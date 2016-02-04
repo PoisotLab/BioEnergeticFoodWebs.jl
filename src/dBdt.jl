@@ -3,6 +3,7 @@ function dBdt(t, biomass, derivative, p)
     # Let's be lazy and get some parameters out of p
     w = p[:w]
     efficiency = p[:efficiency]
+    consumption = p[:consumption]
     F = zeros(size(efficiency))
     x = p[:x]
     y = p[:y]
