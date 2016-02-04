@@ -1,0 +1,3 @@
+test:
+    - make coverage
+    - make clean
