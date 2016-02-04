@@ -30,7 +30,7 @@ function make_initial_parameters(A)
     return p
 end
 
-function make_simulation_parameters(A, p)
+function make_parameters(A, p)
     # Better safe than sorry
     check_initial_parameters(p)
     check_food_web(A)
