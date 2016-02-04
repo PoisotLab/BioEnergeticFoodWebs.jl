@@ -1,4 +1,4 @@
 test:
     script:
-        - make coverage
+        - make coverage -B
         - make clean
