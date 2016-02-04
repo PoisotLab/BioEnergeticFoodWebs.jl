@@ -1,3 +1,4 @@
 test:
-    - make coverage
-    - make clean
+    script:
+        - make coverage
+        - make clean
