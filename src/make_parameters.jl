@@ -25,12 +25,14 @@ function make_initial_parameters(A)
         :y_invertebrate => 4.0,
         :y_vertebrate   => 8.0,
         :Γ              => 0.5,
+        :A => A
         )
     check_initial_parameters(p)
     return p
 end
 
-function make_parameters(A, p)
+function make_parameters(p)
+    A = p[:A]
     # Better safe than sorry
     check_initial_parameters(p)
     check_food_web(A)

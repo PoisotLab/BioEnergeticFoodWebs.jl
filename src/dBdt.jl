@@ -7,6 +7,7 @@ function dBdt(t, biomass, derivative, p)
     x = p[:x]
     y = p[:y]
     a = p[:a]
+    A = p[:A]
     is_herbivore = p[:is_herbivore]
     is_producer = p[:is_producer]
 
