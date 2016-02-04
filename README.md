@@ -37,9 +37,15 @@ Once this is done, you need to generate some additional simulation parameters
 (such as the efficiency matrix):
 
 ~~~ julia
-p = make_parameters(A, p)
+p = make_parameters(p)
 ~~~
 
 When this is done, the simulation is ready to start.
 
 # Simulation
+
+To start with random biomasses:
+
+~~~julia
+println(simulate(p, rand(size(A)[1])))
+~~~

@@ -4,4 +4,4 @@ A = [0 1 1 0; 0 0 0 1; 0 0 0 1; 0 0 0 0]
 p = make_initial_parameters(A)
 p = make_parameters(p)
 
-simulate(p, rand(4))
+println(simulate(p, rand(4)))
