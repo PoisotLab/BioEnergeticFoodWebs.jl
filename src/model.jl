@@ -9,21 +9,21 @@ A = omnivory
 
 # TODO comment
 p = Dict{Symbol,Any}(
+    :K              => 1.0,
     :Z              => 1.25,
-    :vertebrates    => falses(size(A)[1]),
-    :a_vertebrate   => 0.88,
     :a_invertebrate => 0.314,
     :a_producer     => 1.0,
-    :m_producer     => 1.0,
-    :y_vertebrate   => 8.0,
-    :y_invertebrate => 4.0,
-    :e_herbivore    => 0.85,
-    :e_carnivore    => 0.45,
-    :h              => 1.0,
-    :Γ              => 0.5,
+    :a_vertebrate   => 0.88,
     :c              => 0.0,
-    :r => 1.0,
-    :K => 1.0
+    :e_carnivore    => 0.45,
+    :e_herbivore    => 0.85,
+    :h              => 1.0,
+    :m_producer     => 1.0,
+    :r              => 1.0,
+    :vertebrates    => falses(size(A)[1]),
+    :y_invertebrate => 4.0,
+    :y_vertebrate   => 8.0,
+    :Γ              => 0.5,
     )
 
 # begin code
