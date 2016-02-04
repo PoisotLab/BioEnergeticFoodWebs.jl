@@ -27,8 +27,6 @@ function check_initial_parameters(p)
         :K
     ]
     for k in required_keys
-        println(k)
-        println(get(p, k, nothing))
         @assert get(p, k, nothing) != nothing
     end
 end
