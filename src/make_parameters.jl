@@ -40,7 +40,6 @@ function make_parameters(p)
     # Setup some objects
     S = size(A)[1]
     F = zeros(Float64, size(A))
-    consumption = zeros(Float64, size(A))
     efficiency = zeros(Float64, size(A))
     w = zeros(S)
     M = zeros(S)
@@ -104,6 +103,7 @@ function make_parameters(p)
 
 
     p[:w] = w
+    p[:efficiency] = efficiency
     p[:efficiency] = efficiency
     p[:y] = y
     p[:x] = x

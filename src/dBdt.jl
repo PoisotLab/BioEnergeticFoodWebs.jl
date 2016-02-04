@@ -3,12 +3,12 @@ function dBdt(t, biomass, derivative, p)
     # Let's be lazy and get some parameters out of p
     w = p[:w]
     efficiency = p[:efficiency]
-    consumption = p[:consumption]
     F = zeros(size(efficiency))
     x = p[:x]
     y = p[:y]
     a = p[:a]
     A = p[:A]
+    consumption = zeros(Float64, size(A))
     S = size(A)[1]
     is_herbivore = p[:is_herbivore]
     is_producer = p[:is_producer]
