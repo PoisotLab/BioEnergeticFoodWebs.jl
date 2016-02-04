@@ -1,6 +1,5 @@
 function dBdt(t, biomass, derivative, p)
 
-
     # Let's be lazy and get some parameters out of p
     w = p[:w]
     efficiency = p[:efficiency]
