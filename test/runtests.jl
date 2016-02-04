@@ -4,7 +4,8 @@ using Base.Test
 anyerrors = false
 
 test_files = [
-    "trophic_rank.jl"
+    "trophic_rank.jl",
+    "checks.jl"
 ]
 
 for current_test in test_files
