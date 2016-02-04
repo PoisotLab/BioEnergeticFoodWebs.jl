@@ -4,6 +4,7 @@ clean:
 	- rm src/*cov
 
 test: src/*jl test/*jl
+	-julia -e 'Pkg.clone("git@132.204.122.203:tpoisot/befwm.git")'
 	julia --code-coverage test/runtests.jl
 
 coverage: test
