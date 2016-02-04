@@ -16,7 +16,7 @@ function check_initial_parameters(p)
         :a_invertebrate,
         :a_producer,
         :m_producer,
-        :y_vertberate,
+        :y_vertebrate,
         :y_invertebrate,
         :e_herbivore,
         :e_carnivore,
