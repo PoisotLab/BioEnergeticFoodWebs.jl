@@ -1,3 +1,7 @@
+"""
+Total biomass available to a given species, accounting for the allometric
+scaling and the number of resources.
+"""
 function sum_biomasses!(total, biomass, p)
     S = size(p[:A], 1)
     for consumer in 1:S
@@ -9,11 +13,23 @@ function sum_biomasses!(total, biomass, p)
     end
 end
 
+function functional_response!(F, biomass, p, total_biomass_available)
+    S = size(p[:A], 1)
+    for consumer in 1:S
+        if !p[:is_producer][consumer]
+            for resource in 1:S
+                numerator = p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
+                denominator = p[:Γ]^p[:h] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
+                F[consumer, resource] = numerator / denominator;
+            end
+        end
+    end
+end
+
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     w = p[:w]
     efficiency = p[:efficiency]
-    F = zeros(size(efficiency))
     x = p[:x]
     y = p[:y]
     a = p[:a]
@@ -28,15 +44,8 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     sum_biomasses!(total_biomass_available, biomass, p)
 
     # What is the functional response ?
-    for consumer in 1:S
-        if !is_producer[consumer]
-            for resource in 1:S
-                numerator = w[consumer] * A[consumer, resource] * biomass[resource]^p[:h]
-                denominator = p[:Γ]^p[:h] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
-                F[consumer, resource] = numerator / denominator;
-            end
-        end
-    end
+    F = zeros(size(p[:A]))
+    functional_response!(F, biomass, p, total_biomass_available)
 
     # Consumption
     for resource in 1:S
