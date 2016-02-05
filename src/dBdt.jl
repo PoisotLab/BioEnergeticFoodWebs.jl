@@ -95,4 +95,6 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
         derivative[species] = growth - pred + cons
     end
 
+    return derivative
+
 end
