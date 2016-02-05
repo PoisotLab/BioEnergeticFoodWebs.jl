@@ -1,9 +1,9 @@
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=100, reltol::Float64=1e-8, abstol::Float64=1e-16)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=100)
     t_nsteps = (stop - start + 1)
     nsteps = steps * t_nsteps + t_nsteps
     t = collect(linspace(start, stop, nsteps))
     f(t, y, ydot) = dBdt(t, y, ydot, p)
-    timeseries = Sundials.cvode(f, biomass, t, reltol, abstol)
+    timeseries = Sundials.cvode(f, biomass, t)
 
     # Because small timesteps are sometimes needed, the output can get big
     # As in, several GB per simulation
