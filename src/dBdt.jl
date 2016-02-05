@@ -1,7 +1,7 @@
 function sum_biomasses!(total, biomass, p)
     S = size(p[:A], 1)
     for consumer in 1:S
-        if !is_producer[consumer]
+        if !p[:is_producer][consumer]
             for resource in 1:S
                 total[consumer] += p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
             end
