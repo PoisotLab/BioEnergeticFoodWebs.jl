@@ -1,4 +1,4 @@
-function simulate(p, biomass; start=0, stop=500, steps=10)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=10)
     t_nsteps = (stop - start + 1)
     nsteps = steps * t_nsteps + t_nsteps
     t = collect(linspace(start, stop, nsteps))
