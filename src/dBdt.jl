@@ -14,14 +14,15 @@ function dBdt(t, biomass, derivative, p)
     is_producer = p[:is_producer]
 
     # How much food is available?
-    total_biomass_available = zeros(Float64, S)
+    #= total_biomass_available = zeros(Float64, S)
     for consumer in 1:S
         if !is_producer[consumer]
             for resource in 1:S
                 total_biomass_available[consumer] += w[consumer] * A[consumer, resource] * biomass[resource]^p[:h]
             end
         end
-    end
+    end =#
+    total_biomass_available = sum( (w .* (biomass.^p[:h])') .* A)
 
     # What is the functional response ?
     for consumer in 1:S
