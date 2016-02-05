@@ -22,7 +22,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
             end
         end
     end =#
-    total_biomass_available = sum( (w .* (biomass.^p[:h])') .* A)
+    total_biomass_available = sum( (w .* (biomass.^p[:h])') .* A, 2)
 
     # What is the functional response ?
     for consumer in 1:S
