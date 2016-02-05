@@ -65,7 +65,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     # Consumption
     consumption = zeros(Float64, size(p[:A]))
-    consumption_rates!(consumption, bionass, p, F)
+    consumption_rates!(consumption, biomass, p, F)
 
 
     # Rate of change
