@@ -1,6 +1,5 @@
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
-    # Let's be lazy and get some parameters out of p
     w = p[:w]
     efficiency = p[:efficiency]
     F = zeros(size(efficiency))
@@ -14,15 +13,15 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     is_producer = p[:is_producer]
 
     # How much food is available?
-    #= total_biomass_available = zeros(Float64, S)
+    total_biomass_available = zeros(Float64, S)
     for consumer in 1:S
         if !is_producer[consumer]
             for resource in 1:S
                 total_biomass_available[consumer] += w[consumer] * A[consumer, resource] * biomass[resource]^p[:h]
             end
         end
-    end =#
-    total_biomass_available = sum( (w .* (biomass.^p[:h])') .* A, 2)
+    end
+    #=total_biomass_available = sum( (w .* (biomass.^p[:h])') .* A, 2)=#
 
     # What is the functional response ?
     for consumer in 1:S
