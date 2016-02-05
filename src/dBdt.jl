@@ -1,3 +1,14 @@
+function sum_biomasses!(total, biomass, p)
+    S = size(p[:A], 1)
+    for consumer in 1:S
+        if !is_producer[consumer]
+            for resource in 1:S
+                total[consumer] += p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
+            end
+        end
+    end
+end
+
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     w = p[:w]
@@ -14,14 +25,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     # How much food is available?
     total_biomass_available = zeros(Float64, S)
-    for consumer in 1:S
-        if !is_producer[consumer]
-            for resource in 1:S
-                total_biomass_available[consumer] += w[consumer] * A[consumer, resource] * biomass[resource]^p[:h]
-            end
-        end
-    end
-    #=total_biomass_available = sum( (w .* (biomass.^p[:h])') .* A, 2)=#
+    sum_biomasses!(total_biomass_available, biomass, p)
 
     # What is the functional response ?
     for consumer in 1:S
