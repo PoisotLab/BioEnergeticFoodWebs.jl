@@ -13,6 +13,9 @@ function sum_biomasses!(total, biomass, p)
     end
 end
 
+"""
+Functional response
+"""
 function functional_response!(F, biomass, p, total_biomass_available)
     S = size(p[:A], 1)
     for consumer in 1:S
@@ -26,6 +29,20 @@ function functional_response!(F, biomass, p, total_biomass_available)
     end
 end
 
+"""
+Consumption
+"""
+function consumption_rates!(C, biomass, p, F)
+    S = size(p[:A], 1)
+    for resource in 1:S
+        for consumer in 1:S
+            if !p[:is_producer][consumer]
+                C[consumer, resource] = p[:x][consumer] * p[:y][consumer] * biomass[consumer] * F[consumer, resource]
+            end
+        end
+    end
+end
+
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     w = p[:w]
@@ -34,7 +51,6 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     y = p[:y]
     a = p[:a]
     A = p[:A]
-    consumption = zeros(Float64, size(A))
     S = size(A)[1]
     is_herbivore = p[:is_herbivore]
     is_producer = p[:is_producer]
@@ -43,18 +59,14 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     total_biomass_available = zeros(Float64, S)
     sum_biomasses!(total_biomass_available, biomass, p)
 
-    # What is the functional response ?
-    F = zeros(size(p[:A]))
+    # Functional response
+    F = zeros(Float64, size(p[:A]))
     functional_response!(F, biomass, p, total_biomass_available)
 
     # Consumption
-    for resource in 1:S
-        for consumer in 1:S
-            if !is_producer[consumer]
-                consumption[consumer, resource] = x[consumer] * y[consumer] * biomass[consumer] * F[consumer, resource]
-            end
-        end
-    end
+    consumption = zeros(Float64, size(p[:A]))
+    consumption_rates!(consumption, bionass, p, F)
+
 
     # Rate of change
     for species in 1:S
