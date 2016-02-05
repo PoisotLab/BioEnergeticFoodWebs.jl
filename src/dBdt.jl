@@ -1,4 +1,4 @@
-function dBdt(t, biomass, derivative, p)
+function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     # Let's be lazy and get some parameters out of p
     w = p[:w]
