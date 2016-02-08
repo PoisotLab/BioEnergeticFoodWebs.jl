@@ -16,14 +16,14 @@ function make_initial_parameters(A)
         :a_producer     => 1.0,
         :a_vertebrate   => 0.88,
         :c              => 0.0,
-        :e_carnivore    => 0.45,
-        :e_herbivore    => 0.85,
+        :e_carnivore    => 0.85,
+        :e_herbivore    => 0.45,
         :h              => 1.0,
         :m_producer     => 1.0,
         :r              => 1.0,
         :vertebrates    => falses(size(A)[1]),
-        :y_invertebrate => 4.0,
-        :y_vertebrate   => 8.0,
+        :y_invertebrate => 8.0,
+        :y_vertebrate   => 4.0,
         :Γ              => 0.5,
         :A => A
         )
@@ -94,7 +94,7 @@ function make_parameters(p)
             if A[consumer, resource] == 1
                 if is_producer[resource]
                     efficiency[consumer, resource] = p[:e_herbivore]
-                else 
+                else
                     efficiency[consumer, resource] = p[:e_carnivore]
                 end
             end
@@ -115,4 +115,3 @@ function make_parameters(p)
     return p
 
 end
-
