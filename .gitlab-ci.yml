@@ -3,6 +3,3 @@ test:
         - make test -B
         - make clean
 
-mirror:
-    script:
-        - git push --mirror git@github.com:PoisotLab/befwm.git
