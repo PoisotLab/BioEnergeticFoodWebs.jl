@@ -5,11 +5,4 @@ test:
 
 mirror:
     script:
-        - id
-        - echo "$USER"
-        - echo "$USERNAME"
-        - git clone --mirror git@github.com:PoisotLab/befwm.git
-        - cd mirror
-        - git remote set-url --push origin git@github.com:PoisotLab/befwm.git
-        - git fetch -p origin
-        - git push --mirror
+        - git push --mirror git@github.com:PoisotLab/befwm.git
