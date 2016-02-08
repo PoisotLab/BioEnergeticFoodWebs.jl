@@ -5,4 +5,8 @@ test:
 
 mirror:
     script:
-        - git push --mirror git@github.com:PoisotLab/befwm.git
+        - git clone --mirror https://github.com/PoisotLab/befwm.git mirror
+        - cd mirror
+        - git remote set-url --push origin https://github.com/PoisotLab/befwm
+        - git fetch -p origin
+        - git push --mirror
