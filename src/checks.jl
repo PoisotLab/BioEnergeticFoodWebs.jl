@@ -1,6 +1,10 @@
 """
-Check that a matrix is correctly formatted. This means, square, with only
-0 and 1, and two dimensions.
+**Is the matrix correctly formatted?**
+
+A *correct* matrix has only 0 and 1, two dimensions, and is square.
+
+This function returns nothing, but raises an `AssertionError` if one of the
+conditions is not met.
 """
 function check_food_web(A)
     @assert size(A)[1] == size(A)[2]
@@ -31,8 +35,13 @@ function check_initial_parameters(p)
     end
 end
 
+"""
+**Are the simulation parameters present?**
+
+This function will make sure that all the required parameters are here,
+and that the arrays and matrices have matching dimensions.
+"""
 function check_parameters(p)
-    # Users need only call this function
     check_initial_parameters(p)
 
     required_keys = [
@@ -47,4 +56,7 @@ function check_parameters(p)
     for k in required_keys
         @assert get(p, k, nothing) != nothing
     end
+    @assert length(p[:is_producer]) == length(p[:is_herbivore])
+    @assert size(p[:A]) == size(p[:efficiency])
+    @assert length(p[:is_producer]) == size(p[:A], 1)
 end
