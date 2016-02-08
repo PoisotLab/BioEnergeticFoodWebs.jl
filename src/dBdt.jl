@@ -60,7 +60,7 @@ end
 This function is the one wrapped by `Sundials`. Based on a timepoint `t`,
 an array of biomasses `biomass`, an equally sized array of derivatives
 `derivative`, and a series of simulation parameters `p`, it will return
-$\frac{dB}{dt}$ for every species.
+`dB/dt` for every species.
 """
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
