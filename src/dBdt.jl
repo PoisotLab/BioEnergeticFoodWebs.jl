@@ -1,6 +1,13 @@
 """
-Total biomass available to a given species, accounting for the allometric
-scaling and the number of resources.
+**Total biomass available for each species**
+
+Accounting for the allometric scaling and the number of resources.
+
+
+This function should not be called by the user. Based on a vector of biomasses
+(`biomass`) and a list of parameters (`p`), this function will update the
+array `total` with the total biomass available to all species. `total[i]`
+will give the biomass available to species `i`.
 """
 function sum_biomasses!(total, biomass, p)
     S = size(p[:A], 1)
@@ -14,7 +21,11 @@ function sum_biomasses!(total, biomass, p)
 end
 
 """
-Functional response
+**Functional response**
+
+General function for the functional response matrix. Modifies `F` in place. 
+
+Not to be called by the user.
 """
 function functional_response!(F, biomass, p, total_biomass_available)
     S = size(p[:A], 1)
@@ -30,7 +41,7 @@ function functional_response!(F, biomass, p, total_biomass_available)
 end
 
 """
-Consumption
+**Consumption**
 """
 function consumption_rates!(C, biomass, p, F)
     S = size(p[:A], 1)
@@ -43,6 +54,14 @@ function consumption_rates!(C, biomass, p, F)
     end
 end
 
+"""
+**Derivatives**
+
+This function is the one wrapped by `Sundials`. Based on a timepoint `t`,
+an array of biomasses `biomass`, an equally sized array of derivatives
+`derivative`, and a series of simulation parameters `p`, it will return
+$\frac{dB}{dt}$ for every species.
+"""
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     w = p[:w]
