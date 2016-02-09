@@ -5,7 +5,8 @@ anyerrors = false
 
 test_files = [
     "trophic_rank.jl",
-    "checks.jl"
+    "checks.jl",
+    "make_parameters.jl"
 ]
 
 for current_test in test_files
