@@ -1,4 +1,4 @@
 # Bio-energetic food web model
 
-`Julia` implementation - requires `Sundials`
-
+This is a `julia` implementation of the bioenergetic model applied to food
+webs, as described in **ref**.
