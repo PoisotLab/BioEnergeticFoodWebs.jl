@@ -21,13 +21,15 @@ Alternatively, every parameter can be used as a *keyword* argument when calling 
     A = [0 1 1; 0 0 0; 0 0 0]
     p = make_initial_parameters(A, Z=100.0)
 
+The only exception is `vertebrates`, which has to be modified after this
+function is called. By default, all of the species will be invertebrates.
+
 """
 function make_initial_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         a_invertebrate::Float64=0.314, a_producer::Float64=1.0, a_vertebrate::Float64=0.88,
         c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         m_producer::Float64=1.0,
-        vertebrates::Array{Bool,1}=falses(size(A)[1]),
         y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
         Γ::Float64=0.5
         )
