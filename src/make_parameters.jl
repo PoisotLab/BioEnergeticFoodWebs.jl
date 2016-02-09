@@ -57,9 +57,16 @@ function make_initial_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1
     return p
 end
 
-function make_parameters(p)
+"""
+**Make the complete set of parameters**
+
+This function will add simulation parameters, based on the output of
+`make_initial_parameters`.
+
+"""
+function make_parameters(p::Dict{Symbol,Any})
     A = p[:A]
-    # Better safe than sorry
+    # Better safe than sorry, as the user can modify both of these values
     check_initial_parameters(p)
     check_food_web(A)
 
@@ -140,4 +147,16 @@ function make_parameters(p)
     check_parameters(p)
     return p
 
+end
+
+"""
+**Make the complete set of parameters**
+
+This function will add simulation parameters, based on the defaults. No
+parameters can be changed with this function.
+
+"""
+function make_parameters(A::Array{Int64, 2})
+    p = make_initial_parameters(A)
+    return make_parameters(p)
 end
