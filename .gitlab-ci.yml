@@ -23,6 +23,8 @@ doc:
         - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
         - cp doc/* gitdoc/
         - cd gitdoc
+        - git config user.email "cloud@poisotlab.io"
+        - git config user.name "Poisot Lab"
         - git remote add gitbook https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git
         - git add .
         - git commit -m 'Doc update'
