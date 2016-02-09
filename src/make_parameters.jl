@@ -1,4 +1,5 @@
 """
+**Create default parameters**
 
 This function creates initial parameters, based on a food web
 matrix. Specifically, the default values are:
@@ -8,13 +9,33 @@ matrix. Specifically, the default values are:
 | ----      | ----- |
 | K         | 1.0   |
 
+There are two ways to modify the default values. First, by calling the
+function and changing its output. For example
+
+    A = [0 1 1; 0 0 0; 0 0 0]
+    p = make_initial_parameters(A)
+    p[:Z] = 100.0
+
+Alternatively, every parameter can be used as a *keyword* argument when calling the function. For example
+
+    A = [0 1 1; 0 0 0; 0 0 0]
+    p = make_initial_parameters(A, Z=100.0)
+
 """
-function make_initial_parameters(A)
+function make_initial_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
+        a_invertebrate::Float64=0.314, a_producer::Float64=1.0, a_vertebrate::Float64=0.88,
+        c::Float64=0.0, h::Number=1.0,
+        e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
+        m_producer::Float64=1.0,
+        vertebrates::Array{Bool,1}=falses(size(A)[1]),
+        y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
+        Γ::Float64=0.5
+        )
     check_food_web(A)
     # TODO comment
     p = Dict{Symbol,Any}(
         :K              => 1.0,
-        :Z              => 1.25,
+        :Z              => 1.0,
         :a_invertebrate => 0.314,
         :a_producer     => 1.0,
         :a_vertebrate   => 0.88,
