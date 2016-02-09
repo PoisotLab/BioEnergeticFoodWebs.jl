@@ -18,7 +18,8 @@ coverage:
 
 doc:
     stage: doc
+    only: master
     script:
         - make doc
-        - git remote add gitbook https://tpoisot:$GITBOOK_VARIABLE@git.gitbook.com/poisotlab/befwm.git
+        - git remote set-url gitbook https://tpoisot:$GITBOOK_VARIABLE@git.gitbook.com/poisotlab/befwm.git
         - git push -u gitbook master
