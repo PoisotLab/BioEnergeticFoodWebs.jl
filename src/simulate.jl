@@ -33,7 +33,7 @@ The array of biomasses has one row for each timestep, and one column for
 each species.
 
 If the difference between stop and start is more than an arbitrary threshold
-(currently 2000 timesteps), the simulations will be run in chunks of 2000
+(currently 500 timesteps), the simulations will be run in chunks of 500
 timesteps each. This is because the amount of memory needed to store the
 dynamics scales very badly. To avoid `OutOfMemory()` errors, running the
 simulation by parts is sufficient.
@@ -52,7 +52,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
     # We put the starting conditions in the array
     timeseries[1,:] = biomass
 
-    chunk_size = 2000
+    chunk_size = 500
     done_up_to = start
     while done_up_to < stop
         start_at = done_up_to
