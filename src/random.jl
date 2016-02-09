@@ -18,10 +18,10 @@ function nichemodel(S::Int64, L::Int64)
     A = zeros(Int64, (S, S))
 
     # Generate body size
-    n = rand(S)
+    n = rand(Uniform(0.0, 1.0), S)
     
     # Pre-allocate centroids
-    c = zeros(S)
+    c = zeros(Float64, S)
 
     # Generate random ranges
     r = n .* rand(Beta(1.0, β), S)
