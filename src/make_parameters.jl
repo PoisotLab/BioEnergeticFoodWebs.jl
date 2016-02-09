@@ -36,21 +36,21 @@ function make_initial_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1
     check_food_web(A)
     # TODO comment
     p = Dict{Symbol,Any}(
-        :K              => 1.0,
-        :Z              => 1.0,
-        :a_invertebrate => 0.314,
-        :a_producer     => 1.0,
-        :a_vertebrate   => 0.88,
-        :c              => 0.0,
-        :e_carnivore    => 0.85,
-        :e_herbivore    => 0.45,
-        :h              => 1.0,
-        :m_producer     => 1.0,
-        :r              => 1.0,
+        :K              => K,
+        :Z              => Z,
+        :a_invertebrate => a_invertebrate,
+        :a_producer     => a_producer,
+        :a_vertebrate   => a_vertebrate,
+        :c              => c,
+        :e_carnivore    => e_carnivore,
+        :e_herbivore    => e_herbivore,
+        :h              => h,
+        :m_producer     => m_producer,
+        :r              => r,
         :vertebrates    => falses(size(A)[1]),
-        :y_invertebrate => 8.0,
-        :y_vertebrate   => 4.0,
-        :Γ              => 0.5,
+        :y_invertebrate => y_invertebrate,
+        :y_vertebrate   => y_vertebrate,
+        :Γ              => Γ,
         :A => A
         )
     check_initial_parameters(p)
