@@ -148,15 +148,3 @@ function make_parameters(p::Dict{Symbol,Any})
     return p
 
 end
-
-"""
-**Make the complete set of parameters**
-
-This function will add simulation parameters, based on the defaults. No
-parameters can be changed with this function.
-
-"""
-function make_parameters(A::Array{Int64, 2})
-    p = make_initial_parameters(A)
-    return make_parameters(p)
-end
