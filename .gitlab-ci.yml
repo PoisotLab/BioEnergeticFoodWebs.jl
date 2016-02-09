@@ -23,7 +23,7 @@ doc:
         - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
         - cp doc/* gitdoc/
         - cd gitdoc
-        - git remote set-url gitbook https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git
+        - git remote add gitbook https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git
         - git add .
         - git commit -m 'Doc update'
         - git push -u gitbook master -f
