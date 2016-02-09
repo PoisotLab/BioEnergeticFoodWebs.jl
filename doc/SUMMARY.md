@@ -5,3 +5,4 @@
     * [Generating random networks](user_random.md)
 * [Examples](examples.md)
 * [API](api.md)
+* [References](references.md)

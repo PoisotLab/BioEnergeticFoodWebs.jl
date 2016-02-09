@@ -24,6 +24,3 @@ is required.
 
 [glab]: http://132.204.122.203/tpoisot/befwm/repository/archive.zip?ref=master
 
-## References
-
-{% references %} {% endreferences %}

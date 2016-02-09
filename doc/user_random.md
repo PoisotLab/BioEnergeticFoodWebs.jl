@@ -18,6 +18,3 @@ nichemodel(10, 0.4)
 nichemodel(10, 0.5)
 ~~~
 
-## References
-
-{% references %} {% endreferences %}
