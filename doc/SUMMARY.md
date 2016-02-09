@@ -6,3 +6,5 @@
 * [Examples](examples.md)
 * [API](api.md)
 * [References](references.md)
+* [Changelog](CHANGELOG.md)
+* [License](LICENSE.md)

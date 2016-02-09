@@ -19,5 +19,7 @@ coverage: test
 	cd $(FOLD); julia -e 'Pkg.add("Coverage"); using Coverage; coverage = process_folder(); covered_lines, total_lines = get_summary(coverage); println(round(covered_lines/total_lines*100,2),"% covered")'
 
 doc:
+	cp CHANGELOG.md doc/CHANGELOG.md
+	cp LICENSE.md doc/LICENSE.md
 	julia -e 'Pkg.add("Lexicon"); using Lexicon; using befwm; save("doc/api.md", befwm)'
 
