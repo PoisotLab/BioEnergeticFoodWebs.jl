@@ -1,9 +1,12 @@
 """
 
 This function creates initial parameters, based on a food web
-matrix. Specifically, the default values are
+matrix. Specifically, the default values are:
 
-TODO
+
+| Parameter | Value |
+| ----      | ----- |
+| K         | 1.0   |
 
 """
 function make_initial_parameters(A)
