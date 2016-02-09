@@ -20,5 +20,5 @@ doc:
     stage: doc
     script:
         - make doc
-        - git remote add gitbook https://git.gitbook.com/poisotlab/befwm.git
+        - git remote add gitbook https://tpoisot:$GITBOOK_VARIABLE@git.gitbook.com/poisotlab/befwm.git
         - git push -u gitbook master

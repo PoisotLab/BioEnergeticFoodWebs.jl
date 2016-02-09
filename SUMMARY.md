@@ -1,3 +1,4 @@
 # Summary
 
-* [API](api.md)
+* [User guide](doc/userguide.md)
+* [API](doc/api.md)
