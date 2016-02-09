@@ -1,6 +1,7 @@
 stages:
     - test
     - coverage
+    - doc
 
 test:
     stage: test
@@ -13,3 +14,11 @@ coverage:
     script:
         - make coverage
         - make clean
+
+
+doc:
+    stage: doc
+    script:
+        - make doc
+        - git remote add gitbook https://git.gitbook.com/poisotlab/befwm.git
+        - git push -u gitbook master
