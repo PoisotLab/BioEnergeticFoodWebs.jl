@@ -1,6 +1,7 @@
 module befwm
 
     using Sundials
+    using Distributions
 
     export trophic_rank,
         check_food_web,
@@ -9,7 +10,8 @@ module befwm
         dBdt,
         make_parameters,
         make_initial_parameters,
-        simulate
+        simulate,
+        nichemodel
 
     # Includes
     include(joinpath(".", "trophic_rank.jl"))
@@ -17,5 +19,6 @@ module befwm
     include(joinpath(".", "dBdt.jl"))
     include(joinpath(".", "make_parameters.jl"))
     include(joinpath(".", "simulate.jl"))
+    include(joinpath(".", "random.jl"))
 
 end

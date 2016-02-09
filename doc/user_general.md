@@ -1,13 +1,3 @@
-If you have followed the instructions for installation in the first pages
-of this manual, from within julia, `befwm` can be imported as usual:
-
-~~~ julia
-using befwm
-~~~
-
-In this part of the manual, we will walk through the overall design and
-usage of `befwm`.
-
 # Overview of the simulation
 
 Running a simulation has three steps. First, setting up a series of
