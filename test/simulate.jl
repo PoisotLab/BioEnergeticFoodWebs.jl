@@ -13,3 +13,16 @@ module TestSimulate
     @test_throws AssertionError simulate(p, rand(3), start=0, stop=1, steps=1)
 
 end
+
+module TestSimulateSanityCheck
+    using Base.Test
+    using befwm
+
+    free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]
+    p = free_producers |> make_initial_parameters |> make_parameters
+    n = rand(4)
+    s = simulate(p, n, start=0, stop=15, steps=500)
+
+    @test_approx_eq_eps s[:B][16,4] 1.0 0.001 # We might need the extra tolerance here
+
+end
