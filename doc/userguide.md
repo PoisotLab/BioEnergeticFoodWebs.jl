@@ -1,13 +1,12 @@
-# Installation
-
-Currently, the easiest way to install this package is to clone it, and either
-use the `Makefile` (`make install`), or start julia from within the package
-directory, and:
+If you have followed the instructions for installation in the first pages
+of this manual, from within julia, `befwm` can be imported as usual:
 
 ~~~ julia
-Pkg.clone(pwd())
 using befwm
 ~~~
+
+In this part of the manual, we will walk through the overall design and
+usage of `befwm`.
 
 # Overview of the simulation
 
@@ -33,15 +32,21 @@ predators in rows and preys in columns. In addition, it is expected that
 rows in the matrix has no interaction). This is checked internally by the
 different functions.
 
-# Running a simulation
-
-## Create simulation parameters
+## Create initial parameters
 
 First, create or import an interaction matrix, with predators in rows and
 preys in columns:
 
 ~~~ julia
-diamond_food_web = [0 1 1 0; 0 0 0 1; 0 0 0 1; 0 0 0 0]
+#=
+Predators are in rows, so this corresponds to a "diamond" food web: 1 eats
+2 and 3, and 2 and 3 eat 4. 1 is a top predator, 2 and 3 are intermediate
+consumers, and 4 is a primary producer.
+=#
+A = [0 1 1 0; 0 0 0 1; 0 0 0 1; 0 0 0 0]
+
+# We start with random biomasses in [0;1]
+initial_biomasses = rand(size(A, 1))
 ~~~
 
 Once done, get the initial parameters:
@@ -57,6 +62,22 @@ is done, you can change the values of some parameters, *e.g.*:
 p[:Z] = 2.0 # Scaling of body mass with trophic rank
 ~~~
 
+To see what the initial parameters values are, either look at the `p` object,
+or (better) at the help of `make_initial_parameters`, with
+
+~~~ julia
+?make_initial_parameters
+~~~
+
+Alternatively, you can give non-default values directly when calling the
+function. For example,
+
+~~~ julia
+p = make_initial_parameters(A, Z=25.0)
+~~~
+
+## Create simulation parameters
+
 Once this is done, you need to generate some additional simulation parameters
 (such as the efficiency matrix):
 
@@ -64,12 +85,13 @@ Once this is done, you need to generate some additional simulation parameters
 p = make_parameters(p)
 ~~~
 
-When this is done, the simulation is ready to start.
+This function takes no additional input from the user. When this is done,
+the simulation is ready to start.
 
 ## Simulation
 
 To start with random biomasses:
 
 ~~~julia
-println(simulate(p, rand(size(A)[1])))
+println(simulate(p, initial_biomasses))
 ~~~
