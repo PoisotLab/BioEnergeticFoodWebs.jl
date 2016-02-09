@@ -5,9 +5,10 @@ This function creates initial parameters, based on a food web
 matrix. Specifically, the default values are:
 
 
-| Parameter | Value |
-| ----      | ----- |
-| K         | 1.0   |
+| Parameter | Default Value | Meaning                        | Units |
+|-----------|---------------|--------------------------------|-------|
+| K         | 1.0           | carrying capacity of producers |       |
+| r         | 1.0           | growth rate of producers       |       |
 
 There are two ways to modify the default values. First, by calling the
 function and changing its output. For example
