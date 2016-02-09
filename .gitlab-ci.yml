@@ -23,4 +23,4 @@ doc:
     script:
         - make doc
         - git remote set-url gitbook https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git
-        - git push -u gitbook master
+        - git push -u gitbook master -f
