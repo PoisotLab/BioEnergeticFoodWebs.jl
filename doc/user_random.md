@@ -10,11 +10,11 @@ relationships between preys and predators well {{ "gravel" | cite }}, and
 is therefore well suited to generate random networks for `befwm`.
 
 Random niche model networks can be generated using `nichemodel`, which takes
-two arguments: the number of species `S`, and the connectance `C`:
+two arguments: the number of species `S`, and the number of interactions `L`:
 
 ~~~ julia
-nichemodel(10, 0.3)
-nichemodel(10, 0.4)
-nichemodel(10, 0.5)
+nichemodel(10, 12)
+nichemodel(10, 15)
+nichemodel(10, 50)
 ~~~
 

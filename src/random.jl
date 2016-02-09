@@ -1,12 +1,13 @@
 """
 **Niche model of food webs**
 
-Takes a number of species `S` and a connectance `C`, and returns a food web
-with predators in rows, and preys in columns.
+Takes a number of species `S` and a number of interactions `L`, and returns
+a food web with predators in rows, and preys in columns.
 
 """
-function nichemodel(S::Int64, C::Float64)
+function nichemodel(S::Int64, L::Int64)
     @assert S > 1
+    C = L/S^2
     @assert C < 1.0
     @assert C > 0.0
 
