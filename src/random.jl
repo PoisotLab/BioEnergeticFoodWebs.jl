@@ -28,7 +28,7 @@ function nichemodel(S::Int64, L::Int64)
 
     # Generate random centroids
     for s in 1:S
-        c[s] = rand(Uniform(r[s]/2, n[s]), 1.0)
+        c[s] = rand(Uniform(r[s]/2, n[s]), 1)
     end
 
     # The smallest species has a body size and range of 0
