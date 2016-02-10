@@ -1,3 +1,5 @@
+# User guide
+
 If you have followed the instructions for installation in the first pages
 of this manual, from within julia, `befwm` can be imported as usual:
 

@@ -19,8 +19,7 @@ either use `make install`, or start julia, and type
 Pkg.clone(pwd())
 ~~~
 
-This should take care of installing the dependencies (only `Sundials`)
-is required.
+This should take care of installing the dependencies.
 
 [glab]: http://132.204.122.203/tpoisot/befwm/repository/archive.zip?ref=master
 
