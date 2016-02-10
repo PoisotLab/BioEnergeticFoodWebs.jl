@@ -1,3 +1,11 @@
+function connectance(S::Int64, L::Int64)
+    @assert S > 1
+    C = L/S^2
+    @assert C < 1.0
+    @assert C > 0.0
+    return C
+end
+
 """
 **Niche model of food webs**
 
@@ -6,10 +14,8 @@ a food web with predators in rows, and preys in columns.
 
 """
 function nichemodel(S::Int64, L::Int64)
-    @assert S > 1
-    C = L/S^2
-    @assert C < 1.0
-    @assert C > 0.0
+
+    C = connectantce(S, L)
 
     # Beta distribution parameter
     β = 1/(2*C)-1.0
