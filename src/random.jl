@@ -15,7 +15,7 @@ a food web with predators in rows, and preys in columns.
 """
 function nichemodel(S::Int64, L::Int64)
 
-    C = connectantce(S, L)
+    C = connectance(S, L)
 
     # Beta distribution parameter
     β = 1/(2*C)-1.0
