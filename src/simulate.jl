@@ -171,5 +171,6 @@ function wrap_ode(i, f, b, t)
     t, y = i(g, b, t, points=:specified)
     println(t)
     println(y)
+    println(typeof(y))
     return y
 end
