@@ -105,7 +105,7 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
     # Integrate
     if use == :Sundials
         ts = Sundials.cvode(f, biomass, t)
-    elseif user == :Euler
+    elseif use == :Euler
         ts = euler_integration(f, biomass, t)
     end
 
@@ -135,8 +135,9 @@ function euler_integration(f, biomass, t)
     dynamics[1,:] = biomass
     for time in 2:length(t)
         time_differential = t[time] - t[time-1]
-        derivatives = f(t, biomass, zeros(length(biomass)))
-        dynamics[i,:] = dynamics[i-1,:] .+ derivatives .* time_differential
+        derivatives = f(t, dynamics[time-1,:], zeros(length(biomass)))
+        println(derivatives)
+        dynamics[time,:] = vec(dynamics[time-1,:]) .+ vec(derivatives) .* time_differential
     end
     return dynamics
 end
