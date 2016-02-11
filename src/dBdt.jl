@@ -92,9 +92,11 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     consumption = zeros(Float64, size(p[:A]))
     consumption_rates!(consumption, biomass, p, F)
 
+    pred_total = vec(sum(consumption ./ efficiency, 2))
+    cons_total = vec(sum(consumption, 1))
 
     # Rate of change
-    for species in 1:S
+    for species in eachindex(biomass)
 
         # Species-specific component of growth
         if is_producer[species]
@@ -104,20 +106,21 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
         end
 
         # Total predation
-        pred = 0.0;
-        cons = 0.0;
-        for other in 1:S
-            if A[other, species] == 1
-                pred += consumption[other, species] / efficiency[other, species]
-            end
-            if !is_producer[species]
-                if A[species, other] == 1
-                    cons += consumption[species, other]
-                end
-            end
-        end
+        #=pred = 0.0;=#
+        #=cons = 0.0;=#
+        #=for other in eachindex(biomass)=#
+            #=if A[other, species] == 1=#
+                #=pred += consumption[other, species] / efficiency[other, species]=#
+            #=end=#
+            #=if !is_producer[species]=#
+                #=if A[species, other] == 1=#
+                    #=cons += consumption[species, other]=#
+                #=end=#
+            #=end=#
+        #=end=#
 
-        derivative[species] = growth - pred + cons
+        #=derivative[species] = growth - pred + cons=#
+        derivative[species] = growth - pred_total[species] + cons_total[species]
     end
 
     # The derivatives cannot be smaller than -B (i.e. the biomass is at least 0)
