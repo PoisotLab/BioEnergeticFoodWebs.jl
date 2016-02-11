@@ -39,9 +39,25 @@ module TestSimulateSanityCheck
     s = simulate(p, n, start=0, stop=50, steps=500)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
+
     s = simulate(p, n, start=0, stop=50, steps=500, use=:Euler)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
+    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode23s)
+    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
+    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
+
+    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode23)
+    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
+    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
+
+    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode45)
+    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
+    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
+
+    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode78)
+    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
+    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
 end
