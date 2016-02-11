@@ -27,10 +27,9 @@ General function for the functional response matrix. Modifies `F` in place.
 Not to be called by the user.
 """
 function functional_response!(F, biomass, p, total_biomass_available)
-    S = size(p[:A], 1)
-    for consumer in 1:S
+    for consumer in eachindex(biomass)
         if !p[:is_producer][consumer]
-            for resource in 1:S
+            for resource in eachindex(biomass)
                 numerator = p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
                 denominator = p[:Γ]^p[:h] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
                 F[consumer, resource] = numerator / denominator;
@@ -43,9 +42,8 @@ end
 **Consumption**
 """
 function consumption_rates!(C, biomass, p, F)
-    S = size(p[:A], 1)
-    for resource in 1:S
-        for consumer in 1:S
+    for resource in eachindex(biomass)
+        for consumer in eachindex(biomass)
             if !p[:is_producer][consumer]
                 C[consumer, resource] = p[:x][consumer] * p[:y][consumer] * biomass[consumer] * F[consumer, resource]
             end
