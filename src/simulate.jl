@@ -168,7 +168,7 @@ end
 function wrap_ode(i, f, b, t)
     d = copy(b)
     g(t, y) = f(t, y, d)
-    t, y = i(g, b, t)
+    t, y = i(g, b, t, points=:specified)
     println(t)
     println(y)
     return y
