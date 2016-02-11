@@ -1,5 +1,5 @@
-Copyright (c) 2016 Poisot, Timothée <tim@poisotlab.io>
-Author: Poisot, Timothée <tim@poisotlab.io>
+Copyright (c) 2016 The Poisot Lab <tim@poisotlab.io>   
+Author: Poisot, Timothée <tim@poisotlab.io>; Delmas, Eva <eva.delmas@umontreal.ca>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
