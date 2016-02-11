@@ -114,6 +114,14 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
         derivative[species] = growth - pred + cons
     end
 
+    # The derivatives cannot be smaller than -B (i.e. the biomass is at least 0)
+    for species in 1:S
+        if derivative[species] < -biomass[species]
+            derivative[species] = -biomass[species]
+        end
+    end
+
+
     return derivative
 
 end
