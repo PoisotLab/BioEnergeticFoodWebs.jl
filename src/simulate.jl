@@ -56,6 +56,9 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
 
     # We put the starting conditions in the array
     timeseries[1,:] = biomass
+    
+    # Pre-assing function
+    f(t, y, ydot) = dBdt(t, y, ydot, p)
 
     chunk_size = 500
     done_up_to = start
@@ -66,7 +69,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
             stop_at = stop
         end
         i = start_at-start + 1
-        inner_simulation_loop!(timeseries, p, i, start=start_at, stop=stop_at, steps=steps, use=use)
+        inner_simulation_loop!(timeseries, p, i, f, start=start_at, stop=stop_at, steps=steps, use=use)
         done_up_to = stop_at
     end
 
@@ -90,12 +93,11 @@ Note that `output` is a pre-allocated array in which the simulation result
 will be written, and `i` is the origin of the simulation.
 
 """
-function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:Sundials)
+function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:Sundials)
     
     t_nsteps = (stop - start + 1)
     nsteps = (stop - start) * steps + 1
     t = collect(linspace(start, stop, nsteps))
-    f(t, y, ydot) = dBdt(t, y, ydot, p)
 
     # Read the biomass in the pre-allocated array
     biomass = vec(output[i,:])
@@ -118,7 +120,6 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
 
     # Free memory (just to be super double plus sure)
     ts = 0
-    gc()
 end
 
 """

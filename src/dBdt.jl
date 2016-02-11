@@ -10,9 +10,9 @@ array `total` with the total biomass available to all species. `total[i]`
 will give the biomass available to species `i`.
 """
 function sum_biomasses!(total, biomass, p)
-    for consumer in eachindex(biomass)
-        if !p[:is_producer][consumer]
-            for resource in eachindex(biomass)
+    for resource in eachindex(biomass)
+        for consumer in eachindex(biomass)
+            if !p[:is_producer][consumer]
                 total[consumer] += p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
             end
         end
@@ -27,9 +27,9 @@ General function for the functional response matrix. Modifies `F` in place.
 Not to be called by the user.
 """
 function functional_response!(F, biomass, p, total_biomass_available)
-    for consumer in eachindex(biomass)
-        if !p[:is_producer][consumer]
-            for resource in eachindex(biomass)
+    for resource in eachindex(biomass)
+        for consumer in eachindex(biomass)
+            if !p[:is_producer][consumer]
                 numerator = p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
                 denominator = p[:Γ]^p[:h] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
                 F[consumer, resource] = numerator / denominator;
@@ -42,8 +42,8 @@ end
 **Consumption**
 """
 function consumption_rates!(C, biomass, p, F)
-    for resource in eachindex(biomass)
-        for consumer in eachindex(biomass)
+    for consumer in eachindex(biomass)
+        for resource in eachindex(biomass)
             if !p[:is_producer][consumer]
                 C[consumer, resource] = p[:x][consumer] * p[:y][consumer] * biomass[consumer] * F[consumer, resource]
             end
