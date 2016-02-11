@@ -7,7 +7,8 @@ simulation of the bioenergetic model of Yodzis and Innes {{ "yodzis-innes"
 [julia]: http://julialang.org
 
 The model uses `Sundials.jl` to perform robust and precise numerical
-integration.
+integration. Numerical integration using Euler's method, and a wrapper for
+`ODE.jl` are also available.
 
 ## Installation
 
