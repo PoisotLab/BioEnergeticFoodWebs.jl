@@ -4,23 +4,22 @@
 This function creates initial parameters, based on a food web
 matrix. Specifically, the default values are:
 
-| Parameter      | Default Value | Meaning                                                                             | Units |
-|----------------|---------------|-------------------------------------------------------------------------------------|-------|
-| K              | 1.0           | carrying capacity of producers                                                      |       |
-| Z              | 1.0           | consumer-resource body mass ratio                                                   |       |
-| r              | 1.0           | growth rate of producers                                                            |       |
-| a_invertebrate | 0.314         | allometric constant for invertebrate consumers                                      |       |
-| a_producers    | 1.0           | allometric constant of producers                                                    |       |
-| a_vertebrate   | 0.88          | allometric constant for vertebrate consumers                                        |       |
-| c              | 0             | quantifies the predator interference                                                |       |
-| h              | 1             | Hill coefficient                                                                    |       |
-| e_carnivore    | 0.85          | assimilation efficiency of carnivores                                               |       |
-| e_herbivore    | 0.45          | assimilation efficiency of herbivores                                               |       |
-| m_producers    | 1             | body-mass of producers                                                              |       |
-| y_invertebrate | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate |       |
-| y_vertebrate   | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate   |       |
-| Γ              | 0.5           | half_stauration density                                                             |       |
-
+| Parameter      | Default Value | Meaning                                                                             |
+|----------------|---------------|-------------------------------------------------------------------------------------|
+| K              | 1.0           | carrying capacity of producers                                                      |
+| Z              | 1.0           | consumer-resource body mass ratio                                                   |
+| r              | 1.0           | growth rate of producers                                                            |
+| a_invertebrate | 0.314         | allometric constant for invertebrate consumers                                      |
+| a_producers    | 1.0           | allometric constant of producers                                                    |
+| a_vertebrate   | 0.88          | allometric constant for vertebrate consumers                                        |
+| c              | 0             | quantifies the predator interference                                                |
+| h              | 1             | Hill coefficient                                                                    |
+| e_carnivore    | 0.85          | assimilation efficiency of carnivores                                               |
+| e_herbivore    | 0.45          | assimilation efficiency of herbivores                                               |
+| m_producers    | 1             | body-mass of producers                                                              |
+| y_invertebrate | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate |
+| y_vertebrate   | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate   |
+| Γ              | 0.5           | half-saturation density                                                             |
 
 There are two ways to modify the default values. First, by calling the
 function and changing its output. For example
