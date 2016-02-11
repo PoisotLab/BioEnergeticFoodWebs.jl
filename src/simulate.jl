@@ -124,7 +124,10 @@ end
 """
 **Euler integration**
 
-Performs Euler integration along a know time series.
+Performs Euler integration along a known time series. This method is *slower*
+(several orders of magnitude, in fact) than using `:Sundials`, and consumes
+more memory. This is mostly useful for situations in which Sundials chokes
+on a problem.
 
 """
 function euler_integration(f, biomass, t)
