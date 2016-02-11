@@ -28,9 +28,10 @@ Not to be called by the user.
 """
 function functional_response!(F::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, total_biomass_available::Array{Float64, 1})
     for resource in eachindex(biomass)
+        bm_h = biomass[resource]^p[:h]
         for consumer in eachindex(biomass)
             if !p[:is_producer][consumer]
-                numerator = p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
+                numerator = p[:w][consumer] * p[:A][consumer, resource] * bm_h
                 denominator = p[:Γ]^p[:h] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
                 F[consumer, resource] = numerator / denominator
             end
