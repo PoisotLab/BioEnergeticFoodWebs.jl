@@ -92,8 +92,10 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     consumption = zeros(Float64, size(p[:A]))
     consumption_rates!(consumption, biomass, p, F)
 
-    pred_total = vec(sum(consumption ./ efficiency, 2))
-    cons_total = vec(sum(consumption, 1))
+    c_int = consumption .* A
+
+    pred_total = vec(sum(c_int ./ efficiency, 2))
+    cons_total = vec(sum(c_int, 1))
 
     # Rate of change
     for species in eachindex(biomass)
