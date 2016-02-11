@@ -9,7 +9,7 @@ This function should not be called by the user. Based on a vector of biomasses
 array `total` with the total biomass available to all species. `total[i]`
 will give the biomass available to species `i`.
 """
-function sum_biomasses!(total, biomass, p)
+function sum_biomasses!(total::Array{Float64, 1}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any})
     for resource in eachindex(biomass)
         for consumer in eachindex(biomass)
             if !p[:is_producer][consumer]
@@ -26,13 +26,13 @@ General function for the functional response matrix. Modifies `F` in place.
 
 Not to be called by the user.
 """
-function functional_response!(F, biomass, p, total_biomass_available)
+function functional_response!(F::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, total_biomass_available::Array{Float64, 1})
     for resource in eachindex(biomass)
         for consumer in eachindex(biomass)
             if !p[:is_producer][consumer]
                 numerator = p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
                 denominator = p[:Γ]^p[:h] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
-                F[consumer, resource] = numerator / denominator;
+                F[consumer, resource] = numerator / denominator
             end
         end
     end
@@ -41,7 +41,7 @@ end
 """
 **Consumption**
 """
-function consumption_rates!(C, biomass, p, F)
+function consumption_rates!(C::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, F::Array{Float64, 2})
     for consumer in eachindex(biomass)
         for resource in eachindex(biomass)
             if !p[:is_producer][consumer]
