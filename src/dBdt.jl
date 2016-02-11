@@ -45,8 +45,8 @@ end
 function consumption_rates!(C::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, F::Array{Float64, 2})
     for consumer in eachindex(biomass)
         inner_prod = p[:x][consumer] * p[:y][consumer] * biomass[consumer]
-        for resource in eachindex(biomass)
-            if !p[:is_producer][consumer]
+        if !p[:is_producer][consumer]
+            for resource in eachindex(biomass)
                 C[consumer, resource] = inner_prod * F[consumer, resource]
             end
         end
