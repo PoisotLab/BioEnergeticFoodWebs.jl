@@ -107,11 +107,11 @@ function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=200
     # Integrate
     func_dict = Dict{Symbol,Function}(
         :Sundials => Sundials.cvode,
-        :Euler => euler_integration,
-        :ode23 => ODE.ode23,
-        :ode23s => ODE.ode23s,
-        :ode45 => ODE.ode45,
-        :ode78 => ODE.ode78
+        :Euler  => euler_integration,
+        :ode23  => wrap_ode23,
+        :ode23s => wrap_ode23s,
+        :ode45  => wrap_ode45,
+        :ode78  => wrap_ode78
     )
     ts = func_dict[use](f, biomass, t)
 
@@ -147,4 +147,9 @@ function euler_integration(f, biomass, t)
         dynamics[time,:] = vec(dynamics[time-1,:]) .+ vec(derivatives) .* time_differential
     end
     return dynamics
+end
+
+function wrap_ode23(f, b, t)
+    t, y = ODE.ode23(f, b, t)
+    return y
 end
