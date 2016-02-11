@@ -10,10 +10,9 @@ array `total` with the total biomass available to all species. `total[i]`
 will give the biomass available to species `i`.
 """
 function sum_biomasses!(total, biomass, p)
-    S = size(p[:A], 1)
-    for consumer in 1:S
+    for consumer in eachindex(biomass)
         if !p[:is_producer][consumer]
-            for resource in 1:S
+            for resource in eachindex(biomass)
                 total[consumer] += p[:w][consumer] * p[:A][consumer, resource] * biomass[resource]^p[:h]
             end
         end
