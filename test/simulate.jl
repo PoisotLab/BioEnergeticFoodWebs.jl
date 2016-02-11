@@ -23,13 +23,18 @@ module TestSimulateSanityCheck
     p = free_producers |> make_initial_parameters |> make_parameters
     n = rand(4)
     s = simulate(p, n, start=0, stop=15, steps=500)
-    @test_approx_eq_eps s[:B][16,4] p[:K] 0.001 # We might need the extra tolerance here
+    @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
+    s = simulate(p, n, start=0, stop=15, steps=500, use=:Euler)
+    @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
 
     # A consumer with a resource with 0 biomass goes extinct
     A = [0 1; 0 0]
     p = A |> make_initial_parameters |> make_parameters
     n = vec([1.0, 0.0])
     s = simulate(p, n, start=0, stop=50, steps=500)
+    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
+    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
+    s = simulate(p, n, start=0, stop=50, steps=500, use=:Euler)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 

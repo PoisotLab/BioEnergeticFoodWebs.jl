@@ -14,6 +14,7 @@ In addition, the function takes three optional arguments:
 - `start` (defaults to 0), the initial time
 - `stop` (defaults to 500), the final time
 - `steps` (defaults to 5000), the number of internal steps
+- `use` (defaults to `:Sundials`), the integration method
 
 Note that the value of `steps` is the number of intermediate steps when moving
 from `t` to `t+1`. The total number of steps is therefore on the order of
@@ -21,6 +22,9 @@ from `t` to `t+1`. The total number of steps is therefore on the order of
 
 Because this results in very large simulations, the function will return
 results with a timestep equal to unity.
+
+The integration method can be changed to `:Euler`. Not that it should,
+because it takes longer to run and is more likely to give weird results.
 
 The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
 keys:
@@ -39,10 +43,11 @@ dynamics scales very badly. To avoid `OutOfMemory()` errors, running the
 simulation by parts is sufficient.
 
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000, use::Symbol=:Sundials)
     @assert stop > start
     @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
+    @assert use ∈ vec([:Sundials :Euler])
 
     # Pre-allocate the timeseries matrix
     t = collect(linspace(start, stop, (stop-start)+1))
@@ -61,7 +66,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
             stop_at = stop
         end
         i = start_at-start + 1
-        inner_simulation_loop!(timeseries, p, i, start=start_at, stop=stop_at, steps=steps)
+        inner_simulation_loop!(timeseries, p, i, start=start_at, stop=stop_at, steps=steps, use=use)
         done_up_to = stop_at
     end
 
@@ -85,7 +90,7 @@ Note that `output` is a pre-allocated array in which the simulation result
 will be written, and `i` is the origin of the simulation.
 
 """
-function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, steps::Int64=5000)
+function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:Sundials)
     
     t_nsteps = (stop - start + 1)
     nsteps = (stop - start) * steps + 1
@@ -96,7 +101,11 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
     biomass = vec(output[i,:])
 
     # Integrate
-    timeseries = Sundials.cvode(f, biomass, t)
+    if use == :Sundials
+        ts = Sundials.cvode(f, biomass, t)
+    elseif use == :Euler
+        ts = euler_integration(f, biomass, t)
+    end
 
     # Get only the int times
     t_collect = collect(linspace(start, stop, t_nsteps))
@@ -105,6 +114,30 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
     ok_indices = collect(i:(i+sum(t_keep)-1))
     
     # Update the output array
-    output[ok_indices,:] = timeseries[t_keep,:]
+    output[ok_indices,:] = ts[t_keep,:]
+
+    # Free memory (just to be super double plus sure)
+    ts = 0
+    gc()
 end
 
+"""
+**Euler integration**
+
+Performs Euler integration along a known time series. This method is *slower*
+(several orders of magnitude, in fact) than using `:Sundials`, and consumes
+more memory. This is mostly useful for situations in which Sundials chokes
+on a problem.
+
+"""
+function euler_integration(f, biomass, t)
+    # Initial population density
+    dynamics = zeros(Float64, (length(t), length(biomass)))
+    dynamics[1,:] = biomass
+    for time in 2:length(t)
+        time_differential = t[time] - t[time-1]
+        derivatives = f(t, dynamics[time-1,:], zeros(length(biomass)))
+        dynamics[time,:] = vec(dynamics[time-1,:]) .+ vec(derivatives) .* time_differential
+    end
+    return dynamics
+end

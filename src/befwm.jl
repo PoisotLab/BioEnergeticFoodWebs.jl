@@ -11,7 +11,8 @@ module befwm
         make_parameters,
         make_initial_parameters,
         simulate,
-        nichemodel
+        nichemodel,
+        population_stability
 
     # Includes
     include(joinpath(".", "trophic_rank.jl"))
@@ -20,5 +21,6 @@ module befwm
     include(joinpath(".", "make_parameters.jl"))
     include(joinpath(".", "simulate.jl"))
     include(joinpath(".", "random.jl"))
+    include(joinpath(".", "measures.jl"))
 
 end
