@@ -29,7 +29,7 @@ module TestSimulateSanityCheck
     s = simulate(p, n, start=0, stop=15, steps=500, use=:Euler)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
     
-    s = simulate(p, n, start=0, stop=15, steps=500, use=:ode23)
+    s = simulate(p, n, start=0, stop=10, steps=50, use=:ode23)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
 
     # A consumer with a resource with 0 biomass goes extinct
