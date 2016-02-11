@@ -150,6 +150,22 @@ function euler_integration(f, biomass, t)
 end
 
 function wrap_ode23(f, b, t)
-    t, y = ODE.ode23(f, b, t)
+    return wrap_ode(ODE.ode23, f, b, t)
+end
+
+function wrap_ode23s(f, b, t)
+    return wrap_ode(ODE.ode23s, f, b, t)
+end
+
+function wrap_ode45(f, b, t)
+    return wrap_ode(ODE.ode45, f, b, t)
+end
+
+function wrap_ode78(f, b, t)
+    return wrap_ode(ODE.ode78, f, b, t)
+end
+
+function wrap_ode(i, f, b, t)
+    t, y = i(f, b, t)
     return y
 end
