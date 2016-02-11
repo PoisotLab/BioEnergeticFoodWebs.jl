@@ -166,6 +166,8 @@ function wrap_ode78(f, b, t)
 end
 
 function wrap_ode(i, f, b, t)
-    t, y = i(f, b, t)
+    d = copy(b)
+    g(t, y) = f(t, y, d)
+    t, y = i(g, b, t)
     return y
 end
