@@ -54,10 +54,16 @@ end
 """
 **Derivatives**
 
-This function is the one wrapped by `Sundials`. Based on a timepoint `t`,
-an array of biomasses `biomass`, an equally sized array of derivatives
-`derivative`, and a series of simulation parameters `p`, it will return
-`dB/dt` for every species.
+This function is the one wrapped by the various integration routines. Based
+on a timepoint `t`, an array of biomasses `biomass`, an equally sized array
+of derivatives `derivative`, and a series of simulation parameters `p`,
+it will return `dB/dt` for every species.
+
+Note that at the end of the function, we perform different checks to ensure
+that nothing wacky happens during subsequent integration steps. Specifically,
+if B+dB/dt a< ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
+0.0 that your system can represent.
+
 """
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
@@ -112,8 +118,8 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     end
 
     # The derivatives cannot be smaller than -B (i.e. the biomass is at least 0)
-    for species in 1:S
-        if derivative[species] < -biomass[species]
+    for species in eachindex(derivative)
+        if derivative[species] + biomass[species] < eps(0.0)
             derivative[species] = -biomass[species]
         end
     end
