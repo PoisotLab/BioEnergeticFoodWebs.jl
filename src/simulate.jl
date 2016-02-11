@@ -169,8 +169,5 @@ function wrap_ode(i, f, b, t)
     d = copy(b)
     g(t, y) = f(t, y, d)
     t, y = i(g, b, t, points=:specified)
-    println(t)
-    println(y)
-    println(typeof(y))
-    return y
+    return hcat(y...)'
 end
