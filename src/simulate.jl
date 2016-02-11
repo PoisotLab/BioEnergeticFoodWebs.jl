@@ -96,7 +96,7 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
     biomass = vec(output[i,:])
 
     # Integrate
-    timeseries = Sundials.cvode(f, biomass, t)
+    ts = Sundials.cvode(f, biomass, t)
 
     # Get only the int times
     t_collect = collect(linspace(start, stop, t_nsteps))
@@ -105,6 +105,10 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
     ok_indices = collect(i:(i+sum(t_keep)-1))
     
     # Update the output array
-    output[ok_indices,:] = timeseries[t_keep,:]
+    output[ok_indices,:] = ts[t_keep,:]
+
+    # Free memory (just to be super double plus sure)
+    ts = 0
+    gc()
 end
 
