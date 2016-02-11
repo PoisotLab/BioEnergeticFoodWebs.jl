@@ -2,6 +2,7 @@ module befwm
 
     using Sundials
     using Distributions
+    using ODE
 
     export trophic_rank,
         check_food_web,
