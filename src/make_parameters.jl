@@ -86,11 +86,11 @@ function make_parameters(p::Dict{Symbol,Any})
     S = size(A)[1]
     F = zeros(Float64, size(A))
     efficiency = zeros(Float64, size(A))
-    w = zeros(S)
-    M = zeros(S)
-    a = zeros(S)
-    x = zeros(S)
-    y = zeros(S)
+    w = zeros(Float64, S)
+    M = zeros(Float64, S)
+    a = zeros(Float64, S)
+    x = zeros(Float64, S)
+    y = zeros(Float64, S)
 
     # Identify producers
     is_producer = vec(sum(A, 2) .== 0)
@@ -112,8 +112,13 @@ function make_parameters(p::Dict{Symbol,Any})
     end
 
     # Measure generality and extract the vector of 1/n
-    generality = vec(sum(A, 2))
-    w = map(x -> x > 0 ? 1/x : 0, generality)
+    generality = float(vec(sum(A, 2)))
+    for i in eachindex(generality)
+        if generality[i] > 0.0
+            w[i] = 1.0 / generality[i]
+        end
+    end
+    #=w = map(x -> x > 0 ? 1/x : 0, generality)=#
 
     # Get the body mass
     M = p[:Z].^(trophic_rank(A).-1)
