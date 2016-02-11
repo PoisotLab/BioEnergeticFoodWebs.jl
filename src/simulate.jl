@@ -81,7 +81,6 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
         :B => timeseries
     )
 
-    println(timeseries)
     return output
 
 end
