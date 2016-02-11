@@ -23,10 +23,8 @@ from `t` to `t+1`. The total number of steps is therefore on the order of
 Because this results in very large simulations, the function will return
 results with a timestep equal to unity.
 
-The intergation method can be changed to `:Euler`. Not that it should,
-but sometimes you want results within the lifetime of our civilization,
-so it can. So what do you prefer? Maybe wrong results now, or definitely
-right results at some later time? Choose wisely.
+The integration method can be changed to `:Euler`. Not that it should,
+because it takes longer to run and is more likely to give weird results.
 
 The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
 keys:
