@@ -30,8 +30,8 @@ function functional_response!(F::Array{Float64, 2}, biomass::Array{Float64, 1}, 
     Γh = p[:Γ]^p[:h] 
     for resource in eachindex(biomass)
         bm_h = biomass[resource]^p[:h]
-        if !p[:is_producer][consumer]
-            for consumer in eachindex(biomass)
+        for consumer in eachindex(biomass)
+            if !p[:is_producer][consumer]
                 numerator = p[:w][consumer] * p[:A][consumer, resource] * bm_h
                 denominator = Γh * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
                 F[consumer, resource] = numerator / denominator
