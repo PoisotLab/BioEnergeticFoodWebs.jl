@@ -137,7 +137,7 @@ function euler_integration(f, biomass, t)
     dynamics[1,:] = biomass
     for time in 2:length(t)
         time_differential = t[time] - t[time-1]
-        derivatives = f(t, dynamics[time-1,:], zeros(length(biomass)))
+        derivatives = f(t, vec(dynamics[time-1,:]), zeros(length(biomass)))
         dynamics[time,:] = vec(dynamics[time-1,:]) .+ vec(derivatives) .* time_differential
     end
     return dynamics
