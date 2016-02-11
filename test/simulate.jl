@@ -29,7 +29,7 @@ module TestSimulateSanityCheck
     A = [0 1; 0 0]
     p = A |> make_initial_parameters |> make_parameters
     n = vec([1.0, 0.0])
-    s = simulate(p, n, start=0, stop=20, steps=500)
+    s = simulate(p, n, start=0, stop=50, steps=500)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
