@@ -24,7 +24,9 @@ Because this results in very large simulations, the function will return
 results with a timestep equal to unity.
 
 The integration method can be changed to `:Euler`. Not that it should,
-because it takes longer to run and is more likely to give weird results.
+because it takes longer to run and is more likely to give weird results. It
+can also be changed to one of the `Ode` functions, *i.e.* `:ode23`, `:ode45`,
+`:ode78`, or `:ode23s`.
 
 The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
 keys:
@@ -47,7 +49,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
     @assert stop > start
     @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
-    @assert use ∈ vec([:Sundials :Euler])
+    @assert use ∈ vec([:Sundials :Euler :ode23 :ode23s :ode45 :ode78])
 
     # Pre-allocate the timeseries matrix
     t = collect(linspace(start, stop, (stop-start)+1))
@@ -103,11 +105,15 @@ function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=200
     biomass = vec(output[i,:])
 
     # Integrate
-    if use == :Sundials
-        ts = Sundials.cvode(f, biomass, t)
-    elseif use == :Euler
-        ts = euler_integration(f, biomass, t)
-    end
+    func_dict = Dict{Symbol,Function}(
+        :Sundials => Sundials.cvode,
+        :Euler => euler_integration,
+        :ode23 => ODE.ode23,
+        :ode23s => ODE.ode23s,
+        :ode45 => ODE.ode45,
+        :ode78 => ODE.ode78
+    )
+    ts = func_dict[use](f, biomass, t)
 
     # Get only the int times
     t_collect = collect(linspace(start, stop, t_nsteps))
