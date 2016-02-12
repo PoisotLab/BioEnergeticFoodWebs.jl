@@ -24,6 +24,9 @@ function population_stability(D; threshold=1e-10, last=1000)
     @assert last <= size(D, 1)
     non_extinct = D[end,:] .> threshold
     measure_on = D[end-(last-1):end,non_extinct]
+    if sum(measure_on) == 0
+        return NaN
+    end
     stability = -mapslices(coefficient_of_variation, measure_on, 1)
     return mean(stability)
 end
