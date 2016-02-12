@@ -59,7 +59,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
     # We put the starting conditions in the array
     timeseries[1,:] = biomass
     
-    # Pre-assing function
+    # Pre-assign function
     f(t, y, ydot) = dBdt(t, y, ydot, p)
 
     chunk_size = 500
