@@ -79,7 +79,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     # Functional response
     #=F = zeros(Float64, size(p[:A]))=#
     #=functional_response!(F, biomass, p, total_biomass_available)=#
-    F = (p[:w] .* p[:A] .* (biomass .^p[:h])') ./ (p[:Γh] .*(1.0 + p[:c] .* biomass) .+ total_biomass_available )')
+    F = (p[:w] .* p[:A] .* (biomass .^p[:h])') ./ (p[:Γh] .*(1.0 + p[:c] .* biomass) .+ total_biomass_available )
 
     # Consumption
     consumption = p[:x] .* p[:y] .* biomass .* F
