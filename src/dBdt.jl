@@ -74,7 +74,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     # How much food is available?
     #=total_biomass_available = zeros(Float64, S)=#
-    total_biomass_available =  p[:A] * (p[:biomass].^p[:h]) .* p[:w]
+    total_biomass_available =  p[:A] * (biomass.^p[:h]) .* p[:w]
     #=sum_biomasses!(total_biomass_available, biomass, p)=#
 
     # Functional response
