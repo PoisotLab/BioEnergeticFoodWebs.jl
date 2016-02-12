@@ -40,7 +40,7 @@ Based on the average distance of preys to primary producers.
 function trophic_rank(L::Array{Int64, 2})
     # Average of positve elements, 0 otherwise
     nonzeromean = (x) -> maximum(x) == 0 ? 0 : mean(x[x.>0])
-    return mapslices(nonzeromean, L .* distance_to_producer(L), 2) .+ 1
+    return vec(mapslices(nonzeromean, L .* distance_to_producer(L), 2) .+ 1)
 end
 
 """
