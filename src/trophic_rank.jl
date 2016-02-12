@@ -1,4 +1,52 @@
+"""
+**Distance to a primary producer**
+
+This function measures, for every species, its shortest path to a primary
+producer using matrix exponentiation. A primary producer hasa value of 0,
+a primary consumer a value of 1, and so forth.
+
+"""
+function distance_to_producer(L::Array{Int64, 2})
+
+    # We identify producers
+    is_producer = vec(sum(L, 2) .== 0)
+
+    # Producers have a distance of 1
+    d = zeros(Int64, length(is_producer))
+    d[is_producer] = 1
+    
+    # We work on a copy of the matrix with no self-loops
+    K = copy(L)
+    for i in eachindex(d)
+        K[i ,i] = 0
+    end
+
+    # We loop as long as there are species with unknown distance
+    i = 1
+    while prod(d) == 0
+        connected_at_length = (K^i * is_producer) .> 0
+        d[(d .== 0) .* (connected_at_length)] = i+1
+        i = i+1
+    end
+    return d-1
+end
+
+"""
+**Trophic rank**
+
+Based on the average distance of preys to primary producers.
+
+"""
 function trophic_rank(L::Array{Int64, 2})
+    # Average of positve elements, 0 otherwise
+    nonzeromean = (x) -> maximum(x) == 0 ? 0 : mean(x[x.>0])
+    return mapslices(nonzeromean, L .* distance_to_producer(L), 2) .+ 1
+end
+
+"""
+**Alternate trophic rank
+"""
+function trophic_rank_alt(L::Array{Int64, 2})
 
     A = copy(L)
     
@@ -37,35 +85,3 @@ function trophic_rank(L::Array{Int64, 2})
 
 end
 
-"""
-**Distance to a primary producer**
-
-This function measures, for every species, its shortest path to a primary
-producer using matrix exponentiation. A primary producer hasa value of 0,
-a primary consumer a value of 1, and so forth.
-
-"""
-function distance_to_producer(L::Array{Int64, 2})
-
-    # We identify producers
-    is_producer = vec(sum(L, 2) .== 0)
-
-    # Producers have a distance of 1
-    d = zeros(Int64, length(is_producer))
-    d[is_producer] = 1
-    
-    # We work on a copy of the matrix with no self-loops
-    K = copy(L)
-    for i in eachindex(d)
-        K[i ,i] = 0
-    end
-
-    # We loop as long as there are species with unknown distance
-    i = 1
-    while prod(d) == 0
-        connected_at_length = (K^i * is_producer) .> 0
-        d[(d .== 0) .* (connected_at_length)] = i+1
-        i = i+1
-    end
-    return d-1
-end
