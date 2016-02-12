@@ -27,13 +27,12 @@ General function for the functional response matrix. Modifies `F` in place.
 Not to be called by the user.
 """
 function functional_response!(F::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, total_biomass_available::Array{Float64, 1})
-    Γh = p[:Γ]^p[:h] 
     for resource in eachindex(biomass)
         bm_h = biomass[resource]^p[:h]
         for consumer in eachindex(biomass)
             if !p[:is_producer][consumer]
                 numerator = p[:w][consumer] * p[:A][consumer, resource] * bm_h
-                denominator = Γh * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
+                denominator = p[:Γh] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
                 F[consumer, resource] = numerator / denominator
             end
         end
@@ -70,15 +69,7 @@ if B+dB/dt a< ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
 """
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
-    w = p[:w]
-    efficiency = p[:efficiency]
-    x = p[:x]
-    y = p[:y]
-    a = p[:a]
-    A = p[:A]
-    S = size(A)[1]
-    is_herbivore = p[:is_herbivore]
-    is_producer = p[:is_producer]
+    S = size(p[:A])[1]
 
     # How much food is available?
     total_biomass_available = zeros(Float64, S)
@@ -99,18 +90,18 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
         if is_producer[species]
             growth = p[:r] * (1.0 - biomass[species] / p[:K]) * biomass[species]
         else
-            growth = - x[species] * biomass[species]
+            growth = - p[:x][species] * biomass[species]
         end
 
         # Total predation
         pred = 0.0;
         cons = 0.0;
         for other in eachindex(biomass)
-            if A[other, species] == 1
-                pred += consumption[other, species] / efficiency[other, species]
+            if p[:A][other, species] == 1
+                pred += consumption[other, species] / p[:efficiency][other, species]
             end
-            if !is_producer[species]
-                if A[species, other] == 1
+            if !p[:is_producer][species]
+                if p[:A][species, other] == 1
                     cons += consumption[species, other]
                 end
             end
