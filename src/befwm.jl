@@ -5,6 +5,7 @@ module befwm
     using ODE
 
     export trophic_rank,
+        distance_to_producer,
         check_food_web,
         check_initial_parameters,
         check_parameters,
