@@ -24,7 +24,9 @@ Because this results in very large simulations, the function will return
 results with a timestep equal to unity.
 
 The integration method can be changed to `:Euler`. Not that it should,
-because it takes longer to run and is more likely to give weird results.
+because it takes longer to run and is more likely to give weird results. It
+can also be changed to one of the `Ode` functions, *i.e.* `:ode23`, `:ode45`,
+`:ode78`, or `:ode23s`.
 
 The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
 keys:
@@ -47,7 +49,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
     @assert stop > start
     @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
-    @assert use ∈ vec([:Sundials :Euler])
+    @assert use ∈ vec([:Sundials :Euler :ode23 :ode23s :ode45 :ode78])
 
     # Pre-allocate the timeseries matrix
     t = collect(linspace(start, stop, (stop-start)+1))
@@ -56,6 +58,9 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
 
     # We put the starting conditions in the array
     timeseries[1,:] = biomass
+    
+    # Pre-assign function
+    f(t, y, ydot) = dBdt(t, y, ydot, p)
 
     chunk_size = 500
     done_up_to = start
@@ -66,7 +71,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
             stop_at = stop
         end
         i = start_at-start + 1
-        inner_simulation_loop!(timeseries, p, i, start=start_at, stop=stop_at, steps=steps, use=use)
+        inner_simulation_loop!(timeseries, p, i, f, start=start_at, stop=stop_at, steps=steps, use=use)
         done_up_to = stop_at
     end
 
@@ -90,22 +95,25 @@ Note that `output` is a pre-allocated array in which the simulation result
 will be written, and `i` is the origin of the simulation.
 
 """
-function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:Sundials)
+function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:Sundials)
     
     t_nsteps = (stop - start + 1)
     nsteps = (stop - start) * steps + 1
     t = collect(linspace(start, stop, nsteps))
-    f(t, y, ydot) = dBdt(t, y, ydot, p)
 
     # Read the biomass in the pre-allocated array
     biomass = vec(output[i,:])
 
     # Integrate
-    if use == :Sundials
-        ts = Sundials.cvode(f, biomass, t)
-    elseif use == :Euler
-        ts = euler_integration(f, biomass, t)
-    end
+    func_dict = Dict{Symbol,Function}(
+        :Sundials => Sundials.cvode,
+        :Euler  => euler_integration,
+        :ode23  => wrap_ode23,
+        :ode23s => wrap_ode23s,
+        :ode45  => wrap_ode45,
+        :ode78  => wrap_ode78
+    )
+    ts = func_dict[use](f, biomass, t)
 
     # Get only the int times
     t_collect = collect(linspace(start, stop, t_nsteps))
@@ -118,7 +126,6 @@ function inner_simulation_loop!(output, p, i; start::Int64=0, stop::Int64=2000, 
 
     # Free memory (just to be super double plus sure)
     ts = 0
-    gc()
 end
 
 """
@@ -136,8 +143,31 @@ function euler_integration(f, biomass, t)
     dynamics[1,:] = biomass
     for time in 2:length(t)
         time_differential = t[time] - t[time-1]
-        derivatives = f(t, dynamics[time-1,:], zeros(length(biomass)))
+        derivatives = f(t, vec(dynamics[time-1,:]), zeros(length(biomass)))
         dynamics[time,:] = vec(dynamics[time-1,:]) .+ vec(derivatives) .* time_differential
     end
     return dynamics
+end
+
+function wrap_ode23(f, b, t)
+    return wrap_ode(ODE.ode23, f, b, t)
+end
+
+function wrap_ode23s(f, b, t)
+    return wrap_ode(ODE.ode23s, f, b, t)
+end
+
+function wrap_ode45(f, b, t)
+    return wrap_ode(ODE.ode45, f, b, t)
+end
+
+function wrap_ode78(f, b, t)
+    return wrap_ode(ODE.ode78, f, b, t)
+end
+
+function wrap_ode(i, f, b, t)
+    d = copy(b)
+    g(t, y) = f(t, y, d)
+    t, y = i(g, b, t, points=:specified)
+    return hcat(y...)'
 end
