@@ -23,7 +23,7 @@ function distance_to_producer(L::Array{Int64, 2})
 
     # We loop as long as there are species with unknown distance
     i = 1
-    while prod(d) == 0
+    while (i < length(d))|(sum(d) == 0)
         connected_at_length = (K^i * is_producer) .> 0
         d[(d .== 0) .* (connected_at_length)] = i+1
         i = i+1
