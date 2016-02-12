@@ -42,7 +42,13 @@ rank is defined as the average of the distance of preys to primary producers
 function trophic_rank(L::Array{Int64, 2})
     # Average of positve elements, 0 otherwise
     nonzeromean = (x) -> maximum(x) == 0 ? 0 : mean(x[x.>0])
-    return vec(mapslices(nonzeromean, L .* distance_to_producer(L)', 2) .+ 1)
+    d = distance_to_producer(L)
+    dL = L .* d'
+    TL = zeros(length(d))
+    for i in eachindex(d)
+        TL[i] = nonzeromean(dL[i,:]) + 1
+    end
+    return TL
 end
 
 """
