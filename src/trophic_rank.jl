@@ -34,7 +34,9 @@ end
 """
 **Trophic rank**
 
-Based on the average distance of preys to primary producers.
+Based on the average distance of preys to primary producers. Specifically, the
+rank is defined as the average of the distance of preys to primary producers
+(recursively). Primary producers always have a trophic rank of 1.
 
 """
 function trophic_rank(L::Array{Int64, 2})
@@ -44,7 +46,10 @@ function trophic_rank(L::Array{Int64, 2})
 end
 
 """
-**Alternate trophic rank
+**Alternate trophic rank**
+
+***NOT TO BE USED***
+
 """
 function trophic_rank_alt(L::Array{Int64, 2})
 
