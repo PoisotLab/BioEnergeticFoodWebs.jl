@@ -2,8 +2,8 @@
 **Distance to a primary producer**
 
 This function measures, for every species, its shortest path to a primary
-producer using matrix exponentiation. A primary producer hasa value of 0,
-a primary consumer a value of 1, and so forth.
+producer using matrix exponentiation. A primary producer has a value of 1,
+a primary consumer a value of 2, and so forth.
 
 """
 function distance_to_producer(L::Array{Int64, 2})
@@ -28,7 +28,7 @@ function distance_to_producer(L::Array{Int64, 2})
         d[(d .== 0) .* (connected_at_length)] = i+1
         i = i+1
     end
-    return d-1
+    return d
 end
 
 """
