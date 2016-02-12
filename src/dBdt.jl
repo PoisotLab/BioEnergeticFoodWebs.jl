@@ -10,7 +10,6 @@ array `total` with the total biomass available to all species. `total[i]`
 will give the biomass available to species `i`.
 """
 function sum_biomasses!(total::Array{Float64, 1}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any})
-    #=return p[:A] * (p[:biomass].^p[:h]) .* p[:w]=#
     #=for resource in eachindex(biomass)=#
         #=for consumer in eachindex(biomass)=#
             #=if !p[:is_producer][consumer]=#
@@ -44,14 +43,14 @@ end
 **Consumption**
 """
 function consumption_rates!(C::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, F::Array{Float64, 2})
-    for consumer in eachindex(biomass)
-        inner_prod = p[:x][consumer] * p[:y][consumer] * biomass[consumer]
-        if !p[:is_producer][consumer]
-            for resource in eachindex(biomass)
-                C[consumer, resource] = inner_prod * F[consumer, resource]
-            end
-        end
-    end
+    #=for consumer in eachindex(biomass)=#
+        #=inner_prod = p[:x][consumer] * p[:y][consumer] * biomass[consumer]=#
+        #=if !p[:is_producer][consumer]=#
+            #=for resource in eachindex(biomass)=#
+                #=C[consumer, resource] = inner_prod * F[consumer, resource]=#
+            #=end=#
+        #=end=#
+    #=end=#
 end
 
 """
@@ -73,18 +72,18 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     S = size(p[:A], 1)
 
     # How much food is available?
+    total_biomass_available =  p[:A] * (biomass.^p[:h]) .* p[:w]
     #=total_biomass_available = zeros(Float64, S)=#
     #=sum_biomasses!(total_biomass_available, biomass, p)=#
-    total_biomass_available =  p[:A] * (biomass.^p[:h]) .* p[:w]
 
     # Functional response
     F = zeros(Float64, size(p[:A]))
     functional_response!(F, biomass, p, total_biomass_available)
 
     # Consumption
+    consumption = p[:x] .* p[:y] .* biomass .* F
     #=consumption = zeros(Float64, size(p[:A]))=#
     #=consumption_rates!(consumption, biomass, p, F)=#
-    consumption = p[:x].*p[:y].*biomass.*F
 
     # Rate of change
     for species in eachindex(biomass)
