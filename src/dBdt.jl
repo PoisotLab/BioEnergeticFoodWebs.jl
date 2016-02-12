@@ -69,7 +69,7 @@ if B+dB/dt a< ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
 """
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
-    S = size(p[:A])[1]
+    S = size(p[:A], 1)
 
     # How much food is available?
     total_biomass_available = zeros(Float64, S)
