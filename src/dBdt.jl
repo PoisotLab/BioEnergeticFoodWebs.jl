@@ -27,16 +27,16 @@ General function for the functional response matrix. Modifies `F` in place.
 Not to be called by the user.
 """
 function functional_response!(F::Array{Float64, 2}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any}, total_biomass_available::Array{Float64, 1})
-    for resource in eachindex(biomass)
-        bm_h = biomass[resource]^p[:h]
-        for consumer in eachindex(biomass)
-            if !p[:is_producer][consumer]
-                numerator = p[:w][consumer] * p[:A][consumer, resource] * bm_h
-                denominator = p[:Γh] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]
-                F[consumer, resource] = numerator / denominator
-            end
-        end
-    end
+    #=for resource in eachindex(biomass)=#
+        #=bm_h = biomass[resource]^p[:h]=#
+        #=for consumer in eachindex(biomass)=#
+            #=if !p[:is_producer][consumer]=#
+                #=numerator = p[:w][consumer] * p[:A][consumer, resource] * bm_h=#
+                #=denominator = p[:Γh] * (1.0 + p[:c] * biomass[consumer]) + total_biomass_available[consumer]=#
+                #=F[consumer, resource] = numerator / denominator=#
+            #=end=#
+        #=end=#
+    #=end=#
 end
 
 """
@@ -77,8 +77,9 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     #=sum_biomasses!(total_biomass_available, biomass, p)=#
 
     # Functional response
-    F = zeros(Float64, size(p[:A]))
-    functional_response!(F, biomass, p, total_biomass_available)
+    #=F = zeros(Float64, size(p[:A]))=#
+    #=functional_response!(F, biomass, p, total_biomass_available)=#
+    F = (p[:w] .* p[:A] .* (biomass .^p[:h])') ./ (p[:Γh] .*(1.0 + p[:c] .* biomass) .+ total_biomass_available )')
 
     # Consumption
     consumption = p[:x] .* p[:y] .* biomass .* F
