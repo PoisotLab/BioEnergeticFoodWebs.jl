@@ -10,7 +10,7 @@ array `total` with the total biomass available to all species. `total[i]`
 will give the biomass available to species `i`.
 """
 function sum_biomasses!(total::Array{Float64, 1}, biomass::Array{Float64, 1}, p::Dict{Symbol, Any})
-    return p[:A] * (p[:biomass].^p[:h]) .* p[:w]
+    #=return p[:A] * (p[:biomass].^p[:h]) .* p[:w]=#
     #=for resource in eachindex(biomass)=#
         #=for consumer in eachindex(biomass)=#
             #=if !p[:is_producer][consumer]=#
@@ -74,8 +74,8 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     # How much food is available?
     #=total_biomass_available = zeros(Float64, S)=#
-    total_biomass_available =  p[:A] * (biomass.^p[:h]) .* p[:w]
     #=sum_biomasses!(total_biomass_available, biomass, p)=#
+    total_biomass_available =  p[:A] * (biomass.^p[:h]) .* p[:w]
 
     # Functional response
     F = zeros(Float64, size(p[:A]))
