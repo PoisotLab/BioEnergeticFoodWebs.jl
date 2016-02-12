@@ -82,8 +82,9 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     functional_response!(F, biomass, p, total_biomass_available)
 
     # Consumption
-    consumption = zeros(Float64, size(p[:A]))
-    consumption_rates!(consumption, biomass, p, F)
+    #=consumption = zeros(Float64, size(p[:A]))=#
+    #=consumption_rates!(consumption, biomass, p, F)=#
+    consumption = p[:x].*p[:y].*biomass.*F
 
     # Rate of change
     for species in eachindex(biomass)
