@@ -87,7 +87,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     for species in eachindex(biomass)
 
         # Species-specific component of growth
-        if is_producer[species]
+        if p[:is_producer][species]
             growth = p[:r] * (1.0 - biomass[species] / p[:K]) * biomass[species]
         else
             growth = - p[:x][species] * biomass[species]
