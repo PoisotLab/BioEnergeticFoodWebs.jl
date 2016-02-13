@@ -14,7 +14,9 @@ module befwm
         make_initial_parameters,
         simulate,
         nichemodel,
-        population_stability
+        population_stability,
+        total_biomass,
+        population_biomass
 
     # Includes
     include(joinpath(".", "trophic_rank.jl"))

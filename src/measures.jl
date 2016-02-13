@@ -30,3 +30,36 @@ function population_stability(p; threshold=1e-10, last=1000)
     stability = -mapslices(coefficient_of_variation, measure_on, 1)
     return mean(stability)
 end
+
+"""
+**Total biomass**
+
+Returns the sum of biomass, average over the last `last` timesteps.
+
+"""
+function total_biomass(p; last=1000)
+    @assert last <= size(p[:B], 1)
+    measure_on = p[:B][end-(last-1):end,non_extinct]
+    if sum(measure_on) == 0
+        return NaN
+    end
+    biomass = vec(sum(measure_on, 2))
+    return mean(stability)
+end
+
+"""
+**Per species biomass**
+
+Returns the average biomass of all species, over the last `last` timesteps.
+
+"""
+function population_biomass(p; last=1000)
+    @assert last <= size(p[:B], 1)
+    measure_on = p[:B][end-(last-1):end,non_extinct]
+    if sum(measure_on) == 0
+        return NaN
+    end
+    biomass = vec(mean(measure_on, 1))
+    return biomass
+end
+
