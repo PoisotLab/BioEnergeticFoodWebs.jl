@@ -14,6 +14,22 @@ module TestSimulate
 
 end
 
+module TestSimulateHandChecked
+    using Base.Test
+    using befwm
+
+    A = [0 1 0; 0 0 0; 0 1 0]
+    p = make_initial_parameters(A)
+    p = make_parameters(p)
+    b0 = vec([0.2 0.4 0.1])
+    der = zeros(Float64, 3)
+    der = befwm.dBdt(0.0, b0, der, p)
+    0.1604888888888889,-0.4,0.08024444444444445
+    @test_approx_eq_eps der[1] 0.160 0.01
+    @test_approx_eq_eps der[2] -0.4 0.01
+    @test_approx_eq_eps der[3] 0.080 0.01
+end
+
 module TestSimulateSanityCheck
     using Base.Test
     using befwm
