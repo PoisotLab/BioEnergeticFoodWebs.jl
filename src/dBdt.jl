@@ -16,20 +16,18 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
     S = size(p[:A], 1)
 
-    # How much food is available?
-    total_biomass_available =  p[:A] * (biomass.^p[:h]) .* p[:w]
-    #=total_biomass_available = zeros(Float64, S)=#
-    #=sum_biomasses!(total_biomass_available, biomass, p)=#
-
     # Functional response
-    #=F = zeros(Float64, size(p[:A]))=#
-    #=functional_response!(F, biomass, p, total_biomass_available)=#
-    F = (p[:w] .* p[:A] .* (biomass .^p[:h])') ./ (p[:Γh] .*(1.0 + p[:c] .* biomass) .+ total_biomass_available )
+    # This is a big-ass operation, but it works orders of magnitude faster than loops
+    F = (p[:w] .* p[:A] .* (biomass .^p[:h])') ./ (p[:Γh] .*(1.0 + p[:c] .* biomass) .+ (p[:A] * (biomass.^p[:h]) .* p[:w]) )
 
     # Consumption
     consumption = p[:x] .* p[:y] .* biomass .* F
-    #=consumption = zeros(Float64, size(p[:A]))=#
-    #=consumption_rates!(consumption, biomass, p, F)=#
+
+    ce = consumption./p[:efficiency]
+    ce[isnan(ce)] = 0.0
+
+    interac = -vec(sum(ce, 2)).+ sum(consumption, 1)
+
 
     # Rate of change
     for species in eachindex(biomass)
@@ -40,22 +38,9 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
         else
             growth = - p[:x][species] * biomass[species]
         end
-
-        # Total predation
-        pred = 0.0;
-        cons = 0.0;
-        for other in eachindex(biomass)
-            if p[:A][other, species] == 1
-                pred += consumption[other, species] / p[:efficiency][other, species]
-            end
-            if !p[:is_producer][species]
-                if p[:A][species, other] == 1
-                    cons += consumption[species, other]
-                end
-            end
-        end
-
-        derivative[species] = growth - pred + cons
+        
+        derivative[species] = growth + interac[species]
+       
         if derivative[species] + biomass[species] < eps(0.0)
             derivative[species] = -biomass[species]
         end
