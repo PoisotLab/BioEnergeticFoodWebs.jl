@@ -42,7 +42,6 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
     end
 
     dBdt = growth .+ gain .- loss
-    println(dBdt)
 
     for i in eachindex(derivative)
         if dBdt[i] + biomass[i] < eps(0.0)
