@@ -20,10 +20,10 @@ an abundance higher than `threshold`. By default, the stability is measure
 over the last `last=1000` timesteps.
 
 """
-function population_stability(D; threshold=1e-10, last=1000)
-    @assert last <= size(D, 1)
-    non_extinct = D[end,:] .> threshold
-    measure_on = D[end-(last-1):end,non_extinct]
+function population_stability(p; threshold=1e-10, last=1000)
+    @assert last <= size(p[:B], 1)
+    non_extinct = p[:B][end,:] .> threshold
+    measure_on = p[:B][end-(last-1):end,non_extinct]
     if sum(measure_on) == 0
         return NaN
     end
