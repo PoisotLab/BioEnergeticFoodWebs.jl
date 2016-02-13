@@ -44,7 +44,7 @@ function total_biomass(p; last=1000)
         return NaN
     end
     biomass = vec(sum(measure_on, 2))
-    return mean(stability)
+    return mean(biomass)
 end
 
 """
