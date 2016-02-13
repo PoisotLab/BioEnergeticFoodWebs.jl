@@ -39,7 +39,7 @@ Returns the sum of biomass, average over the last `last` timesteps.
 """
 function total_biomass(p; last=1000)
     @assert last <= size(p[:B], 1)
-    measure_on = p[:B][end-(last-1):end,non_extinct]
+    measure_on = p[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
         return NaN
     end
@@ -55,7 +55,7 @@ Returns the average biomass of all species, over the last `last` timesteps.
 """
 function population_biomass(p; last=1000)
     @assert last <= size(p[:B], 1)
-    measure_on = p[:B][end-(last-1):end,non_extinct]
+    measure_on = p[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
         return NaN
     end
