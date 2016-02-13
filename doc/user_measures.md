@@ -20,3 +20,12 @@ those with very small biomasses. This can be done by setting a *negative*
 threshold. Usually, at least 1000 timesteps are required to get a stable
 estimate of stability.
 
+## Population biomass
+
+The `population_biomass` function returns the average biomass over `last`
+timesteps for *every* population in the network.
+
+## Total biomass
+
+The `total_biomass` function returns the total biomass over `last`
+timesteps for the entire network.
