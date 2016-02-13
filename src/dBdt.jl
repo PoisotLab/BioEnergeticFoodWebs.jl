@@ -8,8 +8,8 @@ it will return `dB/dt` for every species.
 
 Note that at the end of the function, we perform different checks to ensure
 that nothing wacky happens during subsequent integration steps. Specifically,
-if B+dB/dt a< ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
-0.0 that your system can represent.
+if B+dB/dt a< ϵ(), we set dBdt to -B. ϵ() is the next value above
+1.0 that your system can represent.
 
 """
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
@@ -41,7 +41,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
         
         derivative[species] = growth + interac[species]
        
-        if derivative[species] + biomass[species] < eps(0.0)
+        if derivative[species] + biomass[species] < eps()
             derivative[species] = -biomass[species]
         end
 
