@@ -86,7 +86,7 @@ function save(p::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN)
         filename = "befwm_" * string(hash(p))
     end
     if as == :json
-        filename .* ".json"
+        filename = filename * ".json"
         f = open(filename, "w")
         JSON.print(f, p)
         close(f)
