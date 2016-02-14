@@ -3,7 +3,6 @@ module befwm
     using Sundials
     using Distributions
     using ODE
-    using JLD
 
     export trophic_rank,
         make_parameters,
