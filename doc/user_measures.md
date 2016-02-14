@@ -29,3 +29,10 @@ timesteps for *every* population in the network.
 
 The `total_biomass` function returns the total biomass over `last`
 timesteps for the entire network.
+
+## Saving the simulations
+
+The object returned by `simulate` can be saved using the `befwm.save`
+function. This function is *not* exported, so it must be called with the
+`befwm.` prefix. By default, this function will generate a unique identifier
+for every simulation.
