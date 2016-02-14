@@ -42,8 +42,11 @@ Note, however, that `Sundials.jl` currently has a huge memory leak. What
 it means, in practice, is that memory allocated for a simulation is not
 release after the simulation is done. This is currently being fixed, but as
 a consequence, it is difficult to use `:Sundials` for many simulations in a
-row. We had good success with `:ode78` as a replacement for `:Sundials`. There
-is a decline in performance associated, but not a gigantic one.
+row. We had good success with `:ode45` as a replacement for `:Sundials`. There
+is a decline in performance associated, but not a gigantic one. In terms of
+overall performance, the two slowest options are `:Euler` and `:ode23s`. In
+the `ODE.jl` family, `:ode45` is the fastest, and `:ode23` and `:ode78`
+have similar speeds.
 
 In addition, note that the solvers will only return the biomasses for *integer*
 timesteps, no matter what the number of intermediate steps is. This is because
