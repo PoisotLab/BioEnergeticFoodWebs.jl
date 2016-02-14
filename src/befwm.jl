@@ -3,13 +3,9 @@ module befwm
     using Sundials
     using Distributions
     using ODE
+    using JLD
 
     export trophic_rank,
-        distance_to_producer,
-        check_food_web,
-        check_initial_parameters,
-        check_parameters,
-        dBdt,
         make_parameters,
         make_initial_parameters,
         simulate,

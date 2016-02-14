@@ -63,3 +63,33 @@ function population_biomass(p; last=1000)
     return biomass
 end
 
+"""
+**Save the output of a simulation**
+
+Takes a simulation output as a mandatory argument. The two keyword arguments
+are `as` (can be `:json`, more options coming soon), defining the file format,
+and `filename` (without an extension, defaults to `NaN`).
+
+Called with the defaults, this function will write `befwm_xxxxxxxx.json`
+with the current simulation output, where `xxxxxxxx` is a hash of the `p`
+output (ensuring that all output files are unique).
+
+This function is *not* exported, so it must be called with `befwm.save`.
+
+"""
+function save(p::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN)
+    if as == :JSON
+        as = :json
+    end
+    @assert as ∈ vec([:json])
+    if isnan(filename)
+        filename = "befwm_" * string(hash(p))
+    end
+    if as == :json
+        filename .* ".json"
+        f = open(filename, "w")
+        JSON.print(f, p)
+        close(f)
+    end
+end
+
