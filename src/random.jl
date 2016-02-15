@@ -54,3 +54,18 @@ function nichemodel(S::Int64, L::Int64)
     return A
 
 end
+
+"""
+**Niche model of food webs**
+
+Takes a number of species `S` and a connectance `C`, and returns a food web
+with predators in rows, and preys in columns. Note that the connectance is
+first transformed into an integer number of interactions.
+
+"""
+function nichemodel(S::Int64, C::Float64)
+    @assert C <= 1.0
+    @assert C > 0.0
+    L = C * S^2
+    return nichemodel(S, L)
+end

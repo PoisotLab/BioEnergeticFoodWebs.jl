@@ -5,16 +5,13 @@ module befwm
     using ODE
 
     export trophic_rank,
-        distance_to_producer,
-        check_food_web,
-        check_initial_parameters,
-        check_parameters,
-        dBdt,
         make_parameters,
         make_initial_parameters,
         simulate,
         nichemodel,
-        population_stability
+        population_stability,
+        total_biomass,
+        population_biomass
 
     # Includes
     include(joinpath(".", "trophic_rank.jl"))

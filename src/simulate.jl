@@ -141,30 +141,58 @@ function euler_integration(f, biomass, t)
     # Initial population density
     dynamics = zeros(Float64, (length(t), length(biomass)))
     dynamics[1,:] = biomass
+    derivatives = zeros(length(biomass))
     for time in 2:length(t)
         time_differential = t[time] - t[time-1]
-        derivatives = f(t, vec(dynamics[time-1,:]), zeros(length(biomass)))
-        dynamics[time,:] = vec(dynamics[time-1,:]) .+ vec(derivatives) .* time_differential
+        start = vec(dynamics[time-1,:])
+        dynamics[time,:] = start .+ f(t, start, derivatives) .* time_differential
     end
     return dynamics
 end
 
+"""
+**Wrapper for ode23**
+
+See `wrap_ode`.
+"""
 function wrap_ode23(f, b, t)
     return wrap_ode(ODE.ode23, f, b, t)
 end
 
+"""
+**Wrapper for ode23s**
+
+See `wrap_ode`.
+"""
 function wrap_ode23s(f, b, t)
     return wrap_ode(ODE.ode23s, f, b, t)
 end
 
+"""
+**Wrapper for ode45**
+
+See `wrap_ode`.
+"""
 function wrap_ode45(f, b, t)
     return wrap_ode(ODE.ode45, f, b, t)
 end
 
+"""
+**Wrapper for ode78**
+
+See `wrap_ode`.
+"""
 function wrap_ode78(f, b, t)
     return wrap_ode(ODE.ode78, f, b, t)
 end
 
+"""
+**Wrapper for ode functions**
+
+The solvers in `ODE.jl` have a different API from `Sundials.jl`. These
+functions will let `ODE` do its job, then return the results in way we
+can handle.
+"""
 function wrap_ode(i, f, b, t)
     d = copy(b)
     g(t, y) = f(t, y, d)
