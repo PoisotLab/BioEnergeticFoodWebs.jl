@@ -11,7 +11,8 @@ module befwm
         nichemodel,
         population_stability,
         total_biomass,
-        population_biomass
+        population_biomass,
+        foodweb_diversity
 
     # Includes
     include(joinpath(".", "trophic_rank.jl"))
