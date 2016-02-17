@@ -64,8 +64,8 @@ first transformed into an integer number of interactions.
 
 """
 function nichemodel(S::Int64, C::Float64)
-    @assert C <= 1.0
+    @assert C < 1.0
     @assert C > 0.0
-    L = C * S^2
+    L = round(Int64, C * S^2)
     return nichemodel(S, L)
 end

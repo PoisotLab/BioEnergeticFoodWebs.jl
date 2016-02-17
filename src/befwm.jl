@@ -3,6 +3,7 @@ module befwm
     using Sundials
     using Distributions
     using ODE
+    using JSON
 
     export trophic_rank,
         make_parameters,
