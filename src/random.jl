@@ -6,6 +6,10 @@ function connectance(S::Int64, L::Int64)
     return C
 end
 
+function connectance(A::Array{Int64, 2})
+    return connectance(size(A, 1), sum(A))
+end
+
 """
 **Niche model of food webs**
 
