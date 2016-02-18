@@ -46,7 +46,6 @@ function make_initial_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1
         Γ::Float64=0.5
         )
     check_food_web(A)
-    # TODO comment
     p = Dict{Symbol,Any}(
         :K              => K,
         :Z              => Z,
@@ -118,7 +117,6 @@ function make_parameters(p::Dict{Symbol,Any})
             w[i] = 1.0 / generality[i]
         end
     end
-    #=w = map(x -> x > 0 ? 1/x : 0, generality)=#
 
     # Get the body mass
     M = p[:Z].^(trophic_rank(A).-1)

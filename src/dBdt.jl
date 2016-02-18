@@ -8,7 +8,7 @@ it will return `dB/dt` for every species.
 
 Note that at the end of the function, we perform different checks to ensure
 that nothing wacky happens during subsequent integration steps. Specifically,
-if B+dB/dt a< ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
+if B+dB/dt < ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
 0.0 that your system can represent.
 
 """

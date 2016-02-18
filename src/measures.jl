@@ -63,6 +63,26 @@ function population_biomass(p; last=1000)
     return biomass
 end
 
+function shannon(x)
+    p = x ./ sum(x)
+    corr = log(length(x))
+    p_ln_p = p .* log(p)
+    return -(sum(p_ln_p)/corr)
+end
+
+"""
+**TODO**
+"""
+function foodweb_diversity(p; last=1000)
+    @assert last <= size(p[:B], 1)
+    measure_on = p[:B][end-(last-1):end,:]
+    if sum(measure_on) == 0
+        return NaN
+    end
+    shan = [shannon(vec(measure_on[i,:])) for i in 1:size(measure_on, 1)]
+    return mean(shan)
+end
+
 """
 **Save the output of a simulation**
 
