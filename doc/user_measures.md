@@ -20,6 +20,12 @@ those with very small biomasses. This can be done by setting a *negative*
 threshold. Usually, at least 1000 timesteps are required to get a stable
 estimate of stability.
 
+Note that in the original paper, what is presented is actually this measure,
+multiplied by 100, which is the *relative standard error*, and not the
+coefficient of variation. Note also that, so as to correct for the fact
+that the number of timesteps varies, we use the corrected estimator of the
+coefficient of variation.
+
 ## Population biomass
 
 The `population_biomass` function returns the average biomass over `last`
@@ -29,6 +35,17 @@ timesteps for *every* population in the network.
 
 The `total_biomass` function returns the total biomass over `last`
 timesteps for the entire network.
+
+## Food web diversity
+
+The `foodweb_diversity` is the Shannon entropy measure, corrected for the
+number of population (*i.e.*, divided by the natural log of the number of
+populations). Values of 1 indicate high evenness, and values close to 0
+indicate extreme un-evenness. In the original paper, diversity is measured
+as the number of species with a biomass above a given threshold. Given that
+this threshold has to be set in an arbitrary way, and does not account for
+the fact that changing several parameters also changes the distribution of
+biomasses, we have not retained this measurement of diversity.
 
 ## Saving the simulations
 
