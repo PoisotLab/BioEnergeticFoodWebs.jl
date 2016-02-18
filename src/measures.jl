@@ -63,15 +63,35 @@ function population_biomass(p; last=1000)
     return biomass
 end
 
-function shannon(x)
-    p = x ./ sum(x)
-    corr = log(length(x))
-    p_ln_p = p .* log(p)
-    return -(sum(p_ln_p)/corr)
+"""
+**Shannon's entropy**
+
+Corrected for the number of species, removes negative and null values, return
+`NaN` in case of problem.
+
+"""
+function shannon(n)
+    x = copy(n)
+    x = filter((k) -> k > 0.0, x)
+    try
+        if length(x) > 1
+            p = x ./ sum(x)
+            corr = log(length(x))
+            p_ln_p = p .* log(p)
+            return -(sum(p_ln_p)/corr)
+        else
+            return NaN
+        end
+    catch
+        return NaN
+    end
 end
 
 """
-**TODO**
+**Food web diversity**
+
+Based on the average of Shannon's entropy over the last `last` timesteps.
+
 """
 function foodweb_diversity(p; last=1000)
     @assert last <= size(p[:B], 1)
