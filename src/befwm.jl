@@ -4,6 +4,7 @@ module befwm
     using Distributions
     using ODE
     using JSON
+    using JLD
 
     export trophic_rank,
         make_parameters,
