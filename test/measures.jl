@@ -27,7 +27,7 @@ module TestMeasures
     p = Dict{Symbol, Any}(:B => B)
     @test total_biomass(p, last=10) == 1.0
     @test_throws AssertionError total_biomass(p, last=1000)
-    @assert population_biomass(p, last=10) .== ones(10).*0.1
+    @test population_biomass(p, last=10)[1] == 0.1
 
 end
 
