@@ -9,6 +9,9 @@ module TestMeasures
     i[1] = 1.0
     @test_approx_eq_eps befwm.shannon(i) 0.0 0.2
 
+    @test isnan(befwm.shannon(vec([1.0])))
+    @test isnan(befwm.shannon(vec([-1.0])))
+
 
     i = ones(5)
     @test befwm.coefficient_of_variation(i) == 0.0
