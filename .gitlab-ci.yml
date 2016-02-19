@@ -1,7 +1,7 @@
 stages:
     - test
     - coverage
-    - doc
+    - post
 
 test:
     stage: test
@@ -14,10 +14,8 @@ coverage:
     script:
         - make coverage
         - make clean
-
-
 doc:
-    stage: doc
+    stage: post
     script:
         - make doc -B
         - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
@@ -29,3 +27,8 @@ doc:
         - git add .
         - git commit -m 'Doc update'
         - git push -u gitbook master -f
+
+mirror:
+    stage: post
+    script:
+        - git push --mirror git@github.com:PoisotLab/befwm.jl.git
