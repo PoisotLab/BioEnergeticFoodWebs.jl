@@ -7,7 +7,9 @@ test_files = [
     "trophic_rank.jl",
     "checks.jl",
     "make_parameters.jl",
-    "simulate.jl"
+    "simulate.jl",
+    "random.jl",
+    "measures.jl"
 ]
 
 for current_test in test_files
