@@ -25,8 +25,9 @@ module TestMeasures
     # Test the total biomass thing
     B = eye(10)
     p = Dict{Symbol, Any}(:B => B)
-    @test total_biomass(p, last=10) == sum(B)
+    @test total_biomass(p, last=10) == 1.0
     @test_throws AssertionError total_biomass(p, last=1000)
+    @assert population_biomass(p, last=10) .== ones(10).*0.1
 
 end
 
