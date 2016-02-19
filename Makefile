@@ -23,3 +23,5 @@ doc:
 	cp LICENSE.md doc/LICENSE.md
 	julia -e 'Pkg.add("Lexicon"); using Lexicon; using befwm; save("doc/api.md", befwm)'
 
+mirror:
+	git push --mirror git@github.com:PoisotLab/befwm.jl.git

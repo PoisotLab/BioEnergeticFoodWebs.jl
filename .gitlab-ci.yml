@@ -1,6 +1,5 @@
 stages:
     - test
-    - mirror
     - doc
     - coverage
 
@@ -31,8 +30,3 @@ doc:
         - git add .
         - git commit -m 'Doc update'
         - git push -u gitbook master -f
-
-mirror:
-    stage: mirror
-    script:
-        - git push --mirror git@github.com:PoisotLab/befwm.jl.git
