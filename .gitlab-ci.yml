@@ -35,4 +35,4 @@ doc:
 mirror:
     stage: mirror
     script:
-        - git push --force github master
+        - git push --mirror git@github.com:PoisotLab/befwm.jl.git
