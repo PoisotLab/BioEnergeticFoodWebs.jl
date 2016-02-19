@@ -16,6 +16,9 @@ coverage:
         - make clean
 doc:
     stage: post
+    only:
+        - master
+    allow_failure: true
     script:
         - make doc -B
         - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
