@@ -1,7 +1,8 @@
 stages:
     - test
+    - mirror
+    - doc
     - coverage
-    - post
 
 test:
     stage: test
@@ -15,7 +16,7 @@ coverage:
         - make coverage
         - make clean
 doc:
-    stage: post
+    stage: doc
     only:
         - master
     allow_failure: true
@@ -32,6 +33,6 @@ doc:
         - git push -u gitbook master -f
 
 mirror:
-    stage: post
+    stage: mirror
     script:
         - git push --force --mirror git@github.com:PoisotLab/befwm.jl.git
