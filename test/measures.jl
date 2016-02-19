@@ -2,6 +2,8 @@ module TestMeasures
     using Base.Test
     using befwm
 
+    # Internal functions
+
     i = ones(10)
     @test_approx_eq befwm.shannon(i) 1.0
 
@@ -19,4 +21,13 @@ module TestMeasures
     i = collect(linspace(0.0, 1.0, 3))
     @test_approx_eq befwm.coefficient_of_variation(i) 1+1/(4*length(i))
 
+
+    # Test the total biomass thing
+    B = eye(10)
+    p = Dict{Symbol, Any}(:B => B)
+    @test total_biomass(p, last=10) == sum(B)
+    @test_throws AssertionError total_biomass(p, last=1000)
+
 end
+
+
