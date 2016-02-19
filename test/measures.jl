@@ -11,7 +11,7 @@ module TestMeasures
 
 
     i = ones(5)
-    @test befwm.coefficient_of_vairation(i) == 0.0
+    @test befwm.coefficient_of_variation(i) == 0.0
 
     i = collect(linspace(0.0, 1.0, 3))
     @test_approx_eq befwm.coefficient_of_variation(i) 1+1/(4*length(i))
