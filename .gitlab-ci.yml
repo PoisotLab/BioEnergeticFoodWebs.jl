@@ -31,4 +31,4 @@ doc:
 mirror:
     stage: post
     script:
-        - git push --mirror git@github.com:PoisotLab/befwm.jl.git
+        - git push --force --mirror git@github.com:PoisotLab/befwm.jl.git
