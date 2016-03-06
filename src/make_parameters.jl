@@ -155,7 +155,7 @@ function make_parameters(p::Dict{Symbol,Any})
     p[:efficiency] = efficiency
     p[:y] = y
     p[:x] = x
-    p[:a]= a
+    p[:a] = a
     p[:is_herbivore] = is_herbivore
     p[:is_producer] = is_producer
     p[:Γh] = p[:Γ]^p[:h]
