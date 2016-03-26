@@ -52,4 +52,8 @@ biomasses, we have not retained this measurement of diversity.
 The object returned by `simulate` can be saved using the `befwm.save`
 function. This function is *not* exported, so it must be called with the
 `befwm.` prefix. By default, this function will generate a unique identifier
-for every simulation.
+for every simulation. It is generally considered good practice to save the
+simulation outputs, and process them later, rather than working on the objects
+without saving them. In case one wants to return to the simulations at a
+later time, saving the objects allows to forgo re-running the simulations,
+and can therefore save significant amounts of time.

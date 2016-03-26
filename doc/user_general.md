@@ -55,7 +55,7 @@ p[:Z] = 2.0 # Scaling of body mass with trophic rank
 To see what the initial parameters values are, either look at the `p` object,
 or (better) at the help of `make_initial_parameters`, with
 
-~~~ julia
+~~~
 ?make_initial_parameters
 ~~~
 
