@@ -14,43 +14,43 @@ if B+dB/dt < ϵ(0.0), we set dBdt to -B. ϵ(0.0) is the next value above
 """
 function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
-    S = size(p[:A], 1)
+  S = size(p[:A], 1)
 
-    # Total available biomass
-    bm_matrix = p[:w]*biomass'.*p[:A]
-    food_available = vec(sum(bm_matrix, 2))
-   
-    f_den = p[:Γh]*(1.0+p[:c].*biomass).+food_available
-    F = bm_matrix ./ f_den
-    
-    xyb = p[:x].*p[:y].*biomass
-    transfered = F.*xyb
-    consumed = transfered./p[:efficiency]
-    consumed[isnan(consumed)] = 0.0
-    
-    gain = vec(sum(transfered, 2))
-    loss = vec(sum(consumed, 1))
+  # Total available biomass
+  bm_matrix = p[:w]*biomass'.*p[:A]
+  food_available = vec(sum(bm_matrix, 2))
 
-    growth = zeros(Float64, S)
-    
-    for i in eachindex(biomass)
-        if p[:is_producer][i]
-            growth[i] = p[:r] * (1.0 - biomass[i] / p[:K]) * biomass[i]
-        else
-            growth[i] = - p[:x][i] * biomass[i]
-        end
+  f_den = p[:Γh]*(1.0+p[:c].*biomass).+food_available
+  F = bm_matrix ./ f_den
+
+  xyb = p[:x].*p[:y].*biomass
+  transfered = F.*xyb
+  consumed = transfered./p[:efficiency]
+  consumed[isnan(consumed)] = 0.0
+
+  gain = vec(sum(transfered, 2))
+  loss = vec(sum(consumed, 1))
+
+  growth = zeros(Float64, S)
+
+  for i in eachindex(biomass)
+    if p[:is_producer][i]
+      growth[i] = p[:r] * (1.0 - biomass[i] / p[:K]) * biomass[i]
+    else
+      growth[i] = - p[:x][i] * biomass[i]
     end
+  end
 
-    dBdt = growth .+ gain .- loss
+  dBdt = growth .+ gain .- loss
 
-    for i in eachindex(derivative)
-        if dBdt[i] + biomass[i] < eps(0.0)
-            derivative[i] = -biomass[i]
-        else
-            derivative[i] = dBdt[i]
-        end
+  for i in eachindex(derivative)
+    if dBdt[i] + biomass[i] < eps(0.0)
+      derivative[i] = -biomass[i]
+    else
+      derivative[i] = dBdt[i]
     end
+  end
 
-    return derivative
+  return derivative
 
 end
