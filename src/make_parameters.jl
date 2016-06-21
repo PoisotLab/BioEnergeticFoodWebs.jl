@@ -26,10 +26,10 @@ All of these values are passed as optional keyword arguments to the function.
 Alternatively, every parameter can be used as a *keyword* argument when calling the function. For example
 
     A = [0 1 1; 0 0 0; 0 0 0]
-    p = make_initial_parameters(A, Z=100.0)
+    p = model_parameters(A, Z=100.0)
 
-The only exception is `vertebrates`, which has to be modified after this
-function is called. By default, all of the species will be invertebrates.
+The final keyword is `vertebrates`, which is an array of `true` or `false`
+for every species in the matrix. By default, all species are invertebrates.
 """
 function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         a_invertebrate::Float64=0.314, a_producer::Float64=1.0, a_vertebrate::Float64=0.88,
