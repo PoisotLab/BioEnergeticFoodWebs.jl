@@ -7,8 +7,7 @@ using JSON
 using JLD
 
 export trophic_rank,
-  make_parameters,
-  make_initial_parameters,
+  model_parameters,
   simulate,
   nichemodel,
   population_stability,

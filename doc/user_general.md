@@ -8,8 +8,7 @@ Starting from a network `A`, this is as simple as
 
 ~~~ julia
 A = [0 1 0 0; 0 0 1 1; 0 0 0 0; 0 0 0 0]
-p = make_initial_parameters(A)
-p = make_parameters(p)
+p = model_parameters(A)
 initial_biomass = rand(size(A, 1))
 d = simulate(p, initial_biomass, start=0, stop=100, steps=10000)
 ~~~
@@ -22,7 +21,7 @@ predators in rows and preys in columns. In addition, it is expected that
 rows in the matrix has no interaction). This is checked internally by the
 different functions.
 
-## Create initial parameters
+## Create model parameters
 
 First, create or import an interaction matrix, with predators in rows and
 preys in columns:
@@ -39,44 +38,18 @@ A = [0 1 1 0; 0 0 0 1; 0 0 0 1; 0 0 0 0]
 initial_biomasses = rand(size(A, 1))
 ~~~
 
-Once done, get the initial parameters:
+Once done, get the initial parameters, and if needed change some of their values:
 
 ~~~ julia
-p = make_initial_parameters(A)
-~~~
-
-This function will generate most of the metabolic rates, etc. Once this step
-is done, you can change the values of some parameters, *e.g.*:
-
-~~~ julia
-p[:Z] = 2.0 # Scaling of body mass with trophic rank
+p = model_parameters(A, Z=2.0)
 ~~~
 
 To see what the initial parameters values are, either look at the `p` object,
-or (better) at the help of `make_initial_parameters`, with
+or (better) at the help of `model_parameters`, with
 
 ~~~
-?make_initial_parameters
+?model_parameters
 ~~~
-
-Alternatively, you can give non-default values directly when calling the
-function. For example,
-
-~~~ julia
-p = make_initial_parameters(A, Z=25.0)
-~~~
-
-## Create simulation parameters
-
-Once this is done, you need to generate some additional simulation parameters
-(such as the efficiency matrix):
-
-~~~ julia
-p = make_parameters(p)
-~~~
-
-This function takes no additional input from the user. When this is done,
-the simulation is ready to start.
 
 ## Simulation
 
