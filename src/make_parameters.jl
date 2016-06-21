@@ -1,7 +1,7 @@
 """
 **Create default parameters**
 
-This function creates initial parameters, based on a food web
+This function creates model parameters, based on a food web
 matrix. Specifically, the default values are:
 
 | Parameter      | Default Value | Meaning                                                                             |
@@ -21,12 +21,7 @@ matrix. Specifically, the default values are:
 | y_vertebrate   | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate   |
 | Γ              | 0.5           | half-saturation density                                                             |
 
-There are two ways to modify the default values. First, by calling the
-function and changing its output. For example
-
-    A = [0 1 1; 0 0 0; 0 0 0]
-    p = make_initial_parameters(A)
-    p[:Z] = 100.0
+All of these values are passed as optional keyword arguments to the function.
 
 Alternatively, every parameter can be used as a *keyword* argument when calling the function. For example
 
@@ -35,7 +30,39 @@ Alternatively, every parameter can be used as a *keyword* argument when calling 
 
 The only exception is `vertebrates`, which has to be modified after this
 function is called. By default, all of the species will be invertebrates.
+"""
+function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
+        a_invertebrate::Float64=0.314, a_producer::Float64=1.0, a_vertebrate::Float64=0.88,
+        c::Float64=0.0, h::Number=1.0,
+        e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
+        m_producer::Float64=1.0,
+        y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
+        Γ::Float64=0.5, vertebrates::Array{Bool, 1}=[false]
+        )
+    # Step 1 -- initial parameters
+    p = make_initial_parameters(A,K=K,Z=Z,r=r,
+                                a_invertebrate=a_invertebrate,a_producer=a_producer,a_vertebrate=a_vertebrate,
+                                c=c, h=h, e_carnivore=e_carnivore, e_herbivore=e_herbivore,
+                                m_producer=m_producer, y_invertebrate=y_invertebrate, y_vertebrate=y_vertebrate,
+                                Γ=Γ
+                                )
+    # Step 2 -- vertebrates ?
+    if length(vertebrates) > 1
+        if length(vertebrates) == size(A, 1)
+            p[:vertebrates] = vertebrates
+        else
+            error("when calling `model_parameters` with an array of values for `vertebrates`, there must be as many elements as rows/columns in the matrix")
+        end
+    end
+    # Step 3 -- final parameters
+    p = make_parameters(p)
+    return p
+end
 
+"""
+**Make initial parameters**
+
+Used internally by `model_parameters`.
 """
 function make_initial_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         a_invertebrate::Float64=0.314, a_producer::Float64=1.0, a_vertebrate::Float64=0.88,
@@ -72,7 +99,7 @@ end
 **Make the complete set of parameters**
 
 This function will add simulation parameters, based on the output of
-`make_initial_parameters`.
+`make_initial_parameters`. Used internally by `model_parameters`.
 
 """
 function make_parameters(p::Dict{Symbol,Any})
