@@ -25,4 +25,13 @@ module TestMakeParameters
     p = befwm.model_parameters(correct_network, Z=2.0)
     @test p[:Z] == 2.0
 
+    # Test that there is an exception if the vertebrates is of the wrong size
+    wrong_vert = vec([true true true false false true true true false false])
+    @test_throws ErrorException model_parameters(correct_network, vertebrates=wrong_vert)
+
+    # Test that there the vertebrates can be passed
+    right_vert = vec([true false true false])
+    p = model_parameters(correct_network, vertebrates=right_vert)
+    @test right_vert == p[:vertebrates]
+
 end
