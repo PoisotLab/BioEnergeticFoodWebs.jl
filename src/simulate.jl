@@ -163,9 +163,8 @@ end
 """
 **Wrapper for ode functions**
 
-The solvers in `ODE.jl` have a different API from `Sundials.jl`. These
-functions will let `ODE` do its job, then return the results in way we
-can handle.
+These functions will let `ODE` do its job, then return the results in way
+we can handle.
 """
 function wrap_ode(i, f, b, t)
     d = copy(b)

@@ -6,9 +6,8 @@ simulation of the bioenergetic model of Yodzis and Innes {{ "yodzis-innes"
 
 [julia]: http://julialang.org
 
-The model uses `Sundials.jl` to perform robust and precise numerical
-integration. Numerical integration using Euler's method, and a wrapper for
-`ODE.jl` are also available.
+The model uses `ODE.jl` to perform robust and precise numerical
+integration.
 
 ## Installation
 
@@ -22,5 +21,5 @@ Pkg.clone(pwd())
 
 This should take care of installing the dependencies.
 
-[glab]: http://132.204.122.203/tpoisot/befwm/repository/archive.zip?ref=master
+[glab]: http://poisotlab.biol.umontreal.ca/julia-packages/befwm/repository/archive.zip?ref=master
 

@@ -16,7 +16,6 @@ install: src/*jl test/*jl ## Install the package in the specified julia version 
 	-julia -e 'Pkg.rm("$(NAME)")'
 	-julia -e 'Pkg.clone(pwd())'
 
-
 test: install ## Run the tests (including code coverage informations)
 	julia --code-coverage test/runtests.jl
 
