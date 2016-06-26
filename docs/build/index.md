@@ -4,7 +4,7 @@
 # befwm documentation
 
 - [User guide](user/userguide.md#User-guide-1)
-    - [Random networks](user/user_random.md#Random-networks-1)
+    - [Generating random networks](user/user_random.md#Generating-random-networks-1)
         - [Niche model](user/user_random.md#Niche-model-1)
     - [Overview of the simulation](user/user_general.md#Overview-of-the-simulation-1)
         - [Create model parameters](user/user_general.md#Create-model-parameters-1)

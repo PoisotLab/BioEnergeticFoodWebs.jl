@@ -22,10 +22,9 @@ test: install ## Run the tests (including code coverage informations)
 coverage: test ## Perform the code coverage analysis
 	cd $(FOLD); julia -e 'Pkg.add("Coverage"); using Coverage; coverage = process_folder(); covered_lines, total_lines = get_summary(coverage); println(round(covered_lines/total_lines*100,2),"% covered")'
 
-doc: ## Self-document the code and copy into the doc/ subfolder
-	cp CHANGELOG.md doc/CHANGELOG.md
-	cp LICENSE.md doc/LICENSE.md
-	julia -e 'Pkg.add("Lexicon"); using Lexicon; using befwm; save("doc/api.md", befwm)'
+doc: install ## Self-document the code and copy into the doc/ subfolder
+	cp {CHANGELOG,LICENSE}.md docs/src/
+	cd docs && julia make.jl
 
 mirror: ## Pushes to the github mirror
 	git push --mirror git@github.com:PoisotLab/befwm.jl.git

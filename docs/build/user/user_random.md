@@ -1,10 +1,10 @@
 
-<a id='Random-networks-1'></a>
+<a id='Generating-random-networks-1'></a>
 
-## Random networks
+## Generating random networks
 
 
-The `befwm` allows the generation of random networks.
+The `befwm` allows the generation of random networks. It is, of course, possible to supply your own. The networks should be presented as matrices of 0 and 1. Internally, `befwm` will check that there are as many rows as there are columns.
 
 
 <a id='Niche-model-1'></a>
