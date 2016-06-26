@@ -16,8 +16,6 @@ coverage:
         - make clean
 pages:
     stage: pages
-    only:
-        - master
     allow_failure: true
     artifacts:
         paths:
