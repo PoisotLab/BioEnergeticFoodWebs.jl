@@ -1,6 +1,5 @@
 module befwm
 
-#using Sundials
 using Distributions
 using ODE
 using JSON
