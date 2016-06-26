@@ -12,6 +12,6 @@ pages:
     allow_failure: true
     artifacts:
         paths:
-            - site
+            - docs/site
     script:
         - cd docs && mkdocs build
