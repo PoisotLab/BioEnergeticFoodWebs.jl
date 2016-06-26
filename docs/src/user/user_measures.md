@@ -1,9 +1,9 @@
-# Measures on output
+## Measures on output
 
 These functions let you work with the output of the simulations (*i.e.*
 the object returned by `simulate`).
 
-## Population variability
+### Population variability
 
 In the original paper {{ "brose" | cite }}, population variability is defined
 as the average of the negative coefficients of variations of biomasses of
@@ -26,17 +26,17 @@ coefficient of variation. Note also that, so as to correct for the fact
 that the number of timesteps varies, we use the corrected estimator of the
 coefficient of variation.
 
-## Population biomass
+### Population biomass
 
 The `population_biomass` function returns the average biomass over `last`
 timesteps for *every* population in the network.
 
-## Total biomass
+### Total biomass
 
 The `total_biomass` function returns the total biomass over `last`
 timesteps for the entire network.
 
-## Food web diversity
+### Food web diversity
 
 The `foodweb_diversity` is the Shannon entropy measure, corrected for the
 number of population (*i.e.*, divided by the natural log of the number of
@@ -47,7 +47,7 @@ this threshold has to be set in an arbitrary way, and does not account for
 the fact that changing several parameters also changes the distribution of
 biomasses, we have not retained this measurement of diversity.
 
-## Saving the simulations
+### Saving the simulations
 
 The object returned by `simulate` can be saved using the `befwm.save`
 function. This function is *not* exported, so it must be called with the

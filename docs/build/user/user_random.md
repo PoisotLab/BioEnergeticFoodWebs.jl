@@ -1,0 +1,26 @@
+
+<a id='Random-networks-1'></a>
+
+## Random networks
+
+
+The `befwm` allows the generation of random networks.
+
+
+<a id='Niche-model-1'></a>
+
+### Niche model
+
+
+Following Williams & Martinez {{ "williams-martinez" | cite }}, we have implemented the *niche* model of food webs. This model represents allometric relationships between preys and predators well {{ "gravel" | cite }}, and is therefore well suited to generate random networks for `befwm`.
+
+
+Random niche model networks can be generated using `nichemodel`, which takes two arguments: the number of species `S`, and the number of interactions `L`:
+
+
+```julia
+nichemodel(10, 12)
+nichemodel(10, 15)
+nichemodel(10, 50)
+```
+
