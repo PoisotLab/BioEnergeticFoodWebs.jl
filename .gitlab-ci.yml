@@ -1,5 +1,4 @@
 stages:
-    - pages
     - coverage
 
 coverage:
@@ -7,11 +6,3 @@ coverage:
     script:
         - make coverage
         - make clean
-pages:
-    stage: pages
-    allow_failure: true
-    artifacts:
-        paths:
-            - docs/site
-    script:
-        - cd docs && mkdocs build
