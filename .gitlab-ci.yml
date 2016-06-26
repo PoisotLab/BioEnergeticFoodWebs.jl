@@ -1,13 +1,6 @@
 stages:
-    - test
     - pages
     - coverage
-
-test:
-    stage: test
-    script:
-        - make test -B
-        - make clean
 
 coverage:
     stage: coverage
