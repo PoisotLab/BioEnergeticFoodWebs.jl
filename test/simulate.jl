@@ -36,12 +36,6 @@ module TestSimulateSanityCheck
     free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]
     p = free_producers |> model_parameters
     n = rand(4)
-
-    s = simulate(p, n, start=0, stop=15, steps=500)
-    @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
-
-    s = simulate(p, n, start=0, stop=15, steps=500, use=:Euler)
-    @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
     
     s = simulate(p, n, start=0, stop=15, steps=500, use=:ode23)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
@@ -59,13 +53,6 @@ module TestSimulateSanityCheck
     A = [0 1; 0 0]
     p = A |> model_parameters
     n = vec([1.0, 0.0])
-    s = simulate(p, n, start=0, stop=50, steps=500)
-    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
-    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
-
-    s = simulate(p, n, start=0, stop=50, steps=500, use=:Euler)
-    @test_approx_eq_eps s[:B][end,1] 0.0 0.001
-    @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
     s = simulate(p, n, start=0, stop=50, steps=500, use=:ode23s)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001

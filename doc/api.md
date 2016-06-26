@@ -133,7 +133,7 @@ In addition, the function takes three optional arguments:
 - `start` (defaults to 0), the initial time
 - `stop` (defaults to 500), the final time
 - `steps` (defaults to 5000), the number of internal steps
-- `use` (defaults to `:Sundials`), the integration method
+- `use` (defaults to `:ode45`), the integration method
 
 Note that the value of `steps` is the number of intermediate steps when moving
 from `t` to `t+1`. The total number of steps is therefore on the order of
@@ -142,10 +142,8 @@ from `t` to `t+1`. The total number of steps is therefore on the order of
 Because this results in very large simulations, the function will return
 results with a timestep equal to unity.
 
-The integration method can be changed to `:Euler`. Not that it should,
-because it takes longer to run and is more likely to give weird results. It
-can also be changed to one of the `Ode` functions, *i.e.* `:ode23`, `:ode45`,
-`:ode78`, or `:ode23s`.
+The integration method is, by default, `:ode45`, and can be changed to one of
+`:ode23`, `:ode45`, `:ode78`, or `:ode23s`.
 
 The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
 keys:
@@ -166,7 +164,7 @@ simulation by parts is sufficient.
 
 
 *source:*
-[befwm/src/simulate.jl:48](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:46](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 
 ---
 
@@ -277,22 +275,6 @@ a primary consumer a value of 2, and so forth.
 
 ---
 
-<a id="method__euler_integration.1" class="lexicon_definition"></a>
-#### euler_integration(f,  biomass,  t) [¶](#method__euler_integration.1)
-**Euler integration**
-
-Performs Euler integration along a known time series. This method is *slower*
-(several orders of magnitude, in fact) than using `:Sundials`, and consumes
-more memory. This is mostly useful for situations in which Sundials chokes
-on a problem.
-
-
-
-*source:*
-[befwm/src/simulate.jl:140](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
-
----
-
 <a id="method__inner_simulation_loop.1" class="lexicon_definition"></a>
 #### inner_simulation_loop!(output,  p,  i,  f) [¶](#method__inner_simulation_loop.1)
 **Inner simulation loop**
@@ -306,7 +288,7 @@ will be written, and `i` is the origin of the simulation.
 
 
 *source:*
-[befwm/src/simulate.jl:98](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:96](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 
 ---
 
@@ -382,7 +364,7 @@ can handle.
 
 
 *source:*
-[befwm/src/simulate.jl:196](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:170](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 
 ---
 
@@ -394,7 +376,7 @@ See `wrap_ode`.
 
 
 *source:*
-[befwm/src/simulate.jl:158](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:132](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 
 ---
 
@@ -406,7 +388,7 @@ See `wrap_ode`.
 
 
 *source:*
-[befwm/src/simulate.jl:167](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:141](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 
 ---
 
@@ -418,7 +400,7 @@ See `wrap_ode`.
 
 
 *source:*
-[befwm/src/simulate.jl:176](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:150](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 
 ---
 
@@ -430,5 +412,5 @@ See `wrap_ode`.
 
 
 *source:*
-[befwm/src/simulate.jl:185](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
+[befwm/src/simulate.jl:159](file:///home/tpoisot/.julia/v0.4/befwm/src/simulate.jl)
 

@@ -14,7 +14,7 @@ In addition, the function takes three optional arguments:
 - `start` (defaults to 0), the initial time
 - `stop` (defaults to 500), the final time
 - `steps` (defaults to 5000), the number of internal steps
-- `use` (defaults to `:Sundials`), the integration method
+- `use` (defaults to `:ode45`), the integration method
 
 Note that the value of `steps` is the number of intermediate steps when moving
 from `t` to `t+1`. The total number of steps is therefore on the order of
@@ -23,10 +23,8 @@ from `t` to `t+1`. The total number of steps is therefore on the order of
 Because this results in very large simulations, the function will return
 results with a timestep equal to unity.
 
-The integration method can be changed to `:Euler`. Not that it should,
-because it takes longer to run and is more likely to give weird results. It
-can also be changed to one of the `Ode` functions, *i.e.* `:ode23`, `:ode45`,
-`:ode78`, or `:ode23s`.
+The integration method is, by default, `:ode45`, and can be changed to one of
+`:ode23`, `:ode45`, `:ode78`, or `:ode23s`.
 
 The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
 keys:
@@ -45,11 +43,11 @@ dynamics scales very badly. To avoid `OutOfMemory()` errors, running the
 simulation by parts is sufficient.
 
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000, use::Symbol=:Sundials)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000, use::Symbol=:ode45)
     @assert stop > start
     @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
-    @assert use ∈ vec([:Sundials :Euler :ode23 :ode23s :ode45 :ode78])
+    @assert use ∈ vec([:ode23 :ode23s :ode45 :ode78])
 
     # Pre-allocate the timeseries matrix
     t = collect(linspace(start, stop, (stop-start)+1))
@@ -95,7 +93,7 @@ Note that `output` is a pre-allocated array in which the simulation result
 will be written, and `i` is the origin of the simulation.
 
 """
-function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:Sundials)
+function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:ode45)
     
     t_nsteps = (stop - start + 1)
     nsteps = (stop - start) * steps + 1
@@ -106,8 +104,6 @@ function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=200
 
     # Integrate
     func_dict = Dict{Symbol,Function}(
-        :Sundials => Sundials.cvode,
-        :Euler  => euler_integration,
         :ode23  => wrap_ode23,
         :ode23s => wrap_ode23s,
         :ode45  => wrap_ode45,
@@ -126,28 +122,6 @@ function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=200
 
     # Free memory (just to be super double plus sure)
     ts = 0
-end
-
-"""
-**Euler integration**
-
-Performs Euler integration along a known time series. This method is *slower*
-(several orders of magnitude, in fact) than using `:Sundials`, and consumes
-more memory. This is mostly useful for situations in which Sundials chokes
-on a problem.
-
-"""
-function euler_integration(f, biomass, t)
-    # Initial population density
-    dynamics = zeros(Float64, (length(t), length(biomass)))
-    dynamics[1,:] = biomass
-    derivatives = zeros(length(biomass))
-    for time in 2:length(t)
-        time_differential = t[time] - t[time-1]
-        start = vec(dynamics[time-1,:])
-        dynamics[time,:] = start .+ f(t, start, derivatives) .* time_differential
-    end
-    return dynamics
 end
 
 """
@@ -189,9 +163,8 @@ end
 """
 **Wrapper for ode functions**
 
-The solvers in `ODE.jl` have a different API from `Sundials.jl`. These
-functions will let `ODE` do its job, then return the results in way we
-can handle.
+These functions will let `ODE` do its job, then return the results in way
+we can handle.
 """
 function wrap_ode(i, f, b, t)
     d = copy(b)
