@@ -1,0 +1,8 @@
+site_name: befwm.jl
+repo_url:  http://poisotlab.biol.umontreal.ca/julia-pakages/befwm
+site_author: The Poisot Lab
+
+docs_dir: 'build'
+
+pages:
+    - Home: index.md

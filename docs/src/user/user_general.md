@@ -1,4 +1,4 @@
-# Overview of the simulation
+## Overview of the simulation
 
 Running a simulation has three steps. First, setting up a series of
 initial parameters. Second, generating the body sizes, metabolic rates,
@@ -21,7 +21,7 @@ predators in rows and preys in columns. In addition, it is expected that
 rows in the matrix has no interaction). This is checked internally by the
 different functions.
 
-## Create model parameters
+### Create model parameters
 
 First, create or import an interaction matrix, with predators in rows and
 preys in columns:
@@ -51,7 +51,7 @@ or (better) at the help of `model_parameters`, with
 ?model_parameters
 ~~~
 
-## Simulation
+### Simulation
 
 To start with random biomasses:
 
