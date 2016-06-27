@@ -15,8 +15,8 @@ doc:
         - make install
         - make doc
         - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
-        - cp docs/build/* gitdoc/
-        - cp docs/gitdoc/* gitdoc/
+        - cp -r docs/build/* gitdoc/
+        - cp -r docs/gitdoc/* gitdoc/
         - cd gitdoc
         - git config user.email "cloud@poisotlab.io"
         - git config user.name "the Poisot lab"
