@@ -25,6 +25,7 @@ coverage: test ## Perform the code coverage analysis
 doc: install ## Self-document the code and copy into the doc/ subfolder
 	cp {CHANGELOG,LICENSE}.md docs/src/
 	cd docs && julia make.jl
+	cd docs && mkdocs build
 
 mirror: ## Pushes to the github mirror
 	git push --mirror git@github.com:PoisotLab/befwm.jl.git

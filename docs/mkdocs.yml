@@ -3,7 +3,7 @@ repo_url:  http://poisotlab.biol.umontreal.ca/julia-pakages/befwm
 site_author: The Poisot Lab
 
 docs_dir: 'build'
-theme: readthedocs
+theme: yeti
 pages:
     - Home: index.md
     - User guide:
