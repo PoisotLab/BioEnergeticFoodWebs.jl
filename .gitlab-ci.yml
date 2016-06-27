@@ -11,7 +11,7 @@ coverage:
 doc:
     stage: doc
     script:
-        - julia -e 'Pkg.add("Documenter")'
+        - julia -e 'Pkg.update(); Pkg.add("Documenter")'
         - make install
         - make doc
         - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
