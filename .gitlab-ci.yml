@@ -1,27 +1,8 @@
 stages:
     - coverage
-    - doc
 
 coverage:
     stage: coverage
     script:
         - make coverage
         - make clean
-
-doc:
-    stage: doc
-    script:
-        - julia -e 'Pkg.update(); Pkg.add("Documenter")'
-        - make install
-        - make doc
-        - git clone https://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git gitdoc
-        - cp -r docs/build/* gitdoc/
-        - cp -r docs/gitdoc/* gitdoc/
-        - cd gitdoc
-        - git config user.email "cloud@poisotlab.io"
-        - git config user.name "the Poisot lab"
-        - git remote add gitbook kttps://tpoisot:$GITBOOK_TOKEN@git.gitbook.com/poisotlab/befwm.git
-        - git add .
-        - git commit -m 'Doc update'
-        - git push -u gitbook master -f
-          
