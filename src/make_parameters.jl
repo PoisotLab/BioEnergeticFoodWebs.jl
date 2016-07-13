@@ -60,7 +60,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     if size(α)[1] == 1
       p[:α] = eye(A)
     else
-        if dim(α) == dim(A)
+        if size(α) == size(A)
             p[:α] = α
         else
             error("when calling `model_parameters` with a matrix `α`, the matrix must have the same shape as the adjacency matrix")
