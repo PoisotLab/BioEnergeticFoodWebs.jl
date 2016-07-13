@@ -102,17 +102,17 @@ function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=200
   biomass = vec(output[i,:])
 
   for i in eachindex(biomass)
-    if biomass[i] <= eps(0.0)
+    if biomass[i] < 0.0
       biomass[i] = 0.0
     end
   end
 
   # Integrate
   func_dict = Dict{Symbol,Function}(
-      :ode23  => wrap_ode23,
-      :ode23s => wrap_ode23s,
-      :ode45  => wrap_ode45,
-      :ode78  => wrap_ode78
+    :ode23  => wrap_ode23,
+    :ode23s => wrap_ode23s,
+    :ode45  => wrap_ode45,
+    :ode78  => wrap_ode78
   )
   ts = func_dict[use](f, biomass, t)
 
