@@ -56,7 +56,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
 
     # We put the starting conditions in the array
     timeseries[1,:] = biomass
-    
+
     # Pre-assign function
     f(t, y, ydot) = dBdt(t, y, ydot, p)
 
@@ -94,34 +94,39 @@ will be written, and `i` is the origin of the simulation.
 
 """
 function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:ode45)
-    
-    t_nsteps = (stop - start + 1)
-    nsteps = (stop - start) * steps + 1
-    t = collect(linspace(start, stop, nsteps))
+  t_nsteps = (stop - start + 1)
+  nsteps = (stop - start) * steps + 1
+  t = collect(linspace(start, stop, nsteps))
 
-    # Read the biomass in the pre-allocated array
-    biomass = vec(output[i,:])
+  # Read the biomass in the pre-allocated array
+  biomass = vec(output[i,:])
 
-    # Integrate
-    func_dict = Dict{Symbol,Function}(
-        :ode23  => wrap_ode23,
-        :ode23s => wrap_ode23s,
-        :ode45  => wrap_ode45,
-        :ode78  => wrap_ode78
-    )
-    ts = func_dict[use](f, biomass, t)
+  for i in eachindex(biomass)
+    if biomass[i] <= eps(0.0)
+      biomass[i] = 0.0
+    end
+  end
 
-    # Get only the int times
-    t_collect = collect(linspace(start, stop, t_nsteps))
-    t_keep = [x ∈ t_collect for x in t]
+  # Integrate
+  func_dict = Dict{Symbol,Function}(
+      :ode23  => wrap_ode23,
+      :ode23s => wrap_ode23s,
+      :ode45  => wrap_ode45,
+      :ode78  => wrap_ode78
+  )
+  ts = func_dict[use](f, biomass, t)
 
-    ok_indices = collect(i:(i+sum(t_keep)-1))
-    
-    # Update the output array
-    output[ok_indices,:] = ts[t_keep,:]
+  # Get only the int times
+  t_collect = collect(linspace(start, stop, t_nsteps))
+  t_keep = [x ∈ t_collect for x in t]
 
-    # Free memory (just to be super double plus sure)
-    ts = 0
+  ok_indices = collect(i:(i+sum(t_keep)-1))
+
+  # Update the output array
+  output[ok_indices,:] = ts[t_keep,:]
+
+  # Free memory (just to be super double plus sure)
+  ts = 0
 end
 
 """
