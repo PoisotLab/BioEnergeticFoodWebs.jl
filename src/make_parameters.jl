@@ -53,6 +53,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
                                 m_producer=m_producer, y_invertebrate=y_invertebrate, y_vertebrate=y_vertebrate,
                                 Γ=Γ
                                 )
+    p[:α] = α
     # Step 2 -- vertebrates ?
     if length(vertebrates) > 1
         if length(vertebrates) == size(A, 1)
@@ -200,7 +201,7 @@ function make_parameters(p::Dict{Symbol,Any})
     p[:is_producer] = is_producer
     p[:Γh] = p[:Γ]^p[:h]
     p[:np] = sum(p[:is_producer])
-    
+
     check_parameters(p)
     return p
 
