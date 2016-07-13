@@ -101,11 +101,11 @@ function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=200
   # Read the biomass in the pre-allocated array
   biomass = vec(output[i,:])
 
-  for i in eachindex(biomass)
-    if biomass[i] < 0.0
-      biomass[i] = 0.0
-    end
-  end
+  # for i in eachindex(biomass)
+  #   if biomass[i] < 0.0
+  #     biomass[i] = 0.0
+  #   end
+  # end
 
   # Integrate
   func_dict = Dict{Symbol,Function}(
