@@ -36,9 +36,25 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
   # Competition matrix
   competition_matrix = p[:α] .* (p[:is_producer] * p[:is_producer]') * biomass
 
+  # Real K is K/np if system-wide prod, K if not
+  real_k = p[:productivity] == :system ? p[:K]/p[:np] : p[:K]
+
   for i in eachindex(biomass)
     if p[:is_producer][i]
-      growth[i] = p[:r] * (1.0 - competition_matrix[i] / p[:K]) * biomass[i]
+
+      # The pool of competing biomass is only the focal species
+      competition = biomass[i]
+      # Unless we have competitive productivity
+      if p[:productivity] == :competitive
+        for j in eachindex(biomass)
+          if p[:is_producer][j]
+            if i != j
+              # in which case there is inter-specific competition too
+              competition += p[:α] * biomass[j]
+            end
+          end
+      end
+      growth[i] = p[:r] * (1.0 - competition / real_k) * biomass[i]
     else
       growth[i] = - p[:x][i] * biomass[i]
     end

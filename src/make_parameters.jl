@@ -199,7 +199,8 @@ function make_parameters(p::Dict{Symbol,Any})
     p[:is_herbivore] = is_herbivore
     p[:is_producer] = is_producer
     p[:Γh] = p[:Γ]^p[:h]
-
+    p[:np] = sum(p[:is_producer])
+    
     check_parameters(p)
     return p
 
