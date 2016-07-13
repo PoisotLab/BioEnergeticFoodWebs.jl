@@ -34,7 +34,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
   growth = zeros(Float64, S)
 
   # Competition matrix
-  comp_mat = p[:α] * biomass
+  comp_mat = p[:α] * (biomass.*p[:is_producer])
 
   for i in eachindex(biomass)
     if p[:is_producer][i]
