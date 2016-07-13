@@ -20,6 +20,7 @@ matrix. Specifically, the default values are:
 | y_invertebrate | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate |
 | y_vertebrate   | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate   |
 | Γ              | 0.5           | half-saturation density                                                             |
+| α              | I(B)          | competition matrix                                                                  |
 
 All of these values are passed as optional keyword arguments to the function.
 
@@ -37,7 +38,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         m_producer::Float64=1.0,
         y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
-        Γ::Float64=0.5, vertebrates::Array{Bool, 1}=[false]
+        Γ::Float64=0.5, α::Array{Float64, 2}=eye(1),
+        vertebrates::Array{Bool, 1}=[false]
         )
     # Step 1 -- initial parameters
     p = make_initial_parameters(A,K=K,Z=Z,r=r,
@@ -52,6 +54,16 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
             p[:vertebrates] = vertebrates
         else
             error("when calling `model_parameters` with an array of values for `vertebrates`, there must be as many elements as rows/columns in the matrix")
+        end
+    end
+    # Step 3 -- competition matrix ?
+    if size(α)[1] == 1
+      p[:α] = eye(A)
+    else
+        if dim(α) == dim(A)
+            p[:α] = α
+        else
+            error("when calling `model_parameters` with a matrix `α`, the matrix must have the same shape as the adjacency matrix")
         end
     end
     # Step 3 -- final parameters
