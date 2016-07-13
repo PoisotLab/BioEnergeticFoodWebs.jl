@@ -33,9 +33,6 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
   growth = zeros(Float64, S)
 
-  # Competition matrix
-  competition_matrix = p[:α] .* (p[:is_producer] * p[:is_producer]') * biomassUodate
-
   # Real K is K/np if system-wide prod, K if not
   real_k = p[:productivity] == :system ? p[:K]/p[:np] : p[:K]
 
