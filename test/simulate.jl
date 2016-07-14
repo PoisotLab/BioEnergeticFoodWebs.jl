@@ -106,7 +106,7 @@ module TestSimulateProductivity
   s = simulate(p, ones(4), start=0, stop=15, use=:ode45)
   @test s[:B][16,4] < p[:K]/4
 
-  # Using competitive regulation with α > 1 is overyielding
+  # Using competitive regulation with α < 1 is overyielding
   p = model_parameters(A, productivity=:competitive, α=0.95)
   s = simulate(p, ones(4), start=0, stop=15, use=:ode45)
   @test s[:B][16,4] > p[:K]/4
