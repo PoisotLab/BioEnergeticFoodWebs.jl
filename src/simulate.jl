@@ -32,7 +32,6 @@ each species.
 """
 function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:ode45)
     @assert stop > start
-    @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
     @assert use ∈ vec([:ode23 :ode23s :ode45 :ode78])
 
