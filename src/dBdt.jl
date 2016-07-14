@@ -57,7 +57,7 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
   for i in eachindex(biomass)
     if p[:is_producer][i]
-      growth[i] = p[:r] * growthrate(p, b, i) * biomass[i]
+      growth[i] = p[:r] * growthrate(p, biomass, i) * biomass[i]
     else
       growth[i] = - p[:x][i] * biomass[i]
     end
