@@ -11,7 +11,7 @@ function growthrate(p, b, i)
   if p[:productivity] == :competitive
     compete_with = b[i]
     for j in eachindex(b)
-      if (i != j) and (p[:is_producer][j])
+      if (i != j) & (p[:is_producer][j])
         compete_with += p[:α] * b[j]
       end
     end
