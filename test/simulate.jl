@@ -75,3 +75,45 @@ module TestSimulateSanityCheck
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
 end
+
+
+module TestSimulateProductivity
+  using Base.Test
+  using befwm
+
+  A = zeros(Int64, (4, 4))
+  n = rand(4)
+
+  # Using system-wide regulation, producers with no consumption reach K / n
+  p = model_parameters(A, productivity=:system)
+  s = simulate(p, n, start=0, stop=15, use=:ode45)
+  @test_approx_eq_eps s[:B][16,4] p[:K]/4 0.001
+
+  # Using species-wide regulation, producers with no consumption reach K
+  p = model_parameters(A, productivity=:species)
+  s = simulate(p, n, start=0, stop=15, use=:ode45)
+  @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
+
+  # NOTE The following tests start with n = [1 1 1 1]
+
+  # Using competitive regulation with α = 1 is neutral
+  p = model_parameters(A, productivity=:competitive, α=1.0)
+  s = simulate(p, ones(4), start=0, stop=15, use=:ode45)
+  @test_approx_eq_eps s[:B][16,4] p[:K]/4 0.001
+
+  # Using competitive regulation with α > 1 is exclusive
+  p = model_parameters(A, productivity=:competitive, α=1.05)
+  s = simulate(p, ones(4), start=0, stop=15, use=:ode45)
+  @test s[:B][16,4] < p[:K]/4
+
+  # Using competitive regulation with α > 1 is overyielding
+  p = model_parameters(A, productivity=:competitive, α=0.95)
+  s = simulate(p, ones(4), start=0, stop=15, use=:ode45)
+  @test s[:B][16,4] > p[:K]/4
+
+  # Using competitive regulation with α = 0 is species-level regulation
+  p = model_parameters(A, productivity=:competitive, α=0.0)
+  s = simulate(p, ones(4), start=0, stop=15, use=:ode45)
+  @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
+
+end
