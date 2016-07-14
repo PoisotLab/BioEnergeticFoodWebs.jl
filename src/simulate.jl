@@ -13,15 +13,8 @@ In addition, the function takes three optional arguments:
 
 - `start` (defaults to 0), the initial time
 - `stop` (defaults to 500), the final time
-- `steps` (defaults to 5000), the number of internal steps
 - `use` (defaults to `:ode45`), the integration method
 
-Note that the value of `steps` is the number of intermediate steps when moving
-from `t` to `t+1`. The total number of steps is therefore on the order of
-(stop - start) * steps.
-
-Because this results in very large simulations, the function will return
-results with a timestep equal to unity.
 
 The integration method is, by default, `:ode45`, and can be changed to one of
 `:ode23`, `:ode45`, `:ode78`, or `:ode23s`.
