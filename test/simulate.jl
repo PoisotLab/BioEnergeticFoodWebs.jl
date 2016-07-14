@@ -46,6 +46,13 @@ module TestSimulateSanityCheck
     s = simulate(p, n, start=0, stop=15, use=:ode78)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
 
+    # Using system-wide regulation, producers with no consumption reach K / n
+    A = zeros((3, 3))
+    p = model_parameters(A, productivity=:system)
+    n = rand(4)
+    s = simulate(p, n, start=0, stop=15, use=:ode45)
+    @test_approx_eq_eps s[:B][16,4] p[:K]/4 0.001
+
     # A consumer with a resource with 0 biomass goes extinct
     A = [0 1; 0 0]
     p = A |> model_parameters
