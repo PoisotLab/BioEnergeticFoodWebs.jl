@@ -8,9 +8,6 @@ module TestSimulate
     @test_throws AssertionError simulate(p, rand(5))
     # Fail if stop < start
     @test_throws AssertionError simulate(p, rand(3), start=0, stop=-1)
-    # Fail if step <= 1
-    @test_throws AssertionError simulate(p, rand(3), start=0, stop=1, steps=1)
-
 end
 
 module TestSimulateHandChecked
@@ -36,37 +33,37 @@ module TestSimulateSanityCheck
     free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]
     p = free_producers |> model_parameters
     n = rand(4)
-    
-    s = simulate(p, n, start=0, stop=15, steps=500, use=:ode23)
+
+    s = simulate(p, n, start=0, stop=15, use=:ode23)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
 
-    s = simulate(p, n, start=0, stop=15, steps=500, use=:ode23s)
+    s = simulate(p, n, start=0, stop=15, use=:ode23s)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
 
-    s = simulate(p, n, start=0, stop=15, steps=500, use=:ode45)
+    s = simulate(p, n, start=0, stop=15, use=:ode45)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
-    
-    s = simulate(p, n, start=0, stop=15, steps=500, use=:ode78)
+
+    s = simulate(p, n, start=0, stop=15, use=:ode78)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
-    
+
     # A consumer with a resource with 0 biomass goes extinct
     A = [0 1; 0 0]
     p = A |> model_parameters
     n = vec([1.0, 0.0])
 
-    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode23s)
+    s = simulate(p, n, start=0, stop=50, use=:ode23s)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
-    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode23)
+    s = simulate(p, n, start=0, stop=50, use=:ode23)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
-    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode45)
+    s = simulate(p, n, start=0, stop=50, use=:ode45)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
-    s = simulate(p, n, start=0, stop=50, steps=500, use=:ode78)
+    s = simulate(p, n, start=0, stop=50, use=:ode78)
     @test_approx_eq_eps s[:B][end,1] 0.0 0.001
     @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
