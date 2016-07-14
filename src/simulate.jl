@@ -37,7 +37,7 @@ The array of biomasses has one row for each timestep, and one column for
 each species.
 
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000, use::Symbol=:ode45)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:ode45)
     @assert stop > start
     @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
