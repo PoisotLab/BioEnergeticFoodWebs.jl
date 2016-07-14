@@ -13,15 +13,8 @@ In addition, the function takes three optional arguments:
 
 - `start` (defaults to 0), the initial time
 - `stop` (defaults to 500), the final time
-- `steps` (defaults to 5000), the number of internal steps
 - `use` (defaults to `:ode45`), the integration method
 
-Note that the value of `steps` is the number of intermediate steps when moving
-from `t` to `t+1`. The total number of steps is therefore on the order of
-(stop - start) * steps.
-
-Because this results in very large simulations, the function will return
-results with a timestep equal to unity.
 
 The integration method is, by default, `:ode45`, and can be changed to one of
 `:ode23`, `:ode45`, `:ode78`, or `:ode23s`.
@@ -36,42 +29,27 @@ keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 
-If the difference between stop and start is more than an arbitrary threshold
-(currently 500 timesteps), the simulations will be run in chunks of 500
-timesteps each. This is because the amount of memory needed to store the
-dynamics scales very badly. To avoid `OutOfMemory()` errors, running the
-simulation by parts is sufficient.
-
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000, use::Symbol=:ode45)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:ode45)
     @assert stop > start
-    @assert steps > 1
     @assert length(biomass) == size(p[:A],1)
     @assert use ∈ vec([:ode23 :ode23s :ode45 :ode78])
 
     # Pre-allocate the timeseries matrix
     t = collect(linspace(start, stop, (stop-start)+1))
-    nt, ns = length(t), length(biomass)
-    timeseries = zeros((nt, ns))
-
-    # We put the starting conditions in the array
-    timeseries[1,:] = biomass
 
     # Pre-assign function
     f(t, y, ydot) = dBdt(t, y, ydot, p)
 
-    chunk_size = 500
-    done_up_to = start
-    while done_up_to < stop
-        start_at = done_up_to
-        stop_at = start_at + chunk_size
-        if stop_at > stop
-            stop_at = stop
-        end
-        i = start_at-start + 1
-        inner_simulation_loop!(timeseries, p, i, f, start=start_at, stop=stop_at, steps=steps, use=use)
-        done_up_to = stop_at
-    end
+    # Integrate
+    func_dict = Dict{Symbol,Function}(
+      :ode23  => wrap_ode23,
+      :ode23s => wrap_ode23s,
+      :ode45  => wrap_ode45,
+      :ode78  => wrap_ode78
+    )
+    # Perform the actual integration
+    timeseries = func_dict[use](f, biomass, t)
 
     output = Dict{Symbol,Any}(
         :p => p,
@@ -81,52 +59,6 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, steps::Int64=5000
 
     return output
 
-end
-
-"""
-**Inner simulation loop**
-
-This function is called internally by `simulate`, and should not be called
-by the user.
-
-Note that `output` is a pre-allocated array in which the simulation result
-will be written, and `i` is the origin of the simulation.
-
-"""
-function inner_simulation_loop!(output, p, i, f; start::Int64=0, stop::Int64=2000, steps::Int64=5000, use::Symbol=:ode45)
-  t_nsteps = (stop - start + 1)
-  nsteps = (stop - start) * steps + 1
-  t = collect(linspace(start, stop, nsteps))
-
-  # Read the biomass in the pre-allocated array
-  biomass = vec(output[i,:])
-
-  for sp in eachindex(biomass)
-    if biomass[sp] < eps(0.0)
-      biomass[sp] = 0.0
-    end
-  end
-
-  # Integrate
-  func_dict = Dict{Symbol,Function}(
-    :ode23  => wrap_ode23,
-    :ode23s => wrap_ode23s,
-    :ode45  => wrap_ode45,
-    :ode78  => wrap_ode78
-  )
-  ts = func_dict[use](f, biomass, t)
-
-  # Get only the int times
-  t_collect = collect(linspace(start, stop, t_nsteps))
-  t_keep = [x ∈ t_collect for x in t]
-
-  ok_indices = collect(i:(i+sum(t_keep)-1))
-
-  # Update the output array
-  output[ok_indices,:] = ts[t_keep,:]
-
-  # Free memory (just to be super double plus sure)
-  ts = 0
 end
 
 """

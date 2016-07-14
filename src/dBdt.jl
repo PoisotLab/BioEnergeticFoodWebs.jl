@@ -1,3 +1,25 @@
+function growthrate(p, b, i)
+  # Default -- species-level regulation
+  compete_with = b[i]
+  effective_K = p[:K]
+  # If regulation is system-wide (all species share K)
+  if p[:productivity] == :system
+    compete_with = b[i]
+    effective_K = p[:K] / p[:np]
+  end
+  # If there is competition
+  if p[:productivity] == :competitive
+    compete_with = b[i]
+    for j in eachindex(b)
+      if (i != j) and (p[:is_producer][j])
+        compete_with += p[:α] * b[j]
+      end
+    end
+    effective_K = p[:K]
+  end
+  return (1.0 - compete_with / effective_K)
+end
+
 """
 **Derivatives**
 
@@ -33,12 +55,9 @@ function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
 
   growth = zeros(Float64, S)
 
-  # Competition matrix
-  competition_matrix = p[:α] .* (p[:is_producer] * p[:is_producer]') * biomass
-
   for i in eachindex(biomass)
     if p[:is_producer][i]
-      growth[i] = p[:r] * (1.0 - competition_matrix[i] / p[:K]) * biomass[i]
+      growth[i] = p[:r] * growthrate(p, biomass, i) * biomass[i]
     else
       growth[i] = - p[:x][i] * biomass[i]
     end
