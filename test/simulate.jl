@@ -47,7 +47,7 @@ module TestSimulateSanityCheck
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
 
     # Using system-wide regulation, producers with no consumption reach K / n
-    A = zeros(Int64, (3, 3))
+    A = zeros(Int64, (4, 4))
     p = model_parameters(A, productivity=:system)
     n = rand(4)
     s = simulate(p, n, start=0, stop=15, use=:ode45)
