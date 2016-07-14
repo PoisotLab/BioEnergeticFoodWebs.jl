@@ -81,19 +81,27 @@ module TestSimulateProductivity
     using Base.Test
     using befwm
 
-    # Using system-wide regulation, producers with no consumption reach K / n
     A = zeros(Int64, (4, 4))
-    p = model_parameters(A, productivity=:system)
     n = rand(4)
+
+    # Using system-wide regulation, producers with no consumption reach K / n
+    p = model_parameters(A, productivity=:system)
     s = simulate(p, n, start=0, stop=15, use=:ode45)
     @test_approx_eq_eps s[:B][16,4] p[:K]/4 0.001
 
     # Using species-wide regulation, producers with no consumption reach K
-    A = zeros(Int64, (4, 4))
     p = model_parameters(A, productivity=:species)
-    n = rand(4)
     s = simulate(p, n, start=0, stop=15, use=:ode45)
     @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
+
+    # Using competitive regulation with α = 1 is neutral
+    p = model_parameters(A, productivity=:species, α=1.0)
+    s = simulate(p, n, start=0, stop=15, use=:ode45)
+    @test_approx_eq_eps s[:B][16,4] p[:K] 0.001
+
+    # Using competitive regulation with α > 1 is exclusive
+
+    # Using competitive regulation with α > 1 is overyielding
 
 
 end
