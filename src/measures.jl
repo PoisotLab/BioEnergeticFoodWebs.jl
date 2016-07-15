@@ -11,16 +11,32 @@ function coefficient_of_variation(x)
 end
 
 """
+**Surviving species**
+
+Number of species with a biomass larger than the `threshold`. The threshold is
+by default set at `eps()`, which should be close to 10^-16.
+"""
+function species_richness(p; threshold::Float64=eps(), last::Int64=1000)
+    @assert last <= size(p[:B], 1)
+    measure_on = p[:B][end-(last-1):end,:]
+    if sum(measure_on) == 0
+        return NaN
+    end
+    richness = vec(sum(measure_on .> threshold, 2))
+    return mean(richness)
+end
+
+"""
 **Population stability**
 
 Takes a matrix with populations in columns, timesteps in rows. This is usually
 the element `:B` of the simulation output. Population stability is measured
 as the mean of the negative coefficient of variations of all species with
-an abundance higher than `threshold`. By default, the stability is measure
+an abundance higher than `threshold`. By default, the stability is measured
 over the last `last=1000` timesteps.
 
 """
-function population_stability(p; threshold=1e-10, last=1000)
+function population_stability(p; threshold::Float64=eps(), last=1000)
     @assert last <= size(p[:B], 1)
     non_extinct = p[:B][end,:] .> threshold
     measure_on = p[:B][end-(last-1):end,non_extinct]
@@ -34,7 +50,7 @@ end
 """
 **Total biomass**
 
-Returns the sum of biomass, average over the last `last` timesteps.
+Returns the sum of biomass, averaged over the last `last` timesteps.
 
 """
 function total_biomass(p; last=1000)
@@ -143,4 +159,3 @@ function save(p::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varname=NaN)
         JLD.save(filename, varname, p)
     end
 end
-
