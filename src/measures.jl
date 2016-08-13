@@ -11,7 +11,7 @@ function coefficient_of_variation(x)
 end
 
 """
-**Surviving species**
+**Number of surviving species**
 
 Number of species with a biomass larger than the `threshold`. The threshold is
 by default set at `eps()`, which should be close to 10^-16.
@@ -24,6 +24,16 @@ function species_richness(p; threshold::Float64=eps(), last::Int64=1000)
     end
     richness = vec(sum(measure_on .> threshold, 2))
     return mean(richness)
+end
+
+"""
+**Proportion of surviving species**
+
+Proportion of species with a biomass larger than the `threshold`. The threshold is
+by default set at `eps()`, which should be close to 10^-16.
+"""
+function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
+    return species_richness(richness, threshold=threshold, last=last)/size(p[:A][1])
 end
 
 """

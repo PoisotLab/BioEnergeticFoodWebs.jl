@@ -13,7 +13,8 @@ export trophic_rank,
   total_biomass,
   population_biomass,
   foodweb_diversity,
-  species_richness
+  species_richness,
+  species_persistence
 
 # Includes
 include(joinpath(".", "trophic_rank.jl"))
