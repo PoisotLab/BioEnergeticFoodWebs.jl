@@ -33,6 +33,14 @@ independant carrying capacity equal to `K`), `:system` (the carrying capacity is
 K divided by the number of primary producers), or `:competitive` (the species
 compete with themselves at rate 1.0, and with one another at rate α).
 
+It is possible for the user to specify a vector of species body-mass, called
+`bodymass` -- please do pay attention to the fact that the model assumes that
+primary producers have a bodymass equal to unity, since all biological rates are
+expressed relatively. We do not perform any check on whether or not the
+user-supplied body-mass vector is correct (mostly because there is no way of
+defining correctness for vectors where body-mass of producers are not equal to
+unity).
+
 The final keyword is `vertebrates`, which is an array of `true` or `false`
 for every species in the matrix. By default, all species are invertebrates.
 """
@@ -44,6 +52,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
         Γ::Float64=0.5, α::Float64=1.0,
         productivity::Symbol=:species,
+        bodymass::Array{Float64, 1}=[0.0],
         vertebrates::Array{Bool, 1}=[false]
         )
     # Step 1 -- initial parameters
@@ -62,7 +71,18 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
             error("when calling `model_parameters` with an array of values for `vertebrates`, there must be as many elements as rows/columns in the matrix")
         end
     end
-    # Step 3 -- productivity type
+    # Step 3 -- body mass
+    if length(bodymass) > 1
+        if length(bodymass) == size(A, 1)
+            p[:bodymass] = bodymass
+        else
+            error("when calling `model_parameters` with an array of values for `bodymass`, there must be as many elements as rows/columns in the matrix")
+        end
+    else
+      p[:bodymass] = bodymass
+    end
+
+    # Step 4 -- productivity type
     if productivity ∈ [:species, :system, :competitive]
       p[:productivity] = productivity
     else
@@ -160,7 +180,10 @@ function make_parameters(p::Dict{Symbol,Any})
   end
 
   # Get the body mass
-  M = p[:Z].^(trophic_rank(A).-1)
+  if length(p[:bodymass] == 1)
+    M = p[:Z].^(trophic_rank(A).-1)
+    p[:bodymass] = M
+  end
 
   # Scaling constraints based on organism type
   a[p[:vertebrates]] = p[:a_vertebrate]
