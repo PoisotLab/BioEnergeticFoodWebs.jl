@@ -72,14 +72,11 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         end
     end
     # Step 3 -- body mass
+    p[:bodymass] = bodymass
     if length(bodymass) > 1
-        if length(bodymass) == size(A, 1)
-            p[:bodymass] = bodymass
-        else
+        if length(bodymass) != size(A, 1)
             error("when calling `model_parameters` with an array of values for `bodymass`, there must be as many elements as rows/columns in the matrix")
         end
-    else
-      p[:bodymass] = bodymass
     end
 
     # Step 4 -- productivity type
