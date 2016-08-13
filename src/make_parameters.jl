@@ -73,8 +73,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     end
     # Step 3 -- body mass
     p[:bodymass] = bodymass
-    if length(bodymass) > 1
-        if length(bodymass) != size(A, 1)
+    if length(p[:bodymass]) > 1
+        if length(p[:bodymass]) != size(A, 1)
             error("when calling `model_parameters` with an array of values for `bodymass`, there must be as many elements as rows/columns in the matrix")
         end
     end
@@ -177,7 +177,7 @@ function make_parameters(p::Dict{Symbol,Any})
   end
 
   # Get the body mass
-  if length(p[:bodymass] == 1)
+  if length(p[:bodymass]) == 1
     M = p[:Z].^(trophic_rank(A).-1)
     p[:bodymass] = M
   end
