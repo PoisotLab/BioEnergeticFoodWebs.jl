@@ -15,7 +15,6 @@ end
 
 Takes a number of species `S` and a number of interactions `L`, and returns
 a food web with predators in rows, and preys in columns.
-
 """
 function nichemodel(S::Int64, L::Int64)
 
@@ -29,7 +28,7 @@ function nichemodel(S::Int64, L::Int64)
 
     # Generate body size
     n = sort(rand(Uniform(0.0, 1.0), S))
-    
+
     # Pre-allocate centroids
     c = zeros(Float64, S)
 
@@ -66,10 +65,30 @@ Takes a number of species `S` and a connectance `C`, and returns a food web
 with predators in rows, and preys in columns. Note that the connectance is
 first transformed into an integer number of interactions.
 
+This function has two keyword arguments:
+
+1. `tolerance` is the allowed error on tolerance (see below)
+
+2. `toltype` is the type or error, and can be `:abs` (absolute) and `:rel`
+(relative). Relative tolerance is the amount of error allowed, relative to the
+desired connectance value. If the simulated network has a tolerance x, the
+target connectance is c, then the relative error is |1-x/c|.
+
 """
-function nichemodel(S::Int64, C::Float64)
+function nichemodel(S::Int64, C::Float64; tolerance::Float64=0.05, toltype::Symbol=:abs)
     @assert C < 1.0
     @assert C > 0.0
+    @assert tolerance > 0.0
+    @assert toltype ∈ [:abs, :rel]
     L = round(Int64, C * S^2)
-    return nichemodel(S, L)
+    A = nichemodel(S, L)
+    if toltype == :abs
+      tolfunc = (x) -> abs(x-C) < tolerance
+    else
+      tolfunc = (x) -> abs(1-x/C) < tolerance
+    end
+    while !(tolfunc(befwm.connectance(A)))
+      A = nichemodel(S, L)
+    end
+    return A
 end
