@@ -8,3 +8,7 @@
 
 This is a `julia` implementation of the bioenergetic model applied to food
 webs. The version on *GitHub* is a **mirror** only.
+
+Installation instructions are given on the [wiki].
+
+[wiki]: http://poisotlab.biol.umontreal.ca/julia-packages/befwm/wikis/home
