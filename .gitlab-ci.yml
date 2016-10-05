@@ -1,8 +1,0 @@
-stages:
-    - coverage
-
-coverage:
-    stage: coverage
-    script:
-        - make coverage
-        - make clean
