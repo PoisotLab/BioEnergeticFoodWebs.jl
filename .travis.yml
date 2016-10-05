@@ -5,8 +5,12 @@ os:
     - osx
 julia:
     - release
+    - nightly
+    - 0.3
+    - 0.4
+    - 0.5
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("befwm"); Pkg.test("befwm"; coverage=true)'
+    - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("BioEnergeticFoodWebs"); Pkg.test("BioEnergeticFoodWebs"; coverage=true)'
 after_success:
-    - julia -e 'cd(Pkg.dir("befwm")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+    - julia -e 'cd(Pkg.dir("BioEnergeticFoodWebs")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
