@@ -1,5 +1,5 @@
-NAME=befwm
-V=0.4
+NAME=BioEnergeticFoodWebs
+V=0.5
 FOLD=~/.julia/v$(V)/$(NAME)
 
 .PHONY: clean help
@@ -22,11 +22,3 @@ test: install ## Run the tests (including code coverage informations)
 coverage: test ## Perform the code coverage analysis
 	cd $(FOLD); julia -e 'Pkg.add("Coverage"); using Coverage; coverage = process_folder(); covered_lines, total_lines = get_summary(coverage); println(round(covered_lines/total_lines*100,2),"% covered")'
 
-doc: install ## Self-document the code and copy into the doc/ subfolder
-	cp {CHANGELOG,LICENSE}.md docs/src/
-	cd docs && julia make.jl
-	cd docs && mkdocs build --clean
-	cp -r docs/site/* ~/code/web/poisotlab.github.io/doc/befwm/
-
-mirror: ## Pushes to the github mirror
-	git push --mirror git@github.com:PoisotLab/befwm.jl.git
