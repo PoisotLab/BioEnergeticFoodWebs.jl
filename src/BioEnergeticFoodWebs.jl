@@ -1,4 +1,4 @@
-module befwm
+module BioEnergeticFoodWebs
 
 using Distributions
 using ODE
