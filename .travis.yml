@@ -8,9 +8,6 @@ os:
 julia:
     - release
     - nightly
-    - 0.3
-    - 0.4
-    - 0.5
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
     - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("BioEnergeticFoodWebs"); Pkg.test("BioEnergeticFoodWebs"; coverage=true)'
