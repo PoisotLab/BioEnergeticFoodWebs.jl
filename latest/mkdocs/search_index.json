@@ -2,23 +2,8 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific instructions][pfsi] if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs\n\n\n\n\n\n\nOutline\n\n\n\n\nLibrary Outline\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions\n\n\n\n\nBioEnergeticFoodWebs.model_parameters", 
+            "text": "Outline\n\n\n\n\nLibrary Outline\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions\n\n\n\n\nBioEnergeticFoodWebs.model_parameters", 
             "title": "Home"
-        }, 
-        {
-            "location": "/#getting-started-with-bioenergeticfoodwebs", 
-            "text": "", 
-            "title": "Getting started with BioEnergeticFoodWebs"
-        }, 
-        {
-            "location": "/#installing-julia", 
-            "text": "Julia can be installed from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific instructions][pfsi] if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
-            "title": "Installing julia"
-        }, 
-        {
-            "location": "/#installing-bioenergeticfoodwebs", 
-            "text": "The current version can be installed by typing the following line into Julia (which is usually started from the command line  Pkg.add( BioEnergeticFoodWebs )  The package can be loaded with  using BioEnergeticFoodWebs", 
-            "title": "Installing BioEnergeticFoodWebs"
         }, 
         {
             "location": "/#outline", 
@@ -39,6 +24,76 @@
             "location": "/#functions", 
             "text": "BioEnergeticFoodWebs.model_parameters", 
             "title": "Functions"
+        }, 
+        {
+            "location": "/man/installation/", 
+            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific instructions][pfsi] if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/man/installation/#getting-started-with-bioenergeticfoodwebs", 
+            "text": "", 
+            "title": "Getting started with BioEnergeticFoodWebs"
+        }, 
+        {
+            "location": "/man/installation/#installing-julia", 
+            "text": "Julia can be installed from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific instructions][pfsi] if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
+            "title": "Installing julia"
+        }, 
+        {
+            "location": "/man/installation/#installing-bioenergeticfoodwebs", 
+            "text": "The current version can be installed by typing the following line into Julia (which is usually started from the command line  Pkg.add( BioEnergeticFoodWebs )  The package can be loaded with  using BioEnergeticFoodWebs", 
+            "title": "Installing BioEnergeticFoodWebs"
+        }, 
+        {
+            "location": "/lib/public/", 
+            "text": "Public Documentation\n\n\nDocumentation for \nBioEnergeticFoodWebs\n's public (exported) interface.\n\n\nSee \nInternal Documentation\n for documentation on internal functions.\n\n\n\n\nContents\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nBioEnergeticFoodWebs.model_parameters\n\n\n\n\n\n\nSetting up simulations\n\n\n#\n\n\nBioEnergeticFoodWebs.model_parameters\n \n \nFunction\n.\n\n\nCreate default parameters\n\n\nThis function creates model parameters, based on a food web matrix. Specifically, the default values are:\n\n\n\n\n\n\n\n\nParameter\n\n\nDefault Value\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nK\n\n\n1.0\n\n\ncarrying capacity of producers\n\n\n\n\n\n\nZ\n\n\n1.0\n\n\nconsumer-resource body mass ratio\n\n\n\n\n\n\nr\n\n\n1.0\n\n\ngrowth rate of producers\n\n\n\n\n\n\na_invertebrate\n\n\n0.314\n\n\nallometric constant for invertebrate consumers\n\n\n\n\n\n\na_producers\n\n\n1.0\n\n\nallometric constant of producers\n\n\n\n\n\n\na_vertebrate\n\n\n0.88\n\n\nallometric constant for vertebrate consumers\n\n\n\n\n\n\nc\n\n\n0\n\n\nquantifies the predator interference\n\n\n\n\n\n\nh\n\n\n1\n\n\nHill coefficient\n\n\n\n\n\n\ne_carnivore\n\n\n0.85\n\n\nassimilation efficiency of carnivores\n\n\n\n\n\n\ne_herbivore\n\n\n0.45\n\n\nassimilation efficiency of herbivores\n\n\n\n\n\n\nm_producers\n\n\n1\n\n\nbody-mass of producers\n\n\n\n\n\n\ny_invertebrate\n\n\n8\n\n\nmaximum consumption rate of invertebrate predators relative to their metabolic rate\n\n\n\n\n\n\ny_vertebrate\n\n\n4\n\n\nmaximum consumption rate of vertebrate predators relative to their metabolic rate\n\n\n\n\n\n\n\u0393\n\n\n0.5\n\n\nhalf-saturation density\n\n\n\n\n\n\n\u03b1\n\n\n1.0\n\n\ninterspecific competition\n\n\n\n\n\n\nproductivity\n\n\n:species\n\n\ntype of productivity regulation\n\n\n\n\n\n\n\n\nAll of these values are passed as optional keyword arguments to the function.\n\n\nA = [0 1 1; 0 0 0; 0 0 0]\np = model_parameters(A, Z=100.0, productivity=:system)\n\n\n\n\nThe \nproductivity\n keyword can be either \n:species\n (each species has an independant carrying capacity equal to \nK\n), \n:system\n (the carrying capacity is K divided by the number of primary producers), or \n:competitive\n (the species compete with themselves at rate 1.0, and with one another at rate \u03b1).\n\n\nIt is possible for the user to specify a vector of species body-mass, called \nbodymass\n \u2013 please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).\n\n\nThe final keyword is \nvertebrates\n, which is an array of \ntrue\n or \nfalse\n for every species in the matrix. By default, all species are invertebrates.\n\n\nsource", 
+            "title": "Public"
+        }, 
+        {
+            "location": "/lib/public/#public-documentation", 
+            "text": "Documentation for  BioEnergeticFoodWebs 's public (exported) interface.  See  Internal Documentation  for documentation on internal functions.", 
+            "title": "Public Documentation"
+        }, 
+        {
+            "location": "/lib/public/#contents", 
+            "text": "Public Documentation  Contents  Index  Setting up simulations", 
+            "title": "Contents"
+        }, 
+        {
+            "location": "/lib/public/#index", 
+            "text": "BioEnergeticFoodWebs.model_parameters", 
+            "title": "Index"
+        }, 
+        {
+            "location": "/lib/public/#setting-up-simulations", 
+            "text": "#  BioEnergeticFoodWebs.model_parameters     Function .  Create default parameters  This function creates model parameters, based on a food web matrix. Specifically, the default values are:     Parameter  Default Value  Meaning      K  1.0  carrying capacity of producers    Z  1.0  consumer-resource body mass ratio    r  1.0  growth rate of producers    a_invertebrate  0.314  allometric constant for invertebrate consumers    a_producers  1.0  allometric constant of producers    a_vertebrate  0.88  allometric constant for vertebrate consumers    c  0  quantifies the predator interference    h  1  Hill coefficient    e_carnivore  0.85  assimilation efficiency of carnivores    e_herbivore  0.45  assimilation efficiency of herbivores    m_producers  1  body-mass of producers    y_invertebrate  8  maximum consumption rate of invertebrate predators relative to their metabolic rate    y_vertebrate  4  maximum consumption rate of vertebrate predators relative to their metabolic rate    \u0393  0.5  half-saturation density    \u03b1  1.0  interspecific competition    productivity  :species  type of productivity regulation     All of these values are passed as optional keyword arguments to the function.  A = [0 1 1; 0 0 0; 0 0 0]\np = model_parameters(A, Z=100.0, productivity=:system)  The  productivity  keyword can be either  :species  (each species has an independant carrying capacity equal to  K ),  :system  (the carrying capacity is K divided by the number of primary producers), or  :competitive  (the species compete with themselves at rate 1.0, and with one another at rate \u03b1).  It is possible for the user to specify a vector of species body-mass, called  bodymass  \u2013 please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).  The final keyword is  vertebrates , which is an array of  true  or  false  for every species in the matrix. By default, all species are invertebrates.  source", 
+            "title": "Setting up simulations"
+        }, 
+        {
+            "location": "/lib/internals/", 
+            "text": "Internal Documentation\n\n\n\n\nContents\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions and methods\n\n\nconnectance", 
+            "title": "Internals"
+        }, 
+        {
+            "location": "/lib/internals/#internal-documentation", 
+            "text": "", 
+            "title": "Internal Documentation"
+        }, 
+        {
+            "location": "/lib/internals/#contents", 
+            "text": "Internal Documentation  Contents  Index  Functions and methods", 
+            "title": "Contents"
+        }, 
+        {
+            "location": "/lib/internals/#index", 
+            "text": "", 
+            "title": "Index"
+        }, 
+        {
+            "location": "/lib/internals/#functions-and-methods", 
+            "text": "connectance", 
+            "title": "Functions and methods"
         }
     ]
 }
