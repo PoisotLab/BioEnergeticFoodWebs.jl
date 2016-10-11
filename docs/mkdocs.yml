@@ -37,6 +37,7 @@ pages:
     - Manual:
         - Installation: man/installation.md
         - Generating random networks: man/random.md
+        - Contributing: man/contributing.md
     - Library:
         - Public: lib/public.md
         - Internals: lib/internals.md
