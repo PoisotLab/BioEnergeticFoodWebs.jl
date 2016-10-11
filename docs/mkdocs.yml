@@ -3,7 +3,10 @@ repo_url: https://github.com/PoisotLab/BioEnergeticFoodWebs.jl
 site_description: Simulation of biomass dynamics on food webs
 site_author: the Poisot lab
 
-theme: readthedocs
+theme: material
+
+extra:
+    logo: 'befw.png'
 
 extra_css:
     - asssets/Documenter.css
@@ -14,6 +17,9 @@ extra_javascript:
 
 markdown_extensions:
     - fenced_code
+    - extra
+    - tables
+    - mdx_math
 
 docs_dir: 'build'
 
