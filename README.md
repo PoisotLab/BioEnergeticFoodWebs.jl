@@ -11,12 +11,12 @@
 
 ## Stable
 
-[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)]()
+[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)](https://travis-ci.org/PoisotLab/BioEnergeticFoodWebs.jl)
 [![Coveralls branch](https://img.shields.io/coveralls/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)](https://coveralls.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=master)
 
 ## In development
 
-[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)]()
+[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)](https://travis-ci.org/PoisotLab/BioEnergeticFoodWebs.jl)
 [![Coveralls branch](https://img.shields.io/coveralls/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)](https://coveralls.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=next)
 
 This is a `julia` implementation of the bioenergetic model applied to
