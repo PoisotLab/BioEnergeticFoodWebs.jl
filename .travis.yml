@@ -1,7 +1,5 @@
 language: julia
 sudo: false
-before_install:
-    - openssl aes-256-cbc -K $encrypted_6c389576e6ce_key -iv $encrypted_6c389576e6ce_iv -in gh_deploy.enc -out gh_deploy -d
 os:
     - linux
 julia:
@@ -12,5 +10,3 @@ script:
     - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("BioEnergeticFoodWebs"); Pkg.test("BioEnergeticFoodWebs"; coverage=true)'
 after_success:
     - julia -e 'cd(Pkg.dir("BioEnergeticFoodWebs")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
-    - julia -e 'Pkg.add("Documenter")'
-    - julia -e 'cd(Pkg.dir("BioEnergeticFoodWebs")); include(joinpath("docs", "make.jl"))'
