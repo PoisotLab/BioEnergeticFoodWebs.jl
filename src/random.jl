@@ -20,7 +20,9 @@ end
 **Niche model of food webs**
 
 Takes a number of species `S` and a number of interactions `L`, and returns
-a food web with predators in rows, and preys in columns.
+a food web with predators in rows, and preys in columns. This function is
+used internally by `nichemodel` called with a connectance.
+
 """
 function nichemodel(S::Int64, L::Int64)
 

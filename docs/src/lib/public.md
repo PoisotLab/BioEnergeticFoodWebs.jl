@@ -27,3 +27,21 @@ model_parameters
 ```@docs
 nichemodel
 ```
+
+## Simulating and saving the output
+
+```@docs
+simulate
+BioEnergeticFoodWebs.save
+```
+
+## Analysis of output
+
+```@docs
+population_stability
+total_biomass
+population_biomass
+foodweb_diversity
+species_richness
+species_persistence
+```
