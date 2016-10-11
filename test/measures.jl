@@ -32,6 +32,5 @@ module TestMeasures
     @test isnan(population_stability(p, last=1))
     @test_approx_eq_eps population_stability(p, last=2) -1.59099  0.01
     @test species_richness(p, last=1) == 1.0
-    @test species_persistence(p, last=1) == 1.0/10
 
 end
