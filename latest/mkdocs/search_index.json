@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Outline\n\n\n\n\nLibrary Outline\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions\n\n\n\n\nBioEnergeticFoodWebs.model_parameters", 
+            "text": "Outline\n\n\n\n\nLibrary Outline\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\nGenerating networks\n\n\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions\n\n\n\n\nBioEnergeticFoodWebs.model_parameters\n\n\nBioEnergeticFoodWebs.nichemodel\n\n\nBioEnergeticFoodWebs.connectance", 
             "title": "Home"
         }, 
         {
@@ -12,7 +12,7 @@
         }, 
         {
             "location": "/#library-outline", 
-            "text": "Public Documentation  Contents  Index  Setting up simulations    Internal Documentation  Contents  Index  Functions and methods", 
+            "text": "Public Documentation  Contents  Index  Setting up simulations  Generating networks    Internal Documentation  Contents  Index  Functions and methods", 
             "title": "Library Outline"
         }, 
         {
@@ -22,12 +22,12 @@
         }, 
         {
             "location": "/#functions", 
-            "text": "BioEnergeticFoodWebs.model_parameters", 
+            "text": "BioEnergeticFoodWebs.model_parameters  BioEnergeticFoodWebs.nichemodel  BioEnergeticFoodWebs.connectance", 
             "title": "Functions"
         }, 
         {
             "location": "/man/installation/", 
-            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific instructions][pfsi] if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs", 
+            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific][pfsi] instructions if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs\n\n\n\n\n\n\nKeeping up to date\n\n\nIf you have already installed the package, you can check for updates with\n\n\nPkg.update()", 
             "title": "Installation"
         }, 
         {
@@ -37,7 +37,7 @@
         }, 
         {
             "location": "/man/installation/#installing-julia", 
-            "text": "Julia can be installed from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific instructions][pfsi] if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
+            "text": "Julia can be installed from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific][pfsi] instructions if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
             "title": "Installing julia"
         }, 
         {
@@ -46,8 +46,28 @@
             "title": "Installing BioEnergeticFoodWebs"
         }, 
         {
+            "location": "/man/installation/#keeping-up-to-date", 
+            "text": "If you have already installed the package, you can check for updates with  Pkg.update()", 
+            "title": "Keeping up to date"
+        }, 
+        {
+            "location": "/man/random/", 
+            "text": "Generating random networks\n\n\nUsers can generate random networks. It is, of course, possible to supply your own. The networks should be presented as matrices of 0 and 1. Internally, \nbefwm\n will check that there are as many rows as there are columns.\n\n\n\n\nNiche model\n\n\nFollowing Williams \n Martinez, we have implemented the \nniche\n model of food webs. This model represents allometric relationships between preys and predators well, and is therefore well suited to generate random networks.\n\n\nRandom niche model networks can be generated using \nnichemodel\n, which takes two arguments: the number of species \nS\n, and the desired connectance \nC\n:\n\n\nnichemodel(10, 0.2)\n\n\n\n\nNote that there are a number of keyword arguments (optional) that can be supplied: \ntolerance\n will give the allowed deviation from the desired connectance, and \ntoltype\n will indicate whether the error is relative or absolute.", 
+            "title": "Generating random networks"
+        }, 
+        {
+            "location": "/man/random/#generating-random-networks", 
+            "text": "Users can generate random networks. It is, of course, possible to supply your own. The networks should be presented as matrices of 0 and 1. Internally,  befwm  will check that there are as many rows as there are columns.", 
+            "title": "Generating random networks"
+        }, 
+        {
+            "location": "/man/random/#niche-model", 
+            "text": "Following Williams   Martinez, we have implemented the  niche  model of food webs. This model represents allometric relationships between preys and predators well, and is therefore well suited to generate random networks.  Random niche model networks can be generated using  nichemodel , which takes two arguments: the number of species  S , and the desired connectance  C :  nichemodel(10, 0.2)  Note that there are a number of keyword arguments (optional) that can be supplied:  tolerance  will give the allowed deviation from the desired connectance, and  toltype  will indicate whether the error is relative or absolute.", 
+            "title": "Niche model"
+        }, 
+        {
             "location": "/lib/public/", 
-            "text": "Public Documentation\n\n\nDocumentation for \nBioEnergeticFoodWebs\n's public (exported) interface.\n\n\nSee \nInternal Documentation\n for documentation on internal functions.\n\n\n\n\nContents\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nBioEnergeticFoodWebs.model_parameters\n\n\n\n\n\n\nSetting up simulations\n\n\n#\n\n\nBioEnergeticFoodWebs.model_parameters\n \n \nFunction\n.\n\n\nCreate default parameters\n\n\nThis function creates model parameters, based on a food web matrix. Specifically, the default values are:\n\n\n\n\n\n\n\n\nParameter\n\n\nDefault Value\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nK\n\n\n1.0\n\n\ncarrying capacity of producers\n\n\n\n\n\n\nZ\n\n\n1.0\n\n\nconsumer-resource body mass ratio\n\n\n\n\n\n\nr\n\n\n1.0\n\n\ngrowth rate of producers\n\n\n\n\n\n\na_invertebrate\n\n\n0.314\n\n\nallometric constant for invertebrate consumers\n\n\n\n\n\n\na_producers\n\n\n1.0\n\n\nallometric constant of producers\n\n\n\n\n\n\na_vertebrate\n\n\n0.88\n\n\nallometric constant for vertebrate consumers\n\n\n\n\n\n\nc\n\n\n0\n\n\nquantifies the predator interference\n\n\n\n\n\n\nh\n\n\n1\n\n\nHill coefficient\n\n\n\n\n\n\ne_carnivore\n\n\n0.85\n\n\nassimilation efficiency of carnivores\n\n\n\n\n\n\ne_herbivore\n\n\n0.45\n\n\nassimilation efficiency of herbivores\n\n\n\n\n\n\nm_producers\n\n\n1\n\n\nbody-mass of producers\n\n\n\n\n\n\ny_invertebrate\n\n\n8\n\n\nmaximum consumption rate of invertebrate predators relative to their metabolic rate\n\n\n\n\n\n\ny_vertebrate\n\n\n4\n\n\nmaximum consumption rate of vertebrate predators relative to their metabolic rate\n\n\n\n\n\n\n\u0393\n\n\n0.5\n\n\nhalf-saturation density\n\n\n\n\n\n\n\u03b1\n\n\n1.0\n\n\ninterspecific competition\n\n\n\n\n\n\nproductivity\n\n\n:species\n\n\ntype of productivity regulation\n\n\n\n\n\n\n\n\nAll of these values are passed as optional keyword arguments to the function.\n\n\nA = [0 1 1; 0 0 0; 0 0 0]\np = model_parameters(A, Z=100.0, productivity=:system)\n\n\n\n\nThe \nproductivity\n keyword can be either \n:species\n (each species has an independant carrying capacity equal to \nK\n), \n:system\n (the carrying capacity is K divided by the number of primary producers), or \n:competitive\n (the species compete with themselves at rate 1.0, and with one another at rate \u03b1).\n\n\nIt is possible for the user to specify a vector of species body-mass, called \nbodymass\n \u2013 please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).\n\n\nThe final keyword is \nvertebrates\n, which is an array of \ntrue\n or \nfalse\n for every species in the matrix. By default, all species are invertebrates.\n\n\nsource", 
+            "text": "Public Documentation\n\n\nDocumentation for \nBioEnergeticFoodWebs\n's public (exported) interface.\n\n\nSee \nInternal Documentation\n for documentation on internal functions.\n\n\n\n\nContents\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\nGenerating networks\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nBioEnergeticFoodWebs.model_parameters\n\n\nBioEnergeticFoodWebs.nichemodel\n\n\n\n\n\n\nSetting up simulations\n\n\n#\n\n\nBioEnergeticFoodWebs.model_parameters\n \n \nFunction\n.\n\n\nCreate default parameters\n\n\nThis function creates model parameters, based on a food web matrix. Specifically, the default values are:\n\n\n\n\n\n\n\n\nParameter\n\n\nDefault Value\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nK\n\n\n1.0\n\n\ncarrying capacity of producers\n\n\n\n\n\n\nZ\n\n\n1.0\n\n\nconsumer-resource body mass ratio\n\n\n\n\n\n\nr\n\n\n1.0\n\n\ngrowth rate of producers\n\n\n\n\n\n\na_invertebrate\n\n\n0.314\n\n\nallometric constant for invertebrate consumers\n\n\n\n\n\n\na_producers\n\n\n1.0\n\n\nallometric constant of producers\n\n\n\n\n\n\na_vertebrate\n\n\n0.88\n\n\nallometric constant for vertebrate consumers\n\n\n\n\n\n\nc\n\n\n0\n\n\nquantifies the predator interference\n\n\n\n\n\n\nh\n\n\n1\n\n\nHill coefficient\n\n\n\n\n\n\ne_carnivore\n\n\n0.85\n\n\nassimilation efficiency of carnivores\n\n\n\n\n\n\ne_herbivore\n\n\n0.45\n\n\nassimilation efficiency of herbivores\n\n\n\n\n\n\nm_producers\n\n\n1\n\n\nbody-mass of producers\n\n\n\n\n\n\ny_invertebrate\n\n\n8\n\n\nmaximum consumption rate of invertebrate predators relative to their metabolic rate\n\n\n\n\n\n\ny_vertebrate\n\n\n4\n\n\nmaximum consumption rate of vertebrate predators relative to their metabolic rate\n\n\n\n\n\n\n\u0393\n\n\n0.5\n\n\nhalf-saturation density\n\n\n\n\n\n\n\u03b1\n\n\n1.0\n\n\ninterspecific competition\n\n\n\n\n\n\nproductivity\n\n\n:species\n\n\ntype of productivity regulation\n\n\n\n\n\n\n\n\nAll of these values are passed as optional keyword arguments to the function.\n\n\nA = [0 1 1; 0 0 0; 0 0 0]\np = model_parameters(A, Z=100.0, productivity=:system)\n\n\n\n\nThe \nproductivity\n keyword can be either \n:species\n (each species has an independant carrying capacity equal to \nK\n), \n:system\n (the carrying capacity is K divided by the number of primary producers), or \n:competitive\n (the species compete with themselves at rate 1.0, and with one another at rate \u03b1).\n\n\nIt is possible for the user to specify a vector of species body-mass, called \nbodymass\n \u2013 please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).\n\n\nThe final keyword is \nvertebrates\n, which is an array of \ntrue\n or \nfalse\n for every species in the matrix. By default, all species are invertebrates.\n\n\nsource\n\n\n\n\nGenerating networks\n\n\n#\n\n\nBioEnergeticFoodWebs.nichemodel\n \n \nFunction\n.\n\n\nNiche model of food webs\n\n\nTakes a number of species \nS\n and a number of interactions \nL\n, and returns a food web with predators in rows, and preys in columns.\n\n\nsource\n\n\nNiche model of food webs\n\n\nTakes a number of species \nS\n and a connectance \nC\n, and returns a food web with predators in rows, and preys in columns. Note that the connectance is first transformed into an integer number of interactions.\n\n\nThis function has two keyword arguments:\n\n\n\n\ntolerance\n is the allowed error on tolerance (see below)\n\n\ntoltype\n is the type or error, and can be \n:abs\n (absolute) and \n:rel\n\n\n\n\n(relative). Relative tolerance is the amount of error allowed, relative to the desired connectance value. If the simulated network has a tolerance x, the target connectance is c, then the relative error is |1-x/c|.\n\n\nsource", 
             "title": "Public"
         }, 
         {
@@ -57,12 +77,12 @@
         }, 
         {
             "location": "/lib/public/#contents", 
-            "text": "Public Documentation  Contents  Index  Setting up simulations", 
+            "text": "Public Documentation  Contents  Index  Setting up simulations  Generating networks", 
             "title": "Contents"
         }, 
         {
             "location": "/lib/public/#index", 
-            "text": "BioEnergeticFoodWebs.model_parameters", 
+            "text": "BioEnergeticFoodWebs.model_parameters  BioEnergeticFoodWebs.nichemodel", 
             "title": "Index"
         }, 
         {
@@ -71,8 +91,13 @@
             "title": "Setting up simulations"
         }, 
         {
+            "location": "/lib/public/#generating-networks", 
+            "text": "#  BioEnergeticFoodWebs.nichemodel     Function .  Niche model of food webs  Takes a number of species  S  and a number of interactions  L , and returns a food web with predators in rows, and preys in columns.  source  Niche model of food webs  Takes a number of species  S  and a connectance  C , and returns a food web with predators in rows, and preys in columns. Note that the connectance is first transformed into an integer number of interactions.  This function has two keyword arguments:   tolerance  is the allowed error on tolerance (see below)  toltype  is the type or error, and can be  :abs  (absolute) and  :rel   (relative). Relative tolerance is the amount of error allowed, relative to the desired connectance value. If the simulated network has a tolerance x, the target connectance is c, then the relative error is |1-x/c|.  source", 
+            "title": "Generating networks"
+        }, 
+        {
             "location": "/lib/internals/", 
-            "text": "Internal Documentation\n\n\n\n\nContents\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions and methods\n\n\nconnectance", 
+            "text": "Internal Documentation\n\n\n\n\nContents\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nBioEnergeticFoodWebs.connectance\n\n\n\n\n\n\nFunctions and methods\n\n\n#\n\n\nBioEnergeticFoodWebs.connectance\n \n \nFunction\n.\n\n\n Connectance of a network\n\n\nReturns the connectance of a square matrix, defined as $S/L^2$.\n\n\nsource", 
             "title": "Internals"
         }, 
         {
@@ -87,12 +112,12 @@
         }, 
         {
             "location": "/lib/internals/#index", 
-            "text": "", 
+            "text": "BioEnergeticFoodWebs.connectance", 
             "title": "Index"
         }, 
         {
             "location": "/lib/internals/#functions-and-methods", 
-            "text": "connectance", 
+            "text": "#  BioEnergeticFoodWebs.connectance     Function .   Connectance of a network  Returns the connectance of a square matrix, defined as $S/L^2$.  source", 
             "title": "Functions and methods"
         }
     ]

@@ -202,6 +202,15 @@
   </li>
 
       
+        
+  <li>
+    <a class="" title="Generating random networks" href="../../man/random/">
+      Generating random networks
+    </a>
+    
+  </li>
+
+      
     </ul>
   </li>
 
@@ -238,6 +247,12 @@
             <li class="anchor">
               <a title="Setting up simulations" href="#setting-up-simulations">
                 Setting up simulations
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Generating networks" href="#generating-networks">
+                Generating networks
               </a>
             </li>
           
@@ -295,6 +310,7 @@
 <li><a href="./#Contents-1">Contents</a></li>
 <li><a href="./#Index-1">Index</a></li>
 <li><a href="./#Setting-up-simulations-1">Setting up simulations</a></li>
+<li><a href="./#Generating-networks-1">Generating networks</a></li>
 </ul>
 </li>
 </ul>
@@ -302,6 +318,7 @@
 <h2 id="index">Index</h2>
 <ul>
 <li><a href="./#BioEnergeticFoodWebs.model_parameters"><code>BioEnergeticFoodWebs.model_parameters</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.nichemodel"><code>BioEnergeticFoodWebs.nichemodel</code></a></li>
 </ul>
 <p><a id='Setting-up-simulations-1'></a></p>
 <h2 id="setting-up-simulations">Setting up simulations</h2>
@@ -408,7 +425,23 @@ p = model_parameters(A, Z=100.0, productivity=:system)
 <p>The <code>productivity</code> keyword can be either <code>:species</code> (each species has an independant carrying capacity equal to <code>K</code>), <code>:system</code> (the carrying capacity is K divided by the number of primary producers), or <code>:competitive</code> (the species compete with themselves at rate 1.0, and with one another at rate α).</p>
 <p>It is possible for the user to specify a vector of species body-mass, called <code>bodymass</code> – please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).</p>
 <p>The final keyword is <code>vertebrates</code>, which is an array of <code>true</code> or <code>false</code> for every species in the matrix. By default, all species are invertebrates.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/e72fb53d79f0b2947b0cec0f8d6c6f008d93b961/src/./make_parameters.jl#L1-L46' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0b1f267f241c3b5ad7b7f658464655fbfa30a6c7/src/./make_parameters.jl#L1-L46' class='documenter-source'>source</a><br></p>
+<p><a id='Generating-networks-1'></a></p>
+<h2 id="generating-networks">Generating networks</h2>
+<p><a id='BioEnergeticFoodWebs.nichemodel' href='#BioEnergeticFoodWebs.nichemodel'>#</a>
+<strong><code>BioEnergeticFoodWebs.nichemodel</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Niche model of food webs</strong></p>
+<p>Takes a number of species <code>S</code> and a number of interactions <code>L</code>, and returns a food web with predators in rows, and preys in columns.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0b1f267f241c3b5ad7b7f658464655fbfa30a6c7/src/./random.jl#L19-L24' class='documenter-source'>source</a><br></p>
+<p><strong>Niche model of food webs</strong></p>
+<p>Takes a number of species <code>S</code> and a connectance <code>C</code>, and returns a food web with predators in rows, and preys in columns. Note that the connectance is first transformed into an integer number of interactions.</p>
+<p>This function has two keyword arguments:</p>
+<ol>
+<li><code>tolerance</code> is the allowed error on tolerance (see below)</li>
+<li><code>toltype</code> is the type or error, and can be <code>:abs</code> (absolute) and <code>:rel</code></li>
+</ol>
+<p>(relative). Relative tolerance is the amount of error allowed, relative to the desired connectance value. If the simulated network has a tolerance x, the target connectance is c, then the relative error is |1-x/c|.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0b1f267f241c3b5ad7b7f658464655fbfa30a6c7/src/./random.jl#L67-L83' class='documenter-source'>source</a><br></p>
           <aside class="copyright" role="note">
             
             Documentation built with
@@ -425,7 +458,7 @@ p = model_parameters(A, Z=100.0, productivity=:system)
   <nav class="pagination" aria-label="Footer">
     <div class="previous">
       
-        <a href="../../man/installation/" title="Installation">
+        <a href="../../man/random/" title="Generating random networks">
           <span class="direction">
             Previous
           </span>
@@ -435,7 +468,7 @@ p = model_parameters(A, Z=100.0, productivity=:system)
             </div>
             <div class="stretch">
               <div class="title">
-                Installation
+                Generating random networks
               </div>
             </div>
           </div>
