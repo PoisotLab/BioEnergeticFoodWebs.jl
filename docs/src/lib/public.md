@@ -22,3 +22,8 @@ Pages = ["public.md"]
 model_parameters
 ```
 
+## Generating networks
+
+```@docs
+nichemodel
+```

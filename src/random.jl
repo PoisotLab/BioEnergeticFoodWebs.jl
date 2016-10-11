@@ -1,3 +1,9 @@
+"""
+** Connectance of a network**
+
+Returns the connectance of a square matrix, defined as $S/L^2$.
+
+"""
 function connectance(S::Int64, L::Int64)
     @assert S > 1
     C = L/S^2

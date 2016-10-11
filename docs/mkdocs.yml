@@ -35,6 +35,7 @@ pages:
     - Home: index.md
     - Manual:
         - Installation: man/installation.md
+        - Generating random networks: man/random.md
     - Library:
         - Public: lib/public.md
         - Internals: lib/internals.md
