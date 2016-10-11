@@ -1,0 +1,24 @@
+site_name: BioEnergeticFoodWebs.jl
+repo_url: https://github.com/PoisotLab/BioEnergeticFoodWebs.jl
+site_description: Simulation of biomass dynamics on food webs
+site_author: the Poisot lab
+
+theme: readthedocs
+
+extra_css:
+    - asssets/Documenter.css
+
+extra_javascript:
+    - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+    - assets/mathjaxhelper.js
+
+markdown_extensions:
+    - extra
+    - tables
+    - fenced_code
+    - mdx_math
+
+docs_dir: 'build'
+
+pages:
+    - Home: index.md
