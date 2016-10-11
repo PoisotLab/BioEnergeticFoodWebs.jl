@@ -7,6 +7,14 @@ theme: material
 
 extra:
     logo: 'befw.png'
+    palette:
+        primary: purple
+        accent: teal
+    font:
+        text: 'Roboto'
+        code: 'Roboto Mono'
+    author:
+        twitter: 'poisotlab'
 
 extra_css:
     - asssets/Documenter.css
