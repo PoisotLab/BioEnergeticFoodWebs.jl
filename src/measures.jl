@@ -33,7 +33,7 @@ Proportion of species with a biomass larger than the `threshold`. The threshold 
 by default set at `eps()`, which should be close to 10^-16.
 """
 function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
-    return species_richness(richness, threshold=threshold, last=last)/size(p[:A][1])
+    return species_richness(p, threshold=threshold, last=last)/size(p[:A][1])
 end
 
 """
