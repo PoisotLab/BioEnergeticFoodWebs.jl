@@ -21,12 +21,15 @@ module TestMeasures
     i = collect(linspace(0.0, 1.0, 3))
     @test_approx_eq BioEnergeticFoodWebs.coefficient_of_variation(i) 1+1/(4*length(i))
 
-
     # Test the total biomass thing
     B = eye(10)
     p = Dict{Symbol, Any}(:B => B)
     @test total_biomass(p, last=10) == 1.0
     @test_throws AssertionError total_biomass(p, last=1000)
     @test population_biomass(p, last=10)[1] == 0.1
+
+    # Population stability
+    @test isnan(population_stability(p, last=1))
+    @test_approx_eq_eps population_stability(p, last=2) -1.59099  0.01
 
 end
