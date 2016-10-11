@@ -23,7 +23,8 @@ module TestMeasures
 
     # Test the total biomass thing
     B = eye(10)
-    p = Dict{Symbol, Any}(:B => B)
+    A = eye(10)
+    p = Dict{Symbol, Any}(:B => B, A => A)
     @test total_biomass(p, last=10) == 1.0
     @test_throws AssertionError total_biomass(p, last=1000)
     @test population_biomass(p, last=10)[1] == 0.1
@@ -32,5 +33,6 @@ module TestMeasures
     @test isnan(population_stability(p, last=1))
     @test_approx_eq_eps population_stability(p, last=2) -1.59099  0.01
     @test species_richness(p, last=1) == 1.0
+    @test species_persistence(p, last=1) == 0.1
 
 end
