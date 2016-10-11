@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific instructions][pfsi] if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing befwm\n\n\n\n\n\n\nUser manual\n\n\n\n\nGeneral informations\n\n\nMeasures on output\n\n\nGenerating random networks\n\n\nFunctions reference", 
+            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific instructions][pfsi] if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs\n\n\n\n\n\n\nOutline\n\n\n\n\nLibrary Outline\n\n\n\n\nPublic Documentation\n\n\nContents\n\n\nIndex\n\n\nSetting up simulations\n\n\n\n\n\n\nInternal Documentation\n\n\nContents\n\n\nIndex\n\n\nFunctions and methods\n\n\n\n\n\n\n\n\n\n\nIndex\n\n\n\n\nFunctions\n\n\n\n\nBioEnergeticFoodWebs.model_parameters", 
             "title": "Home"
         }, 
         {
@@ -17,13 +17,28 @@
         }, 
         {
             "location": "/#installing-bioenergeticfoodwebs", 
-            "text": "The current version can be installed by typing the following line into Julia (which is usually started from the command line  Pkg.add( BioEnergeticFoodWebs )  The package can be loaded with  using befwm", 
+            "text": "The current version can be installed by typing the following line into Julia (which is usually started from the command line  Pkg.add( BioEnergeticFoodWebs )  The package can be loaded with  using BioEnergeticFoodWebs", 
             "title": "Installing BioEnergeticFoodWebs"
         }, 
         {
-            "location": "/#user-manual", 
-            "text": "General informations  Measures on output  Generating random networks  Functions reference", 
-            "title": "User manual"
+            "location": "/#outline", 
+            "text": "", 
+            "title": "Outline"
+        }, 
+        {
+            "location": "/#library-outline", 
+            "text": "Public Documentation  Contents  Index  Setting up simulations    Internal Documentation  Contents  Index  Functions and methods", 
+            "title": "Library Outline"
+        }, 
+        {
+            "location": "/#index", 
+            "text": "", 
+            "title": "Index"
+        }, 
+        {
+            "location": "/#functions", 
+            "text": "BioEnergeticFoodWebs.model_parameters", 
+            "title": "Functions"
         }
     ]
 }
