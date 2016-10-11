@@ -87,7 +87,7 @@ function nichemodel(S::Int64, C::Float64; tolerance::Float64=0.05, toltype::Symb
     else
       tolfunc = (x) -> abs(1-x/C) < tolerance
     end
-    while !(tolfunc(BioEnergeticFoodWeb.connectance(A)))
+    while !(tolfunc(BioEnergeticFoodWebs.connectance(A)))
       A = nichemodel(S, L)
     end
     return A

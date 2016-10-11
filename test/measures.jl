@@ -1,25 +1,25 @@
 module TestMeasures
     using Base.Test
-    using BioEnergeticFoodWeb
+    using BioEnergeticFoodWebs
 
     # Internal functions
 
     i = ones(10)
-    @test_approx_eq BioEnergeticFoodWeb.shannon(i) 1.0
+    @test_approx_eq BioEnergeticFoodWebs.shannon(i) 1.0
 
     i = zeros(100).+0.001
     i[1] = 1.0
-    @test_approx_eq_eps BioEnergeticFoodWeb.shannon(i) 0.0 0.2
+    @test_approx_eq_eps BioEnergeticFoodWebs.shannon(i) 0.0 0.2
 
-    @test isnan(BioEnergeticFoodWeb.shannon(vec([1.0])))
-    @test isnan(BioEnergeticFoodWeb.shannon(vec([-1.0])))
+    @test isnan(BioEnergeticFoodWebs.shannon(vec([1.0])))
+    @test isnan(BioEnergeticFoodWebs.shannon(vec([-1.0])))
 
 
     i = ones(5)
-    @test BioEnergeticFoodWeb.coefficient_of_variation(i) == 0.0
+    @test BioEnergeticFoodWebs.coefficient_of_variation(i) == 0.0
 
     i = collect(linspace(0.0, 1.0, 3))
-    @test_approx_eq BioEnergeticFoodWeb.coefficient_of_variation(i) 1+1/(4*length(i))
+    @test_approx_eq BioEnergeticFoodWebs.coefficient_of_variation(i) 1+1/(4*length(i))
 
 
     # Test the total biomass thing

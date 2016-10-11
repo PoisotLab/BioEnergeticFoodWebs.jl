@@ -1,6 +1,6 @@
 module TestSimulate
     using Base.Test
-    using BioEnergeticFoodWeb
+    using BioEnergeticFoodWebs
 
     food_chain = [0 0 0;0 0 1; 1 0 0]
     p = model_parameters(food_chain)
@@ -12,13 +12,13 @@ end
 
 module TestSimulateHandChecked
     using Base.Test
-    using BioEnergeticFoodWeb
+    using BioEnergeticFoodWebs
 
     A = [0 1 0; 0 0 0; 0 1 0]
     p = model_parameters(A)
     b0 = vec([0.2 0.4 0.1])
     der = zeros(Float64, 3)
-    der = BioEnergeticFoodWeb.dBdt(0.0, b0, der, p)
+    der = BioEnergeticFoodWebs.dBdt(0.0, b0, der, p)
     # 0.1604888888888889,-0.4,0.08024444444444445
     @test_approx_eq_eps der[1] 0.160 0.01
     @test_approx_eq_eps der[2] -0.4 0.01
@@ -27,7 +27,7 @@ end
 
 module TestSimulateSanityCheck
     using Base.Test
-    using BioEnergeticFoodWeb
+    using BioEnergeticFoodWebs
 
     # A producer with no predation reaches K
     free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]
@@ -79,7 +79,7 @@ end
 
 module TestSimulateProductivity
   using Base.Test
-  using BioEnergeticFoodWeb
+  using BioEnergeticFoodWebs
 
   A = zeros(Int64, (4, 4))
   n = rand(4)

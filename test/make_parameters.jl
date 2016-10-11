@@ -1,5 +1,5 @@
 module TestMakeParameters
-    using BioEnergeticFoodWeb
+    using BioEnergeticFoodWebs
     using Base.Test
 
     # Test the keyword interface
@@ -20,7 +20,7 @@ module TestMakeParameters
 
     # Test the direct interface
     correct_network = [0 1 0 0; 0 0 1 1; 0 0 0 0; 0 0 0 0]
-    p = BioEnergeticFoodWeb.model_parameters(correct_network, Z=2.0)
+    p = BioEnergeticFoodWebs.model_parameters(correct_network, Z=2.0)
     @test p[:Z] == 2.0
 
     # Test that there is an exception if the vertebrates is of the wrong size
