@@ -1,7 +1,8 @@
 # Bio-energetic food web model
 
-[![RTD](https://img.shields.io/badge/Documentation-online-blue.svg?style=flat-square)](http://poisotlab.io/doc/BioEnergeticFoodWebs/)
-[![GitHub tag](https://img.shields.io/github/tag/PoisotLab/BioEnergeticFoodWebs.jl.svg?style=flat-square)]()
+[![RTD](https://img.shields.io/badge/Documentation-online-blue.svg)](http://poisotlab.io/doc/BioEnergeticFoodWebs/)
+[![GitHub tag](https://img.shields.io/github/tag/PoisotLab/BioEnergeticFoodWebs.jl.svg)]()
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.160189.svg)](https://doi.org/10.5281/zenodo.160189)
 
 ## Stable
 
