@@ -1,6 +1,6 @@
 module TestTrophicRank
     using Base.Test
-    using befwm
+    using BioEnergeticFoodWeb
 
     food_chain = [0 0 0;0 0 1; 1 0 0]
     @assert trophic_rank(food_chain) == vec([1.0 3.0 2.0])

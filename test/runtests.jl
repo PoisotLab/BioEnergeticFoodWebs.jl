@@ -1,4 +1,4 @@
-using befwm
+using BioEnergeticFoodWeb
 using Base.Test
 
 anyerrors = false

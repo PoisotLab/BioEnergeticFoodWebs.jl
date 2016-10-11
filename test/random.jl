@@ -1,6 +1,6 @@
 module TestRandom
     using Base.Test
-    using befwm
+    using BioEnergeticFoodWeb
 
     @test_throws AssertionError nichemodel(10, 150)
 
@@ -16,6 +16,6 @@ module TestRandom
     A = nichemodel(10, 0.12, toltype=:abs)
 
     A = [0 1; 1 0]
-    @test befwm.connectance(A) == 0.5
+    @test BioEnergeticFoodWeb.connectance(A) == 0.5
 
 end

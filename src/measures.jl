@@ -141,7 +141,7 @@ Called with the defaults, this function will write `befwm_xxxxxxxx.json`
 with the current simulation output, where `xxxxxxxx` is a hash of the `p`
 output (ensuring that all output files are unique).
 
-This function is *not* exported, so it must be called with `befwm.save`.
+This function is *not* exported, so it must be called with `BioEnergeticFoodWeb.save`.
 
 """
 function save(p::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varname=NaN)
