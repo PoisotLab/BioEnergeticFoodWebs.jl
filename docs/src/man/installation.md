@@ -2,9 +2,9 @@
 
 ## Installing `julia`
 
-Julia can be installed from the [JuliaLang][jll] website. Most GNU/Linux
-distributions have a package named `julia`, and there are [platform-specific
-instructions][pfsi] if needs be.
+Julia can be installed from the [JuliaLang][jll] website. Most
+GNU/Linux distributions have a package named `julia`, and there are
+[platform-specific][pfsi] instructions if needs be.
 
 [jll]: http://julialang.org/downloads/ "JuliaLang download page"
 [pfsi]: http://julialang.org/downloads/platform.html "Platform-specific installation instructions"
@@ -26,3 +26,12 @@ The package can be loaded with
 ``` julia
 using BioEnergeticFoodWebs
 ```
+
+## Keeping up to date
+
+If you have already installed the package, you can check for updates with
+
+``` julia
+Pkg.update()
+```
+
