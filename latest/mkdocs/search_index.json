@@ -1,0 +1,29 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific instructions][pfsi] if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing befwm\n\n\n\n\n\n\nUser manual\n\n\n\n\nGeneral informations\n\n\nMeasures on output\n\n\nGenerating random networks\n\n\nFunctions reference", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#getting-started-with-bioenergeticfoodwebs", 
+            "text": "", 
+            "title": "Getting started with BioEnergeticFoodWebs"
+        }, 
+        {
+            "location": "/#installing-julia", 
+            "text": "Julia can be installed from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific instructions][pfsi] if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
+            "title": "Installing julia"
+        }, 
+        {
+            "location": "/#installing-bioenergeticfoodwebs", 
+            "text": "The current version can be installed by typing the following line into Julia (which is usually started from the command line  Pkg.add( BioEnergeticFoodWebs )  The package can be loaded with  using befwm", 
+            "title": "Installing BioEnergeticFoodWebs"
+        }, 
+        {
+            "location": "/#user-manual", 
+            "text": "General informations  Measures on output  Generating random networks  Functions reference", 
+            "title": "User manual"
+        }
+    ]
+}
