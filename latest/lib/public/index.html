@@ -256,6 +256,18 @@
               </a>
             </li>
           
+            <li class="anchor">
+              <a title="Simulating and saving the output" href="#simulating-and-saving-the-output">
+                Simulating and saving the output
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Analysis of output" href="#analysis-of-output">
+                Analysis of output
+              </a>
+            </li>
+          
         </ul>
       
     
@@ -311,14 +323,24 @@
 <li><a href="./#Index-1">Index</a></li>
 <li><a href="./#Setting-up-simulations-1">Setting up simulations</a></li>
 <li><a href="./#Generating-networks-1">Generating networks</a></li>
+<li><a href="./#Simulating-and-saving-the-output-1">Simulating and saving the output</a></li>
+<li><a href="./#Analysis-of-output-1">Analysis of output</a></li>
 </ul>
 </li>
 </ul>
 <p><a id='Index-1'></a></p>
 <h2 id="index">Index</h2>
 <ul>
+<li><a href="./#BioEnergeticFoodWebs.foodweb_diversity"><code>BioEnergeticFoodWebs.foodweb_diversity</code></a></li>
 <li><a href="./#BioEnergeticFoodWebs.model_parameters"><code>BioEnergeticFoodWebs.model_parameters</code></a></li>
 <li><a href="./#BioEnergeticFoodWebs.nichemodel"><code>BioEnergeticFoodWebs.nichemodel</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.population_biomass"><code>BioEnergeticFoodWebs.population_biomass</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.population_stability"><code>BioEnergeticFoodWebs.population_stability</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.save"><code>BioEnergeticFoodWebs.save</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.simulate"><code>BioEnergeticFoodWebs.simulate</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.species_persistence"><code>BioEnergeticFoodWebs.species_persistence</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.species_richness"><code>BioEnergeticFoodWebs.species_richness</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.total_biomass"><code>BioEnergeticFoodWebs.total_biomass</code></a></li>
 </ul>
 <p><a id='Setting-up-simulations-1'></a></p>
 <h2 id="setting-up-simulations">Setting up simulations</h2>
@@ -425,14 +447,14 @@ p = model_parameters(A, Z=100.0, productivity=:system)
 <p>The <code>productivity</code> keyword can be either <code>:species</code> (each species has an independant carrying capacity equal to <code>K</code>), <code>:system</code> (the carrying capacity is K divided by the number of primary producers), or <code>:competitive</code> (the species compete with themselves at rate 1.0, and with one another at rate α).</p>
 <p>It is possible for the user to specify a vector of species body-mass, called <code>bodymass</code> – please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).</p>
 <p>The final keyword is <code>vertebrates</code>, which is an array of <code>true</code> or <code>false</code> for every species in the matrix. By default, all species are invertebrates.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0b1f267f241c3b5ad7b7f658464655fbfa30a6c7/src/./make_parameters.jl#L1-L46' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./make_parameters.jl#L1-L46' class='documenter-source'>source</a><br></p>
 <p><a id='Generating-networks-1'></a></p>
 <h2 id="generating-networks">Generating networks</h2>
 <p><a id='BioEnergeticFoodWebs.nichemodel' href='#BioEnergeticFoodWebs.nichemodel'>#</a>
 <strong><code>BioEnergeticFoodWebs.nichemodel</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Niche model of food webs</strong></p>
-<p>Takes a number of species <code>S</code> and a number of interactions <code>L</code>, and returns a food web with predators in rows, and preys in columns.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0b1f267f241c3b5ad7b7f658464655fbfa30a6c7/src/./random.jl#L19-L24' class='documenter-source'>source</a><br></p>
+<p>Takes a number of species <code>S</code> and a number of interactions <code>L</code>, and returns a food web with predators in rows, and preys in columns. This function is used internally by <code>nichemodel</code> called with a connectance.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./random.jl#L19-L26' class='documenter-source'>source</a><br></p>
 <p><strong>Niche model of food webs</strong></p>
 <p>Takes a number of species <code>S</code> and a connectance <code>C</code>, and returns a food web with predators in rows, and preys in columns. Note that the connectance is first transformed into an integer number of interactions.</p>
 <p>This function has two keyword arguments:</p>
@@ -441,7 +463,72 @@ p = model_parameters(A, Z=100.0, productivity=:system)
 <li><code>toltype</code> is the type or error, and can be <code>:abs</code> (absolute) and <code>:rel</code></li>
 </ol>
 <p>(relative). Relative tolerance is the amount of error allowed, relative to the desired connectance value. If the simulated network has a tolerance x, the target connectance is c, then the relative error is |1-x/c|.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0b1f267f241c3b5ad7b7f658464655fbfa30a6c7/src/./random.jl#L67-L83' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./random.jl#L69-L85' class='documenter-source'>source</a><br></p>
+<p><a id='Simulating-and-saving-the-output-1'></a></p>
+<h2 id="simulating-and-saving-the-output">Simulating and saving the output</h2>
+<p><a id='BioEnergeticFoodWebs.simulate' href='#BioEnergeticFoodWebs.simulate'>#</a>
+<strong><code>BioEnergeticFoodWebs.simulate</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Main simulation loop</strong></p>
+<p>This function takes two mandatory arguments:</p>
+<ul>
+<li><code>p</code> is a <code>Dict</code> as returned by <code>make_parameters</code></li>
+<li><code>biomass</code> is a <code>Array{Float64, 1}</code> with the initial biomasses of every species</li>
+</ul>
+<p>Internally, the function will check that the length of <code>biomass</code> matches with the size of the network.</p>
+<p>In addition, the function takes three optional arguments:</p>
+<ul>
+<li><code>start</code> (defaults to 0), the initial time</li>
+<li><code>stop</code> (defaults to 500), the final time</li>
+<li><code>use</code> (defaults to <code>:ode45</code>), the integration method</li>
+</ul>
+<p>The integration method is, by default, <code>:ode45</code>, and can be changed to one of <code>:ode23</code>, <code>:ode45</code>, <code>:ode78</code>, or <code>:ode23s</code>.</p>
+<p>The <code>simulate</code> function returns a <code>Dict{Symbol, Any}</code>, with three top-level keys:</p>
+<ul>
+<li><code>:p</code>, the parameters that were given as input</li>
+<li><code>:t</code>, the timesteps</li>
+<li><code>:B</code>, an <code>Array{Float64, 2}</code> with the biomasses</li>
+</ul>
+<p>The array of biomasses has one row for each timestep, and one column for each species.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./simulate.jl#L1-L32' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.save' href='#BioEnergeticFoodWebs.save'>#</a>
+<strong><code>BioEnergeticFoodWebs.save</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Save the output of a simulation</strong></p>
+<p>Takes a simulation output as a mandatory argument. The two keyword arguments are <code>as</code> (can be <code>:json</code> or <code>:jld</code>), defining the file format, and <code>filename</code> (without an extension, defaults to <code>NaN</code>). If <code>:jld</code> is used, the variable is named <code>befwm_simul</code> unless a <code>varname</code> is given.</p>
+<p>Called with the defaults, this function will write <code>befwm_xxxxxxxx.json</code> with the current simulation output, where <code>xxxxxxxx</code> is a hash of the <code>p</code> output (ensuring that all output files are unique).</p>
+<p>This function is <em>not</em> exported, so it must be called with <code>BioEnergeticFoodWebs.save</code>.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L132-L146' class='documenter-source'>source</a><br></p>
+<p><a id='Analysis-of-output-1'></a></p>
+<h2 id="analysis-of-output">Analysis of output</h2>
+<p><a id='BioEnergeticFoodWebs.population_stability' href='#BioEnergeticFoodWebs.population_stability'>#</a>
+<strong><code>BioEnergeticFoodWebs.population_stability</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Population stability</strong></p>
+<p>Takes a matrix with populations in columns, timesteps in rows. This is usually the element <code>:B</code> of the simulation output. Population stability is measured as the mean of the negative coefficient of variations of all species with an abundance higher than <code>threshold</code>. By default, the stability is measured over the last <code>last=1000</code> timesteps.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L39-L48' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.total_biomass' href='#BioEnergeticFoodWebs.total_biomass'>#</a>
+<strong><code>BioEnergeticFoodWebs.total_biomass</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Total biomass</strong></p>
+<p>Returns the sum of biomass, averaged over the last <code>last</code> timesteps.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L60-L65' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.population_biomass' href='#BioEnergeticFoodWebs.population_biomass'>#</a>
+<strong><code>BioEnergeticFoodWebs.population_biomass</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Per species biomass</strong></p>
+<p>Returns the average biomass of all species, over the last <code>last</code> timesteps.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L76-L81' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.foodweb_diversity' href='#BioEnergeticFoodWebs.foodweb_diversity'>#</a>
+<strong><code>BioEnergeticFoodWebs.foodweb_diversity</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Food web diversity</strong></p>
+<p>Based on the average of Shannon's entropy over the last <code>last</code> timesteps.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L116-L121' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.species_richness' href='#BioEnergeticFoodWebs.species_richness'>#</a>
+<strong><code>BioEnergeticFoodWebs.species_richness</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Number of surviving species</strong></p>
+<p>Number of species with a biomass larger than the <code>threshold</code>. The threshold is by default set at <code>eps()</code>, which should be close to 10^-16.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L13-L18' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.species_persistence' href='#BioEnergeticFoodWebs.species_persistence'>#</a>
+<strong><code>BioEnergeticFoodWebs.species_persistence</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Proportion of surviving species</strong></p>
+<p>Proportion of species with a biomass larger than the <code>threshold</code>. The threshold is by default set at <code>eps()</code>, which should be close to 10^-16.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/5bf3ef8b3a4093a68b57bff5617cb5dc3562287f/src/./measures.jl#L29-L34' class='documenter-source'>source</a><br></p>
           <aside class="copyright" role="note">
             
             Documentation built with
