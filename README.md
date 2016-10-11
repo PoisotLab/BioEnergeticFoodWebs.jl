@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/PoisotLab/BioEnergeticFoodWebs.jl/master/docs/src/befw.png" alt="logo" />
+</p>
+
+
 # Bio-energetic food web model
 
 [![RTD](https://img.shields.io/badge/doc-stable-blue.svg)](http://poisotlab.io/BioEnergeticFoodWebs.jl/next/)
@@ -6,7 +11,7 @@
 
 ## Stable
 
-[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)])
+[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)]()
 [![Coveralls branch](https://img.shields.io/coveralls/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)]()
 
 ## In development
