@@ -24,14 +24,24 @@ Pkg.add("BioEnergeticFoodWebs")
 The package can be loaded with
 
 ~~~ julia
-using befwm
+using BioEnergeticFoodWebs
 ~~~
-        
-# User manual
+ 
+## Outline
 
-1. [General informations](general-informations)
-1. [Measures on output](measures)
-2. [Generating random networks](random-networks)
-3. [Functions reference](api)
+## Library Outline
 
+```@contents
+Pages = ["lib/public.md", "lib/internals.md"]
+Depth = 2
+```
+
+## [Index](@id main-index)
+
+### Functions
+
+```@index
+Pages = ["lib/public.md", "lib/internals.md"]
+Order = [:function]
+```
 
