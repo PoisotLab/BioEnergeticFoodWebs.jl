@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     
       
-        <title>Generating random networks - BioEnergeticFoodWebs.jl</title>
+        <title>First simulation - BioEnergeticFoodWebs.jl</title>
       
       
       
@@ -102,7 +102,7 @@
             
           </span>
         
-        Generating random networks
+        First simulation
       </div>
     </div>
     
@@ -209,33 +209,23 @@
       
         
   <li>
-    <a class="current" title="Generating random networks" href="./">
+    <a class="" title="Generating random networks" href="../random/">
       Generating random networks
     </a>
-    
-      
-        
-      
-      
-        <ul>
-          
-            <li class="anchor">
-              <a title="Niche model" href="#niche-model">
-                Niche model
-              </a>
-            </li>
-          
-        </ul>
-      
     
   </li>
 
       
         
   <li>
-    <a class="" title="First simulation" href="../first_simulation/">
+    <a class="current" title="First simulation" href="./">
       First simulation
     </a>
+    
+      
+        
+      
+      
     
   </li>
 
@@ -311,17 +301,22 @@
       <article class="article">
         <div class="wrapper">
           
-          <p><a id='Generating-random-networks-1'></a></p>
-<h1 id="generating-random-networks">Generating random networks</h1>
-<p>Users can generate random networks. It is, of course, possible to supply your own. The networks should be presented as matrices of 0 and 1. Internally, <code>befwm</code> will check that there are as many rows as there are columns.</p>
-<p><a id='Niche-model-1'></a></p>
-<h2 id="niche-model">Niche model</h2>
-<p>Following Williams &amp; Martinez, we have implemented the <em>niche</em> model of food webs. This model represents allometric relationships between preys and predators well, and is therefore well suited to generate random networks.</p>
-<p>Random niche model networks can be generated using <code>nichemodel</code>, which takes two arguments: the number of species <code>S</code>, and the desired connectance <code>C</code>:</p>
-<pre><code class="julia">nichemodel(10, 0.2)
-</code></pre>
-
-<p>Note that there are a number of keyword arguments (optional) that can be supplied: <code>tolerance</code> will give the allowed deviation from the desired connectance, and <code>toltype</code> will indicate whether the error is relative or absolute.</p>
+          <p><a id='First-simulation-1'></a></p>
+<h1 id="first-simulation">First simulation</h1>
+<p>Starting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.</p>
+<p>In this example, we will start with a simple generation of the null model, then generate the default set of parameters (see <code>?model_parameters</code>), and start a short simulation.</p>
+<p>Do keep in mind that all functions are documented, so you can type in <code>?function_name</code> from within <em>Julia</em>, and get access to the documentation.</p>
+<p>```@example</p>
+<h1 id="we-generate-the-network">We generate the network</h1>
+<p>A = nichemodel(10, 0.3)</p>
+<h1 id="the-we-setup-the-default-parameters">The we setup the default parameters</h1>
+<p>p = model_parameters(A)</p>
+<h1 id="and-random-biomasses">And random biomasses</h1>
+<p>b = rand(size(A, 1))</p>
+<h1 id="and-finally-we-simulate">And finally, we simulate</h1>
+<p>s = simulate(p, b, start=0, stop=50, steps=1000)
+```</p>
+<p>The <code>A</code> matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.</p>
           <aside class="copyright" role="note">
             
             Documentation built with
@@ -338,7 +333,7 @@
   <nav class="pagination" aria-label="Footer">
     <div class="previous">
       
-        <a href="../installation/" title="Installation">
+        <a href="../random/" title="Generating random networks">
           <span class="direction">
             Previous
           </span>
@@ -348,7 +343,7 @@
             </div>
             <div class="stretch">
               <div class="title">
-                Installation
+                Generating random networks
               </div>
             </div>
           </div>
@@ -357,14 +352,14 @@
     </div>
     <div class="next">
       
-        <a href="../first_simulation/" title="First simulation">
+        <a href="../contributing/" title="Contributing">
           <span class="direction">
             Next
           </span>
           <div class="page">
             <div class="stretch">
               <div class="title">
-                First simulation
+                Contributing
               </div>
             </div>
             <div class="button button-next" role="button" aria-label="Next">
