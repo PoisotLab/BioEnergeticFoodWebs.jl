@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     
       
-        <title>Generating random networks - BioEnergeticFoodWebs.jl</title>
+        <title>Contributing - BioEnergeticFoodWebs.jl</title>
       
       
       
@@ -102,7 +102,7 @@
             
           </span>
         
-        Generating random networks
+        Contributing
       </div>
     </div>
     
@@ -209,8 +209,17 @@
       
         
   <li>
-    <a class="current" title="Generating random networks" href="./">
+    <a class="" title="Generating random networks" href="../random/">
       Generating random networks
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="current" title="Contributing" href="./">
+      Contributing
     </a>
     
       
@@ -220,22 +229,19 @@
         <ul>
           
             <li class="anchor">
-              <a title="Niche model" href="#niche-model">
-                Niche model
+              <a title="Reporting issues" href="#reporting-issues">
+                Reporting issues
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Adding code and features" href="#adding-code-and-features">
+                Adding code and features
               </a>
             </li>
           
         </ul>
       
-    
-  </li>
-
-      
-        
-  <li>
-    <a class="" title="Contributing" href="../contributing/">
-      Contributing
-    </a>
     
   </li>
 
@@ -302,17 +308,15 @@
       <article class="article">
         <div class="wrapper">
           
-          <p><a id='Generating-random-networks-1'></a></p>
-<h1 id="generating-random-networks">Generating random networks</h1>
-<p>Users can generate random networks. It is, of course, possible to supply your own. The networks should be presented as matrices of 0 and 1. Internally, <code>befwm</code> will check that there are as many rows as there are columns.</p>
-<p><a id='Niche-model-1'></a></p>
-<h2 id="niche-model">Niche model</h2>
-<p>Following Williams &amp; Martinez, we have implemented the <em>niche</em> model of food webs. This model represents allometric relationships between preys and predators well, and is therefore well suited to generate random networks.</p>
-<p>Random niche model networks can be generated using <code>nichemodel</code>, which takes two arguments: the number of species <code>S</code>, and the desired connectance <code>C</code>:</p>
-<pre><code class="julia">nichemodel(10, 0.2)
-</code></pre>
-
-<p>Note that there are a number of keyword arguments (optional) that can be supplied: <code>tolerance</code> will give the allowed deviation from the desired connectance, and <code>toltype</code> will indicate whether the error is relative or absolute.</p>
+          <p><a id='Contributing-to-the-package-1'></a></p>
+<h1 id="contributing-to-the-package">Contributing to the package</h1>
+<p><a id='Reporting-issues-1'></a></p>
+<h2 id="reporting-issues">Reporting issues</h2>
+<p>A simple yet very useful way to contribute to <code>BioEnergeticFoodWebs</code> is to report issues on <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/issues" title="Open an issue">GitHub</a>.</p>
+<p>Issues can be either reports of bugs, or suggestions of things to improve in the package.</p>
+<p><a id='Adding-code-and-features-1'></a></p>
+<h2 id="adding-code-and-features">Adding code and features</h2>
+<p>Please start by submitting an issue explaining what you would like to add. When we merge your changes into a new release, we will give you authorship on the DOI provided by <a href="https://zenodo.org/record/160189#.V_1sLnVhlhE">Zenodo</a>.</p>
           <aside class="copyright" role="note">
             
             Documentation built with
@@ -329,7 +333,7 @@
   <nav class="pagination" aria-label="Footer">
     <div class="previous">
       
-        <a href="../installation/" title="Installation">
+        <a href="../random/" title="Generating random networks">
           <span class="direction">
             Previous
           </span>
@@ -339,7 +343,7 @@
             </div>
             <div class="stretch">
               <div class="title">
-                Installation
+                Generating random networks
               </div>
             </div>
           </div>
@@ -348,14 +352,14 @@
     </div>
     <div class="next">
       
-        <a href="../contributing/" title="Contributing">
+        <a href="../../lib/public/" title="Public">
           <span class="direction">
             Next
           </span>
           <div class="page">
             <div class="stretch">
               <div class="title">
-                Contributing
+                Public
               </div>
             </div>
             <div class="button button-next" role="button" aria-label="Next">

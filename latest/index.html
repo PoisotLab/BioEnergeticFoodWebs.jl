@@ -55,13 +55,13 @@
       
       
       
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arimo:400,700|Cousine">
       <style>
         body, input {
-          font-family: 'Roboto', Helvetica, Arial, sans-serif;
+          font-family: 'Arimo', Helvetica, Arial, sans-serif;
         }
         pre, code {
-          font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+          font-family: 'Cousine', 'Courier New', 'Courier', monospace;
         }
       </style>
     
@@ -74,7 +74,7 @@
   
   
   
-  <body class="palette-primary-purple palette-accent-teal">
+  <body class="palette-primary-blue palette-accent-lightblue">
     
       
       
@@ -109,6 +109,11 @@
         <a href="https://twitter.com/poisotlab" title="@poisotlab on Twitter" target="_blank" class="toggle-button icon icon-twitter"></a>
       </div>
     
+    
+      
+      <div class="button button-github" role="button" aria-label="GitHub">
+        <a href="https://github.com/poisotlab" title="@poisotlab on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+      </div>
     
     <div class="button button-search" role="button" aria-label="Search">
       <label class="toggle-button icon icon-search" title="Search" for="toggle-search"></label>
@@ -234,6 +239,15 @@
   </li>
 
       
+        
+  <li>
+    <a class="" title="Contributing" href="man/contributing/">
+      Contributing
+    </a>
+    
+  </li>
+
+      
     </ul>
   </li>
 
@@ -279,6 +293,13 @@
               </li>
             
             
+              
+              <li>
+                <a href="https://github.com/poisotlab" target="_blank" title="@poisotlab on GitHub">
+                  @poisotlab on GitHub
+                </a>
+              </li>
+            
           </ul>
         
       </div>
@@ -293,6 +314,25 @@
           
           <p><a id='Outline-1'></a></p>
 <h2 id="outline">Outline</h2>
+<ul>
+<li><a href="man/installation/#Getting-started-with-BioEnergeticFoodWebs-1">Getting started with <code>BioEnergeticFoodWebs</code></a><ul>
+<li><a href="man/installation/#Installing-julia-1">Installing <code>julia</code></a></li>
+<li><a href="man/installation/#Installing-BioEnergeticFoodWebs-1">Installing <code>BioEnergeticFoodWebs</code></a></li>
+<li><a href="man/installation/#Keeping-up-to-date-1">Keeping up to date</a></li>
+<li><a href="man/installation/#Citing-the-package-1">Citing the package</a></li>
+</ul>
+</li>
+<li><a href="man/random/#Generating-random-networks-1">Generating random networks</a><ul>
+<li><a href="man/random/#Niche-model-1">Niche model</a></li>
+</ul>
+</li>
+<li><a href="man/first_simulation.md#First-simulation-1">First simulation</a></li>
+<li><a href="man/contributing/#Contributing-to-the-package-1">Contributing to the package</a><ul>
+<li><a href="man/contributing/#Reporting-issues-1">Reporting issues</a></li>
+<li><a href="man/contributing/#Adding-code-and-features-1">Adding code and features</a></li>
+</ul>
+</li>
+</ul>
 <p><a id='Library-Outline-1'></a></p>
 <h2 id="library-outline">Library Outline</h2>
 <ul>
@@ -308,7 +348,10 @@
 <li><a href="lib/internals/#Internal-Documentation-1">Internal Documentation</a><ul>
 <li><a href="lib/internals/#Contents-1">Contents</a></li>
 <li><a href="lib/internals/#Index-1">Index</a></li>
-<li><a href="lib/internals/#Functions-and-methods-1">Functions and methods</a></li>
+<li><a href="lib/internals/#Functions-and-methods-for-networks-1">Functions and methods for networks</a></li>
+<li><a href="lib/internals/#ODE-wrappers-and-functions-for-integration-1">ODE wrappers and functions for integration</a></li>
+<li><a href="lib/internals/#Functions-to-work-on-output-1">Functions to work on output</a></li>
+<li><a href="lib/internals/#Functions-to-prepare-and-check-parameters-1">Functions to prepare and check parameters</a></li>
 </ul>
 </li>
 </ul>
@@ -327,7 +370,22 @@
 <li><a href="lib/public/#BioEnergeticFoodWebs.species_persistence"><code>BioEnergeticFoodWebs.species_persistence</code></a></li>
 <li><a href="lib/public/#BioEnergeticFoodWebs.species_richness"><code>BioEnergeticFoodWebs.species_richness</code></a></li>
 <li><a href="lib/public/#BioEnergeticFoodWebs.total_biomass"><code>BioEnergeticFoodWebs.total_biomass</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.check_food_web"><code>BioEnergeticFoodWebs.check_food_web</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.check_parameters"><code>BioEnergeticFoodWebs.check_parameters</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.coefficient_of_variation"><code>BioEnergeticFoodWebs.coefficient_of_variation</code></a></li>
 <li><a href="lib/internals/#BioEnergeticFoodWebs.connectance"><code>BioEnergeticFoodWebs.connectance</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.dBdt"><code>BioEnergeticFoodWebs.dBdt</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.distance_to_producer"><code>BioEnergeticFoodWebs.distance_to_producer</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.growthrate"><code>BioEnergeticFoodWebs.growthrate</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.make_initial_parameters"><code>BioEnergeticFoodWebs.make_initial_parameters</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.make_parameters"><code>BioEnergeticFoodWebs.make_parameters</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.shannon"><code>BioEnergeticFoodWebs.shannon</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.trophic_rank"><code>BioEnergeticFoodWebs.trophic_rank</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode"><code>BioEnergeticFoodWebs.wrap_ode</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode23"><code>BioEnergeticFoodWebs.wrap_ode23</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode23s"><code>BioEnergeticFoodWebs.wrap_ode23s</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode45"><code>BioEnergeticFoodWebs.wrap_ode45</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode78"><code>BioEnergeticFoodWebs.wrap_ode78</code></a></li>
 </ul>
           <aside class="copyright" role="note">
             

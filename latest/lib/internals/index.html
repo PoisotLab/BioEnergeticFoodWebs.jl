@@ -53,13 +53,13 @@
       
       
       
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arimo:400,700|Cousine">
       <style>
         body, input {
-          font-family: 'Roboto', Helvetica, Arial, sans-serif;
+          font-family: 'Arimo', Helvetica, Arial, sans-serif;
         }
         pre, code {
-          font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+          font-family: 'Cousine', 'Courier New', 'Courier', monospace;
         }
       </style>
     
@@ -72,7 +72,7 @@
   
   
   
-  <body class="palette-primary-purple palette-accent-teal">
+  <body class="palette-primary-blue palette-accent-lightblue">
     
       
       
@@ -111,6 +111,11 @@
         <a href="https://twitter.com/poisotlab" title="@poisotlab on Twitter" target="_blank" class="toggle-button icon icon-twitter"></a>
       </div>
     
+    
+      
+      <div class="button button-github" role="button" aria-label="GitHub">
+        <a href="https://github.com/poisotlab" title="@poisotlab on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+      </div>
     
     <div class="button button-search" role="button" aria-label="Search">
       <label class="toggle-button icon icon-search" title="Search" for="toggle-search"></label>
@@ -211,6 +216,15 @@
   </li>
 
       
+        
+  <li>
+    <a class="" title="Contributing" href="../../man/contributing/">
+      Contributing
+    </a>
+    
+  </li>
+
+      
     </ul>
   </li>
 
@@ -254,8 +268,26 @@
             </li>
           
             <li class="anchor">
-              <a title="Functions and methods" href="#functions-and-methods">
-                Functions and methods
+              <a title="Functions and methods for networks" href="#functions-and-methods-for-networks">
+                Functions and methods for networks
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="ODE wrappers and functions for integration" href="#ode-wrappers-and-functions-for-integration">
+                ODE wrappers and functions for integration
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Functions to work on output" href="#functions-to-work-on-output">
+                Functions to work on output
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Functions to prepare and check parameters" href="#functions-to-prepare-and-check-parameters">
+                Functions to prepare and check parameters
               </a>
             </li>
           
@@ -283,6 +315,13 @@
               </li>
             
             
+              
+              <li>
+                <a href="https://github.com/poisotlab" target="_blank" title="@poisotlab on GitHub">
+                  @poisotlab on GitHub
+                </a>
+              </li>
+            
           </ul>
         
       </div>
@@ -301,22 +340,112 @@
 <li><a href="./#Internal-Documentation-1">Internal Documentation</a><ul>
 <li><a href="./#Contents-1">Contents</a></li>
 <li><a href="./#Index-1">Index</a></li>
-<li><a href="./#Functions-and-methods-1">Functions and methods</a></li>
+<li><a href="./#Functions-and-methods-for-networks-1">Functions and methods for networks</a></li>
+<li><a href="./#ODE-wrappers-and-functions-for-integration-1">ODE wrappers and functions for integration</a></li>
+<li><a href="./#Functions-to-work-on-output-1">Functions to work on output</a></li>
+<li><a href="./#Functions-to-prepare-and-check-parameters-1">Functions to prepare and check parameters</a></li>
 </ul>
 </li>
 </ul>
 <p><a id='Index-1'></a></p>
 <h2 id="index">Index</h2>
 <ul>
+<li><a href="./#BioEnergeticFoodWebs.check_food_web"><code>BioEnergeticFoodWebs.check_food_web</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.check_parameters"><code>BioEnergeticFoodWebs.check_parameters</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.coefficient_of_variation"><code>BioEnergeticFoodWebs.coefficient_of_variation</code></a></li>
 <li><a href="./#BioEnergeticFoodWebs.connectance"><code>BioEnergeticFoodWebs.connectance</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.dBdt"><code>BioEnergeticFoodWebs.dBdt</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.distance_to_producer"><code>BioEnergeticFoodWebs.distance_to_producer</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.growthrate"><code>BioEnergeticFoodWebs.growthrate</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.make_initial_parameters"><code>BioEnergeticFoodWebs.make_initial_parameters</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.make_parameters"><code>BioEnergeticFoodWebs.make_parameters</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.shannon"><code>BioEnergeticFoodWebs.shannon</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.trophic_rank"><code>BioEnergeticFoodWebs.trophic_rank</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.wrap_ode"><code>BioEnergeticFoodWebs.wrap_ode</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.wrap_ode23"><code>BioEnergeticFoodWebs.wrap_ode23</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.wrap_ode23s"><code>BioEnergeticFoodWebs.wrap_ode23s</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.wrap_ode45"><code>BioEnergeticFoodWebs.wrap_ode45</code></a></li>
+<li><a href="./#BioEnergeticFoodWebs.wrap_ode78"><code>BioEnergeticFoodWebs.wrap_ode78</code></a></li>
 </ul>
-<p><a id='Functions-and-methods-1'></a></p>
-<h2 id="functions-and-methods">Functions and methods</h2>
+<p><a id='Functions-and-methods-for-networks-1'></a></p>
+<h2 id="functions-and-methods-for-networks">Functions and methods for networks</h2>
 <p><a id='BioEnergeticFoodWebs.connectance' href='#BioEnergeticFoodWebs.connectance'>#</a>
 <strong><code>BioEnergeticFoodWebs.connectance</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong> Connectance of a network</strong></p>
 <p>Returns the connectance of a square matrix, defined as $S/L^2$.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/41171ca6f6406dbc2425a2e20c2afb2982f902ba/src/./random.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./random.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.distance_to_producer' href='#BioEnergeticFoodWebs.distance_to_producer'>#</a>
+<strong><code>BioEnergeticFoodWebs.distance_to_producer</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Distance to a primary producer</strong></p>
+<p>This function measures, for every species, its shortest path to a primary producer using matrix exponentiation. A primary producer has a value of 1, a primary consumer a value of 2, and so forth.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./trophic_rank.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.trophic_rank' href='#BioEnergeticFoodWebs.trophic_rank'>#</a>
+<strong><code>BioEnergeticFoodWebs.trophic_rank</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Trophic rank</strong></p>
+<p>Based on the average distance of preys to primary producers. Specifically, the rank is defined as the average of the distance of preys to primary producers (recursively). Primary producers always have a trophic rank of 1.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./trophic_rank.jl#L34-L41' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.check_food_web' href='#BioEnergeticFoodWebs.check_food_web'>#</a>
+<strong><code>BioEnergeticFoodWebs.check_food_web</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Is the matrix correctly formatted?</strong></p>
+<p>A <em>correct</em> matrix has only 0 and 1, two dimensions, and is square.</p>
+<p>This function returns nothing, but raises an <code>AssertionError</code> if one of the conditions is not met.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./checks.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a id='ODE-wrappers-and-functions-for-integration-1'></a></p>
+<h2 id="ode-wrappers-and-functions-for-integration">ODE wrappers and functions for integration</h2>
+<p><a id='BioEnergeticFoodWebs.wrap_ode23' href='#BioEnergeticFoodWebs.wrap_ode23'>#</a>
+<strong><code>BioEnergeticFoodWebs.wrap_ode23</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Wrapper for ode23</strong></p>
+<p>See <code>wrap_ode</code>.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./simulate.jl#L64-L68' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.wrap_ode23s' href='#BioEnergeticFoodWebs.wrap_ode23s'>#</a>
+<strong><code>BioEnergeticFoodWebs.wrap_ode23s</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Wrapper for ode23s</strong></p>
+<p>See <code>wrap_ode</code>.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./simulate.jl#L73-L77' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.wrap_ode45' href='#BioEnergeticFoodWebs.wrap_ode45'>#</a>
+<strong><code>BioEnergeticFoodWebs.wrap_ode45</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Wrapper for ode45</strong></p>
+<p>See <code>wrap_ode</code>.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./simulate.jl#L82-L86' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.wrap_ode78' href='#BioEnergeticFoodWebs.wrap_ode78'>#</a>
+<strong><code>BioEnergeticFoodWebs.wrap_ode78</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Wrapper for ode78</strong></p>
+<p>See <code>wrap_ode</code>.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./simulate.jl#L91-L95' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.wrap_ode' href='#BioEnergeticFoodWebs.wrap_ode'>#</a>
+<strong><code>BioEnergeticFoodWebs.wrap_ode</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Wrapper for ode functions</strong></p>
+<p>These functions will let <code>ODE</code> do its job, then return the results in way we can handle. To be entirely explicit, these functions return objects in the same format as the output of <code>Sundials</code>. The long-term plan is to use Sundials only, but there is currently a significant memory leak issue, so we are resorting to ODE for the time being.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./simulate.jl#L100-L108' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.dBdt' href='#BioEnergeticFoodWebs.dBdt'>#</a>
+<strong><code>BioEnergeticFoodWebs.dBdt</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Derivatives</strong></p>
+<p>This function is the one wrapped by the various integration routines. Based on a timepoint <code>t</code>, an array of biomasses <code>biomass</code>, an equally sized array of derivatives <code>derivative</code>, and a series of simulation parameters <code>p</code>, it will return <code>dB/dt</code> for every species.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./dBdt.jl#L28-L35' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.growthrate' href='#BioEnergeticFoodWebs.growthrate'>#</a>
+<strong><code>BioEnergeticFoodWebs.growthrate</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Growth rate</strong></p>
+<p>TODO</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./dBdt.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='Functions-to-work-on-output-1'></a></p>
+<h2 id="functions-to-work-on-output">Functions to work on output</h2>
+<p><a id='BioEnergeticFoodWebs.coefficient_of_variation' href='#BioEnergeticFoodWebs.coefficient_of_variation'>#</a>
+<strong><code>BioEnergeticFoodWebs.coefficient_of_variation</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Coefficient of variation</strong></p>
+<p>Corrected for the sample size.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./measures.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a id='BioEnergeticFoodWebs.shannon' href='#BioEnergeticFoodWebs.shannon'>#</a>
+<strong><code>BioEnergeticFoodWebs.shannon</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>Shannon's entropy</strong></p>
+<p>Corrected for the number of species, removes negative and null values, return <code>NaN</code> in case of problem.</p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/a7974800ebd7ef39d93fd95cd62add1f28bad277/src/./measures.jl#L94-L100' class='documenter-source'>source</a><br></p>
+<p><a id='Functions-to-prepare-and-check-parameters-1'></a></p>
+<h2 id="functions-to-prepare-and-check-parameters">Functions to prepare and check parameters</h2>
+<pre><code>make_initial_parameters
+make_parameters
+check_initial_parameters
+check_parameters
+</code></pre>
           <aside class="copyright" role="note">
             
             Documentation built with
