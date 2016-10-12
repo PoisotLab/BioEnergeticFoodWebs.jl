@@ -101,7 +101,10 @@ end
 **Wrapper for ode functions**
 
 These functions will let `ODE` do its job, then return the results in way
-we can handle.
+we can handle. To be entirely explicit, these functions return objects in
+the same format as the output of `Sundials`. The long-term plan is to use
+Sundials only, but there is currently a significant memory leak issue,
+so we are resorting to ODE for the time being.
 """
 function wrap_ode(i, f, b, t)
     d = copy(b)
