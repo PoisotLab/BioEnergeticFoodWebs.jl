@@ -4,6 +4,7 @@
 Pages = [
     "man/installation.md",
     "man/random.md",
+    "man/first_simulation.md",
     "man/contributing.md"
 ]
 Depth = 2
