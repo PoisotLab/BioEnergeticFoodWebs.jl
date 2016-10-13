@@ -72,33 +72,13 @@
         }, 
         {
             "location": "/man/first_simulation/", 
-            "text": "First simulation\n\n\nStarting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.\n\n\nIn this example, we will start with a simple generation of the null model, then generate the default set of parameters (see \n?model_parameters\n), and start a short simulation.\n\n\nDo keep in mind that all functions are documented, so you can type in \n?function_name\n from within \nJulia\n, and get access to the documentation.\n\n\n```@example\n\n\nWe generate the network\n\n\nA = nichemodel(10, 0.3)\n\n\nThe we setup the default parameters\n\n\np = model_parameters(A)\n\n\nAnd random biomasses\n\n\nb = rand(size(A, 1))\n\n\nAnd finally, we simulate\n\n\ns = simulate(p, b, start=0, stop=50, steps=1000)\n```\n\n\nThe \nA\n matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
+            "text": "First simulation\n\n\nStarting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.\n\n\nIn this example, we will start with a simple generation of the null model, then generate the default set of parameters (see \n?model_parameters\n), and start a short simulation.\n\n\nDo keep in mind that all functions are documented, so you can type in \n?function_name\n from within \nJulia\n, and get access to the documentation.\n\n\n```@example\nA = nichemodel(10, 0.3)\n\n\np = model_parameters(A)\n\n\nb = rand(size(A, 1))\n\n\ns = simulate(p, b, start=0, stop=50, steps=1000)\n```\n\n\nThe \nA\n matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
             "title": "First simulation"
         }, 
         {
             "location": "/man/first_simulation/#first-simulation", 
-            "text": "Starting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.  In this example, we will start with a simple generation of the null model, then generate the default set of parameters (see  ?model_parameters ), and start a short simulation.  Do keep in mind that all functions are documented, so you can type in  ?function_name  from within  Julia , and get access to the documentation.  ```@example", 
+            "text": "Starting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.  In this example, we will start with a simple generation of the null model, then generate the default set of parameters (see  ?model_parameters ), and start a short simulation.  Do keep in mind that all functions are documented, so you can type in  ?function_name  from within  Julia , and get access to the documentation.  ```@example\nA = nichemodel(10, 0.3)  p = model_parameters(A)  b = rand(size(A, 1))  s = simulate(p, b, start=0, stop=50, steps=1000)\n```  The  A  matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
             "title": "First simulation"
-        }, 
-        {
-            "location": "/man/first_simulation/#we-generate-the-network", 
-            "text": "A = nichemodel(10, 0.3)", 
-            "title": "We generate the network"
-        }, 
-        {
-            "location": "/man/first_simulation/#the-we-setup-the-default-parameters", 
-            "text": "p = model_parameters(A)", 
-            "title": "The we setup the default parameters"
-        }, 
-        {
-            "location": "/man/first_simulation/#and-random-biomasses", 
-            "text": "b = rand(size(A, 1))", 
-            "title": "And random biomasses"
-        }, 
-        {
-            "location": "/man/first_simulation/#and-finally-we-simulate", 
-            "text": "s = simulate(p, b, start=0, stop=50, steps=1000)\n```  The  A  matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
-            "title": "And finally, we simulate"
         }, 
         {
             "location": "/man/contributing/", 
