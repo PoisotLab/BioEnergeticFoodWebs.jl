@@ -11,16 +11,12 @@ Do keep in mind that all functions are documented, so you can type in
 `?function_name` from within *Julia*, and get access to the documentation.
 
 ```@example
-# We generate the network
 A = nichemodel(10, 0.3)
 
-# The we setup the default parameters
 p = model_parameters(A)
 
-# And random biomasses
 b = rand(size(A, 1))
 
-# And finally, we simulate
 s = simulate(p, b, start=0, stop=50, steps=1000)
 ```
 
