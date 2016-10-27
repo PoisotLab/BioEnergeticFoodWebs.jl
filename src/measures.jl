@@ -34,7 +34,8 @@ by default set at `eps()`, which should be close to 10^-16.
 """
 function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
     r = species_richness(p, threshold=threshold, last=last)
-    m = size(p[:A], 1)
+    par = p[:p]
+    m = size(par[:A], 1)
     return r/m
 end
 
