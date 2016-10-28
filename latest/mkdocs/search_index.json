@@ -27,7 +27,7 @@
         }, 
         {
             "location": "/man/installation/", 
-            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nJulia can be installed from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific][pfsi] instructions if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs\n\n\n\n\n\n\nKeeping up to date\n\n\nIf you have already installed the package, you can check for updates with\n\n\nPkg.update()\n\n\n\n\n\n\nCiting the package\n\n\n\n\nTimoth\u00e9e Poisot, \n Eva Delmas. (2016). PoisotLab/BioEnergeticFoodWebs.jl: v0.1.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.160189\n\n\nEva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timoth\u00e9e Poisot\n\n\n\n\nbioRxiv 070946; doi: http://dx.doi.org/10.1101/070946", 
+            "text": "Getting started with \nBioEnergeticFoodWebs\n\n\n\n\nInstalling \njulia\n\n\nThe recommended way to install Julia is from the \nJuliaLang\n website. Most GNU/Linux distributions have a package named \njulia\n, and there are [platform-specific][pfsi] instructions if needs be.\n\n\nThere are further specific instructions to install a Julia kernel in Jupyter on the \nIJulia\n page.\n\n\n\n\nInstalling \nBioEnergeticFoodWebs\n\n\nThe current version can be installed by typing the following line into Julia (which is usually started from the command line\n\n\nPkg.add(\nBioEnergeticFoodWebs\n)\n\n\n\n\nThe package can be loaded with\n\n\nusing BioEnergeticFoodWebs\n\n\n\n\n\n\nKeeping up to date\n\n\nIf you have already installed the package, you can check for updates with\n\n\nPkg.update()\n\n\n\n\n\n\nCiting the package\n\n\n\n\nTimoth\u00e9e Poisot, \n Eva Delmas. (2016). PoisotLab/BioEnergeticFoodWebs.jl: v0.1.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.160189\n\n\nEva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timoth\u00e9e Poisot\n\n\n\n\nbioRxiv 070946; doi: http://dx.doi.org/10.1101/070946", 
             "title": "Installation"
         }, 
         {
@@ -37,7 +37,7 @@
         }, 
         {
             "location": "/man/installation/#installing-julia", 
-            "text": "Julia can be installed from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific][pfsi] instructions if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
+            "text": "The recommended way to install Julia is from the  JuliaLang  website. Most GNU/Linux distributions have a package named  julia , and there are [platform-specific][pfsi] instructions if needs be.  There are further specific instructions to install a Julia kernel in Jupyter on the  IJulia  page.", 
             "title": "Installing julia"
         }, 
         {
@@ -72,12 +72,12 @@
         }, 
         {
             "location": "/man/first_simulation/", 
-            "text": "First simulation\n\n\nStarting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.\n\n\nIn this example, we will start with a simple generation of the null model, then generate the default set of parameters (see \n?model_parameters\n), and start a short simulation.\n\n\nDo keep in mind that all functions are documented, so you can type in \n?function_name\n from within \nJulia\n, and get access to the documentation.\n\n\n```@example\nA = nichemodel(10, 0.3)\n\n\np = model_parameters(A)\n\n\nb = rand(size(A, 1))\n\n\ns = simulate(p, b, start=0, stop=50, steps=1000)\n```\n\n\nThe \nA\n matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
+            "text": "First simulation\n\n\nStarting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.\n\n\nIn this example, we will start with a simple generation of the null model, then generate the default set of parameters (see \n?model_parameters\n), and start a short simulation.\n\n\nDo keep in mind that all functions are documented, so you can type in \n?function_name\n from within \nJulia\n, and get access to the documentation.\n\n\nA = nichemodel(10, 0.3)\n\np = model_parameters(A)\n\nb = rand(size(A, 1))\n\ns = simulate(p, b, start=0, stop=50, steps=1000)\n\n\n\n\nThe \nA\n matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
             "title": "First simulation"
         }, 
         {
             "location": "/man/first_simulation/#first-simulation", 
-            "text": "Starting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.  In this example, we will start with a simple generation of the null model, then generate the default set of parameters (see  ?model_parameters ), and start a short simulation.  Do keep in mind that all functions are documented, so you can type in  ?function_name  from within  Julia , and get access to the documentation.  ```@example\nA = nichemodel(10, 0.3)  p = model_parameters(A)  b = rand(size(A, 1))  s = simulate(p, b, start=0, stop=50, steps=1000)\n```  The  A  matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
+            "text": "Starting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.  In this example, we will start with a simple generation of the null model, then generate the default set of parameters (see  ?model_parameters ), and start a short simulation.  Do keep in mind that all functions are documented, so you can type in  ?function_name  from within  Julia , and get access to the documentation.  A = nichemodel(10, 0.3)\n\np = model_parameters(A)\n\nb = rand(size(A, 1))\n\ns = simulate(p, b, start=0, stop=50, steps=1000)  The  A  matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.", 
             "title": "First simulation"
         }, 
         {

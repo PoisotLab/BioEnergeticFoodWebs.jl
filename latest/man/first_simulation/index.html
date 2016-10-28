@@ -306,12 +306,15 @@
 <p>Starting a simulation has three steps: getting the network, deciding on the parameters, and then starting the simulation itself.</p>
 <p>In this example, we will start with a simple generation of the null model, then generate the default set of parameters (see <code>?model_parameters</code>), and start a short simulation.</p>
 <p>Do keep in mind that all functions are documented, so you can type in <code>?function_name</code> from within <em>Julia</em>, and get access to the documentation.</p>
-<p>```@example
-A = nichemodel(10, 0.3)</p>
-<p>p = model_parameters(A)</p>
-<p>b = rand(size(A, 1))</p>
-<p>s = simulate(p, b, start=0, stop=50, steps=1000)
-```</p>
+<pre><code class="julia">A = nichemodel(10, 0.3)
+
+p = model_parameters(A)
+
+b = rand(size(A, 1))
+
+s = simulate(p, b, start=0, stop=50, steps=1000)
+</code></pre>
+
 <p>The <code>A</code> matrix, which is used by subsequent functions, has predators in rows, and preys in columns. It can only have 0 and 1.</p>
           <aside class="copyright" role="note">
             
