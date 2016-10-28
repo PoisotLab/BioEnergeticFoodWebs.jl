@@ -10,7 +10,7 @@ and start a short simulation.
 Do keep in mind that all functions are documented, so you can type in
 `?function_name` from within *Julia*, and get access to the documentation.
 
-```@example
+``` julia
 A = nichemodel(10, 0.3)
 
 p = model_parameters(A)
