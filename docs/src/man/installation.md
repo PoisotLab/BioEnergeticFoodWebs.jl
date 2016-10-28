@@ -2,7 +2,7 @@
 
 ## Installing `julia`
 
-Julia can be installed from the [JuliaLang][jll] website. Most
+The recommended way to install Julia is from the [JuliaLang][jll] website. Most
 GNU/Linux distributions have a package named `julia`, and there are
 [platform-specific][pfsi] instructions if needs be.
 
