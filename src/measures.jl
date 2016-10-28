@@ -34,7 +34,7 @@ by default set at `eps()`, which should be close to 10^-16.
 """
 function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
     r = species_richness(p, threshold=threshold, last=last)
-    m = size(p[:A], 1)
+    m = size(p[:B], 1) # Number of species is the number of columns in the biomass matrix
     return r/m
 end
 

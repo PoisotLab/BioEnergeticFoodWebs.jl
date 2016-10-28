@@ -24,15 +24,16 @@ module TestMeasures
     # Test the total biomass thing
     B = eye(10)
     A = eye(10)
-    p = Dict{Symbol, Any}(:B => B, :A => A)
-    @test total_biomass(p, last=10) == 1.0
-    @test_throws AssertionError total_biomass(p, last=1000)
-    @test population_biomass(p, last=10)[1] == 0.1
+    fake_params = Dict{Symbol, Any}(:A => A)
+    s = Dict{Symbol, Any}(:B => B, :p => fake_params)
+    @test total_biomass(s, last=10) == 1.0
+    @test_throws AssertionError total_biomass(s, last=1000)
+    @test population_biomass(s, last=10)[1] == 0.1
 
     # Population stability
-    @test isnan(population_stability(p, last=1))
-    @test_approx_eq_eps population_stability(p, last=2) -1.59099  0.01
-    @test species_richness(p, last=1) == 1.0
-    @test species_persistence(p, last=1) == 0.1
+    @test isnan(population_stability(s, last=1))
+    @test_approx_eq_eps population_stability(s, last=2) -1.59099  0.01
+    @test species_richness(s, last=1) == 1.0
+    @test species_persistence(s, last=1) == 0.1
 
 end
