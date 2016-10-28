@@ -1,5 +1,14 @@
-
 ## Outline
+
+```@contents
+Pages = [
+    "man/installation.md",
+    "man/random.md",
+    "man/first_simulation.md",
+    "man/contributing.md"
+]
+Depth = 2
+```
 
 ## Library Outline
 

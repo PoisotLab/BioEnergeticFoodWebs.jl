@@ -8,13 +8,14 @@ theme: material
 extra:
     logo: 'befw.png'
     palette:
-        primary: purple
-        accent: teal
+        primary: blue
+        accent: lightblue
     font:
-        text: 'Roboto'
-        code: 'Roboto Mono'
+        text: 'Arimo'
+        code: 'Cousine'
     author:
         twitter: 'poisotlab'
+        github: 'poisotlab'
 
 extra_css:
     - asssets/Documenter.css
@@ -36,6 +37,8 @@ pages:
     - Manual:
         - Installation: man/installation.md
         - Generating random networks: man/random.md
+        - First simulation: man/first_simulation.md
+        - Contributing: man/contributing.md
     - Library:
         - Public: lib/public.md
         - Internals: lib/internals.md

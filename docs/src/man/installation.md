@@ -2,7 +2,7 @@
 
 ## Installing `julia`
 
-Julia can be installed from the [JuliaLang][jll] website. Most
+The recommended way to install Julia is from the [JuliaLang][jll] website. Most
 GNU/Linux distributions have a package named `julia`, and there are
 [platform-specific][pfsi] instructions if needs be.
 
@@ -35,3 +35,8 @@ If you have already installed the package, you can check for updates with
 Pkg.update()
 ```
 
+## Citing the package
+
+1. Timothée Poisot, & Eva Delmas. (2016). PoisotLab/BioEnergeticFoodWebs.jl: v0.1.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.160189
+2. Eva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timothée Poisot
+bioRxiv 070946; doi: http://dx.doi.org/10.1101/070946
