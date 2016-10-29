@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="no-js ie6"><![endif]-->
+<!--[if IE 7 ]><html class="no-js ie7"><![endif]-->
+<!--[if IE 8 ]><html class="no-js ie8"><![endif]-->
+<!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    
+      
+        <title>BioEnergeticFoodWebs.jl - Simulation of biomass dynamics on food webs</title>
+      
+      
+        <meta name="description" content="Simulation of biomass dynamics on food webs">
+      
+      
+      
+        <meta name="author" content="the Poisot lab">
+      
+    
+    <meta property="og:url" content="None">
+    <meta property="og:title" content="BioEnergeticFoodWebs.jl">
+    <meta property="og:image" content="None/./befw.png">
+    <meta name="apple-mobile-web-app-title" content="BioEnergeticFoodWebs.jl">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+      <link rel="apple-touch-icon" href="./befw.png">
+    
+    
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/favicon-e565ddfa3b.ico">
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon-e565ddfa3b.ico">
+    <style>
+      @font-face {
+      	font-family: 'Icon';
+      	src: url('./assets/fonts/icon.eot?52m981');
+      	src: url('./assets/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+      		   url('./assets/fonts/icon.woff?52m981')
+               format('woff'),
+      		   url('./assets/fonts/icon.ttf?52m981')
+               format('truetype'),
+      		   url('./assets/fonts/icon.svg?52m981#icon')
+               format('svg');
+      	font-weight: normal;
+      	font-style: normal;
+      }
+    </style>
+    <link rel="stylesheet" href="./assets/stylesheets/application-a422ff04cc.css">
+    
+      <link rel="stylesheet" href="./assets/stylesheets/palettes-05ab2406df.css">
+    
+    
+      
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arimo:400,700|Cousine">
+      <style>
+        body, input {
+          font-family: 'Arimo', Helvetica, Arial, sans-serif;
+        }
+        pre, code {
+          font-family: 'Cousine', 'Courier New', 'Courier', monospace;
+        }
+      </style>
+    
+    
+      <link rel="stylesheet" href="./asssets/Documenter.css">
+    
+    <script src="./assets/javascripts/modernizr-4ab42b99fd.js"></script>
+    
+  </head>
+  
+  
+  
+  <body class="palette-primary-blue palette-accent-lightblue">
+    
+      
+      
+    
+    <div class="backdrop">
+      <div class="backdrop-paper"></div>
+    </div>
+    <input class="toggle" type="checkbox" id="toggle-drawer">
+    <input class="toggle" type="checkbox" id="toggle-search">
+    <label class="toggle-button overlay" for="toggle-drawer"></label>
+    <header class="header">
+      <nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        
+          <span class="path">
+            
+          </span>
+        
+        BioEnergeticFoodWebs.jl
+      </div>
+    </div>
+    
+      
+      <div class="button button-twitter" role="button" aria-label="Twitter">
+        <a href="https://twitter.com/poisotlab" title="@poisotlab on Twitter" target="_blank" class="toggle-button icon icon-twitter"></a>
+      </div>
+    
+    
+      
+      <div class="button button-github" role="button" aria-label="GitHub">
+        <a href="https://github.com/poisotlab" title="@poisotlab on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+      </div>
+    
+    <div class="button button-search" role="button" aria-label="Search">
+      <label class="toggle-button icon icon-search" title="Search" for="toggle-search"></label>
+    </div>
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+    </header>
+    <main class="main">
+      
+      <div class="drawer">
+        <nav aria-label="Navigation">
+  
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="./befw.png">
+        </div>
+      
+      <div class="name">
+        <strong>
+          BioEnergeticFoodWebs.jl
+          <span class="version">
+            
+          </span>
+        </strong>
+        
+          <br>
+          PoisotLab/BioEnergeticFoodWebs.jl
+        
+      </div>
+    </div>
+  </a>
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            
+            <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+      <div class="toc">
+        <ul>
+          
+            
+  <li>
+    <a class="current" title="Home" href=".">
+      Home
+    </a>
+    
+      
+      
+        <ul>
+          
+            <li class="anchor">
+              <a title="Outline" href="#outline">
+                Outline
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Library Outline" href="#library-outline">
+                Library Outline
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Index" href="#index">
+                Index
+              </a>
+            </li>
+          
+        </ul>
+      
+    
+  </li>
+
+          
+            
+  <li>
+    <span class="section">Manual</span>
+    <ul>
+      
+        
+  <li>
+    <a class="" title="Installation" href="man/installation/">
+      Installation
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Generating random networks" href="man/random/">
+      Generating random networks
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="First simulation" href="man/first_simulation/">
+      First simulation
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Contributing" href="man/contributing/">
+      Contributing
+    </a>
+    
+  </li>
+
+      
+    </ul>
+  </li>
+
+          
+            
+  <li>
+    <span class="section">Library</span>
+    <ul>
+      
+        
+  <li>
+    <a class="" title="Public" href="lib/public/">
+      Public
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Internals" href="lib/internals/">
+      Internals
+    </a>
+    
+  </li>
+
+      
+    </ul>
+  </li>
+
+          
+        </ul>
+        
+          <hr>
+          <span class="section">The author</span>
+          <ul>
+            
+              
+              <li>
+                <a href="https://twitter.com/poisotlab" target="_blank" title="@poisotlab on Twitter">
+                  @poisotlab on Twitter
+                </a>
+              </li>
+            
+            
+              
+              <li>
+                <a href="https://github.com/poisotlab" target="_blank" title="@poisotlab on GitHub">
+                  @poisotlab on GitHub
+                </a>
+              </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+      </div>
+      <article class="article">
+        <div class="wrapper">
+          
+            <h1>BioEnergeticFoodWebs.jl</h1>
+          
+          <p><a id='Outline-1'></a></p>
+<h2 id="outline">Outline</h2>
+<ul>
+<li><a href="man/installation/#Getting-started-with-BioEnergeticFoodWebs-1">Getting started with <code>BioEnergeticFoodWebs</code></a><ul>
+<li><a href="man/installation/#Installing-julia-1">Installing <code>julia</code></a></li>
+<li><a href="man/installation/#Installing-BioEnergeticFoodWebs-1">Installing <code>BioEnergeticFoodWebs</code></a></li>
+<li><a href="man/installation/#Keeping-up-to-date-1">Keeping up to date</a></li>
+<li><a href="man/installation/#Citing-the-package-1">Citing the package</a></li>
+</ul>
+</li>
+<li><a href="man/random/#Generating-random-networks-1">Generating random networks</a><ul>
+<li><a href="man/random/#Niche-model-1">Niche model</a></li>
+</ul>
+</li>
+<li><a href="man/first_simulation/#First-simulation-1">First simulation</a></li>
+<li><a href="man/contributing/#Contributing-to-the-package-1">Contributing to the package</a><ul>
+<li><a href="man/contributing/#Reporting-issues-1">Reporting issues</a></li>
+<li><a href="man/contributing/#Adding-code-and-features-1">Adding code and features</a></li>
+</ul>
+</li>
+</ul>
+<p><a id='Library-Outline-1'></a></p>
+<h2 id="library-outline">Library Outline</h2>
+<ul>
+<li><a href="lib/public/#Public-Documentation-1">Public Documentation</a><ul>
+<li><a href="lib/public/#Contents-1">Contents</a></li>
+<li><a href="lib/public/#Index-1">Index</a></li>
+<li><a href="lib/public/#Setting-up-simulations-1">Setting up simulations</a></li>
+<li><a href="lib/public/#Generating-networks-1">Generating networks</a></li>
+<li><a href="lib/public/#Simulating-and-saving-the-output-1">Simulating and saving the output</a></li>
+<li><a href="lib/public/#Analysis-of-output-1">Analysis of output</a></li>
+</ul>
+</li>
+<li><a href="lib/internals/#Internal-Documentation-1">Internal Documentation</a><ul>
+<li><a href="lib/internals/#Contents-1">Contents</a></li>
+<li><a href="lib/internals/#Index-1">Index</a></li>
+<li><a href="lib/internals/#Functions-and-methods-for-networks-1">Functions and methods for networks</a></li>
+<li><a href="lib/internals/#ODE-wrappers-and-functions-for-integration-1">ODE wrappers and functions for integration</a></li>
+<li><a href="lib/internals/#Functions-to-work-on-output-1">Functions to work on output</a></li>
+<li><a href="lib/internals/#Functions-to-prepare-and-check-parameters-1">Functions to prepare and check parameters</a></li>
+</ul>
+</li>
+</ul>
+<p><a id='main-index-1'></a></p>
+<h2 id="index">Index</h2>
+<p><a id='Functions-1'></a></p>
+<h3 id="functions">Functions</h3>
+<ul>
+<li><a href="lib/public/#BioEnergeticFoodWebs.foodweb_diversity"><code>BioEnergeticFoodWebs.foodweb_diversity</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.model_parameters"><code>BioEnergeticFoodWebs.model_parameters</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.nichemodel"><code>BioEnergeticFoodWebs.nichemodel</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.population_biomass"><code>BioEnergeticFoodWebs.population_biomass</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.population_stability"><code>BioEnergeticFoodWebs.population_stability</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.save"><code>BioEnergeticFoodWebs.save</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.simulate"><code>BioEnergeticFoodWebs.simulate</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.species_persistence"><code>BioEnergeticFoodWebs.species_persistence</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.species_richness"><code>BioEnergeticFoodWebs.species_richness</code></a></li>
+<li><a href="lib/public/#BioEnergeticFoodWebs.total_biomass"><code>BioEnergeticFoodWebs.total_biomass</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.check_food_web"><code>BioEnergeticFoodWebs.check_food_web</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.check_parameters"><code>BioEnergeticFoodWebs.check_parameters</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.coefficient_of_variation"><code>BioEnergeticFoodWebs.coefficient_of_variation</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.connectance"><code>BioEnergeticFoodWebs.connectance</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.dBdt"><code>BioEnergeticFoodWebs.dBdt</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.distance_to_producer"><code>BioEnergeticFoodWebs.distance_to_producer</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.growthrate"><code>BioEnergeticFoodWebs.growthrate</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.make_initial_parameters"><code>BioEnergeticFoodWebs.make_initial_parameters</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.make_parameters"><code>BioEnergeticFoodWebs.make_parameters</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.shannon"><code>BioEnergeticFoodWebs.shannon</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.trophic_rank"><code>BioEnergeticFoodWebs.trophic_rank</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode"><code>BioEnergeticFoodWebs.wrap_ode</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode23"><code>BioEnergeticFoodWebs.wrap_ode23</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode23s"><code>BioEnergeticFoodWebs.wrap_ode23s</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode45"><code>BioEnergeticFoodWebs.wrap_ode45</code></a></li>
+<li><a href="lib/internals/#BioEnergeticFoodWebs.wrap_ode78"><code>BioEnergeticFoodWebs.wrap_ode78</code></a></li>
+</ul>
+          <aside class="copyright" role="note">
+            
+            Documentation built with
+            <a href="http://www.mkdocs.org" target="_blank">MkDocs</a>
+            using the
+            <a href="http://squidfunk.github.io/mkdocs-material/" target="_blank">
+              Material
+            </a>
+            theme.
+          </aside>
+          
+            <footer class="footer">
+              
+  <nav class="pagination" aria-label="Footer">
+    <div class="previous">
+      
+    </div>
+    <div class="next">
+      
+        <a href="man/installation/" title="Installation">
+          <span class="direction">
+            Next
+          </span>
+          <div class="page">
+            <div class="stretch">
+              <div class="title">
+                Installation
+              </div>
+            </div>
+            <div class="button button-next" role="button" aria-label="Next">
+              <i class="icon icon-forward"></i>
+            </div>
+          </div>
+        </a>
+      
+    </div>
+  </nav>
+
+            </footer>
+          
+        </div>
+      </article>
+      <div class="results" role="status" aria-live="polite">
+        <div class="scrollable">
+          <div class="wrapper">
+            <div class="meta"></div>
+            <div class="list"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      var base_url = '.';
+      var repo_id  = 'PoisotLab/BioEnergeticFoodWebs.jl';
+    </script>
+    <script src="./assets/javascripts/application-997097ee0c.js"></script>
+    
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+      <script src="./assets/mathjaxhelper.js"></script>
+    
+    
+  </body>
+</html>
