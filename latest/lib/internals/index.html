@@ -382,72 +382,72 @@
 <strong><code>BioEnergeticFoodWebs.connectance</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong> Connectance of a network</strong></p>
 <p>Returns the connectance of a square matrix, defined as $S/L^2$.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./random.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./random.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.distance_to_producer' href='#BioEnergeticFoodWebs.distance_to_producer'>#</a>
 <strong><code>BioEnergeticFoodWebs.distance_to_producer</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Distance to a primary producer</strong></p>
 <p>This function measures, for every species, its shortest path to a primary producer using matrix exponentiation. A primary producer has a value of 1, a primary consumer a value of 2, and so forth.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./trophic_rank.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./trophic_rank.jl#L1-L8' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.trophic_rank' href='#BioEnergeticFoodWebs.trophic_rank'>#</a>
 <strong><code>BioEnergeticFoodWebs.trophic_rank</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Trophic rank</strong></p>
 <p>Based on the average distance of preys to primary producers. Specifically, the rank is defined as the average of the distance of preys to primary producers (recursively). Primary producers always have a trophic rank of 1.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./trophic_rank.jl#L34-L41' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./trophic_rank.jl#L34-L41' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.check_food_web' href='#BioEnergeticFoodWebs.check_food_web'>#</a>
 <strong><code>BioEnergeticFoodWebs.check_food_web</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Is the matrix correctly formatted?</strong></p>
 <p>A <em>correct</em> matrix has only 0 and 1, two dimensions, and is square.</p>
 <p>This function returns nothing, but raises an <code>AssertionError</code> if one of the conditions is not met.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./checks.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./checks.jl#L1-L8' class='documenter-source'>source</a><br></p>
 <p><a id='ODE-wrappers-and-functions-for-integration-1'></a></p>
 <h2 id="ode-wrappers-and-functions-for-integration">ODE wrappers and functions for integration</h2>
 <p><a id='BioEnergeticFoodWebs.wrap_ode23' href='#BioEnergeticFoodWebs.wrap_ode23'>#</a>
 <strong><code>BioEnergeticFoodWebs.wrap_ode23</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Wrapper for ode23</strong></p>
 <p>See <code>wrap_ode</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./simulate.jl#L64-L68' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./simulate.jl#L64-L68' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.wrap_ode23s' href='#BioEnergeticFoodWebs.wrap_ode23s'>#</a>
 <strong><code>BioEnergeticFoodWebs.wrap_ode23s</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Wrapper for ode23s</strong></p>
 <p>See <code>wrap_ode</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./simulate.jl#L73-L77' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./simulate.jl#L73-L77' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.wrap_ode45' href='#BioEnergeticFoodWebs.wrap_ode45'>#</a>
 <strong><code>BioEnergeticFoodWebs.wrap_ode45</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Wrapper for ode45</strong></p>
 <p>See <code>wrap_ode</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./simulate.jl#L82-L86' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./simulate.jl#L82-L86' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.wrap_ode78' href='#BioEnergeticFoodWebs.wrap_ode78'>#</a>
 <strong><code>BioEnergeticFoodWebs.wrap_ode78</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Wrapper for ode78</strong></p>
 <p>See <code>wrap_ode</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./simulate.jl#L91-L95' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./simulate.jl#L91-L95' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.wrap_ode' href='#BioEnergeticFoodWebs.wrap_ode'>#</a>
 <strong><code>BioEnergeticFoodWebs.wrap_ode</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Wrapper for ode functions</strong></p>
 <p>These functions will let <code>ODE</code> do its job, then return the results in way we can handle. To be entirely explicit, these functions return objects in the same format as the output of <code>Sundials</code>. The long-term plan is to use Sundials only, but there is currently a significant memory leak issue, so we are resorting to ODE for the time being.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./simulate.jl#L100-L108' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./simulate.jl#L100-L108' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.dBdt' href='#BioEnergeticFoodWebs.dBdt'>#</a>
 <strong><code>BioEnergeticFoodWebs.dBdt</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Derivatives</strong></p>
 <p>This function is the one wrapped by the various integration routines. Based on a timepoint <code>t</code>, an array of biomasses <code>biomass</code>, an equally sized array of derivatives <code>derivative</code>, and a series of simulation parameters <code>p</code>, it will return <code>dB/dt</code> for every species.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./dBdt.jl#L28-L35' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./dBdt.jl#L28-L35' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.growthrate' href='#BioEnergeticFoodWebs.growthrate'>#</a>
 <strong><code>BioEnergeticFoodWebs.growthrate</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Growth rate</strong></p>
 <p>TODO</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./dBdt.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./dBdt.jl#L1-L5' class='documenter-source'>source</a><br></p>
 <p><a id='Functions-to-work-on-output-1'></a></p>
 <h2 id="functions-to-work-on-output">Functions to work on output</h2>
 <p><a id='BioEnergeticFoodWebs.coefficient_of_variation' href='#BioEnergeticFoodWebs.coefficient_of_variation'>#</a>
 <strong><code>BioEnergeticFoodWebs.coefficient_of_variation</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Coefficient of variation</strong></p>
 <p>Corrected for the sample size.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./measures.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./measures.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.shannon' href='#BioEnergeticFoodWebs.shannon'>#</a>
 <strong><code>BioEnergeticFoodWebs.shannon</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Shannon's entropy</strong></p>
 <p>Corrected for the number of species, removes negative and null values, return <code>NaN</code> in case of problem.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/24772f95c1ad16490047395c8390d44901f886a4/src/./measures.jl#L90-L95' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/b3f8bd4dfd4e0d2f3c74d64dee6be8de5f9a6e24/src/./measures.jl#L90-L95' class='documenter-source'>source</a><br></p>
 <p><a id='Functions-to-prepare-and-check-parameters-1'></a></p>
 <h2 id="functions-to-prepare-and-check-parameters">Functions to prepare and check parameters</h2>
 <pre><code>make_initial_parameters
