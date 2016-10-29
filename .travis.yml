@@ -3,7 +3,6 @@ sudo: false
 os:
     - linux
 julia:
-    - 0.4
     - release
     - nightly
 script:
