@@ -34,19 +34,16 @@ by default set at `eps()`, which should be close to 10^-16.
 """
 function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
     r = species_richness(p, threshold=threshold, last=last)
-    m = size(p[:B], 1) # Number of species is the number of columns in the biomass matrix
+    m = size(p[:B], 2) # Number of species is the number of columns in the biomass matrix
     return r/m
 end
 
 """
 **Population stability**
 
-Takes a matrix with populations in columns, timesteps in rows. This is usually
-the element `:B` of the simulation output. Population stability is measured
-as the mean of the negative coefficient of variations of all species with
-an abundance higher than `threshold`. By default, the stability is measured
-over the last `last=1000` timesteps.
-
+Population stability is measured as the mean of the negative coefficient
+of variations of all species with an abundance higher than `threshold`. By
+default, the stability is measured over the last `last=1000` timesteps.
 """
 function population_stability(p; threshold::Float64=eps(), last=1000)
     @assert last <= size(p[:B], 1)
@@ -79,7 +76,6 @@ end
 **Per species biomass**
 
 Returns the average biomass of all species, over the last `last` timesteps.
-
 """
 function population_biomass(p; last=1000)
     @assert last <= size(p[:B], 1)
@@ -96,7 +92,6 @@ end
 
 Corrected for the number of species, removes negative and null values, return
 `NaN` in case of problem.
-
 """
 function shannon(n)
     x = copy(n)
@@ -118,7 +113,9 @@ end
 """
 **Food web diversity**
 
-Based on the average of Shannon's entropy over the last `last` timesteps.
+Based on the average of Shannon's entropy (corrected for the number of
+species) over the last `last` timesteps. Values close to 1 indicate that
+all populations have equal biomasses.
 
 """
 function foodweb_diversity(p; last=1000)
