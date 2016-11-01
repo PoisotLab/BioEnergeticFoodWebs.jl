@@ -3,7 +3,8 @@ sudo: false
 os:
     - linux
 julia:
-    - release
+    - 0.4
+    - 0.5
     - nightly
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
