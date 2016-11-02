@@ -118,7 +118,7 @@ species) over the last `last` timesteps. Values close to 1 indicate that
 all populations have equal biomasses.
 
 """
-function foodweb_diversity(p; last=1000)
+function foodweb_evenness(p; last=1000)
     @assert last <= size(p[:B], 1)
     measure_on = p[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
