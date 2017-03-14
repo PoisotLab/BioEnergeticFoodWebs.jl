@@ -25,8 +25,10 @@ matrix. Specifically, the default values are:
 
 All of these values are passed as optional keyword arguments to the function.
 
-    A = [0 1 1; 0 0 0; 0 0 0]
-    p = model_parameters(A, Z=100.0, productivity=:system)
+~~~ julia
+A = [0 1 1; 0 0 0; 0 0 0]
+p = model_parameters(A, Z=100.0, productivity=:system)
+~~~
 
 The `productivity` keyword can be either `:species` (each species has an
 independant carrying capacity equal to `K`), `:system` (the carrying capacity is
