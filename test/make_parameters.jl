@@ -36,7 +36,7 @@ module TestMakeParameters
   wrong_bs = rand(100)
   @test_throws ErrorException model_parameters(correct_network, bodymass=wrong_bs)
 
-  # Test that there the vertebrates can be passed
+  # Test that there the bodymasses can be passed
   right_bs = rand(4)
   p = model_parameters(correct_network, bodymass=right_bs)
   @test right_bs == p[:bodymass]
