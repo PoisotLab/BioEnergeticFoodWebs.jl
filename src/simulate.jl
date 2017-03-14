@@ -6,7 +6,7 @@
 This function takes two mandatory arguments:
 
 - `p` is a `Dict` as returned by `make_parameters`
-- `biomass` is a `Array{Float64, 1}` with the initial biomasses of every species
+- `biomass` is an `Array{Float64, 1}` with the initial biomasses of every species
 
 Internally, the function will check that the length of `biomass` matches
 with the size of the network.
@@ -40,7 +40,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stif
   t_keep = collect(start:1:stop)
 
   # Pre-assign function
-  f(t, y, ydot) = dBdt(t, y, ydot, p)
+  f(t, y) = dBdt(t, y, p)
 
   # Perform the actual integration
   prob = ODEProblem(f, biomass, t)
