@@ -18,10 +18,11 @@ In addition, the function takes three optional arguments:
 - `use` (defaults to `:stiff`), a hint to select the solver
 
 The integration method is, by default, `:stiff`, and can be changed to
-`:nonstiff`.
+`:nonstiff`. This is because internally, this function used the
+`DifferentialEquations` package to pick the most appropriate algorithm.
 
-The `simulate` function returns a `Dict{Symbol, Any}`, with three top-level
-keys:
+The `simulate` function returns a `Dict{Symbol, Any}`, with three
+top-level keys:
 
 - `:p`, the parameters that were given as input
 - `:t`, the timesteps
