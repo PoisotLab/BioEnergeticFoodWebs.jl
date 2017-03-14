@@ -36,8 +36,8 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stif
   @assert use ∈ vec([:stiff :nonstiff])
 
   # Pre-allocate the timeseries matrix
-  t = (start, stop)
-  t_keep = collect(start:1:stop)
+  t = (float(start), float(stop))
+  t_keep = collect(start:1.0:stop)
 
   # Pre-assign function
   f(t, y) = dBdt(t, y, p)
@@ -49,7 +49,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stif
   output = Dict{Symbol,Any}(
   :p => p,
   :t => sol.t,
-  :B => hcat(sol.u...)
+  :B => hcat(sol.u...)'
   )
 
   return output
