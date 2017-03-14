@@ -10,7 +10,7 @@
 [![Gitter](https://img.shields.io/gitter/room/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://gitter.im/PoisotLab/BioEnergeticFoodWebs.jl)
 
 Simulations of biomass flows in food webs is a difficult task, yet performing it
-correectly is required to understand the ties betweeen the structure and
+correctly is required to understand the ties betweeen the structure and
 function of ecological communities. This package provides a robustly tested,
 well-documented, computationally efficient common interface for the simulation
 of bio-energetic systems in food webs.
