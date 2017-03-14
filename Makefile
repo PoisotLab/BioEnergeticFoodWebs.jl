@@ -1,6 +1,7 @@
 NAME=BioEnergeticFoodWebs
 V=0.5
 FOLD=~/.julia/v$(V)/$(NAME)
+JEXEC=julia
 
 
 .DEFAULT_GOAL := help
@@ -21,9 +22,8 @@ install: src/*jl test/*jl ## Install the package in the specified julia version 
 	-julia -e 'Pkg.rm("$(NAME)")'
 	-julia -e 'Pkg.clone(pwd())'
 
-test: install ## Run the tests (including code coverage informations)
-	julia --code-coverage test/runtests.jl
+test: src/*jl test/*jl ## Run the tests
+	$(JEXEC) -e 'include("src/BioEnergeticFoodWebs.jl"); include("test/runtests.jl")'
 
 coverage: test ## Perform the code coverage analysis
 	cd $(FOLD); julia -e 'Pkg.add("Coverage"); using Coverage; coverage = process_folder(); covered_lines, total_lines = get_summary(coverage); println(round(covered_lines/total_lines*100,2),"% covered")'
-

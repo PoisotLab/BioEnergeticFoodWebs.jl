@@ -28,14 +28,14 @@ end
 """
 **Derivatives**
 
-This function is the one wrapped by the various integration routines. Based
-on a timepoint `t`, an array of biomasses `biomass`, an equally sized array
-of derivatives `derivative`, and a series of simulation parameters `p`,
-it will return `dB/dt` for every species.
+This function is the one wrapped by the various integration routines. Based on a
+timepoint `t`, an array of biomasses `biomass`, and a series of simulation
+parameters `p`, it will return `dB/dt` for every species.
 """
-function dBdt(t, biomass, derivative, p::Dict{Symbol,Any})
+function dBdt(t, biomass, p::Dict{Symbol,Any})
 
   S = size(p[:A], 1)
+  derivative = zeros(Float64, length(biomass))
 
   # Total available biomass
   bm_matrix = p[:w]*biomass'.*p[:A]
