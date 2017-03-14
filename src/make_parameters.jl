@@ -5,7 +5,7 @@ This function creates model parameters, based on a food web
 matrix. Specifically, the default values are:
 
 | Parameter      | Default Value | Meaning                                                                             |
-|----------------|---------------|-------------------------------------------------------------------------------------|
+|:---------------|:--------------|:------------------------------------------------------------------------------------|
 | K              | 1.0           | carrying capacity of producers                                                      |
 | Z              | 1.0           | consumer-resource body mass ratio                                                   |
 | r              | 1.0           | growth rate of producers                                                            |
@@ -67,27 +67,18 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     p[:α] = α
     # Step 2 -- vertebrates ?
     if length(vertebrates) > 1
-        if length(vertebrates) == size(A, 1)
-            p[:vertebrates] = vertebrates
-        else
-            error("when calling `model_parameters` with an array of values for `vertebrates`, there must be as many elements as rows/columns in the matrix")
-        end
+      @assert length(vertebrates) == size(A, 1)
     end
     # Step 3 -- body mass
     p[:bodymass] = bodymass
     if length(p[:bodymass]) > 1
-        if length(p[:bodymass]) != size(A, 1)
-            error("when calling `model_parameters` with an array of values for `bodymass`, there must be as many elements as rows/columns in the matrix")
-        end
+      @assert length(p[:bodymass]) == size(A, 1)
     end
 
     # Step 4 -- productivity type
-    if productivity ∈ [:species, :system, :competitive]
-      p[:productivity] = productivity
-    else
-      error("Invalid value for productivity -- must be :system, :species, or :competitive")
-    end
-    # Step 3 -- final parameters
+    @assert productivity ∈ [:species, :system, :competitive]
+
+    # Step 5 -- final parameters
     p = make_parameters(p)
     return p
 end
