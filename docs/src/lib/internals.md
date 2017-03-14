@@ -28,11 +28,6 @@ check_food_web
 ## ODE wrappers and functions for integration
 
 ```@docs
-wrap_ode23
-wrap_ode23s
-wrap_ode45
-wrap_ode78
-wrap_ode
 dBdt
 growthrate
 ```

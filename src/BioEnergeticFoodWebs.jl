@@ -1,7 +1,7 @@
 module BioEnergeticFoodWebs
 
 using Distributions
-using ODE
+using DifferentialEquations
 using JSON
 using JLD
 

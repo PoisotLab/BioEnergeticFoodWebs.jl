@@ -12,6 +12,9 @@ function check_food_web(A)
   @assert sum(map(x -> x ∉ [0 1], A)) == 0
 end
 
+"""
+**Check initial parameters**
+"""
 function check_initial_parameters(p)
   required_keys = [
     :Z,

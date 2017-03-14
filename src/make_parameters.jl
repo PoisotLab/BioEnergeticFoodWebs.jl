@@ -5,7 +5,7 @@ This function creates model parameters, based on a food web
 matrix. Specifically, the default values are:
 
 | Parameter      | Default Value | Meaning                                                                             |
-|----------------|---------------|-------------------------------------------------------------------------------------|
+|:---------------|:--------------|:------------------------------------------------------------------------------------|
 | K              | 1.0           | carrying capacity of producers                                                      |
 | Z              | 1.0           | consumer-resource body mass ratio                                                   |
 | r              | 1.0           | growth rate of producers                                                            |
@@ -25,8 +25,10 @@ matrix. Specifically, the default values are:
 
 All of these values are passed as optional keyword arguments to the function.
 
-    A = [0 1 1; 0 0 0; 0 0 0]
-    p = model_parameters(A, Z=100.0, productivity=:system)
+~~~ julia
+A = [0 1 1; 0 0 0; 0 0 0]
+p = model_parameters(A, Z=100.0, productivity=:system)
+~~~
 
 The `productivity` keyword can be either `:species` (each species has an
 independant carrying capacity equal to `K`), `:system` (the carrying capacity is
@@ -85,7 +87,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     else
       error("Invalid value for productivity -- must be :system, :species, or :competitive")
     end
-    # Step 3 -- final parameters
+
+    # Step 5 -- final parameters
     p = make_parameters(p)
     return p
 end
