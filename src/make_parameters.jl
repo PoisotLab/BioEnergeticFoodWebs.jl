@@ -87,7 +87,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     else
       error("Invalid value for productivity -- must be :system, :species, or :competitive")
     end
-    
+
     # Step 5 -- final parameters
     p = make_parameters(p)
     return p

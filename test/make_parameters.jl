@@ -37,8 +37,17 @@ module TestMakeParameters
   @test_throws ErrorException model_parameters(correct_network, bodymass=wrong_bs)
 
   # Test that there the vertebrates can be passed
-  right_vert = rand(4)
-  p = model_parameters(correct_network, bodymass=wrong_bs)
-  @test right_vert == p[:bodymass]
+  right_bs = rand(4)
+  p = model_parameters(correct_network, bodymass=right_bs)
+  @test right_bs == p[:bodymass]
+
+  # Test that there is an exception if the wrong productivity is used
+  wrong_pr = :global
+  @test_throws ErrorException model_parameters(correct_network, productivity=wrong_pr)
+
+  # Test that there the productivity can be passed
+  right_pr = :system
+  p = model_parameters(correct_network, productivity=right_pr)
+  @test right_pr == p[:productivity]
 
 end
