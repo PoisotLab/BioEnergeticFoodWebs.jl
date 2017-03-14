@@ -12,7 +12,7 @@ export trophic_rank,
   population_stability,
   total_biomass,
   population_biomass,
-  foodweb_diversity,
+  foodweb_evenness,
   species_richness,
   species_persistence
 

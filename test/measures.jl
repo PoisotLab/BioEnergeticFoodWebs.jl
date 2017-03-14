@@ -34,12 +34,12 @@ module TestMeasures
     @test_approx_eq_eps population_stability(s, last=2) -1.59099  0.01
     @test species_richness(s, last=1) == 1.0
     @test species_persistence(s, last=1) == 0.1
-    
+
     # Test when the total biomass is 0
     empty_p = Dict{Symbol, Any}(:B => zeros(10, 10))
     @test isnan(population_biomass(empty_p, last=2))
     @test isnan(population_stability(empty_p, last=2))
     @test isnan(total_biomass(empty_p, last=2))
-    @test isnan(foodweb_diversity(empty_p, last=2))
+    @test isnan(foodweb_evenness(empty_p, last=2))
 
 end

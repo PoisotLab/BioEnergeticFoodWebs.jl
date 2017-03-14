@@ -7,7 +7,7 @@
 
 [![RTD](https://img.shields.io/badge/doc-latest-blue.svg)](http://poisotlab.io/BioEnergeticFoodWebs.jl/latest/)
 [![GitHub tag](https://img.shields.io/github/tag/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/releases)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.160189.svg)](https://doi.org/10.5281/zenodo.160189)
+[![DOI](https://zenodo.org/badge/70102258.svg)](https://zenodo.org/badge/latestdoi/70102258)
 [![Gitter](https://img.shields.io/gitter/room/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://gitter.im/PoisotLab/BioEnergeticFoodWebs.jl)
 
 ## Stable
