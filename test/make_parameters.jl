@@ -41,6 +41,11 @@ module TestMakeParameters
   p = model_parameters(correct_network, bodymass=right_bs)
   @test right_bs == p[:bodymass]
 
+  # Test that the metabolic rates are calculated from bodymass
+  p   = model_parameters(correct_network)
+  p_b = model_parameters(correct_network, bodymass = p[:bodymass) 
+  @test p[:x] == p_b[:x]
+    
   # Test that there is an exception if the wrong productivity is used
   wrong_pr = :global
   @test_throws ErrorException model_parameters(correct_network, productivity=wrong_pr)
