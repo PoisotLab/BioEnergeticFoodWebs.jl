@@ -43,7 +43,7 @@ module TestMakeParameters
 
   # Test that the metabolic rates are calculated from bodymass
   p   = model_parameters(correct_network)
-  p_b = model_parameters(correct_network, bodymass = p[:bodymass) 
+  p_b = model_parameters(correct_network, bodymass = p[:bodymass]) 
   @test p[:x] == p_b[:x]
     
   # Test that there is an exception if the wrong productivity is used
