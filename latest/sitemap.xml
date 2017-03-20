@@ -3,8 +3,8 @@
 
     
     <url>
-     <loc>None/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,26 +12,26 @@
     
         
     <url>
-     <loc>None/man/installation/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/man/installation/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/man/random/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/man/random/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/man/first_simulation/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/man/first_simulation/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/man/contributing/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/man/contributing/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -40,14 +40,14 @@
     
         
     <url>
-     <loc>None/lib/public/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/lib/public/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/lib/internals/</loc>
-     <lastmod>2016-11-02</lastmod>
+     <loc>/lib/internals/</loc>
+     <lastmod>2017-03-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         

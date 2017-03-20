@@ -1,347 +1,479 @@
+
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="no-js ie6"><![endif]-->
-<!--[if IE 7 ]><html class="no-js ie7"><![endif]-->
-<!--[if IE 8 ]><html class="no-js ie8"><![endif]-->
-<!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<html class="no-js">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <title>Public - BioEnergeticFoodWebs.jl</title>
-      
+        <meta name="description" content="Simulation of biomass dynamics on food webs">
       
       
       
         <meta name="author" content="the Poisot lab">
       
-    
-    <meta property="og:url" content="None">
-    <meta property="og:title" content="BioEnergeticFoodWebs.jl">
-    <meta property="og:image" content="None/../../befw.png">
-    <meta name="apple-mobile-web-app-title" content="BioEnergeticFoodWebs.jl">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-      <link rel="apple-touch-icon" href="../../befw.png">
-    
-    
-    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon-e565ddfa3b.ico">
-    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon-e565ddfa3b.ico">
-    <style>
-      @font-face {
-      	font-family: 'Icon';
-      	src: url('../../assets/fonts/icon.eot?52m981');
-      	src: url('../../assets/fonts/icon.eot?#iefix52m981')
-               format('embedded-opentype'),
-      		   url('../../assets/fonts/icon.woff?52m981')
-               format('woff'),
-      		   url('../../assets/fonts/icon.ttf?52m981')
-               format('truetype'),
-      		   url('../../assets/fonts/icon.svg?52m981#icon')
-               format('svg');
-      	font-weight: normal;
-      	font-style: normal;
-      }
-    </style>
-    <link rel="stylesheet" href="../../assets/stylesheets/application-a422ff04cc.css">
-    
-      <link rel="stylesheet" href="../../assets/stylesheets/palettes-05ab2406df.css">
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.2, mkdocs-material-1.4.1">
     
     
       
+        <title>Public - BioEnergeticFoodWebs.jl</title>
       
+    
+    
+      <script src="../../assets/javascripts/modernizr-56ade86843.js"></script>
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-76741b64bc.css">
       
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arimo:400,700|Cousine">
-      <style>
-        body, input {
-          font-family: 'Arimo', Helvetica, Arial, sans-serif;
-        }
-        pre, code {
-          font-family: 'Cousine', 'Courier New', 'Courier', monospace;
-        }
-      </style>
+        <link rel="stylesheet" href="../../assets/stylesheets/application-66fa0d9bba.palette.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
       <link rel="stylesheet" href="../../asssets/Documenter.css">
     
-    <script src="../../assets/javascripts/modernizr-4ab42b99fd.js"></script>
     
   </head>
   
   
   
-  <body class="palette-primary-blue palette-accent-lightblue">
-    
-      
-      
-    
-    <div class="backdrop">
-      <div class="backdrop-paper"></div>
-    </div>
-    <input class="toggle" type="checkbox" id="toggle-drawer">
-    <input class="toggle" type="checkbox" id="toggle-search">
-    <label class="toggle-button overlay" for="toggle-drawer"></label>
-    <header class="header">
-      <nav aria-label="Header">
-  <div class="bar default">
-    <div class="button button-menu" role="button" aria-label="Menu">
-      <label class="toggle-button icon icon-menu" for="toggle-drawer">
-        <span></span>
-      </label>
-    </div>
-    <div class="stretch">
-      <div class="title">
-        
-          <span class="path">
-            
-              
-                Library <i class="icon icon-link"></i>
-              
-            
-          </span>
-        
-        Public
-      </div>
-    </div>
-    
-      
-      <div class="button button-twitter" role="button" aria-label="Twitter">
-        <a href="https://twitter.com/poisotlab" title="@poisotlab on Twitter" target="_blank" class="toggle-button icon icon-twitter"></a>
-      </div>
-    
-    
-      
-      <div class="button button-github" role="button" aria-label="GitHub">
-        <a href="https://github.com/poisotlab" title="@poisotlab on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
-      </div>
-    
-    <div class="button button-search" role="button" aria-label="Search">
-      <label class="toggle-button icon icon-search" title="Search" for="toggle-search"></label>
-    </div>
-  </div>
-  <div class="bar search">
-    <div class="button button-close" role="button" aria-label="Close">
-      <label class="toggle-button icon icon-back" for="toggle-search"></label>
-    </div>
-    <div class="stretch">
-      <div class="field">
-        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
-      </div>
-    </div>
-    <div class="button button-reset" role="button" aria-label="Search">
-      <button class="toggle-button icon icon-close" id="reset-search"></button>
-    </div>
-  </div>
-</nav>
-    </header>
-    <main class="main">
-      
-      <div class="drawer">
-        <nav aria-label="Navigation">
   
-  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" class="project">
-    <div class="banner">
-      
-        <div class="logo">
-          <img src="../../befw.png">
-        </div>
-      
-      <div class="name">
-        <strong>
-          BioEnergeticFoodWebs.jl
-          <span class="version">
-            
-          </span>
-        </strong>
+    <body data-md-color-primary="green" data-md-color-accent="deep-orange">
+  
+    <svg class="md-svg">
+      <defs>
         
-          <br>
-          PoisotLab/BioEnergeticFoodWebs.jl
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="../.." title="BioEnergeticFoodWebs.jl" class="md-logo md-header-nav__button">
+            <img src="../../befw.png" width="24" height="24">
+          </a>
         
       </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  Library
+                </span>
+              
+            
+            Public
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <div class="md-search__overlay"></div>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <div class="md-header-nav__source">
+          
+            
+
+
+  
+
+
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
     </div>
   </a>
-  <div class="scrollable">
-    <div class="wrapper">
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
       
-        <ul class="repo">
-          <li class="repo-download">
-            
-            <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/archive/master.zip" target="_blank" title="Download" data-action="download">
-              <i class="icon icon-download"></i> Download
-            </a>
-          </li>
-          <li class="repo-stars">
-            <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/stargazers" target="_blank" title="Stargazers" data-action="star">
-              <i class="icon icon-star"></i> Stars
-              <span class="count">&ndash;</span>
-            </a>
-          </li>
-        </ul>
-        <hr>
       
-      <div class="toc">
-        <ul>
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
           
             
-  <li>
-    <a class="" title="Home" href="../..">
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-logo md-nav__button">
+        <img src="../../befw.png">
+      </i>
+    
+    BioEnergeticFoodWebs.jl
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
       Home
     </a>
-    
   </li>
 
-          
-            
-  <li>
-    <span class="section">Manual</span>
-    <ul>
+    
       
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Manual
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Manual
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
         
-  <li>
-    <a class="" title="Installation" href="../../man/installation/">
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../man/installation/" title="Installation" class="md-nav__link">
       Installation
     </a>
-    
   </li>
 
-      
         
-  <li>
-    <a class="" title="Generating random networks" href="../../man/random/">
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../man/random/" title="Generating random networks" class="md-nav__link">
       Generating random networks
     </a>
-    
   </li>
 
-      
         
-  <li>
-    <a class="" title="First simulation" href="../../man/first_simulation/">
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../man/first_simulation/" title="First simulation" class="md-nav__link">
       First simulation
     </a>
-    
   </li>
 
-      
         
-  <li>
-    <a class="" title="Contributing" href="../../man/contributing/">
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../man/contributing/" title="Contributing" class="md-nav__link">
       Contributing
     </a>
-    
   </li>
 
-      
-    </ul>
-  </li>
-
-          
-            
-  <li>
-    <span class="section">Library</span>
-    <ul>
-      
         
-  <li>
-    <a class="current" title="Public" href="./">
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Library
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Library
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Public
+      </label>
+    
+    <a href="./" title="Public" class="md-nav__link md-nav__link--active">
       Public
     </a>
     
       
-        
-      
-      
-        <ul>
-          
-            <li class="anchor">
-              <a title="Contents" href="#contents">
-                Contents
-              </a>
-            </li>
-          
-            <li class="anchor">
-              <a title="Index" href="#index">
-                Index
-              </a>
-            </li>
-          
-            <li class="anchor">
-              <a title="Setting up simulations" href="#setting-up-simulations">
-                Setting up simulations
-              </a>
-            </li>
-          
-            <li class="anchor">
-              <a title="Generating networks" href="#generating-networks">
-                Generating networks
-              </a>
-            </li>
-          
-            <li class="anchor">
-              <a title="Simulating and saving the output" href="#simulating-and-saving-the-output">
-                Simulating and saving the output
-              </a>
-            </li>
-          
-            <li class="anchor">
-              <a title="Analysis of output" href="#analysis-of-output">
-                Analysis of output
-              </a>
-            </li>
-          
-        </ul>
-      
+<nav class="md-nav md-nav--secondary">
+  
+  
     
-  </li>
-
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
       
-        
-  <li>
-    <a class="" title="Internals" href="../internals/">
-      Internals
-    </a>
-    
-  </li>
-
+        <li class="md-nav__item">
+  <a href="#contents" title="Contents" class="md-nav__link">
+    Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index" title="Index" class="md-nav__link">
+    Index
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-simulations" title="Setting up simulations" class="md-nav__link">
+    Setting up simulations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-networks" title="Generating networks" class="md-nav__link">
+    Generating networks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulating-and-saving-the-output" title="Simulating and saving the output" class="md-nav__link">
+    Simulating and saving the output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analysis-of-output" title="Analysis of output" class="md-nav__link">
+    Analysis of output
+  </a>
+  
+</li>
+      
+      
       
     </ul>
+  
+</nav>
+    
   </li>
 
+        
           
-        </ul>
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../internals/" title="Internals" class="md-nav__link">
+      Internals
+    </a>
+  </li>
+
         
-          <hr>
-          <span class="section">The author</span>
-          <ul>
-            
-              
-              <li>
-                <a href="https://twitter.com/poisotlab" target="_blank" title="@poisotlab on Twitter">
-                  @poisotlab on Twitter
-                </a>
-              </li>
-            
-            
-              
-              <li>
-                <a href="https://github.com/poisotlab" target="_blank" title="@poisotlab on GitHub">
-                  @poisotlab on GitHub
-                </a>
-              </li>
-            
-          </ul>
-        
-      </div>
-    </div>
-  </div>
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
 </nav>
-      </div>
-      <article class="article">
-        <div class="wrapper">
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" title="Contents" class="md-nav__link">
+    Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index" title="Index" class="md-nav__link">
+    Index
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-simulations" title="Setting up simulations" class="md-nav__link">
+    Setting up simulations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-networks" title="Generating networks" class="md-nav__link">
+    Generating networks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulating-and-saving-the-output" title="Simulating and saving the output" class="md-nav__link">
+    Simulating and saving the output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analysis-of-output" title="Analysis of output" class="md-nav__link">
+    Analysis of output
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
-          <p><a id='Public-Documentation-1'></a></p>
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/edit/master/docs/lib/public.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                
+                
+                <p><a id='Public-Documentation-1'></a></p>
 <h1 id="public-documentation">Public Documentation</h1>
 <p>Documentation for <code>BioEnergeticFoodWebs</code>'s public (exported) interface.</p>
 <p>See <a href="../internals/#Internal-Documentation-1">Internal Documentation</a> for documentation on internal functions.</p>
@@ -381,110 +513,110 @@
 <table>
 <thead>
 <tr>
-<th align="right">Parameter</th>
-<th align="right">Default Value</th>
-<th align="right">Meaning</th>
+<th align="left">Parameter</th>
+<th align="left">Default Value</th>
+<th align="left">Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="right">K</td>
-<td align="right">1.0</td>
-<td align="right">carrying capacity of producers</td>
+<td align="left">K</td>
+<td align="left">1.0</td>
+<td align="left">carrying capacity of producers</td>
 </tr>
 <tr>
-<td align="right">Z</td>
-<td align="right">1.0</td>
-<td align="right">consumer-resource body mass ratio</td>
+<td align="left">Z</td>
+<td align="left">1.0</td>
+<td align="left">consumer-resource body mass ratio</td>
 </tr>
 <tr>
-<td align="right">r</td>
-<td align="right">1.0</td>
-<td align="right">growth rate of producers</td>
+<td align="left">r</td>
+<td align="left">1.0</td>
+<td align="left">growth rate of producers</td>
 </tr>
 <tr>
-<td align="right">a_invertebrate</td>
-<td align="right">0.314</td>
-<td align="right">allometric constant for invertebrate consumers</td>
+<td align="left">a_invertebrate</td>
+<td align="left">0.314</td>
+<td align="left">allometric constant for invertebrate consumers</td>
 </tr>
 <tr>
-<td align="right">a_producers</td>
-<td align="right">1.0</td>
-<td align="right">allometric constant of producers</td>
+<td align="left">a_producers</td>
+<td align="left">1.0</td>
+<td align="left">allometric constant of producers</td>
 </tr>
 <tr>
-<td align="right">a_vertebrate</td>
-<td align="right">0.88</td>
-<td align="right">allometric constant for vertebrate consumers</td>
+<td align="left">a_vertebrate</td>
+<td align="left">0.88</td>
+<td align="left">allometric constant for vertebrate consumers</td>
 </tr>
 <tr>
-<td align="right">c</td>
-<td align="right">0</td>
-<td align="right">quantifies the predator interference</td>
+<td align="left">c</td>
+<td align="left">0</td>
+<td align="left">quantifies the predator interference</td>
 </tr>
 <tr>
-<td align="right">h</td>
-<td align="right">1</td>
-<td align="right">Hill coefficient</td>
+<td align="left">h</td>
+<td align="left">1</td>
+<td align="left">Hill coefficient</td>
 </tr>
 <tr>
-<td align="right">e_carnivore</td>
-<td align="right">0.85</td>
-<td align="right">assimilation efficiency of carnivores</td>
+<td align="left">e_carnivore</td>
+<td align="left">0.85</td>
+<td align="left">assimilation efficiency of carnivores</td>
 </tr>
 <tr>
-<td align="right">e_herbivore</td>
-<td align="right">0.45</td>
-<td align="right">assimilation efficiency of herbivores</td>
+<td align="left">e_herbivore</td>
+<td align="left">0.45</td>
+<td align="left">assimilation efficiency of herbivores</td>
 </tr>
 <tr>
-<td align="right">m_producers</td>
-<td align="right">1</td>
-<td align="right">body-mass of producers</td>
+<td align="left">m_producers</td>
+<td align="left">1</td>
+<td align="left">body-mass of producers</td>
 </tr>
 <tr>
-<td align="right">y_invertebrate</td>
-<td align="right">8</td>
-<td align="right">maximum consumption rate of invertebrate predators relative to their metabolic rate</td>
+<td align="left">y_invertebrate</td>
+<td align="left">8</td>
+<td align="left">maximum consumption rate of invertebrate predators relative to their metabolic rate</td>
 </tr>
 <tr>
-<td align="right">y_vertebrate</td>
-<td align="right">4</td>
-<td align="right">maximum consumption rate of vertebrate predators relative to their metabolic rate</td>
+<td align="left">y_vertebrate</td>
+<td align="left">4</td>
+<td align="left">maximum consumption rate of vertebrate predators relative to their metabolic rate</td>
 </tr>
 <tr>
-<td align="right">Γ</td>
-<td align="right">0.5</td>
-<td align="right">half-saturation density</td>
+<td align="left">Γ</td>
+<td align="left">0.5</td>
+<td align="left">half-saturation density</td>
 </tr>
 <tr>
-<td align="right">α</td>
-<td align="right">1.0</td>
-<td align="right">interspecific competition</td>
+<td align="left">α</td>
+<td align="left">1.0</td>
+<td align="left">interspecific competition</td>
 </tr>
 <tr>
-<td align="right">productivity</td>
-<td align="right">:species</td>
-<td align="right">type of productivity regulation</td>
+<td align="left">productivity</td>
+<td align="left">:species</td>
+<td align="left">type of productivity regulation</td>
 </tr>
 </tbody>
 </table>
 <p>All of these values are passed as optional keyword arguments to the function.</p>
-<pre><code>A = [0 1 1; 0 0 0; 0 0 0]
+<pre><code class="julia">A = [0 1 1; 0 0 0; 0 0 0]
 p = model_parameters(A, Z=100.0, productivity=:system)
 </code></pre>
 
 <p>The <code>productivity</code> keyword can be either <code>:species</code> (each species has an independant carrying capacity equal to <code>K</code>), <code>:system</code> (the carrying capacity is K divided by the number of primary producers), or <code>:competitive</code> (the species compete with themselves at rate 1.0, and with one another at rate α).</p>
 <p>It is possible for the user to specify a vector of species body-mass, called <code>bodymass</code> – please do pay attention to the fact that the model assumes that primary producers have a bodymass equal to unity, since all biological rates are expressed relatively. We do not perform any check on whether or not the user-supplied body-mass vector is correct (mostly because there is no way of defining correctness for vectors where body-mass of producers are not equal to unity).</p>
 <p>The final keyword is <code>vertebrates</code>, which is an array of <code>true</code> or <code>false</code> for every species in the matrix. By default, all species are invertebrates.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./make_parameters.jl#L1-L46' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./make_parameters.jl#L1-L48' class='documenter-source'>source</a><br></p>
 <p><a id='Generating-networks-1'></a></p>
 <h2 id="generating-networks">Generating networks</h2>
 <p><a id='BioEnergeticFoodWebs.nichemodel' href='#BioEnergeticFoodWebs.nichemodel'>#</a>
 <strong><code>BioEnergeticFoodWebs.nichemodel</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Niche model of food webs</strong></p>
 <p>Takes a number of species <code>S</code> and a number of interactions <code>L</code>, and returns a food web with predators in rows, and preys in columns. This function is used internally by <code>nichemodel</code> called with a connectance.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./random.jl#L19-L26' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./random.jl#L19-L26' class='documenter-source'>source</a><br></p>
 <p><strong>Niche model of food webs</strong></p>
 <p>Takes a number of species <code>S</code> and a connectance <code>C</code>, and returns a food web with predators in rows, and preys in columns. Note that the connectance is first transformed into an integer number of interactions.</p>
 <p>This function has two keyword arguments:</p>
@@ -493,25 +625,28 @@ p = model_parameters(A, Z=100.0, productivity=:system)
 <li><code>toltype</code> is the type or error, and can be <code>:abs</code> (absolute) and <code>:rel</code></li>
 </ol>
 <p>(relative). Relative tolerance is the amount of error allowed, relative to the desired connectance value. If the simulated network has a tolerance x, the target connectance is c, then the relative error is |1-x/c|.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./random.jl#L69-L85' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./random.jl#L69-L85' class='documenter-source'>source</a><br></p>
 <p><a id='Simulating-and-saving-the-output-1'></a></p>
 <h2 id="simulating-and-saving-the-output">Simulating and saving the output</h2>
 <p><a id='BioEnergeticFoodWebs.simulate' href='#BioEnergeticFoodWebs.simulate'>#</a>
 <strong><code>BioEnergeticFoodWebs.simulate</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Main simulation loop</strong></p>
+<pre><code>simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+</code></pre>
+
 <p>This function takes two mandatory arguments:</p>
 <ul>
 <li><code>p</code> is a <code>Dict</code> as returned by <code>make_parameters</code></li>
-<li><code>biomass</code> is a <code>Array{Float64, 1}</code> with the initial biomasses of every species</li>
+<li><code>biomass</code> is an <code>Array{Float64, 1}</code> with the initial biomasses of every species</li>
 </ul>
 <p>Internally, the function will check that the length of <code>biomass</code> matches with the size of the network.</p>
 <p>In addition, the function takes three optional arguments:</p>
 <ul>
 <li><code>start</code> (defaults to 0), the initial time</li>
 <li><code>stop</code> (defaults to 500), the final time</li>
-<li><code>use</code> (defaults to <code>:ode45</code>), the integration method</li>
+<li><code>use</code> (defaults to <code>:stiff</code>), a hint to select the solver</li>
 </ul>
-<p>The integration method is, by default, <code>:ode45</code>, and can be changed to one of <code>:ode23</code>, <code>:ode45</code>, <code>:ode78</code>, or <code>:ode23s</code>.</p>
+<p>The integration method is, by default, <code>:stiff</code>, and can be changed to <code>:nonstiff</code>. This is because internally, this function used the <code>DifferentialEquations</code> package to pick the most appropriate algorithm.</p>
 <p>The <code>simulate</code> function returns a <code>Dict{Symbol, Any}</code>, with three top-level keys:</p>
 <ul>
 <li><code>:p</code>, the parameters that were given as input</li>
@@ -519,123 +654,125 @@ p = model_parameters(A, Z=100.0, productivity=:system)
 <li><code>:B</code>, an <code>Array{Float64, 2}</code> with the biomasses</li>
 </ul>
 <p>The array of biomasses has one row for each timestep, and one column for each species.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./simulate.jl#L1-L32' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./simulate.jl#L1-L33' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.save' href='#BioEnergeticFoodWebs.save'>#</a>
 <strong><code>BioEnergeticFoodWebs.save</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Save the output of a simulation</strong></p>
 <p>Takes a simulation output as a mandatory argument. The two keyword arguments are <code>as</code> (can be <code>:json</code> or <code>:jld</code>), defining the file format, and <code>filename</code> (without an extension, defaults to <code>NaN</code>). If <code>:jld</code> is used, the variable is named <code>befwm_simul</code> unless a <code>varname</code> is given.</p>
 <p>Called with the defaults, this function will write <code>befwm_xxxxxxxx.json</code> with the current simulation output, where <code>xxxxxxxx</code> is a hash of the <code>p</code> output (ensuring that all output files are unique).</p>
 <p>This function is <em>not</em> exported, so it must be called with <code>BioEnergeticFoodWebs.save</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L131-L145' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L131-L145' class='documenter-source'>source</a><br></p>
 <p><a id='Analysis-of-output-1'></a></p>
 <h2 id="analysis-of-output">Analysis of output</h2>
 <p><a id='BioEnergeticFoodWebs.population_stability' href='#BioEnergeticFoodWebs.population_stability'>#</a>
 <strong><code>BioEnergeticFoodWebs.population_stability</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Population stability</strong></p>
 <p>Population stability is measured as the mean of the negative coefficient of variations of all species with an abundance higher than <code>threshold</code>. By default, the stability is measured over the last <code>last=1000</code> timesteps.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L41-L47' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L41-L47' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.total_biomass' href='#BioEnergeticFoodWebs.total_biomass'>#</a>
 <strong><code>BioEnergeticFoodWebs.total_biomass</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Total biomass</strong></p>
 <p>Returns the sum of biomass, averaged over the last <code>last</code> timesteps.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L59-L64' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L59-L64' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.population_biomass' href='#BioEnergeticFoodWebs.population_biomass'>#</a>
 <strong><code>BioEnergeticFoodWebs.population_biomass</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Per species biomass</strong></p>
 <p>Returns the average biomass of all species, over the last <code>last</code> timesteps.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L75-L79' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L75-L79' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.foodweb_evenness' href='#BioEnergeticFoodWebs.foodweb_evenness'>#</a>
 <strong><code>BioEnergeticFoodWebs.foodweb_evenness</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Food web diversity</strong></p>
 <p>Based on the average of Shannon's entropy (corrected for the number of species) over the last <code>last</code> timesteps. Values close to 1 indicate that all populations have equal biomasses.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L113-L120' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L113-L120' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.species_richness' href='#BioEnergeticFoodWebs.species_richness'>#</a>
 <strong><code>BioEnergeticFoodWebs.species_richness</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Number of surviving species</strong></p>
 <p>Number of species with a biomass larger than the <code>threshold</code>. The threshold is by default set at <code>eps()</code>, which should be close to 10^-16.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L13-L18' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L13-L18' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.species_persistence' href='#BioEnergeticFoodWebs.species_persistence'>#</a>
 <strong><code>BioEnergeticFoodWebs.species_persistence</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Proportion of surviving species</strong></p>
 <p>Proportion of species with a biomass larger than the <code>threshold</code>. The threshold is by default set at <code>eps()</code>, which should be close to 10^-16.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/3e4382757b4ab60e101578ffda4d54a51254a7f4/src/./measures.jl#L29-L34' class='documenter-source'>source</a><br></p>
-          <aside class="copyright" role="note">
-            
-            Documentation built with
-            <a href="http://www.mkdocs.org" target="_blank">MkDocs</a>
-            using the
-            <a href="http://squidfunk.github.io/mkdocs-material/" target="_blank">
-              Material
-            </a>
-            theme.
-          </aside>
-          
-            <footer class="footer">
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/628f66ba4d990e8d2028eda8805f03509ba95c54/src/./measures.jl#L29-L34' class='documenter-source'>source</a><br></p>
+                
+                  
+                
               
-  <nav class="pagination" aria-label="Footer">
-    <div class="previous">
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
       
-        <a href="../../man/contributing/" title="Contributing">
-          <span class="direction">
-            Previous
-          </span>
-          <div class="page">
-            <div class="button button-previous" role="button" aria-label="Previous">
-              <i class="icon icon-back"></i>
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../man/contributing/" title="Contributing" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
-            <div class="stretch">
-              <div class="title">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
                 Contributing
-              </div>
+              </span>
             </div>
-          </div>
-        </a>
-      
-    </div>
-    <div class="next">
-      
-        <a href="../internals/" title="Internals">
-          <span class="direction">
-            Next
-          </span>
-          <div class="page">
-            <div class="stretch">
-              <div class="title">
+          </a>
+        
+        
+          <a href="../internals/" title="Internals" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
                 Internals
-              </div>
+              </span>
             </div>
-            <div class="button button-next" role="button" aria-label="Next">
-              <i class="icon icon-forward"></i>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
             </div>
-          </div>
-        </a>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
       
     </div>
-  </nav>
-
-            </footer>
-          
-        </div>
-      </article>
-      <div class="results" role="status" aria-live="polite">
-        <div class="scrollable">
-          <div class="wrapper">
-            <div class="meta"></div>
-            <div class="list"></div>
-          </div>
-        </div>
-      </div>
-    </main>
-    <script>
-      var base_url = '../..';
-      var repo_id  = 'PoisotLab/BioEnergeticFoodWebs.jl';
-    </script>
-    <script src="../../assets/javascripts/application-997097ee0c.js"></script>
+  </div>
+</footer>
+      
+    </div>
     
-      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../assets/javascripts/application-3964c0cb56.js"></script>
+      <script>app.initialize({url:{base:"../.."}})</script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      
+        <script src="../../assets/mathjaxhelper.js"></script>
+      
     
-      <script src="../../assets/mathjaxhelper.js"></script>
     
+      
     
   </body>
 </html>
