@@ -8,8 +8,8 @@ theme: material
 extra:
     logo: 'befw.png'
     palette:
-        primary: blue
-        accent: lightblue
+        primary: 'green'
+        accent: 'deep orange'
     font:
         text: 'Arimo'
         code: 'Cousine'

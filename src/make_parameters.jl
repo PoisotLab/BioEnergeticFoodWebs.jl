@@ -191,7 +191,7 @@ function make_parameters(p::Dict{Symbol,Any})
   a[is_producer] = p[:a_producer]
 
   # Metabolic rate
-  body_size_relative = M ./ p[:m_producer]
+  body_size_relative = p[:bodymass] ./ p[:m_producer]
   body_size_scaled = body_size_relative.^-0.25
   x = (a ./ p[:a_producer]) .* body_size_scaled
 
