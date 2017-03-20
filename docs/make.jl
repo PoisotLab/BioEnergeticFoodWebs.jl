@@ -1,6 +1,6 @@
 using Documenter
 push!(LOAD_PATH, "../src/")
-using EcologicalNetwork
+using BioEnergeticFoodWebs
 
 makedocs(
          modules = [BioEnergeticFoodWebs]
