@@ -6,39 +6,36 @@ site_author: the Poisot lab
 theme: material
 
 extra:
-    logo: 'befw.png'
-    palette:
-        primary: 'green'
-        accent: 'deep orange'
-    font:
-        text: 'Arimo'
-        code: 'Cousine'
-    author:
-        twitter: 'poisotlab'
-        github: 'poisotlab'
+  logo: 'befw.png'
+  palette:
+    primary: 'green'
+    accent: 'deep orange'
+  author:
+    twitter: 'poisotlab'
+    github: 'poisotlab'
 
 extra_css:
-    - asssets/Documenter.css
+  - asssets/Documenter.css
 
 extra_javascript:
-    - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-    - assets/mathjaxhelper.js
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  - assets/mathjaxhelper.js
 
 markdown_extensions:
-    - fenced_code
-    - extra
-    - tables
-    - mdx_math
+  - fenced_code
+  - extra
+  - tables
+  - mdx_math
 
 docs_dir: 'build'
 
 pages:
-    - Home: index.md
-    - Manual:
-        - Installation: man/installation.md
-        - Generating random networks: man/random.md
-        - First simulation: man/first_simulation.md
-        - Contributing: man/contributing.md
-    - Library:
-        - Public: lib/public.md
-        - Internals: lib/internals.md
+  - Home: index.md
+  - Manual:
+    - Installation: man/installation.md
+    - Generating random networks: man/random.md
+    - First simulation: man/first_simulation.md
+    - Contributing: man/contributing.md
+  - Library:
+    - Public: lib/public.md
+    - Internals: lib/internals.md
