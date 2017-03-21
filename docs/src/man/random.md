@@ -13,7 +13,7 @@ predators well, and is therefore well suited to generate random networks.
 Random niche model networks can be generated using `nichemodel`, which takes
 two arguments: the number of species `S`, and the desired connectance `C`:
 
-~~~ julia
+~~~@example
 nichemodel(10, 0.2)
 ~~~
 

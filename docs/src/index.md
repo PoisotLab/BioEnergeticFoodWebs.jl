@@ -2,10 +2,10 @@
 
 ```@contents
 Pages = [
-    "man/installation.md",
-    "man/random.md",
-    "man/first_simulation.md",
-    "man/contributing.md"
+  "man/installation.md",
+  "man/random.md",
+  "man/first_simulation.md",
+  "man/contributing.md"
 ]
 Depth = 2
 ```
@@ -25,4 +25,3 @@ Depth = 2
 Pages = ["lib/public.md", "lib/internals.md"]
 Order = [:function]
 ```
-
