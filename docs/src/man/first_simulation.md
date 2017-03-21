@@ -13,11 +13,9 @@ Do keep in mind that all functions are documented, so you can type in
 ~~~@example
 using BioEnergeticFoodWebs
 
-A = nichemodel(10, 0.3)
-
-p = model_parameters(A)
-
-b = rand(size(A, 1))
+A = nichemodel(10, 0.3);
+p = model_parameters(A);
+b = rand(size(A, 1));
 
 s = simulate(p, b, start=0, stop=50, steps=1000)
 ~~~
