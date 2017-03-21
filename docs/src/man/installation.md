@@ -15,11 +15,14 @@ on the [IJulia](https://github.com/JuliaLang/IJulia.jl) page.
 ## Installing `BioEnergeticFoodWebs`
 
 The current version can be installed by typing the following line into Julia
-(which is usually started from the command line
+(which is usually started from the command line):
 
 ``` julia
 Pkg.add("BioEnergeticFoodWebs")
 ```
+
+!!! warning
+    The version of `BioEnergeticFoodWebs` that will be installed depends on your version of `julia`. By default, the current version *always* works on the current released version of `julia`; but we make no guarantee that it will work on the previous version, or the one currently in development.
 
 The package can be loaded with
 
@@ -37,6 +40,13 @@ Pkg.update()
 
 ## Citing the package
 
-1. Timothée Poisot, & Eva Delmas. (2016). PoisotLab/BioEnergeticFoodWebs.jl: v0.1.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.160189
-2. Eva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timothée Poisot
-bioRxiv 070946; doi: http://dx.doi.org/10.1101/070946
+The package itself can be cited as
+
+!!! summary
+    Timothée Poisot, Eva Delmas, Viral B. Shah, Tony Kelman, & Tom clegg. (2017). PoisotLab/BioEnergeticFoodWebs.jl: v0.3.1 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.401053
+
+If you want to also cite the software note describing the relase of `v0.2.0`,
+you can cite
+
+!!! summary
+    Eva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timothée Poisot. (2016). Simulations of biomass dynamics in community food webs. Methods col Evol. http://doi.org/10.1111/2041-210X.12713

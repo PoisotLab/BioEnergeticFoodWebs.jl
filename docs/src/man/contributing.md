@@ -17,3 +17,6 @@ we merge your changes into a new release, we will give you authorship on
 the DOI provided by [Zenodo][zenodo].
 
 [zenodo]: https://zenodo.org/record/160189#.V_1sLnVhlhE
+
+!!! tip
+    When you contribute, please fork the `next` branch, and not the `master` one. In order to make sure that the `master` branch is always functional, we do not commit directly to it.

@@ -10,15 +10,15 @@ and start a short simulation.
 Do keep in mind that all functions are documented, so you can type in
 `?function_name` from within *Julia*, and get access to the documentation.
 
-``` julia
-A = nichemodel(10, 0.3)
+~~~@example
+using BioEnergeticFoodWebs
 
-p = model_parameters(A)
-
-b = rand(size(A, 1))
+A = nichemodel(10, 0.3);
+p = model_parameters(A);
+b = rand(size(A, 1));
 
 s = simulate(p, b, start=0, stop=50, steps=1000)
-```
+~~~
 
 The `A` matrix, which is used by subsequent functions, has predators in rows,
 and preys in columns. It can only have 0 and 1.
