@@ -42,7 +42,7 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
-      <link rel="stylesheet" href="../../asssets/Documenter.css">
+      <link rel="stylesheet" href="../../assets/Documenter.css">
     
     
   </head>
@@ -453,10 +453,14 @@
 <p>There are further specific instructions to install a Julia kernel in Jupyter on the <a href="https://github.com/JuliaLang/IJulia.jl">IJulia</a> page.</p>
 <p><a id='Installing-BioEnergeticFoodWebs-1'></a></p>
 <h2 id="installing-bioenergeticfoodwebs">Installing <code>BioEnergeticFoodWebs</code></h2>
-<p>The current version can be installed by typing the following line into Julia (which is usually started from the command line</p>
+<p>The current version can be installed by typing the following line into Julia (which is usually started from the command line):</p>
 <pre><code class="julia">Pkg.add(&quot;BioEnergeticFoodWebs&quot;)
 </code></pre>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The version of <code>BioEnergeticFoodWebs</code> that will be installed depends on your version of <code>julia</code>. By default, the current version <em>always</em> works on the current released version of <code>julia</code>; but we make no guarantee that it will work on the previous version, or the one currently in development.</p>
+</div>
 <p>The package can be loaded with</p>
 <pre><code class="julia">using BioEnergeticFoodWebs
 </code></pre>
@@ -469,11 +473,16 @@
 
 <p><a id='Citing-the-package-1'></a></p>
 <h2 id="citing-the-package">Citing the package</h2>
-<ol>
-<li>Timothée Poisot, &amp; Eva Delmas. (2016). PoisotLab/BioEnergeticFoodWebs.jl: v0.1.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.160189</li>
-<li>Eva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timothée Poisot</li>
-</ol>
-<p>bioRxiv 070946; doi: http://dx.doi.org/10.1101/070946</p>
+<p>The package itself can be cited as</p>
+<div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>Timothée Poisot, Eva Delmas, Viral B. Shah, Tony Kelman, &amp; Tom clegg. (2017). PoisotLab/BioEnergeticFoodWebs.jl: v0.3.1 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.401053</p>
+</div>
+<p>If you want to also cite the software note describing the relase of <code>v0.2.0</code>, you can cite</p>
+<div class="admonition summary">
+<p class="admonition-title">Summary</p>
+<p>Eva Delmas, Ulrich Brose, Dominique Gravel, Daniel Stouffer, Timothée Poisot. (2016). Simulations of biomass dynamics in community food webs. Methods col Evol. http://doi.org/10.1111/2041-210X.12713</p>
+</div>
                 
                   
                 

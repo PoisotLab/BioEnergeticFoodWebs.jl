@@ -42,7 +42,7 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
-      <link rel="stylesheet" href="../../asssets/Documenter.css">
+      <link rel="stylesheet" href="../../assets/Documenter.css">
     
     
   </head>
@@ -410,7 +410,21 @@
 <h2 id="niche-model">Niche model</h2>
 <p>Following Williams &amp; Martinez, we have implemented the <em>niche</em> model of food webs. This model represents allometric relationships between preys and predators well, and is therefore well suited to generate random networks.</p>
 <p>Random niche model networks can be generated using <code>nichemodel</code>, which takes two arguments: the number of species <code>S</code>, and the desired connectance <code>C</code>:</p>
-<pre><code class="julia">nichemodel(10, 0.2)
+<pre><code class="julia">using BioEnergeticFoodWebs
+nichemodel(10, 0.2)
+</code></pre>
+
+<pre><code>10×10 Array{Int64,2}:
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  1  1  1  0  0  0  0  0  0
+ 0  0  1  1  0  0  0  0  0  0
+ 1  1  1  1  1  1  1  1  0  0
+ 1  1  0  0  0  0  0  0  0  0
+ 1  1  1  1  0  0  0  0  0  0
+ 0  0  0  0  1  1  0  0  0  0
+ 0  0  0  0  1  1  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
 </code></pre>
 
 <p>Note that there are a number of keyword arguments (optional) that can be supplied: <code>tolerance</code> will give the allowed deviation from the desired connectance, and <code>toltype</code> will indicate whether the error is relative or absolute.</p>
