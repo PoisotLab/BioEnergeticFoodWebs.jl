@@ -9,6 +9,10 @@
 [![DOI](https://zenodo.org/badge/70102258.svg)](https://zenodo.org/badge/latestdoi/70102258)
 [![Gitter](https://img.shields.io/gitter/room/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://gitter.im/PoisotLab/BioEnergeticFoodWebs.jl)
 
+[![BioEnergeticFoodWebs](http://pkg.julialang.org/badges/BioEnergeticFoodWebs_0.4.svg)](http://pkg.julialang.org/?pkg=BioEnergeticFoodWebs)
+[![BioEnergeticFoodWebs](http://pkg.julialang.org/badges/BioEnergeticFoodWebs_0.5.svg)](http://pkg.julialang.org/?pkg=BioEnergeticFoodWebs)
+[![BioEnergeticFoodWebs](http://pkg.julialang.org/badges/BioEnergeticFoodWebs_0.6.svg)](http://pkg.julialang.org/?pkg=BioEnergeticFoodWebs)
+
 Simulations of biomass flows in food webs is a difficult task, yet performing it
 correctly is required to understand the ties betweeen the structure and
 function of ecological communities. This package provides a robustly tested,
