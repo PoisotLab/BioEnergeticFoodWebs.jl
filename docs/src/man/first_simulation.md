@@ -1,5 +1,11 @@
 # First simulation
 
+```@meta
+DocTestSetup  = quote
+    using BioEnergeticFoodWebs
+end
+```
+
 Starting a simulation has three steps: getting the network, deciding on the
 parameters, and then starting the simulation itself.
 
@@ -22,3 +28,7 @@ s = simulate(p, b, start=0, stop=50, steps=1000)
 
 The `A` matrix, which is used by subsequent functions, has predators in rows,
 and preys in columns. It can only have 0 and 1.
+
+```@meta
+DocTestSetup  = nothing
+```
