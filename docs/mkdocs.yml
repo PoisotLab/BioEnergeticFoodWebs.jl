@@ -15,7 +15,7 @@ extra:
     github: 'poisotlab'
 
 extra_css:
-  - asssets/Documenter.css
+  - assets/Documenter.css
 
 extra_javascript:
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
