@@ -8,6 +8,8 @@ matrix:
 julia:
   - 0.5
   - 0.6
+env:
+   - PYTHON=""
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("BioEnergeticFoodWebs"); Pkg.test("BioEnergeticFoodWebs"; coverage=true)'
