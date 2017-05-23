@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -13,25 +13,25 @@
         
     <url>
      <loc>/man/installation/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/man/random/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/man/first_simulation/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/man/contributing/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -41,13 +41,13 @@
         
     <url>
      <loc>/lib/public/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/lib/internals/</loc>
-     <lastmod>2017-05-22</lastmod>
+     <lastmod>2017-05-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
