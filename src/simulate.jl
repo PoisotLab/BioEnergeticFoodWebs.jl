@@ -31,24 +31,39 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+function simulate(p, p_r, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
   @assert stop > start
   @assert length(biomass) == size(p[:A],1)
   @assert use ∈ vec([:stiff :nonstiff])
+
+  S = size(p[:A],1)
 
   # Pre-allocate the timeseries matrix
   t = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
   # Pre-assign function
-  f(t, y) = dBdt(t, y, p)
+  f(t, y) = dBdt(t, y, p, p_r)
+
+  function condition(t,y,integrator)
+    minimum(y)
+  end
+
+  function affect!(integrator)
+
+    println(integrator.t)
+    p , p_r = update_params(p,S,p_r,integrator.u)
+  end
+
+  cb = ContinuousCallback(condition,affect!)
 
   # Perform the actual integration
   prob = ODEProblem(f, biomass, t)
-  sol = solve(prob, saveat=t_keep, dense=false, save_timeseries=false, alg_hints=[use])
+  sol = solve(prob, saveat=t_keep, dense=false, save_everystep=false, alg_hints=[use],callback = cb)
 
   output = Dict{Symbol,Any}(
   :p => p,
+  :p_r => p_r,
   :t => sol.t,
   :B => hcat(sol.u...)'
   )
