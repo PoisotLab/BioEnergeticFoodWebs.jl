@@ -146,7 +146,7 @@ function make_parameters(p::Dict{Symbol,Any})
   S = size(A)[1]
   F = zeros(Float64, size(A))
   efficiency = zeros(Float64, size(A))
-  w = zeros(Float64, S)
+  w = zeros(Float64, size(A))
   M = zeros(Float64, S)
   a = zeros(Float64, S)
   x = zeros(Float64, S)
@@ -173,9 +173,9 @@ function make_parameters(p::Dict{Symbol,Any})
 
   # Measure generality and extract the vector of 1/n
   generality = float(vec(sum(A, 2)))
-  for i in eachindex(generality)
-    if generality[i] > 0.0
-      w[i] = 1.0 / generality[i]
+  for i in 1:size(w,1), j in 1:size(w,2)
+    if A[i,j] == 1
+      w[i,j] = 1.0 / generality[i]
     end
   end
 
