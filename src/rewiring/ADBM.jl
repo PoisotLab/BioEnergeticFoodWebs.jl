@@ -6,30 +6,30 @@ This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 
-function getADBM_Terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64},p_r::Dict{Symbol,Any})
-  E = p_r[:e] .* p[:bodymass]
-  if p_r[:Nmethod] == :original
-    N = p_r[:n] .* (p[:bodymass] .^ p_r[:ni])
-  elseif p_r[:Nmethod] == :biomass
+function getADBM_Terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
+  E = p[:e] .* p[:bodymass]
+  if p[:Nmethod] == :original
+    N = p[:n] .* (p[:bodymass] .^ p[:ni])
+  elseif p[:Nmethod] == :biomass
     N = biomass
   end
-  A = p_r[:a] * (p[:bodymass].^p_r[:aj]) * (p[:bodymass].^p_r[:ai])' # a * pred * prey
+  A = p[:a_adbm] * (p[:bodymass].^p[:aj]) * (p[:bodymass].^p[:ai])' # a * pred * prey
   for i = 1:S #for each prey
     A[:,i] = A[:,i] .* N[i]
   end
   λ = A
-  if p_r[:Hmethod] == :ratio
+  if p[:Hmethod] == :ratio
     H = zeros(Float64,(S,S))
     ratios = (p[:bodymass] ./ p[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
     for i = 1:S , j = 1:S
-      if ratios[j,i] < p_r[:b]
-      H[j,i] =  p_r[:h] / (p_r[:b] - ratios[j,i])
+      if ratios[j,i] < p[:b]
+      H[j,i] =  p[:h_adbm] / (p[:b] - ratios[j,i])
       else
       H[j,i] = Inf
       end
     end
-  elseif p_r[:Hmethod] == :power
-    H = p_r[:h] * (p[:bodymass].^p_r[:hj]) * (p[:bodymass].^p_r[:hi])' # h * pred * prey
+  elseif p[:Hmethod] == :power
+    H = p[:h_adbm] * (p[:bodymass].^p[:hj]) * (p[:bodymass].^p[:hi])' # h * pred * prey
   end
 
   adbmTerms = Dict{Symbol,Any}(
@@ -77,9 +77,9 @@ detemine the web structure. This function is called using the callback to includ
 """
 
 
-function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64},p_r::Dict{Symbol,Any})
+function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
-  adbmTerms = getADBM_Terms(S,p,biomass,p_r)
+  adbmTerms = getADBM_Terms(S,p,biomass)
   E = adbmTerms[:E]
   λ = adbmTerms[:λ]
   H = adbmTerms[:H]

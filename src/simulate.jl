@@ -31,7 +31,7 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(p, p_r, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
   @assert stop > start
   @assert length(biomass) == size(p[:A],1)
   @assert use ∈ vec([:stiff :nonstiff])
@@ -43,7 +43,7 @@ function simulate(p, p_r, biomass; start::Int64=0, stop::Int64=500, use::Symbol=
   t_keep = collect(start:1.0:stop)
 
   # Pre-assign function
-  f(t, y) = dBdt(t, y, p, p_r)
+  f(t, y) = dBdt(t, y, p)
 
   function condition(t,y,integrator)
     minimum(y)
@@ -52,7 +52,8 @@ function simulate(p, p_r, biomass; start::Int64=0, stop::Int64=500, use::Symbol=
   function affect!(integrator)
 
     println(integrator.t)
-    p , p_r = update_params(p,S,p_r,integrator.u)
+    p = update_params(p,integrator.u)
+
   end
 
   cb = ContinuousCallback(condition,affect!)
@@ -63,7 +64,6 @@ function simulate(p, p_r, biomass; start::Int64=0, stop::Int64=500, use::Symbol=
 
   output = Dict{Symbol,Any}(
   :p => p,
-  :p_r => p_r,
   :t => sol.t,
   :B => hcat(sol.u...)'
   )

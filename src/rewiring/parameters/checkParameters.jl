@@ -8,22 +8,22 @@ function check_rewiring_parameters(rewireP,rewireMethod)
   if rewireMethod == :ADBM
     required_keys = [
     :e,
-    :a,
+    :a_adbm,
     :ai,
     :aj,
     :b,
-    :h,
+    :h_adbm,
     :hi,
     :hj,
     :n,
     :ni,
     :Nmethod,
     :Hmethod,
-    :rewireMethod,
+    :rewire_method,
     :costMat]
   elseif rewireMethod == :Gilljam
     required_keys = [
-    :rewireMethod,
+    :rewire_method,
     :similarity,
     :specialistPrefMag,
     :extinctions,
@@ -33,8 +33,10 @@ function check_rewiring_parameters(rewireP,rewireMethod)
     :specialistPref]
   end
 
-  for k in required_keys
-    @assert get(rewireP, k, nothing) != nothing
+  if rewireMethod ∈ [:Gilljam, :ADBM]
+    for k in required_keys
+      @assert get(rewireP, k, nothing) != nothing
+    end
   end
 
 end

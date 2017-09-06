@@ -1,39 +1,44 @@
-function update_params(p::Dict{Symbol,Any},S::Int64,p_r::Dict{Symbol,Any},biomass)
-  if p_r[:rewireMethod] == :ADBM
+function update_params(p::Dict{Symbol,Any}, biomass)
+  S = size(p[:A], 1)
+
+  if p[:rewire_method] == :ADBM
     #assign new array
-    p[:A] = BioEnergeticFoodWebs.ADBM(S,p,biomass,p_r)
+    p[:A] = ADBM(S,p,biomass,p_r)
 
     #update the parameters
-    p = getHerbivores(p,S) #
-    p = getW_ADBM(p,S) #
-    p = getEfficency(p,S)
+    getHerbivores(p) #
+    getW_preference(p) #
+    getEfficiency(p)
 
-  elseif p_r[:rewireMethod] == :Gilljam
+  elseif p[:rewire_method] == :Gilljam
     #add extinction
     workingBiomass = deepcopy(biomass)
-    deleteat!(workingBiomass,p_r[:extinctions])
-    append!(p_r[:extinctions],findin(biomass,findmin(workingBiomass)[1]))
-    sort!(p_r[:extinctions])
+    deleteat!(workingBiomass,p[:extinctions])
+    append!(p[:extinctions],findin(biomass,findmin(workingBiomass)[1]))
+    sort!(p[:extinctions])
 
     #assign new array and update costs
-    p[:A] , p_r = BioEnergeticFoodWebs.Gilljam(S,p,biomass,p_r)
+    p[:A] , p = Gilljam(S,p,biomass)
 
     #update rewiring parameters
-    if p_r[:preferenceMethod] == :specialist
-      p_r = BioEnergeticFoodWebs.updateSpecialistPref(p,p_r,S)
+    if p[:preferenceMethod] == :specialist
+      p = BioEnergeticFoodWebs.updateSpecialistPref(p,p_r,S)
     end
 
     #update parameters
-    p = getHerbivores(p,S)
-    p = getW_preference(p,p_r,S)
+    getHerbivores(p)
+    getW_preference(p)
     p[:w][find(p[:w] .== Inf)] = 1
-    p = getEfficency(p,S)
+    getEfficiency(p)
 
   end
-return((p,p_r))
+return p
 end
 
-function getHerbivores(p::Dict{Symbol,Any},S::Int64)
+function getHerbivores(p::Dict{Symbol,Any})
+  #used internally by model_parameters and update_parameters
+  S = size(p[:A], 1)
+  is_herbivore = falses(S)
   # Identify herbivores
   # Herbivores consume producers
   for consumer in 1:S
@@ -41,98 +46,127 @@ function getHerbivores(p::Dict{Symbol,Any},S::Int64)
       for resource in 1:S
         if p[:is_producer][resource]
           if p[:A][consumer, resource] == 1
-            p[:is_herbivore][consumer] = true
+            is_herbivore[consumer] = true
           end
         end
       end
     end
   end
-  return(p)
+  p[:is_herbivore] = is_herbivore
+  #return(p)
 end
 
-function getEfficency(p::Dict{Symbol,Any},S::Int64)
+function getEfficiency(p::Dict{Symbol,Any})
+  #used internally by model_parameters and update_parameters
+  S = size(p[:A], 1)
   # Efficiency matrix
+  efficiency = zeros(Float64,(S, S))
   for consumer in 1:S
     for resource in 1:S
       if p[:A][consumer, resource] == 1
         if p[:is_producer][resource]
-          p[:efficiency][consumer, resource] = p[:e_herbivore]
+          efficiency[consumer, resource] = p[:e_herbivore]
         else
-          p[:efficiency][consumer, resource] = p[:e_carnivore]
-        end
-      else
-        p[:efficiency][consumer, resource] = 0.0
-      end
-    end
-  end
-  return(p)
-end
-
-function getW_ADBM(p::Dict{Symbol,Any},S::Int64)
-  generality = float(vec(sum(p[:A], 2)))
-  for i in eachindex(generality)
-    if generality[i] > 0.0
-      for j = 1:S
-        if p[:A][i,j] == 1
-          p[:w][i,j] = 1.0 / generality[i]
+          efficiency[consumer, resource] = p[:e_carnivore]
         end
       end
     end
   end
-  return(p)
+  p[:efficiency] = efficiency
+  #return(p)
 end
 
-function getW_preference(p::Dict{Symbol,Any},p_r::Dict{Symbol,Any},S::Int64)
-  p[:w] = zeros(Float64,(S,S))
+# Replaced by getW_preference
+# function getW_ADBM(p::Dict{Symbol,Any},S::Int64)
+#   generality = float(vec(sum(p[:A], 2)))
+#   for i in eachindex(generality)
+#     if generality[i] > 0.0
+#       for j = 1:S
+#         if p[:A][i,j] == 1
+#           p[:w][i,j] = 1.0 / generality[i]
+#         end
+#       end
+#     end
+#   end
+#   return(p)
+# end
+
+function getW_preference(p::Dict{Symbol,Any})
+  #used internally by model_parameters and update_parameters
+  S = size(p[:A],1)
   generality = float(vec(sum(p[:A], 2)))
-  if p_r[:preferenceMethod] == :generalist
+
+  if (p[:rewire_method] ∈ [:none, :ADBM])
+
+    w = zeros(Float64,(S))
     for i in eachindex(generality)
       if generality[i] > 0.0
-        for j = 1:S
-          if p[:A][i,j] == 1
-            p[:w][i,j] = 1.0 / generality[i]
-          end
-        end
+        w[i] = 1.0 / generality[i]
       end
     end
-  elseif p_r[:preferenceMethod] == :specialist
-    for i in eachindex(generality)
-      if generality[i] > 0.0
-        for j = 1:S
-          if p[:A][i,j] == 1
-            if p_r[:specialistPref][i] == j
-              if generality[i] > 1
-                p[:w][i,j] = p_r[:specialistPrefMag]
+    w = w .*p[:A]
+
+  else
+
+    if p[:preferenceMethod] == :generalist
+      w = zeros(Float64,(S))
+      for i in eachindex(generality)
+        if generality[i] > 0.0
+          w[i] = 1.0 / generality[i]
+        end
+      end
+      w = w .*p[:A]
+
+    elseif p[:preferenceMethod] == :specialist
+      w = zeros(Float64,(S,S))
+      for i in eachindex(generality)
+        if generality[i] > 0.0
+          for j = 1:S
+            if p[:A][i,j] == 1
+              if p[:specialistPref][i] == j
+                if generality[i] > 1
+                  w[i,j] = p[:specialistPrefMag]
+                else
+                  w[i,j] = 1.0
+                end
               else
-                p[:w][i,j] = 1.0
+                if generality[i] > 1
+                  w[i,j] = (1 - p[:specialistPrefMag])/(generality[i]-1)
+                else
+                  w[i,j] = 1.0
+                end
               end
-            else
-              p[:w][i,j] = (1 - p_r[:specialistPrefMag])/(generality[i]-1)
             end
           end
         end
       end
-    end
-  end
-  return(p)
+
+    end # ifelse p[:preferenceMethod]
+
+  end #ifelse p[:rewire_method]
+
+
+  p[:w] = w
+  #return(p)
 end
 
-function updateSpecialistPref(p::Dict{Symbol,Any},p_r::Dict{Symbol,Any},S::Int64)
-  #find those that have lost thier specialistPref and are not extinct
+function updateSpecialistPref(p::Dict{Symbol,Any})
+  S = size(p[:A], 1)
+  #find those that have lost their specialistPref and are not extinct
   lost = falses(S)
   for i = 1:S
-    if !p[:is_producer][i] && !in(i,p_r[:extinctions])
-      if p[:A][i,p_r[:specialistPref][i]] == 0
+    if !p[:is_producer][i] && !in(i,p[:extinctions])
+      if p[:A][i,p[:specialistPref][i]] == 0
         #assign new random species from diet
-        p_r[:specialistPref][i] = sample(find(p[:A][i,:]))
+        p[:specialistPref][i] = sample(find(p[:A][i,:]))
       end
     else
-      p_r[:specialistPref][i] = 0
+      p[:specialistPref][i] = 0
     end
   end
-  return(p_r)
+  #return(p_r)
 end
 
-function updateCost(p::Dict{Symbol,Any},p_r::Dict{Symbol,Any},S::Int64)
-
-end
+# function updateCost(p::Dict{Symbol,Any},p_r::Dict{Symbol,Any},S::Int64)
+#
+# end

@@ -51,7 +51,7 @@ function rewire_parameters(rewireMethod::Symbol ; e::Float64 = 1.0, a::Float64 =
     end
   end
   rewireP[:rewireMethod] = rewireMethod
-  check_rewiring_parameters(rewireP,rewireMethod)
+  #check_rewiring_parameters(rewireP,rewireMethod)
   return(rewireP)
 end
 
