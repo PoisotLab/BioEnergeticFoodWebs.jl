@@ -31,7 +31,21 @@ function update_params(p::Dict{Symbol,Any}, biomass)
     p[:w][find(p[:w] .== Inf)] = 1
     getEfficiency(p)
 
+  elseif p[:rewire_method] == :stan
+    #add extinction
+    workingBiomass = deepcopy(biomass)
+    deleteat!(workingBiomass,p[:extinctions])
+    append!(p[:extinctions],findin(biomass,findmin(workingBiomass)[1]))
+    sort!(p[:extinctions])
+
+    p[:A] = Staniczenko_rewire(p)
+    print(p[:A])
+    getHerbivores(p)
+    getW_preference(p)
+    getEfficiency(p)
+
   end
+
 return p
 end
 
@@ -96,7 +110,7 @@ function getW_preference(p::Dict{Symbol,Any})
   S = size(p[:A],1)
   generality = float(vec(sum(p[:A], 2)))
 
-  if (p[:rewire_method] ∈ [:none, :ADBM])
+  if (p[:rewire_method] ∈ [:none, :ADBM, :stan])
 
     w = zeros(Float64,(S))
     for i in eachindex(generality)

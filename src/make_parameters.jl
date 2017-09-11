@@ -125,6 +125,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
      adbm_par(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
  elseif rewire_method == :Gilljam
      gilljam_par(p, cost, specialistPrefMag, preferenceMethod)
+ elseif rewire_method == :stan
+     p[:extinctions] = Array{Int,1}()
  end
  check_rewiring_parameters(p, p[:rewire_method])
 
