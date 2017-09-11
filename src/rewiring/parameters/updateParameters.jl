@@ -3,7 +3,7 @@ function update_params(p::Dict{Symbol,Any}, biomass)
 
   if p[:rewire_method] == :ADBM
     #assign new array
-    p[:A] = ADBM(S,p,biomass,p_r)
+    p[:A] = ADBM(S,p,biomass)
 
     #update the parameters
     getHerbivores(p) #
@@ -22,7 +22,7 @@ function update_params(p::Dict{Symbol,Any}, biomass)
 
     #update rewiring parameters
     if p[:preferenceMethod] == :specialist
-      p = BioEnergeticFoodWebs.updateSpecialistPref(p,p_r,S)
+      p = BioEnergeticFoodWebs.updateSpecialistPref(p,S)
     end
 
     #update parameters
