@@ -31,7 +31,7 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
   @assert length(biomass) == size(p[:A],1)
   @assert use ∈ vec([:stiff :nonstiff])
