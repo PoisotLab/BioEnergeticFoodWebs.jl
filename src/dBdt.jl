@@ -51,7 +51,7 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
   xyb = p[:x].*p[:y].*biomass
   transfered = F.*xyb
   consumed = transfered./p[:efficiency]
-  consumed[isnan(consumed)] = 0.0
+  consumed[isnan.(consumed)] = 0.0
 
   gain = vec(sum(transfered, 2))
   loss = vec(sum(consumed, 1))
