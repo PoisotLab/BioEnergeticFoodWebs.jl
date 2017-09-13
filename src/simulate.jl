@@ -45,14 +45,28 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   # Pre-assign function
   f(t, y) = dBdt(t, y, p)
 
+  extspecies = Int[]
+  isext = falses(S)
+
   function condition(t,y,integrator)
-    minimum(y)
+    # if t == Int(round(t))
+    #   println(minimum(y[.!isext]))
+    # end
+    minimum(y[.!isext])
   end
 
   function affect!(integrator)
 
-    println(integrator.t)
     p = update_params(p,integrator.u)
+    #id extinct species
+    minb = minimum(integrator.u[.!isext])
+    sp_min = findin(integrator.u, minb)[1]
+    #push id to extspecies
+    push!(extspecies, sp_min)
+    isext[extspecies] = true
+    #set biomass to 0 to avoid ghost species
+    println(string("extinction time:", integrator.t, " / sp.: ", sp_min, " / b = ", integrator.u[sp_min]))
+    integrator.u[sp_min] = 0.0
 
   end
 
