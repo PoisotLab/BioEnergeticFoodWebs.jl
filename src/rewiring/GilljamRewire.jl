@@ -11,7 +11,7 @@ function Gilljam(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   #Sp that have no prey
   newLinks[1,:] = (sum(preferenceMat,2) .== 0)
   #Sp that are not producers
-  newLinks[2,:] = !p[:is_producer]
+  newLinks[2,:] = .!p[:is_producer]
   #Sp that are extinction
   newLinks[3,p[:extinctions]] = false
   #rows where all conditions are met
