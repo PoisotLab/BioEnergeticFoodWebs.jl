@@ -162,7 +162,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
 
   # Step 10 -- Scaling constraints based on organism type
   a[p[:vertebrates]] = p[:a_vertebrate]
-  a[!p[:vertebrates]] = p[:a_invertebrate]
+  a[.!p[:vertebrates]] = p[:a_invertebrate]
   a[is_producer] = p[:a_producer]
 
   # Step 11 -- Metabolic rate
@@ -173,7 +173,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   # Step 12 -- Assimilation efficiency
   y = zeros(S)
   y[p[:vertebrates]] = p[:y_vertebrate]
-  y[!p[:vertebrates]] = p[:y_invertebrate]
+  y[.!p[:vertebrates]] = p[:y_invertebrate]
 
   # Step 13 -- Efficiency matrix
   getEfficiency(p)

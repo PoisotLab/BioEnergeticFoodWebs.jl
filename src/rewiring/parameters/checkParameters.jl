@@ -31,9 +31,13 @@ function check_rewiring_parameters(rewireP,rewireMethod)
     :cost,
     :costMat,
     :specialistPref]
+  elseif rewireMethod == :stan
+    required_keys = [
+    :rewire_method,
+    :extinctions]
   end
 
-  if rewireMethod ∈ [:Gilljam, :ADBM]
+  if rewireMethod ∈ [:Gilljam, :ADBM, :stan]
     for k in required_keys
       @assert get(rewireP, k, nothing) != nothing
     end
