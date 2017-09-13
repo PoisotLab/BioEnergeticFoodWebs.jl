@@ -35,11 +35,11 @@ function update_params(p::Dict{Symbol,Any}, biomass)
     #add extinction
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,p[:extinctions])
-    append!(p[:extinctions],findin(biomass,findmin(workingBiomass)[1]))
+    id_Ɛ = findin(biomass,findmin(workingBiomass)[1])
+    append!(p[:extinctions], id_Ɛ)
     sort!(p[:extinctions])
 
     p[:A] = Staniczenko_rewire(p)
-    print(p[:A])
     getHerbivores(p)
     getW_preference(p)
     getEfficiency(p)
