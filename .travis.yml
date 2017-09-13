@@ -5,10 +5,8 @@ os:
 matrix:
   allow_failures:
     - julia: nightly
-    - julia: 0.5
 julia:
-  - 0.5
-  - release
+  - 0.6
   - nightly
 env:
    - PYTHON=""
