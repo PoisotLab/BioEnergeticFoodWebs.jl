@@ -108,6 +108,7 @@ module TestMakeParameters
 
   # Tests for the gilljam_par function:
     # Tests for the internal preference_parameters function:
+
       # parameters can be passed
   test_cost = .2
   test_preferenceMethod = :specialist
@@ -116,37 +117,46 @@ module TestMakeParameters
   @test pref_par[:cost] == test_cost
   @test pref_par[:preferenceMethod] == test_preferenceMethod
   @test pref_par[:specialistPrefMag] == test_specialistPrefMag
+
       # empty extinction vector to store extinct species during simulations
   right_extinctions = Int64[]
   @test pref_par[:extinctions] == right_extinctions
+
       # jaccard similarity matrix
   network_1 = correct_network #all species have different resources
-  network_2 = [0 0 1 1; 0 0 1 1; 0 0 0 0; 0 0 0 0] #species 1 and 2 have the same diet
   pref_par_1 = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, network_1, test_preferenceMethod)
   n1_simIndex = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]]
   @test n1_simIndex == pref_par_1[:similarity]
+
+  network_2 = [0 0 1 1; 0 0 1 1; 0 0 0 0; 0 0 0 0] #species 1 and 2 have the same diet
   pref_par_2 = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, network_2, test_preferenceMethod)
   n2_simIndex = [[1,3,4,2],[2,3,4,1],[1,2,3,4],[1,2,3,4]]
   @test n2_simIndex == pref_par_2[:similarity]
+
       # cost matrix (each cost = 1.0) of size (S, S) is added to p
   S = size(correct_network, 1)
   right_cm = ones(S,S)
   @test right_cm == pref_par[:costMat]
 
     # Test the internal getSpeciaistPref function:
+
       # Test that the preferences returned are empty if test_preferenceMethod = :generalist
-  pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, :generalist)
-  pref = BioEnergeticFoodWebs.getSpeciaistPref(pr, correct_network)
+  pm = :generalist
+  pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, pm)
   right_pref = zeros(Int64, S)
+  pref = BioEnergeticFoodWebs.getSpeciaistPref(pr, correct_network)
   @test right_pref == pref
+
       # Test that the preferences returned are correct when test_preferenceMethod = :specialist
-  pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, :specialist)
+  pm = :specialist
+  pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, pm)
   pref = BioEnergeticFoodWebs.getSpeciaistPref(pr, correct_network)
   right_pref_1 = [2,4,0,0]
   right_pref_2 = [2,3,0,0]
   @test (pref == right_pref_1) | (pref == right_pref_2)
 
     # Test the gilljam_par function:
+
       # exception if the wrong preferenceMethod is passed
   wrong_pm = :gen
   @test_throws ErrorException model_parameters(correct_network, rewire_method=:Gilljam, preferenceMethod=wrong_pm)
@@ -158,5 +168,10 @@ module TestMakeParameters
   @test p[:cost] == .0
   @test p[:costMat] == right_cm
   @test (p[:specialistPref] == right_pref_1) | (p[:specialistPref] == right_pref_2)
+
+  # Test that an empty vector p[:extinctions] is returned when using Staniczenko's rewiring method
+  extinctions = Int[]
+  p = model_parameters(correct_network, rewire_method = :stan)
+  @test extinctions == p[:extinctions]
 
 end
