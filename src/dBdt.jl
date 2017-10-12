@@ -32,10 +32,10 @@ This function is the one wrapped by the various integration routines. Based on a
 timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
-function dBdt(t, biomass, p::Dict{Symbol,Any})
+function dBdt2(t, biomass, p::Dict{Symbol,Any})
 
   S = size(p[:A], 1)
-  derivative = zeros(Float64, length(biomass))
+  #derivative = zeros(Float64, length(biomass))
 
   # Total available biomass
   if p[:rewire_method] ∈ [:ADBM, :Gilljam]
@@ -67,15 +67,15 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
   end
 
   dbdt = growth .+ gain .- loss
+  return dbdt
 
-  for i in eachindex(derivative)
-    if dbdt[i] + biomass[i] < eps(0.0)
-      derivative[i] = -biomass[i]
-    else
-      derivative[i] = dbdt[i]
-    end
-  end
-
-  return derivative
-
+  # for i in eachindex(derivative)
+  #   if dbdt[i] + biomass[i] < eps(0.0)
+  #     derivative[i] = - biomass[i]
+  #   else
+  #     derivative[i] = dbdt[i]
+  #   end
+  # end
+  #
+  # return derivative
 end
