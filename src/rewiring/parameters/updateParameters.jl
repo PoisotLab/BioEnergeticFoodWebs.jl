@@ -46,7 +46,7 @@ function update_params(p::Dict{Symbol,Any}, biomass)
 
   end
 
-return p
+  return p
 end
 
 function getHerbivores(p::Dict{Symbol,Any})
