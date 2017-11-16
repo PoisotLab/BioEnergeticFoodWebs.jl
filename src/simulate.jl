@@ -43,16 +43,17 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   t_keep = collect(start:1.0:stop)
 
   # Pre-assign function
-  f(t, y) = dBdt2(t, y, p)
+  f(t, y) = dBdt(t, y, p)
 
   extspecies = Int[]
   isext = falses(S)
 
   function condition(t,y,integrator)
-    # if t == Int(round(t))
-    #   println(minimum(y[.!isext]))
-    # end
-    minimum(y[.!isext])
+    if size(y[.!isext],1) != 0
+      minimum(y[.!isext])
+    else
+      minimum(y)
+    end
   end
 
   function affect!(integrator)
@@ -74,7 +75,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
   # Perform the actual integration
   prob = ODEProblem(f, biomass, t)
-  sol = solve(prob, saveat=t_keep, dense=false, save_everystep=false, alg_hints=[use],callback = cb, abstol = 1e-3, interp_points=1000)
+  sol = solve(prob, saveat=t_keep, dense=false, save_everystep=false, alg_hints=[use],callback = cb)
 
   output = Dict{Symbol,Any}(
   :p => p,
