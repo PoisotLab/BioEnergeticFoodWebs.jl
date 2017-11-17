@@ -52,7 +52,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
     # if t == Int(round(t))
     #   println(minimum(y[.!isext]))
     # end
-    minimum(y[.!isext])
+    !all(isext) ? minimum(y[.!isext]) : 1
   end
 
   function affect!(integrator)
