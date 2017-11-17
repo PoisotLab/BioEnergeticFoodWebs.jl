@@ -32,10 +32,9 @@ This function is the one wrapped by the various integration routines. Based on a
 timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
-function dBdt(t, biomass, p::Dict{Symbol,Any})
+function dBdt(t, biomass, p::Dict{Symbol,Any}, derivative)
 
   S = size(p[:A], 1)
-  derivative = zeros(Float64, length(biomass))
 
   # Total available biomass
   bm_matrix = p[:w]*biomass'.*p[:A]
@@ -52,7 +51,7 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
   gain = vec(sum(transfered, 2))
   loss = vec(sum(consumed, 1))
 
-  growth = zeros(Float64, S)
+  growth = zeros(eltype(biomass), S)
 
   for i in eachindex(biomass)
     if p[:is_producer][i]
