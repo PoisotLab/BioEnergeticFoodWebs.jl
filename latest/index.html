@@ -1,4 +1,7 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
@@ -14,9 +17,22 @@
         <meta name="author" content="the Poisot lab">
       
       
-        <link rel="shortcut icon" href="./assets/images/favicon.png">
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.5">
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="./assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.0.4">
     
     
       
@@ -24,19 +40,14 @@
       
     
     
-      <script src="./assets/javascripts/modernizr-1df76c4e58.js"></script>
-    
-    
-      <link rel="stylesheet" href="./assets/stylesheets/application-769c285a91.css">
-      
-        <link rel="stylesheet" href="./assets/stylesheets/application-02c2a4388f.palette.css">
+      <link rel="stylesheet" href="./assets/stylesheets/application-709eec9410.css">
       
     
     
+      <script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
+    
+    
       
-        
-        
-        
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
@@ -48,10 +59,7 @@
     
   </head>
   
-  
-  
-  
-    <body data-md-color-primary="green" data-md-color-accent="deep-orange">
+    <body>
   
     <svg class="md-svg">
       <defs>
@@ -69,11 +77,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        
-          <a href="." title="BioEnergeticFoodWebs.jl" class="md-logo md-header-nav__button">
-            <img src="./befw.png" width="24" height="24">
-          </a>
-        
+        <a href="." title="BioEnergeticFoodWebs.jl" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
@@ -90,20 +98,21 @@
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
-          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
             Type to start searching
           </div>
           <ol class="md-search-result__list"></ol>
@@ -112,6 +121,7 @@
     </div>
   </div>
 </div>
+          
         
       </div>
       
@@ -123,7 +133,7 @@
   
 
 
-  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -145,7 +155,6 @@
     
     <div class="md-container">
       
-      
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
@@ -155,11 +164,11 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="drawer">
-    
-      <i class="md-logo md-nav__button">
-        <img src="./befw.png">
-      </i>
-    
+    <span class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </span>
     BioEnergeticFoodWebs.jl
   </label>
   
@@ -170,7 +179,7 @@
   
 
 
-  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -444,7 +453,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                   <h1>Home</h1>
@@ -575,10 +584,9 @@
       
     </div>
     
-      <script src="./assets/javascripts/application-07b0fbb49b.js"></script>
+      <script src="./assets/javascripts/application-8e4952e681.js"></script>
       
-      
-      <script>app.initialize({url:{base:"."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:"."}})</script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

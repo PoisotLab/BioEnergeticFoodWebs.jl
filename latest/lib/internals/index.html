@@ -1,4 +1,7 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
@@ -14,9 +17,22 @@
         <meta name="author" content="the Poisot lab">
       
       
-        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.5">
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.0.4">
     
     
       
@@ -24,19 +40,14 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
-    
-    
-      <link rel="stylesheet" href="../../assets/stylesheets/application-769c285a91.css">
-      
-        <link rel="stylesheet" href="../../assets/stylesheets/application-02c2a4388f.palette.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-709eec9410.css">
       
     
     
+      <script src="../../assets/javascripts/modernizr-e826f8942a.js"></script>
+    
+    
       
-        
-        
-        
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
@@ -48,10 +59,7 @@
     
   </head>
   
-  
-  
-  
-    <body data-md-color-primary="green" data-md-color-accent="deep-orange">
+    <body>
   
     <svg class="md-svg">
       <defs>
@@ -69,11 +77,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        
-          <a href="../.." title="BioEnergeticFoodWebs.jl" class="md-logo md-header-nav__button">
-            <img src="../../befw.png" width="24" height="24">
-          </a>
-        
+        <a href="../.." title="BioEnergeticFoodWebs.jl" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
@@ -94,20 +102,21 @@
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
-          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
             Type to start searching
           </div>
           <ol class="md-search-result__list"></ol>
@@ -116,6 +125,7 @@
     </div>
   </div>
 </div>
+          
         
       </div>
       
@@ -127,7 +137,7 @@
   
 
 
-  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -149,7 +159,6 @@
     
     <div class="md-container">
       
-      
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
@@ -159,11 +168,11 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="drawer">
-    
-      <i class="md-logo md-nav__button">
-        <img src="../../befw.png">
-      </i>
-    
+    <span class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </span>
     BioEnergeticFoodWebs.jl
   </label>
   
@@ -174,7 +183,7 @@
   
 
 
-  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -472,7 +481,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/edit/master/docs/lib/internals.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/edit/master/docs/lib/internals.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <p><a id='Internal-Documentation-1'></a></p>
@@ -512,68 +521,68 @@
 <strong><code>BioEnergeticFoodWebs.connectance</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong> Connectance of a network</strong></p>
 <p>Returns the connectance of a square matrix, defined as $S/L^2$.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./random.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/random.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.distance_to_producer' href='#BioEnergeticFoodWebs.distance_to_producer'>#</a>
 <strong><code>BioEnergeticFoodWebs.distance_to_producer</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Distance to a primary producer</strong></p>
 <p>This function measures, for every species, its shortest path to a primary producer using matrix exponentiation. A primary producer has a value of 1, a primary consumer a value of 2, and so forth.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./trophic_rank.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/trophic_rank.jl#L1-L8' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.trophic_rank' href='#BioEnergeticFoodWebs.trophic_rank'>#</a>
 <strong><code>BioEnergeticFoodWebs.trophic_rank</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Trophic rank</strong></p>
 <p>Based on the average distance of preys to primary producers. Specifically, the rank is defined as the average of the distance of preys to primary producers (recursively). Primary producers always have a trophic rank of 1.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./trophic_rank.jl#L34-L41' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/trophic_rank.jl#L34-L41' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.check_food_web' href='#BioEnergeticFoodWebs.check_food_web'>#</a>
 <strong><code>BioEnergeticFoodWebs.check_food_web</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Is the matrix correctly formatted?</strong></p>
 <p>A <em>correct</em> matrix has only 0 and 1, two dimensions, and is square.</p>
 <p>This function returns nothing, but raises an <code>AssertionError</code> if one of the conditions is not met.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./checks.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/checks.jl#L1-L8' class='documenter-source'>source</a><br></p>
 <p><a id='ODE-wrappers-and-functions-for-integration-1'></a></p>
 <h2 id="ode-wrappers-and-functions-for-integration">ODE wrappers and functions for integration</h2>
 <p><a id='BioEnergeticFoodWebs.dBdt' href='#BioEnergeticFoodWebs.dBdt'>#</a>
 <strong><code>BioEnergeticFoodWebs.dBdt</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Derivatives</strong></p>
 <p>This function is the one wrapped by the various integration routines. Based on a timepoint <code>t</code>, an array of biomasses <code>biomass</code>, and a series of simulation parameters <code>p</code>, it will return <code>dB/dt</code> for every species.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./dBdt.jl#L28-L34' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/dBdt.jl#L28-L34' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.growthrate' href='#BioEnergeticFoodWebs.growthrate'>#</a>
 <strong><code>BioEnergeticFoodWebs.growthrate</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Growth rate</strong></p>
 <p>TODO</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./dBdt.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/dBdt.jl#L1-L5' class='documenter-source'>source</a><br></p>
 <p><a id='Functions-to-work-on-output-1'></a></p>
 <h2 id="functions-to-work-on-output">Functions to work on output</h2>
 <p><a id='BioEnergeticFoodWebs.coefficient_of_variation' href='#BioEnergeticFoodWebs.coefficient_of_variation'>#</a>
 <strong><code>BioEnergeticFoodWebs.coefficient_of_variation</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Coefficient of variation</strong></p>
 <p>Corrected for the sample size.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./measures.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/measures.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.shannon' href='#BioEnergeticFoodWebs.shannon'>#</a>
 <strong><code>BioEnergeticFoodWebs.shannon</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Shannon's entropy</strong></p>
 <p>Corrected for the number of species, removes negative and null values, return <code>NaN</code> in case of problem.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./measures.jl#L90-L95' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/measures.jl#L90-L95' class='documenter-source'>source</a><br></p>
 <p><a id='Functions-to-prepare-and-check-parameters-1'></a></p>
 <h2 id="functions-to-prepare-and-check-parameters">Functions to prepare and check parameters</h2>
 <p><a id='BioEnergeticFoodWebs.make_initial_parameters' href='#BioEnergeticFoodWebs.make_initial_parameters'>#</a>
 <strong><code>BioEnergeticFoodWebs.make_initial_parameters</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Make initial parameters</strong></p>
 <p>Used internally by <code>model_parameters</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./make_parameters.jl#L96-L100' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/make_parameters.jl#L96-L100' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.make_parameters' href='#BioEnergeticFoodWebs.make_parameters'>#</a>
 <strong><code>BioEnergeticFoodWebs.make_parameters</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Make the complete set of parameters</strong></p>
 <p>This function will add simulation parameters, based on the output of <code>make_initial_parameters</code>. Used internally by <code>model_parameters</code>.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./make_parameters.jl#L132-L138' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/make_parameters.jl#L132-L138' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.check_initial_parameters' href='#BioEnergeticFoodWebs.check_initial_parameters'>#</a>
 <strong><code>BioEnergeticFoodWebs.check_initial_parameters</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Check initial parameters</strong></p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./checks.jl#L15-L17' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/checks.jl#L15-L17' class='documenter-source'>source</a><br></p>
 <p><a id='BioEnergeticFoodWebs.check_parameters' href='#BioEnergeticFoodWebs.check_parameters'>#</a>
 <strong><code>BioEnergeticFoodWebs.check_parameters</code></strong> &mdash; <em>Function</em>.</p>
 <p><strong>Are the simulation parameters present?</strong></p>
 <p>This function will make sure that all the required parameters are here, and that the arrays and matrices have matching dimensions.</p>
-<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/0a19c1d60ca375e5e215e0151dd8c8b80bdee9fa/src/./checks.jl#L41-L46' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/tree/9481c503fa182ea2f0eade0593d8492e88c8ee68/src/checks.jl#L41-L46' class='documenter-source'>source</a><br></p>
                 
                   
                 
@@ -629,10 +638,9 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application-07b0fbb49b.js"></script>
+      <script src="../../assets/javascripts/application-8e4952e681.js"></script>
       
-      
-      <script>app.initialize({url:{base:"../.."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:"../.."}})</script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       
