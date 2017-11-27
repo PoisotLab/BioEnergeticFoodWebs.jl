@@ -49,6 +49,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   isext = falses(S)
 
   function condition(t,y,integrator)
+    # TODO remove size
     if size(y[.!isext],1) != 0
       minimum(y[.!isext])
     else
@@ -66,7 +67,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
     push!(extspecies, sp_min)
     isext[extspecies] = true
     #set biomass to 0 to avoid ghost species
-    println(string("extinction time:", integrator.t, " / sp.: ", sp_min, " / b = ", integrator.u[sp_min]))
+    info(string("extinction time:", integrator.t, " / sp.: ", sp_min, " / b = ", integrator.u[sp_min]))
     integrator.u[sp_min] = 0.0
 
   end
