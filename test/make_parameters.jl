@@ -224,6 +224,13 @@ module TestUpdateParameters
   pref = float.(p[:A])
   @test BioEnergeticFoodWebs.getW_preference(p) == pref
 
+  #with specialists
+  p_specialists = model_parameters(A, rewire_method = RWmethod, preferenceMethod = :specialist)
+  p_specialists[:A] = p[:A]
+  p_specialists[:extinctions] = p[:extinctions]
+  BioEnergeticFoodWebs.updateSpecialistPref(p_specialists)
+  @test p_specialists[:specialistPref] == [4, 4, 0, 0]
+
   # Test with Staniczenko rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5]
