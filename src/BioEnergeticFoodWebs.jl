@@ -8,7 +8,7 @@ using StatsBase
 
 export trophic_rank,
   model_parameters,
-  rewire_parameters,
+  #rewire_parameters,
   simulate,
   nichemodel,
   population_stability,
@@ -31,7 +31,7 @@ include(joinpath(".", "rewiring/ADBM.jl"))
 include(joinpath(".", "rewiring/GilljamRewire.jl"))
 include(joinpath(".", "rewiring/StaniczenkoRewire.jl"))
 include(joinpath(".", "rewiring/parameters/checkParameters.jl"))
-include(joinpath(".", "rewiring/parameters/makeParameters.jl"))
+#include(joinpath(".", "rewiring/parameters/makeParameters.jl"))
 include(joinpath(".", "rewiring/parameters/updateParameters.jl"))
 
 
