@@ -41,5 +41,6 @@ module TestMeasures
     @test isnan(population_stability(empty_p, last=2))
     @test isnan(total_biomass(empty_p, last=2))
     @test isnan(foodweb_evenness(empty_p, last=2))
+    @test isnan(species_richness(empty_p, last = 2))
 
 end
