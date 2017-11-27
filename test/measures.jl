@@ -35,11 +35,17 @@ module TestMeasures
     @test species_richness(s, last=1) == 1.0
     @test species_persistence(s, last=1) == 0.1
 
+    # Foodweb evenness
+    B = repmat([0 .5 0 .5], 5)
+    s = Dict{Symbol, Any}(:B => B)
+    @test foodweb_evenness(s, last = 2) == 1.00
+
     # Test when the total biomass is 0
     empty_p = Dict{Symbol, Any}(:B => zeros(10, 10))
     @test isnan(population_biomass(empty_p, last=2))
     @test isnan(population_stability(empty_p, last=2))
     @test isnan(total_biomass(empty_p, last=2))
     @test isnan(foodweb_evenness(empty_p, last=2))
+    @test isnan(species_richness(empty_p, last = 2))
 
 end
