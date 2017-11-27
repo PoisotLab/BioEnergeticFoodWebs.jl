@@ -1,13 +1,13 @@
 language: julia
-sudo: false
+sudo: required
 os:
   - linux
 matrix:
   allow_failures:
-    - julia: 0.6
+    - julia: nightly
 julia:
-  - 0.5
   - 0.6
+  - nightly
 env:
    - PYTHON=""
 script:

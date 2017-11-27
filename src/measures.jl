@@ -99,8 +99,8 @@ function shannon(n)
     try
         if length(x) > 1
             p = x ./ sum(x)
-            corr = log(length(x))
-            p_ln_p = p .* log(p)
+            corr = log.(length(x))
+            p_ln_p = p .* log.(p)
             return -(sum(p_ln_p)/corr)
         else
             return NaN
