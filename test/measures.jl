@@ -49,3 +49,28 @@ module TestMeasures
     @test isnan(species_richness(empty_p, last = 2))
 
 end
+
+module TestSave
+    using Base.Test
+    using BioEnergeticFoodWebs
+    using JLD
+
+    A = [0 0 0 ; 0 0 0 ; 0 0 0]
+    b = rand(3)
+    p = model_parameters(A)
+    #default variable name and extension
+    def_vname = "befwm_simul"
+    def_ftype = :jld
+    #test default arguments
+    cd(tempdir())
+    s = simulate(p,b)
+    # default file name
+    def_fname = "befwm_" * string(hash(s)) * ".jld"
+    BioEnergeticFoodWebs.save(s, as = def_ftype)
+    @test isfile(def_fname)
+    sbis = load(def_fname, def_vname)
+    @test sbis == s
+
+    rm(def_fname)
+
+end
