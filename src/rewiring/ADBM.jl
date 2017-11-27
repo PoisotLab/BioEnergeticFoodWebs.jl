@@ -51,11 +51,19 @@ links of species j. Used internally by ADBM().
 function getFeedingLinks(S::Int64,E::Vector{Float64}, λ::Array{Float64}, H::Array{Float64},j)
   profit = E ./ H[j,:]
   profs = sortperm(profit,rev = true)
-  profitSort = profit[profs]
+
   λSort = λ[j,profs]
   HSort = H[j,profs]
   ESort = E[profs]
-  cumulativeProfit = cumsum(ESort .* λSort) ./ (1 + cumsum(λSort .* HSort))
+
+  λH = cumsum(λSort .* HSort)
+  Eλ = cumsum(ESort .* λSort)
+
+  λH[isnan.(λH)] = Inf
+  Eλ[isnan.(Eλ)] = Inf
+
+  cumulativeProfit = Eλ ./ (1 + λH)
+
   if all(0 .== cumulativeProfit)
   feeding = []
   else
