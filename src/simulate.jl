@@ -49,12 +49,10 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   isext = falses(S)
 
   function condition(t,y,integrator)
-    # TODO remove size
-    if size(y[.!isext],1) != 0
-      minimum(y[.!isext])
-    else
-      minimum(y)
-    end
+    # if t == Int(round(t))
+    #   println(minimum(y[.!isext]))
+    # end
+    !all(isext) ? minimum(y[.!isext]) : one(eltype(y))
   end
 
   function affect!(integrator)
