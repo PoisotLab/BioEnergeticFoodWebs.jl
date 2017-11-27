@@ -17,7 +17,7 @@ function rewiring_graph(A)
   A_slices = map(x -> Abis[:,x], collect(1:S))
   for i in 1:S
     shared_predators = map(x -> sum(A_slices[i] .== x .== 1) >= 1, A_slices)
-    unshared_predators = map(x -> sum((A_slices[i] .== 1) & (x .== 0)) >= 1, A_slices)
+    unshared_predators = map(x -> sum((A_slices[i] .== 1) .& (x .== 0)) >= 1, A_slices)
     is_overlap = map((x,y) -> x .== y .== true, shared_predators, unshared_predators)
     idx = find(is_overlap .== true)
     R[i, idx] = 1
