@@ -43,7 +43,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   t_keep = collect(start:1.0:stop)
 
   # Pre-assign function
-  f(t, y, dy) = dBdt(t, y, p, dy)
+  f(t, y) = dBdt(t, y, p)
 
   extspecies = Int[]
   isext = falses(S)
@@ -81,7 +81,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       alg = Tsit5()
   end
 
-  sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
+  sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
 
   output = Dict{Symbol,Any}(
   :p => p,
