@@ -23,10 +23,11 @@ function Gilljam(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
       similarities = p[:similarity][newLinks][1] #get the similarity ranks
       deleteat!(similarities,findin(similarities,p[:extinctions])) # remove extinctions
       deleteat!(similarities,findin(similarities,find(sum(preferenceMat,2).==0,)))#remove Sp without prey
-
-      newLink = sample(find(preferenceMat[similarities[end],:])) #choose link to make
-      preferenceMat[i,newLink] = 1 #add  link to the new predation matrix
-      p[:costMat][i,newLink] = p[:cost]
+      if !isempty(similarities) #TODO : find a cleaner way to do it
+        newLink = sample(find(preferenceMat[similarities[end],:])) #choose link to make
+        preferenceMat[i,newLink] = 1 #add  link to the new predation matrix
+        p[:costMat][i,newLink] = p[:cost]
+      end
     end
   end
   return(preferenceMat,p)
