@@ -46,12 +46,13 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   f(t, y) = dBdt(t, y, p)
 
   extspecies = Int[]
-  isext = falses(S)
+  #isext = falses(S)
 
   function condition(t,y,integrator)
     # if t == Int(round(t))
     #   println(minimum(y[.!isext]))
     # end
+    isext = y .== 0.0
     !all(isext) ? minimum(y[.!isext]) : one(eltype(y))
   end
 
@@ -59,18 +60,19 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
     p = update_params(p,integrator.u)
     #id extinct species
+    isext = integrator.u .== 0.0
     minb = minimum(integrator.u[.!isext])
     sp_min = findin(integrator.u, minb)[1]
     #push id to extspecies
     push!(extspecies, sp_min)
-    isext[extspecies] = true
+    #isext[extspecies] = true
     #set biomass to 0 to avoid ghost species
     info(string("extinction time:", integrator.t, " / sp.: ", sp_min, " / b = ", integrator.u[sp_min]))
     integrator.u[sp_min] = 0.0
 
   end
 
-  cb = ContinuousCallback(condition,affect!)
+  cb = ContinuousCallback(condition,affect!, abstol = 1e-10)
 
   # Perform the actual integration
   prob = ODEProblem(f, biomass, t)
@@ -81,7 +83,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       alg = Tsit5()
   end
 
-  sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+  sol = solve(prob, alg, callback = cb, dtmax = 1, saveat=t_keep, dense=false, save_timeseries=false)
 
   output = Dict{Symbol,Any}(
   :p => p,

@@ -66,15 +66,14 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
   end
 
   dbdt = growth .+ gain .- loss
-  return dbdt
 
-  # for i in eachindex(derivative)
-  #   if dbdt[i] + biomass[i] < eps(0.0)
-  #     derivative[i] = - biomass[i]
-  #   else
-  #     derivative[i] = dbdt[i]
-  #   end
-  # end
-  #
-  # return derivative
+  for i in eachindex(dbdt)
+   if (dbdt[i] + biomass[i] < eps()) & (dbdt[i] + biomass[i] > 0.0)
+     dbdt[i] = - (biomass[i]+eps())
+   else
+     dbdt[i] = dbdt[i]
+   end
+ end
+
+  return dbdt
 end
