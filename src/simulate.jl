@@ -84,7 +84,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
       end
 
-      cb = ContinuousCallback(condition,affect!, abstol = 1e-10)
+      cb = ContinuousCallback(condition,affect!, abstol = 1e-10, interp_points=1000)
       sol = solve(prob, alg, callback = cb, dtmax = 1, saveat=t_keep, dense=false, save_timeseries=false)
   end
 
