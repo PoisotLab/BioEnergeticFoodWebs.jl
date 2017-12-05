@@ -14,7 +14,9 @@ function update_params(p::Dict{Symbol,Any}, biomass)
     #add extinction
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,p[:extinctions])
-    append!(p[:extinctions],findin(biomass,findmin(workingBiomass)[1]))
+    id_Ɛ  = findin(biomass,findmin(workingBiomass)[1])
+    filter!(e -> e∉p[:extinctions],id_Ɛ)
+    append!(p[:extinctions],id_Ɛ)
     sort!(p[:extinctions])
 
     #assign new array and update costs
@@ -35,8 +37,9 @@ function update_params(p::Dict{Symbol,Any}, biomass)
     #add extinction
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,p[:extinctions])
-    id_Ɛ = findin(biomass,findmin(workingBiomass)[1])
-    append!(p[:extinctions], id_Ɛ)
+    id_Ɛ  = findin(biomass,findmin(workingBiomass)[1])
+    filter!(e -> e∉p[:extinctions],id_Ɛ)
+    append!(p[:extinctions],id_Ɛ)
     sort!(p[:extinctions])
 
     p[:A] = Staniczenko_rewire(p)
