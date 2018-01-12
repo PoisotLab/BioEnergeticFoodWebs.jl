@@ -1,0 +1,17 @@
+{
+   "title": "Simulations of biomass dynamics and extinctions in food webs",
+   "description": "This packages provides an implementation of the bioenergetic food web model, as well various models of extinctions.",
+   "grants": [
+      {}
+   ],
+   "upload_type": "software",
+   "creators": [
+      {
+         "affiliation": "Université de Montréal",
+         "name": "Poisot, Timothée",
+         "orcid": "0000-0002-0735-5184"
+      }
+   ],
+   "access_right": "open",
+   "license": "mit-license"
+}
