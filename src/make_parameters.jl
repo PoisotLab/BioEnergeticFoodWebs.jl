@@ -122,9 +122,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
  end
 
  if rewire_method == :ADBM
-     adbm_par(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+     adbm_parameters(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
  elseif rewire_method == :Gilljam
-     gilljam_par(p, cost, specialistPrefMag, preferenceMethod)
+     gilljam_parameters(p, cost, specialistPrefMag, preferenceMethod)
  elseif rewire_method == :stan
      p[:extinctions] = Array{Int,1}()
  end
@@ -193,7 +193,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   return p
 end
 
-function adbm_par(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+function adbm_parameters(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
     p[:e] = e
     p[:a_adbm] = a_adbm
     p[:ai] = ai
@@ -216,12 +216,12 @@ function adbm_par(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmeth
     else
       error("Invalid value for Nmethod -- must be :original or :biomass")
     end
-    #add empty cost matrix
+    # add empty cost matrix
     S = size(p[:A],2)
     p[:costMat] = ones(Float64,(S,S))
 end
 
-function getSpeciaistPref(pr, A)
+function get_specialist_preferences(pr, A)
   specials = zeros(Int64,size(A,1))
   if pr[:preferenceMethod] == :specialist
     for pred = 1:size(A,2)
@@ -267,13 +267,13 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
   return(preferenceParameters)
 end
 
-function gilljam_par(p, cost, specialistPrefMag, preferenceMethod)
+function gilljam_parameters(p, cost, specialistPrefMag, preferenceMethod)
   #preference parameters
   rewireP = preference_parameters(cost, specialistPrefMag, p[:A], preferenceMethod)
   #check preferenceMethod
   if preferenceMethod ∈ [:generalist, :specialist]
     rewireP[:preferenceMethod] = preferenceMethod
-    rewireP[:specialistPref] = getSpeciaistPref(rewireP,p[:A])
+    rewireP[:specialistPref] = get_specialist_preferences(rewireP,p[:A])
   else
     error("Invalid value for preferenceMethod -- must be :generalist or :specialist")
   end

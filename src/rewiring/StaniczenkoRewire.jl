@@ -1,5 +1,4 @@
 """
-
 **Rewiring graph**
 
 (Based on Staniczenko et al., 2010)
@@ -26,14 +25,12 @@ function rewiring_graph(A)
 end
 
 """
-
 **Potential predators**
 
 (Based on Staniczenko et al., 2010)
 This function identify the potential predators from the rewiring graph R.
 Used internally by rewire().
 """
-
 function potential_newlinks(A, R, p)
   S = size(A, 1)
   R_slices = [R[:, i] for i in 1:S]
@@ -65,7 +62,6 @@ function potential_newlinks(A, R, p)
 end
 
 """
-
 **Rewire**
 
 (Based on Staniczenko et al., 2010)
@@ -73,7 +69,6 @@ This function identify the resources that are released following an extinction e
 and sample a new predator for each of them (when possible) from the matrix of
 potential predators (from `potential_predators()`).
 """
-
 function Staniczenko_rewire(p)
   S = size(p[:A], 1)
   A = p[:A]

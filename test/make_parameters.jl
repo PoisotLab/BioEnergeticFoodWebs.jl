@@ -64,7 +64,7 @@ module TestMakeParameters
   p = model_parameters(correct_network, rewire_method=right_rm)
   @test right_rm == p[:rewire_method]
 
-  # Test the ADBM_par function:
+  # Test the adbm_parameters function:
   # Test that the parameters can be passed
   p = model_parameters(correct_network, rewire_method=:none)
   test_e = 2.0
@@ -79,7 +79,7 @@ module TestMakeParameters
   test_ni= -0.8
   test_Hmethod = :power
   test_Nmethod = :biomass
-  BioEnergeticFoodWebs.adbm_par(p, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod)
+  BioEnergeticFoodWebs.adbm_parameters(p, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod)
   @test test_e == p[:e]
   @test test_a_adbm == p[:a_adbm]
   @test test_ai == p[:ai]
@@ -106,7 +106,7 @@ module TestMakeParameters
   right_cm = ones(S,S)
   @test right_cm == p[:costMat]
 
-  # Tests for the gilljam_par function:
+  # Tests for the gilljam_parameters function:
     # Tests for the internal preference_parameters function:
 
       # parameters can be passed
@@ -138,24 +138,24 @@ module TestMakeParameters
   right_cm = ones(S,S)
   @test right_cm == pref_par[:costMat]
 
-    # Test the internal getSpeciaistPref function:
+    # Test the internal get_specialist_preferences function:
 
       # Test that the preferences returned are empty if test_preferenceMethod = :generalist
   pm = :generalist
   pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, pm)
   right_pref = zeros(Int64, S)
-  pref = BioEnergeticFoodWebs.getSpeciaistPref(pr, correct_network)
+  pref = BioEnergeticFoodWebs.get_specialist_preferences(pr, correct_network)
   @test right_pref == pref
 
       # Test that the preferences returned are correct when test_preferenceMethod = :specialist
   pm = :specialist
   pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, pm)
-  pref = BioEnergeticFoodWebs.getSpeciaistPref(pr, correct_network)
+  pref = BioEnergeticFoodWebs.get_specialist_preferences(pr, correct_network)
   right_pref_1 = [2,4,0,0]
   right_pref_2 = [2,3,0,0]
   @test (pref == right_pref_1) | (pref == right_pref_2)
 
-    # Test the gilljam_par function:
+    # Test the gilljam_parameters function:
 
       # exception if the wrong preferenceMethod is passed
   wrong_pm = :gen
