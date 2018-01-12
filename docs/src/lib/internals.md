@@ -43,8 +43,7 @@ shannon
 ## Functions to prepare and check parameters
 
 ```@docs
-make_initial_parameters
-make_parameters
+model_parameters
 check_initial_parameters
 check_parameters
 ```
