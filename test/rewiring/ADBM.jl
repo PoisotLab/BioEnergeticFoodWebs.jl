@@ -2,14 +2,14 @@ module TestADBM
     using BioEnergeticFoodWebs
     using Base.Test
 
-    #testing getADBM_Terms
+    #testing get_adbm_terms
     S = 3
     A = [0 0 0 ;
          1 1 0 ;
          0 1 1 ]
     biomass = [0.0,1.0,1.0]
     p = model_parameters(A, rewire_method = :ADBM , Z = 10.0) #change Z to change bodymass
-    ADBMterms = BioEnergeticFoodWebs.getADBM_Terms(S,p,biomass)
+    ADBMterms = BioEnergeticFoodWebs.get_adbm_terms(S,p,biomass)
 
     #test keys
     @test collect(keys(ADBMterms)) == [:H,:λ,:E]

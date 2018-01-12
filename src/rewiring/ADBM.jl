@@ -6,7 +6,7 @@ This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 
-function getADBM_Terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
+function get_adbm_terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   E = p[:e] .* p[:bodymass]
   if p[:Nmethod] == :original
     N = p[:n] .* (p[:bodymass] .^ p[:ni])
@@ -44,11 +44,11 @@ end
 
 **ADBM Feeding Links**
 
-This function takes the terms calculated by getADBM_Terms() and uses them to determine the feeding
+This function takes the terms calculated by get_adbm_terms() and uses them to determine the feeding
 links of species j. Used internally by ADBM().
 """
 
-function getFeedingLinks(S::Int64,E::Vector{Float64}, λ::Array{Float64}, H::Array{Float64},j)
+function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64}, H::Array{Float64},j)
   profit = E ./ H[j,:]
   profs = sortperm(profit,rev = true)
 
@@ -80,20 +80,20 @@ end
 **ADBM Web**
 
 This function returns the food web based on the ADBM model of Petchey et al. 2008. The function
-takes the paramteres created by rewire_parameters() and uses getADBM_Terms() and getFeedingLinks() to
+takes the paramteres created by rewire_parameters() and uses get_adbm_terms() and get_feeding_links() to
 detemine the web structure. This function is called using the callback to include rewiring into biomass simulations.
 """
 
 
 function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
-  adbmTerms = getADBM_Terms(S,p,biomass)
+  adbmTerms = get_adbm_terms(S,p,biomass)
   E = adbmTerms[:E]
   λ = adbmTerms[:λ]
   H = adbmTerms[:H]
   for j = 1:S
     if !p[:is_producer][j]
-      feeding = getFeedingLinks(S,E,λ,H,j)
+      feeding = get_feeding_links(S,E,λ,H,j)
       adbmMAT[j,feeding] = 1
     end
   end
