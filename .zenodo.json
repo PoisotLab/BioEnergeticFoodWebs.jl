@@ -7,6 +7,16 @@
    "upload_type": "software",
    "creators": [
       {
+         "affiliation": "???",
+         "name": "Delmas, Eva",
+         "orcid": "???"
+      },
+      {
+         "affiliation": "???",
+         "name": "Clegg, Tom",
+         "orcid": "???"
+      },
+      {
          "affiliation": "Université de Montréal",
          "name": "Poisot, Timothée",
          "orcid": "0000-0002-0735-5184"
