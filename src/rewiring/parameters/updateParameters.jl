@@ -1,4 +1,4 @@
-function update_params(p::Dict{Symbol,Any}, biomass)
+function update_rewiring_parameters(p::Dict{Symbol,Any}, biomass)
   S = size(p[:A], 1)
 
   if p[:rewire_method] == :ADBM
@@ -6,9 +6,9 @@ function update_params(p::Dict{Symbol,Any}, biomass)
     p[:A] = ADBM(S,p,biomass)
 
     #update the parameters
-    getHerbivores(p) #
+    get_herbivores(p) #
     getW_preference(p) #
-    getEfficiency(p)
+    get_efficiency(p)
 
   elseif p[:rewire_method] == :Gilljam
     #add extinction
@@ -22,14 +22,14 @@ function update_params(p::Dict{Symbol,Any}, biomass)
 
     #update rewiring parameters
     if p[:preferenceMethod] == :specialist
-      p = BioEnergeticFoodWebs.updateSpecialistPref(p,S)
+      p = BioEnergeticFoodWebs.update_specialist_preference(p,S)
     end
 
     #update parameters
-    getHerbivores(p)
+    get_herbivores(p)
     getW_preference(p)
     p[:w][find(p[:w] .== Inf)] = 1
-    getEfficiency(p)
+    get_efficiency(p)
 
   elseif p[:rewire_method] == :stan
     #add extinction
@@ -40,16 +40,16 @@ function update_params(p::Dict{Symbol,Any}, biomass)
     sort!(p[:extinctions])
 
     p[:A] = Staniczenko_rewire(p)
-    getHerbivores(p)
+    get_herbivores(p)
     getW_preference(p)
-    getEfficiency(p)
+    get_efficiency(p)
 
   end
 
   return p
 end
 
-function getHerbivores(p::Dict{Symbol,Any})
+function get_herbivores(p::Dict{Symbol,Any})
   #used internally by model_parameters and update_parameters
   S = size(p[:A], 1)
   is_herbivore = falses(S)
@@ -70,7 +70,7 @@ function getHerbivores(p::Dict{Symbol,Any})
   #return(p)
 end
 
-function getEfficiency(p::Dict{Symbol,Any})
+function get_efficiency(p::Dict{Symbol,Any})
   #used internally by model_parameters and update_parameters
   S = size(p[:A], 1)
   # Efficiency matrix
@@ -89,21 +89,6 @@ function getEfficiency(p::Dict{Symbol,Any})
   p[:efficiency] = efficiency
   #return(p)
 end
-
-# Replaced by getW_preference
-# function getW_ADBM(p::Dict{Symbol,Any},S::Int64)
-#   generality = float(vec(sum(p[:A], 2)))
-#   for i in eachindex(generality)
-#     if generality[i] > 0.0
-#       for j = 1:S
-#         if p[:A][i,j] == 1
-#           p[:w][i,j] = 1.0 / generality[i]
-#         end
-#       end
-#     end
-#   end
-#   return(p)
-# end
 
 function getW_preference(p::Dict{Symbol,Any})
   #used internally by model_parameters and update_parameters
@@ -164,7 +149,7 @@ function getW_preference(p::Dict{Symbol,Any})
   #return(p)
 end
 
-function updateSpecialistPref(p::Dict{Symbol,Any})
+function update_specialist_preference(p::Dict{Symbol,Any})
   S = size(p[:A], 1)
   #find those that have lost their specialistPref and are not extinct
   lost = falses(S)
@@ -180,7 +165,3 @@ function updateSpecialistPref(p::Dict{Symbol,Any})
   end
   #return(p_r)
 end
-
-# function updateCost(p::Dict{Symbol,Any},p_r::Dict{Symbol,Any},S::Int64)
-#
-# end

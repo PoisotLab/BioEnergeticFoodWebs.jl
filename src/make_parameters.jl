@@ -149,7 +149,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   is_herbivore = falses(S)
 
   # Step 7 -- Identify herbivores (Herbivores consume producers)
-  getHerbivores(p)
+  get_herbivores(p)
 
   # Step 8 -- Measure generality and extract the vector of 1/n
   getW_preference(p)
@@ -176,7 +176,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   y[.!p[:vertebrates]] = p[:y_invertebrate]
 
   # Step 13 -- Efficiency matrix
-  getEfficiency(p)
+  get_efficiency(p)
 
   # Final Step -- store the parameters in the dict. p
   #p[:w] = w

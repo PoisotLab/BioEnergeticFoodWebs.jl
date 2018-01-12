@@ -70,7 +70,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
       function affect!(integrator)
 
-        p = update_params(p,integrator.u)
+        p = update_rewiring_parameters(p,integrator.u)
         #id extinct species
         isext = integrator.u .== 0.0
         minb = minimum(integrator.u[.!isext])
