@@ -68,8 +68,8 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
   dbdt = growth .+ gain .- loss
 
   for i in eachindex(dbdt)
-   if (dbdt[i] + biomass[i] < eps()) & (dbdt[i] + biomass[i] > 0.0)
-     dbdt[i] = - (biomass[i]+eps())
+   if (dbdt[i] + biomass[i] < 100eps()) & (dbdt[i] + biomass[i] > 0.0)
+     dbdt[i] = - (biomass[i]+100eps())
    else
      dbdt[i] = dbdt[i]
    end
