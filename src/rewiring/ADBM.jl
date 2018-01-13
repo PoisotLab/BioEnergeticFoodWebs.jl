@@ -1,12 +1,10 @@
 """
-
 **ADBM Terms**
-
 This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 
-function get_adbm_terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
+function getADBM_Terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   E = p[:e] .* p[:bodymass]
   if p[:Nmethod] == :original
     N = p[:n] .* (p[:bodymass] .^ p[:ni])
@@ -41,15 +39,19 @@ function get_adbm_terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
 end
 
 """
-
 **ADBM Feeding Links**
-
-This function takes the terms calculated by get_adbm_terms() and uses them to determine the feeding
+This function takes the terms calculated by getADBM_Terms() and uses them to determine the feeding
 links of species j. Used internally by ADBM().
 """
 
-function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64}, H::Array{Float64},j)
+function getFeedingLinks(S::Int64,E::Vector{Float64}, λ::Array{Float64},
+   H::Array{Float64},biomass::Vector{Float64},j)
+
   profit = E ./ H[j,:]
+  # Setting profit of species with zero biomass  to -1.0
+  # This prevents them being included in the profitSort
+  profit[biomass .== 0.0] = -1.0
+
   profs = sortperm(profit,rev = true)
 
   λSort = λ[j,profs]
@@ -78,23 +80,24 @@ end
 
 """
 **ADBM Web**
-
 This function returns the food web based on the ADBM model of Petchey et al. 2008. The function
-takes the paramteres created by rewire_parameters() and uses get_adbm_terms() and get_feeding_links() to
+takes the paramteres created by rewire_parameters() and uses getADBM_Terms() and getFeedingLinks() to
 detemine the web structure. This function is called using the callback to include rewiring into biomass simulations.
 """
 
 
 function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
-  adbmTerms = get_adbm_terms(S,p,biomass)
+  adbmTerms = getADBM_Terms(S,p,biomass)
   E = adbmTerms[:E]
   λ = adbmTerms[:λ]
   H = adbmTerms[:H]
   for j = 1:S
     if !p[:is_producer][j]
-      feeding = get_feeding_links(S,E,λ,H,j)
-      adbmMAT[j,feeding] = 1
+      if biomass[j] > 0.0
+        feeding = getFeedingLinks(S,E,λ,H,biomass,j)
+        adbmMAT[j,feeding] = 1
+      end
     end
   end
   return(adbmMAT)
