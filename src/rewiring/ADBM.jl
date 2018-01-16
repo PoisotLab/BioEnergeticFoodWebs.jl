@@ -4,7 +4,7 @@ This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 
-function getADBM_Terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
+function get_adbm_terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   E = p[:e] .* p[:bodymass]
   if p[:Nmethod] == :original
     N = p[:n] .* (p[:bodymass] .^ p[:ni])
@@ -44,7 +44,7 @@ This function takes the terms calculated by getADBM_Terms() and uses them to det
 links of species j. Used internally by ADBM().
 """
 
-function getFeedingLinks(S::Int64,E::Vector{Float64}, λ::Array{Float64},
+function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
    H::Array{Float64},biomass::Vector{Float64},j)
 
   profit = E ./ H[j,:]
@@ -88,14 +88,14 @@ detemine the web structure. This function is called using the callback to includ
 
 function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
-  adbmTerms = getADBM_Terms(S,p,biomass)
+  adbmTerms = get_adbm_terms(S,p,biomass)
   E = adbmTerms[:E]
   λ = adbmTerms[:λ]
   H = adbmTerms[:H]
   for j = 1:S
     if !p[:is_producer][j]
       if biomass[j] > 0.0
-        feeding = getFeedingLinks(S,E,λ,H,biomass,j)
+        feeding = get_feeding_links(S,E,λ,H,biomass,j)
         adbmMAT[j,feeding] = 1
       end
     end
