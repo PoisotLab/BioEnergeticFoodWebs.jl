@@ -44,7 +44,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stif
   prob = ODEProblem(dBdt, biomass, t, p)
 
   if use == :stiff
-      alg = CVODE_BDF()
+      alg = Rodas4(autodiff=false)
   else
       alg = Tsit5()
   end
