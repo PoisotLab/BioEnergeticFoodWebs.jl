@@ -1,7 +1,7 @@
 julia 0.5
 Distributions
-OrdinaryDiffEq
-Sundials
+OrdinaryDiffEq 3.0.0
+Sundials 1.1.0
 DiffEqCallbacks
 JSON
 JLD
