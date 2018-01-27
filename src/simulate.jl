@@ -40,12 +40,16 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stif
   t = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
-  # Pre-assign function
-  f(t, y) = dBdt(t, y, p)
-
   # Perform the actual integration
-  prob = ODEProblem(f, biomass, t)
-  sol = solve(prob, saveat=t_keep, dense=false, save_timeseries=false, alg_hints=[use])
+  prob = ODEProblem(dBdt, biomass, t, p)
+
+  if use == :stiff
+      alg = CVODE_BDF()
+  else
+      alg = Tsit5()
+  end
+
+  sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
 
   output = Dict{Symbol,Any}(
   :p => p,
