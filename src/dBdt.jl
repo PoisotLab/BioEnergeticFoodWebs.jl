@@ -26,6 +26,23 @@ function growthrate(p, b, i)
 end
 
 """
+**Nutrient uptake**
+
+TODO
+"""
+function nutrientuptake(nutrients, biomass, p)
+  #producers growth factor (G)
+  Ks = vcat(p[:K1]', p[:K2]')
+  limiting_nutrient = nutrients ./ (Ks .+ nutrients)
+  growth_factor = minimum(limiting_nutrient, 1)
+  #nutrients concentrations
+  nutrient_turnover = p[:D] .* (p[:S] .- nutrients)
+  nutrient_uptake = sum(p[:r] .* growth_factor' .* biomass[p[:is_producer]])
+  dndt = nutrient_turnover .- (p[:υ] .* nutrient_uptake)
+  NP = Dict(:G => growth_factor, :dndt => dndt)
+end
+
+"""
 **Derivatives**
 
 This function is the one wrapped by the various integration routines. Based on a
@@ -33,8 +50,18 @@ timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
 function dBdt(t, biomass, p::Dict{Symbol,Any})
-
+  if (t/10) == round(t/10)
+    println(t)
+  end
   S = size(p[:A], 1)
+
+  if(p[:productivity] == :nutrients)
+    nutrients = biomass[S+1:end] #nutrients concentration
+    biomass = biomass[1:S] #species biomasses
+    NP_outputs = nutrientuptake(nutrients, biomass, p)
+    G = NP_outputs[:G]
+    dndt = NP_outputs[:dndt]
+  end
 
   # Total available biomass
   if p[:rewire_method] ∈ [:ADBM, :Gilljam]
@@ -57,9 +84,16 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
 
   growth = zeros(eltype(biomass), S)
 
+  j = 0
   for i in eachindex(biomass)
     if p[:is_producer][i]
-      growth[i] = p[:r] * growthrate(p, biomass, i) * biomass[i]
+      j = j+1
+      if p[:productivity] == :nutrients #Nutrient intake
+        growth_factor = G[j]
+      else
+        growth_factor = growthrate(p, biomass, i)
+      end
+      growth[i] = p[:r] * growth_factor * biomass[i]
     else
       growth[i] = - p[:x][i] * biomass[i]
     end
@@ -73,6 +107,10 @@ function dBdt(t, biomass, p::Dict{Symbol,Any})
    else
      dbdt[i] = dbdt[i]
    end
+ end
+
+ if p[:productivity] == :nutrients
+   dbdt = vcat(dbdt, dndt)
  end
 
   return dbdt

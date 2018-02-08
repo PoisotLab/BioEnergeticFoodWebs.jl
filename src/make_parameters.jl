@@ -63,7 +63,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         ni::Float64= -0.75, Hmethod::Symbol = :ratio,
         Nmethod::Symbol = :original, cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
-        preferenceMethod::Symbol = :generalist)
+        preferenceMethod::Symbol = :generalist,
+        D::Float64 = 0.25, S::Array{Float64, 1} = [10.0],
+        υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.0],
+        K2::Array{Float64, 1} = [0.0])
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -107,13 +110,45 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   end
 
   # Step 4 -- productivity type
-  if productivity ∈ [:species, :system, :competitive]
+  if productivity ∈ [:species, :system, :competitive, :nutrients]
     p[:productivity] = productivity
   else
-    error("Invalid value for productivity -- must be :system, :species, or :competitive")
+    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
   end
 
-  # Step 5 -- rewire method
+  # step 5 -- productivity parameters
+
+  p[:D] = D
+  p[:S] = S
+  if length(p[:S]) > 1
+    if length(p[:S]) != 2
+      error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
+    end
+  else
+    p[:S] = repmat(S, 2)
+  end
+  p[:υ] = υ
+  if length(p[:υ]) != 2
+      error("when calling `model_parameters` with an array of values for `υ`, there must be as many elements as nutrients (2)")
+  end
+  p[:K1] = K1
+  p[:K2] = K2
+  if length(p[:K1]) > 1
+    if length(p[:K1]) != sum(sum(A,2) .== 0)
+      error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as producers in the matrix")
+    end
+  else
+    p[:K1] = repmat(K1, sum(sum(A,2) .== 0))
+  end
+  if length(p[:K2]) > 1
+    if length(p[:K2]) != sum(sum(A,2) .== 0)
+      error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as producers in the matrix")
+    end
+  else
+    p[:K2] = repmat(K2, sum(sum(A,2) .== 0))
+  end
+
+  # Step 6 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     p[:rewire_method] = rewire_method
@@ -142,40 +177,40 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   TR = trophic_rank(A)
   p[:trophic_rank] = TR
 
-  # Step 6 -- Identify producers
+  # Step 7 -- Identify producers
   is_producer = vec(sum(A, 2) .== 0)
   p[:is_producer] = is_producer
   producers_richness = sum(is_producer)
   is_herbivore = falses(S)
 
-  # Step 7 -- Identify herbivores (Herbivores consume producers)
+  # Step 8 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(p)
 
-  # Step 8 -- Measure generality and extract the vector of 1/n
+  # Step 9 -- Measure generality and extract the vector of 1/n
   getW_preference(p)
 
-  # Step 9 -- Get the body mass
+  # Step 10 -- Get the body mass
   if length(p[:bodymass]) == 1
     M = p[:Z].^(TR.-1)
     p[:bodymass] = M
   end
 
-  # Step 10 -- Scaling constraints based on organism type
+  # Step 11 -- Scaling constraints based on organism type
   a[p[:vertebrates]] = p[:a_vertebrate]
   a[.!p[:vertebrates]] = p[:a_invertebrate]
   a[is_producer] = p[:a_producer]
 
-  # Step 11 -- Metabolic rate
+  # Step 12 -- Metabolic rate
   body_size_relative = p[:bodymass] ./ p[:m_producer]
   body_size_scaled = body_size_relative.^-0.25
   x = (a ./ p[:a_producer]) .* body_size_scaled
 
-  # Step 12 -- Assimilation efficiency
+  # Step 13 -- Assimilation efficiency
   y = zeros(S)
   y[p[:vertebrates]] = p[:y_vertebrate]
   y[.!p[:vertebrates]] = p[:y_invertebrate]
 
-  # Step 13 -- Efficiency matrix
+  # Step 14 -- Efficiency matrix
   get_efficiency(p)
 
   # Final Step -- store the parameters in the dict. p

@@ -33,7 +33,12 @@ each species.
 """
 function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
-  @assert length(biomass) == size(p[:A],1)
+  if p[:productivity] == :nutrients
+      @assert length(biomass) == size(p[:A],1) + 2
+  else
+      @assert length(biomass) == size(p[:A],1)
+  end
+
   @assert use ∈ vec([:stiff :nonstiff])
 
   S = size(p[:A],1)
@@ -88,12 +93,19 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 
-
-  output = Dict{Symbol,Any}(
-  :p => p,
-  :t => sol.t,
-  :B => hcat(sol.u...)'
-  )
+  if p[:productivity] == :nutrients
+      output = Dict{Symbol,Any}(
+      :p => p,
+      :t => sol.t,
+      :B => hcat(sol.u...)'
+      )
+  else
+      output = Dict{Symbol,Any}(
+      :p => p,
+      :t => sol.t,
+      :B => hcat(sol.u...)'
+      )
+  end
 
   return output
 
