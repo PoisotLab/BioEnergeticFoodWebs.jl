@@ -50,9 +50,6 @@ timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
 function dBdt(t, biomass, p::Dict{Symbol,Any})
-  if (t/10) == round(t/10)
-    println(t)
-  end
   S = size(p[:A], 1)
 
   if(p[:productivity] == :nutrients)

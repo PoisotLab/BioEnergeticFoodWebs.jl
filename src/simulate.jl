@@ -34,6 +34,7 @@ each species.
 function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
   if p[:productivity] == :nutrients
+      #For the NP model, the initial concentration of the two ntrients must be given.
       @assert length(biomass) == size(p[:A],1) + 2
   else
       @assert length(biomass) == size(p[:A],1)

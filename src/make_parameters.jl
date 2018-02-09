@@ -129,7 +129,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   end
   p[:υ] = υ
   if length(p[:υ]) != 2
-      error("when calling `model_parameters` with an array of values for `υ`, there must be as many elements as nutrients (2)")
+      error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
   end
   p[:K1] = K1
   p[:K2] = K2
