@@ -65,8 +65,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         specialistPrefMag::Float64 = 0.9,
         preferenceMethod::Symbol = :generalist,
         D::Float64 = 0.25, S::Array{Float64, 1} = [10.0],
-        υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.0],
-        K2::Array{Float64, 1} = [0.0])
+        υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
+        K2::Array{Float64, 1} = [0.15])
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -131,21 +131,27 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   if length(p[:υ]) != 2
       error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
   end
+
+  # Identify producers
+  is_producer = vec(sum(A, 2) .== 0)
+  p[:is_producer] = is_producer
+  producers_richness = sum(is_producer)
+
   p[:K1] = K1
   p[:K2] = K2
   if length(p[:K1]) > 1
-    if length(p[:K1]) != sum(sum(A,2) .== 0)
-      error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as producers in the matrix")
+    if length(p[:K1]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as species")
     end
   else
-    p[:K1] = repmat(K1, sum(sum(A,2) .== 0))
+    p[:K1] = is_producer .* K1
   end
   if length(p[:K2]) > 1
-    if length(p[:K2]) != sum(sum(A,2) .== 0)
-      error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as producers in the matrix")
+    if length(p[:K2]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as species")
     end
   else
-    p[:K2] = repmat(K2, sum(sum(A,2) .== 0))
+    p[:K2] = is_producer .* repmat(K2, size(A, 1))
   end
 
   # Step 6 -- rewire method
@@ -177,12 +183,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   TR = trophic_rank(A)
   p[:trophic_rank] = TR
 
-  # Step 7 -- Identify producers
-  is_producer = vec(sum(A, 2) .== 0)
-  p[:is_producer] = is_producer
-  producers_richness = sum(is_producer)
   is_herbivore = falses(S)
-
   # Step 8 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(p)
 
