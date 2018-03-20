@@ -35,7 +35,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
   @assert stop > start
   @assert length(biomass) == size(par[:A],1)
   @assert length(concentration) == 2
-  if p[:productivity] == :nutrients
+  if par[:productivity] == :nutrients
       biomass = vcat(biomass, concentration)
   end
 
@@ -59,7 +59,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
       alg = Tsit5()
   end
 
-  if p[:rewire_method] == :none
+  if par[:rewire_method] == :none
       sol = solve(prob, alg, dtmax = 1, saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
@@ -75,7 +75,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
 
       function affect!(integrator)
 
-        p = update_rewiring_parameters(par,integrator.u)
+        par = update_rewiring_parameters(par,integrator.u)
         #id extinct species
         isext = integrator.u .== 0.0
         minb = minimum(integrator.u[.!isext])
@@ -95,7 +95,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
 
   B = hcat(sol.u...)'
 
-  if p[:productivity] == :nutrients
+  if par[:productivity] == :nutrients
       output = Dict{Symbol,Any}(
       :p => par,
       :t => sol.t,
