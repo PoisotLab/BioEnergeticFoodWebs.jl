@@ -89,7 +89,7 @@ function dBdt(biomass, p::Dict{Symbol,Any})
     if p[:is_producer][i]
       j = j+1
       if p[:productivity] == :nutrients #Nutrient intake
-        growth[i] = p[:r] * G[j]
+        growth[i] = p[:r] * G[j] - (p[:x][i] * biomass[i])
       else
         growth[i] = p[:r] * growthrate(p, biomass, i) * biomass[i]
       end
