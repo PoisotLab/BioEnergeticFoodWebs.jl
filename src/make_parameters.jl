@@ -204,7 +204,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   # Step 12 -- Metabolic rate
   body_size_relative = p[:bodymass] ./ p[:m_producer]
   body_size_scaled = body_size_relative.^-0.25
-  x = (a ./ p[:a_producer]) .* body_size_scaled
+  x = a .* body_size_scaled
 
   # Step 13 -- Assimilation efficiency
   y = zeros(S)
