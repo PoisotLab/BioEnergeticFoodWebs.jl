@@ -42,7 +42,7 @@ module TestMakeParameters
   @test right_bs == p[:bodymass]
 
   # Test that the metabolic rates are calculated from bodymass
-  p   = model_parameters(correct_network)
+  p = model_parameters(correct_network)
   p_b = model_parameters(correct_network, bodymass = p[:bodymass])
   @test p[:x] == p_b[:x]
 
@@ -247,5 +247,41 @@ module TestUpdateParameters
   eff = float.(zeros(p[:A]))
   eff[find(p[:A] .> 0)] = p[:e_herbivore]
   @test BioEnergeticFoodWebs.get_efficiency(p) == eff
+
+end
+
+# Nutrient Intake model - parameters
+
+module TestUpdateParameters
+  using BioEnergeticFoodWebs
+  using Base.Test
+
+  # Test that the parameters can be passed
+  A = [0 1 1 ; 0 0 0 ; 0 0 0]
+  k1 = [0, 0.1, 0.2]
+  k2 = [0, 0.2, 0.1]
+  turnover_rate = 0.3
+  s = [3.0, 4.0]
+  content = [0.8, 0.6]
+  p = model_parameters(A, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
+  @test p[:K1] == k1
+  @test p[:K2] == k2
+  @test p[:D] == turnover_rate
+  @test p[:supply] == s
+  @test p[:υ] == content
+
+  # Test that there is an error when the vectors length is incorrect
+  k1 = [0.1, 0.2]
+  @test_throws ErrorException model_parameters(A, K1 = k1)
+  k2 = [0.2, 0.1]
+  @test_throws ErrorException model_parameters(A, K2 = k2)
+  s = [3.0, 2.0, 4.0]
+  @test_throws ErrorException model_parameters(A, supply = s)
+  content = [1.0]
+  @test_throws ErrorException model_parameters(A, υ = content)
+
+  # Producer metabolic rates
+  p = model_parameters(A)
+  @test p[:x] == [0.314, 0.138, 0.138]
 
 end
