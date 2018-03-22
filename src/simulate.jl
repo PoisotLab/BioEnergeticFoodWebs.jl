@@ -39,11 +39,11 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   S = size(p[:A],1)
 
   # Pre-allocate the timeseries matrix
-  t = (float(start), float(stop))
+  tspan = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt, biomass, t, p)
+  prob = ODEProblem(dBdt, biomass, tspan, p)
 
   if use == :stiff
       alg = Rodas4(autodiff=false)
@@ -57,12 +57,12 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       extspecies = Int[]
       #isext = falses(S)
 
-      function condition(t,y,integrator)
+      function condition(u,t,integrator)
         # if t == Int(round(t))
         #   println(minimum(y[.!isext]))
         # end
-        isext = y .== 0.0
-        !all(isext) ? minimum(y[.!isext]) : one(eltype(y))
+        isext = u .== 0.0
+        !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
       end
 
       function affect!(integrator)
@@ -81,7 +81,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
       end
 
-      cb = ContinuousCallback(condition,affect!, abstol = 1e-10)
+      cb = ContinuousCallback(condition,affect!,abstol = 1e-10)
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 

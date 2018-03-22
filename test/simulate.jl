@@ -20,9 +20,9 @@ module TestSimulateHandChecked
   der = similar(b0)
   BioEnergeticFoodWebs.dBdt(der, b0, p, 0.0)
   # 0.1604888888888889,-0.4,0.08024444444444445
-  @test_approx_eq_eps der[1] 0.160 0.01
-  @test_approx_eq_eps der[2] -0.4 0.01
-  @test_approx_eq_eps der[3] 0.080 0.01
+  @test der[1] ≈ 0.160 atol = 0.01
+  @test der[2] ≈ -0.4 atol = 0.01
+  @test der[3] ≈ 0.080 atol = 0.01
 end
 
 module TestSimulateSanityCheck
