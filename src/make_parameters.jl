@@ -120,12 +120,12 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
 
   p[:D] = D
   p[:supply] = supply
-  if length(p[:S]) > 1
-    if length(p[:S]) != 2
+  if length(p[:supply]) > 1
+    if length(p[:supply]) != 2
       error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
     end
   else
-    p[:S] = repmat(S, 2)
+    p[:supply] = repmat(S, 2)
   end
   p[:υ] = υ
   if length(p[:υ]) != 2
