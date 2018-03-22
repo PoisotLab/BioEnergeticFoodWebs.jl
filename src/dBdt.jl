@@ -65,13 +65,14 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
     end
   end
 
-  dBdt = growth .+ gain .- loss
-
+  dbdt = growth .+ gain .- loss
   for i in eachindex(derivative)
-    if dBdt[i] + biomass[i] < eps(0.0)
+    if dbdt[i] + biomass[i] < eps(0.0)
       derivative[i] = -biomass[i]
     else
-      derivative[i] = dBdt[i]
+      derivative[i] = dbdt[i]
     end
   end
+
+  return derivative
 end
