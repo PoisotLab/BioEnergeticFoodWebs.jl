@@ -116,42 +116,44 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
   end
 
-  # step 5 -- productivity parameters
-
-  p[:D] = D
-  p[:supply] = supply
-  if length(p[:supply]) > 1
-    if length(p[:supply]) != 2
-      error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
-    end
-  else
-    p[:supply] = repmat(supply, 2)
-  end
-  p[:υ] = υ
-  if length(p[:υ]) != 2
-      error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
-  end
-
-  # Step 6 -- Identify producers
+  # Step 5 -- Identify producers
   is_producer = vec(sum(A, 2) .== 0)
   p[:is_producer] = is_producer
   producers_richness = sum(is_producer)
 
-  p[:K1] = K1
-  p[:K2] = K2
-  if length(p[:K1]) > 1
-    if length(p[:K1]) != size(A, 1)
-      error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as species")
+  # step 6 -- productivity parameters for the NP model
+  if p[:productivity] == :nutrients
+    p[:D] = D
+    p[:supply] = supply
+    if length(p[:supply]) > 1
+      if length(p[:supply]) != 2
+        error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
+      end
+    else
+      p[:supply] = repmat(supply, 2)
     end
-  else
-    p[:K1] = is_producer .* K1
-  end
-  if length(p[:K2]) > 1
-    if length(p[:K2]) != size(A, 1)
-      error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as species")
+    p[:υ] = υ
+    if length(p[:υ]) != 2
+        error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
     end
-  else
-    p[:K2] = is_producer .* repmat(K2, size(A, 1))
+
+    p[:K1] = K1
+    p[:K2] = K2
+    if length(p[:K1]) > 1
+      if length(p[:K1]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as species")
+      end
+    else
+      p[:K1] = is_producer .* K1
+    end
+    if length(p[:K2]) > 1
+      if length(p[:K2]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as species")
+      end
+    else
+      p[:K2] = is_producer .* repmat(K2, size(A, 1))
+    end
+
   end
 
   # Step 7 -- rewire method

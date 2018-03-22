@@ -263,25 +263,33 @@ module TestUpdateParameters
   turnover_rate = 0.3
   s = [3.0, 4.0]
   content = [0.8, 0.6]
-  p = model_parameters(A, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
+  p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
   @test p[:K1] == k1
   @test p[:K2] == k2
   @test p[:D] == turnover_rate
   @test p[:supply] == s
   @test p[:υ] == content
 
+  # Test that the NP parameters are not returned when the function is called with productivity != :nutrient
+  p = model_parameters(A, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
+  @test_throws KeyError p[:K1]
+  @test_throws KeyError p[:K2]
+  @test_throws KeyError p[:D]
+  @test_throws KeyError p[:supply]
+  @test_throws KeyError p[:υ]
+
   # Test that there is an error when the vectors length is incorrect
   k1 = [0.1, 0.2]
-  @test_throws ErrorException model_parameters(A, K1 = k1)
+  @test_throws ErrorException model_parameters(A, productivity = :nutrients, K1 = k1)
   k2 = [0.2, 0.1]
-  @test_throws ErrorException model_parameters(A, K2 = k2)
+  @test_throws ErrorException model_parameters(A, productivity = :nutrients, K2 = k2)
   s = [3.0, 2.0, 4.0]
-  @test_throws ErrorException model_parameters(A, supply = s)
+  @test_throws ErrorException model_parameters(A, productivity = :nutrients, supply = s)
   content = [1.0]
-  @test_throws ErrorException model_parameters(A, υ = content)
+  @test_throws ErrorException model_parameters(A, productivity = :nutrients, υ = content)
 
   # Producer metabolic rates
-  p = model_parameters(A)
+  p = model_parameters(A, productivity = :nutrients)
   @test p[:x] == [0.314, 0.138, 0.138]
 
 end
