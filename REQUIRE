@@ -1,5 +1,6 @@
 julia 0.6
 Distributions
-OrdinaryDiffEq
+OrdinaryDiffEq 3.0.0
+DiffEqCallbacks
 JSON
 JLD

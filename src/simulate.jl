@@ -42,20 +42,17 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
   t = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
-  # Pre-assign function
-  f(t, y) = dBdt(t, y, p)
-
   # Perform the actual integration
-  prob = ODEProblem(f, biomass, t)
+  prob = ODEProblem(dBdt, biomass, t, p)
 
   if use == :stiff
-      alg = Rodas4()
+      alg = Rodas4(autodiff=false)
   else
       alg = Tsit5()
   end
 
   if p[:rewire_method] == :none
-      sol = solve(prob, alg, dtmax = 1, saveat=t_keep, dense=false, save_timeseries=false)
+      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
       #isext = falses(S)
@@ -87,7 +84,6 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       cb = ContinuousCallback(condition,affect!, abstol = 1e-10)
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
-
 
   output = Dict{Symbol,Any}(
   :p => p,
