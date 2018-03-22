@@ -39,7 +39,7 @@ function nutrientuptake(nutrients, biomass, p)
   G = minimum(limiting_nutrient, 2)
   growth = G .* biomass
   #nutrients concentrations
-  nutrient_turnover = p[:D] .* (p[:S] .- nutrients)
+  nutrient_turnover = p[:D] .* (p[:supply] .- nutrients)
   dndt = nutrient_turnover .- p[:υ] .* sum(growth)
   NP = Dict(:G => growth, :dndt => dndt)
 end
