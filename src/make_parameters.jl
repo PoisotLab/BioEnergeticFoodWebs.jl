@@ -48,7 +48,7 @@ for every species in the matrix. By default, all species are invertebrates.
 """
 
 function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
-        a_invertebrate::Float64=0.314, a_producer::Float64=1.0,
+        a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
         a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         m_producer::Float64=1.0,
@@ -125,7 +125,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
       error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
     end
   else
-    p[:supply] = repmat(S, 2)
+    p[:supply] = repmat(supply, 2)
   end
   p[:υ] = υ
   if length(p[:υ]) != 2
