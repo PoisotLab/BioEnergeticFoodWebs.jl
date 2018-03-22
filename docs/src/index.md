@@ -5,7 +5,8 @@ Pages = [
   "man/installation.md",
   "man/random.md",
   "man/first_simulation.md",
-  "man/contributing.md"
+  "man/contributing.md",
+  "man/extinctions.md"
 ]
 Depth = 2
 ```

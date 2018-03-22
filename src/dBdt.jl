@@ -37,7 +37,11 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   S = size(p[:A], 1)
 
   # Total available biomass
-  bm_matrix = p[:w]*biomass'.*p[:A]
+  if p[:rewire_method] ∈ [:ADBM, :Gilljam]
+    bm_matrix = p[:w] .* ( biomass'.*p[:A]) .* p[:costMat]
+  else
+    bm_matrix = p[:w] .* ( biomass'.*p[:A])
+  end
   food_available = vec(sum(bm_matrix, 2))
 
   f_den = p[:Γh]*(1.0+p[:c].*biomass).+food_available
@@ -46,12 +50,12 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   xyb = p[:x].*p[:y].*biomass
   transfered = F.*xyb
   consumed = transfered./p[:efficiency]
-  consumed[isnan(consumed)] = 0.0
+  consumed[isnan.(consumed)] = 0.0
 
   gain = vec(sum(transfered, 2))
   loss = vec(sum(consumed, 1))
 
-  growth = zeros(Float64, S)
+  growth = zeros(eltype(biomass), S)
 
   for i in eachindex(biomass)
     if p[:is_producer][i]
