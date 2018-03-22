@@ -106,7 +106,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
       output = Dict{Symbol,Any}(
       :p => par,
       :t => sol.t,
-      :B => B'      )
+      :B => B)
   end
 
   return output
