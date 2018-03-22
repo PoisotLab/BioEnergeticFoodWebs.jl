@@ -64,7 +64,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         Nmethod::Symbol = :original, cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
         preferenceMethod::Symbol = :generalist,
-        D::Float64 = 0.25, S::Array{Float64, 1} = [10.0],
+        D::Float64 = 0.25, supply::Array{Float64, 1} = [4.0],
         υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
         K2::Array{Float64, 1} = [0.15])
 
@@ -119,7 +119,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   # step 5 -- productivity parameters
 
   p[:D] = D
-  p[:S] = S
+  p[:supply] = supply
   if length(p[:S]) > 1
     if length(p[:S]) != 2
       error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
@@ -132,7 +132,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
       error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
   end
 
-  # Identify producers
+  # Step 6 -- Identify producers
   is_producer = vec(sum(A, 2) .== 0)
   p[:is_producer] = is_producer
   producers_richness = sum(is_producer)
@@ -154,7 +154,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     p[:K2] = is_producer .* repmat(K2, size(A, 1))
   end
 
-  # Step 6 -- rewire method
+  # Step 7 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     p[:rewire_method] = rewire_method
@@ -182,8 +182,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   y = zeros(Float64, S)
   TR = trophic_rank(A)
   p[:trophic_rank] = TR
-
   is_herbivore = falses(S)
+
   # Step 8 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(p)
 
