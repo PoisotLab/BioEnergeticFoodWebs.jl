@@ -141,3 +141,32 @@ module TestSimulateRewiring
   @test_nowarn simulate(p, b)
 
 end
+
+module TestSimulateNP
+  using Base.Test
+  using BioEnergeticFoodWebs
+
+  A = [0 1 1 ; 0 0 0 ; 0 0 0]
+  b0 = [0.5, 0.5, 0.5]
+  k1 = [0, 0.1, 0.2]
+  k2 = [0, 0.15, 0.15]
+  # When nutrient concentration is 0, then producers growth is 0 and nutrient growth is 1
+  c0 = [0.0, 0.0]
+  p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2)
+  n = BioEnergeticFoodWebs.nutrientuptake(c0, b0, p)
+  @test n[:dndt] ≈ [1.0, 1.0] atol=0.001
+  @test n[:G] ≈ [0.0, 0.0, 0.0] atol=0.001
+  c = [0.0, 1.0]
+  n = BioEnergeticFoodWebs.nutrientuptake(c0, b0, p)
+  @test n[:dndt][1] ≈ 1.0 atol=0.001
+  @test n[:G] ≈ [0.0, 0.0, 0.0] atol=0.001
+  #sanity check
+  c0 = [3.0, 3.0]
+  n = BioEnergeticFoodWebs.nutrientuptake(c0, b0, p)
+  @test n[:G][1] ≈ 0.0 atol=0.001
+  @test n[:G][2] ≈ 0.9524*0.5 atol=0.001
+  @test n[:G][3] ≈ 0.9375*0.5 atol=0.001
+  @test n[:dndt][1] ≈ 1.0 atol=0.001
+  @test n[:dndt][2] ≈ 1.0 atol=0.001
+
+end
