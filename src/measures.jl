@@ -168,3 +168,81 @@ function save(p::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varname=NaN)
         JLD.save(filename, varname, p)
     end
 end
+
+"""
+**Producers growth rate - internal**
+
+"""
+function extract_growthrate(b, p; c = 0)
+    if p[:productivity] == :nutrients
+        nutrients = c #nutrients concentration
+        biomass = b #species biomasses
+        NP_outputs = BioEnergeticFoodWebs.nutrientuptake(nutrients, biomass, p)
+        G = NP_outputs[:G]
+    end
+    growth = zeros(eltype(b), S)
+    j = 0
+    for i in 1:size(p[:A],1)
+        if p[:is_producer][i]
+            j = j+1
+            if p[:productivity] == :nutrients #Nutrient intake
+                growth[i] = p[:r] * G[j]
+            else
+                growth[i] = p[:r] * BioEnergeticFoodWebs.growthrate(p, b, i) * b[i]
+            end
+        end
+    end
+    return growth
+end
+
+"""
+**Producers growth rate**
+
+"""
+function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
+    p = out[:p]
+    @assert last <= size(out[:B], 1)
+    measure_on = out[:B][end-(last-1):end,:]
+    measure_on_mat = [measure_on[i,:] for i = 1:last]
+    if p[:productivity] != :nutrients
+        gr = map(x -> extract_growthrate(x,p), measure_on_mat)
+    else
+        c = out[:C][end-(last-1):end,:]
+        c_mat = [c[i,:] for i = 1:last]
+        gr = map((x,y) -> extract_growthrate(x,p, c = y), measure_on_mat, c_mat)
+    end
+    gr_mat = hcat(gr...)'
+    if out_type == :all
+        return gr_mat
+    elseif out_type == :mean
+        return mean(gr_mat, 1)
+    elseif out_type == :std
+        return std(gr_mat, 1)
+    else
+        error("out_type should be one of :all, :mean or :std")
+    end
+end
+
+"""
+**Nutrients intake**
+"""
+
+"""
+**Nutrients uptake**
+"""
+
+"""
+**Nutrients growth**
+"""
+
+"""
+**Consumers' biomass intake**
+"""
+
+"""
+**Metabolic loss**
+"""
+
+"""
+**Resources' biomass loss**
+"""
