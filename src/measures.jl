@@ -172,6 +172,9 @@ end
 """
 **Producers growth rate - internal**
 
+This function is used internally by `producer_growth`. It takes the vector of biomass
+at each time steps, the model parameters (and the vector of nutrients concentrations
+if `productivity = :nutrients`), and return the producers' growth rates for this time step
 """
 function extract_growthrate(b, p; c = 0)
     if p[:productivity] == :nutrients
@@ -180,7 +183,7 @@ function extract_growthrate(b, p; c = 0)
         NP_outputs = BioEnergeticFoodWebs.nutrientuptake(nutrients, biomass, p)
         G = NP_outputs[:G]
     end
-    growth = zeros(eltype(b), S)
+    growth = zeros(eltype(b), size(p[:A], 1))
     j = 0
     for i in 1:size(p[:A],1)
         if p[:is_producer][i]
@@ -198,27 +201,33 @@ end
 """
 **Producers growth rate**
 
+This function takes the simulation outputs from `simulate` and returns the producers
+growth rates. Depending on the value given to the keyword `out_type`, it can return
+more specifically:
+- growth rates for each producer at each time step form end-last to last (`out_type = :all`)
+- the mean growth rate for each producer over the last `last` time steps (`out_type = :mean`)
+- the standard deviation of the growth rate for each producer over the last `last` time steps (`out_type = :std`)
 """
 function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
-    p = out[:p]
+    p = out[:p] #extract parameters
     @assert last <= size(out[:B], 1)
-    measure_on = out[:B][end-(last-1):end,:]
-    measure_on_mat = [measure_on[i,:] for i = 1:last]
-    if p[:productivity] != :nutrients
-        gr = map(x -> extract_growthrate(x,p), measure_on_mat)
-    else
-        c = out[:C][end-(last-1):end,:]
-        c_mat = [c[i,:] for i = 1:last]
-        gr = map((x,y) -> extract_growthrate(x,p, c = y), measure_on_mat, c_mat)
+    measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
+    measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
+    if p[:productivity] != :nutrients #if the producers do NOT rely on nutrients for their growth
+        gr = map(x -> extract_growthrate(x,p), measure_on_mat) #use the extract_growthrate directly, on each time step
+    else #nutrient intake model for producers growth
+        c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
+        c_mat = [c[i,:] for i = 1:last] #make it an array of array
+        gr = map((x,y) -> extract_growthrate(x,p, c = y), measure_on_mat, c_mat) #calculate growth rate for each time step
     end
-    gr_mat = hcat(gr...)'
-    if out_type == :all
+    gr_mat = hcat(gr...)' #convert from array of array to array
+    if out_type == :all #return all growth rates (each producer at each time step)
         return gr_mat
-    elseif out_type == :mean
+    elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
         return mean(gr_mat, 1)
-    elseif out_type == :std
+    elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
         return std(gr_mat, 1)
-    else
+    else #if the keyword used is not one of :mean, :all or :std, print an error
         error("out_type should be one of :all, :mean or :std")
     end
 end
