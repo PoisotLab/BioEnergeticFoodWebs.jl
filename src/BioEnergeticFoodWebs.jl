@@ -17,7 +17,8 @@ export trophic_rank,
   foodweb_evenness,
   species_richness,
   species_persistence,
-  producer_growth
+  producer_growth,
+  nutrient_intake
 
 # Includes
 include(joinpath(".", "trophic_rank.jl"))

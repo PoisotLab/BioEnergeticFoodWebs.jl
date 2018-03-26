@@ -224,9 +224,17 @@ function nutrient_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
     c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
     c_mat = [c[i,:] for i = 1:last] #make it an array of array
-    NP_outputs = map((x,y) -> BioEnergeticFoodWebs.nutrientuptake(x, y, p), c_mat, measure_on_mat)
-    G = map(x -> x[:G], NP_outputs)
-
+    gr = map((x,y) -> BioEnergeticFoodWebs.get_growth(x,p,c=y), measure_on_mat, c_mat)
+    intake = hcat(map(x -> x[:G], gr)...)'
+    if out_type == :all #return all growth rates (each producer at each time step)
+        return intake
+    elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
+        return mean(intake, 1)
+    elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
+        return std(intake, 1)
+    else #if the keyword used is not one of :mean, :all or :std, print an error
+        error("out_type should be one of :all, :mean or :std")
+    end
 end
 
 # """
