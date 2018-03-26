@@ -33,6 +33,34 @@ function growthrate(p, b, i; c = [0.0, 0.0])
 end
 
 """
+**Species growth - internal**
+
+This function is used internally by `dBdt` and `producer_growth`. It takes the vector of biomass
+at each time steps, the model parameters (and the vector of nutrients concentrations
+if `productivity = :nutrients`), and return the producers' growth rates for this time step
+"""
+function get_growth(b, p; c = 0)
+    S = size(p[:A], 1)
+    growth = zeros(eltype(b), S)
+    G = zeros(eltype(b), S)
+    for i in eachindex(b)
+      if p[:is_producer][i]
+        gr = BioEnergeticFoodWebs.growthrate(p, b, i, c = c)[1]
+        G[i] = (p[:r] * gr * b[i])
+        if p[:productivity] == :nutrients #Nutrient intake
+          growth[i] = G[i] - (p[:x][i] * b[i])
+        else
+          growth[i] = G[i]
+        end
+      else
+        growth[i] = - p[:x][i] * b[i]
+      end
+    end
+    out = Dict(:growth => growth, :G => G)
+    return out
+end
+
+"""
 **Nutrient uptake**
 
 TODO
@@ -58,6 +86,8 @@ function dBdt(biomass, p::Dict{Symbol,Any})
     nutrients = biomass[S+1:end] #nutrients concentration
     nutrients[nutrients .< 0] = 0
     biomass = biomass[1:S] #species biomasses
+  else
+    nutrients = [NaN, NaN]
   end
 
   # Total available biomass
@@ -79,22 +109,9 @@ function dBdt(biomass, p::Dict{Symbol,Any})
   gain = vec(sum(transfered, 2))
   loss = vec(sum(consumed, 1))
 
-  growth = zeros(eltype(biomass), S)
-  G = zeros(eltype(biomass), S)
-
-  for i in eachindex(biomass)
-    if p[:is_producer][i]
-      if p[:productivity] == :nutrients #Nutrient intake
-        gr = growthrate(p, biomass, i, c = nutrients)[1]
-        G[i] = (p[:r] * gr * biomass[i])
-        growth[i] = G[i] - (p[:x][i] * biomass[i])
-      else
-        growth[i] = p[:r] * growthrate(p, biomass, i) * biomass[i]
-      end
-    else
-      growth[i] = - p[:x][i] * biomass[i]
-    end
-  end
+  g = get_growth(biomass, p, c = nutrients)
+  growth = g[:growth]
+  G = g[:G]
 
   dbdt = growth .+ gain .- loss
 
