@@ -72,6 +72,34 @@ function nutrientuptake(nutrients, b, p, prodgrowth)
 end
 
 """
+**Consumption**
+
+TODO
+"""
+function consumption(b, p)
+  # Total available biomass
+  if p[:rewire_method] ∈ [:ADBM, :Gilljam]
+    bm_matrix = p[:w] .* (b'.*p[:A]) .* p[:costMat]
+  else
+    bm_matrix = p[:w] .* (b'.*p[:A])
+  end
+  food_available = vec(sum(bm_matrix, 2))
+
+  f_den = p[:Γh]*(1.0+p[:c].*b).+food_available
+  F = bm_matrix ./ f_den
+
+  xyb = p[:x].*p[:y].*b
+  transfered = F.*xyb
+  consumed = transfered./p[:efficiency]
+  consumed[isnan.(consumed)] = 0.0
+
+  gain = vec(sum(transfered, 2))
+  loss = vec(sum(consumed, 1))
+  out = Dict(:gain => gain, :loss => loss)
+  return out
+end
+
+"""
 **Derivatives**
 
 This function is the one wrapped by the various integration routines. Based on a
@@ -90,31 +118,20 @@ function dBdt(biomass, p::Dict{Symbol,Any})
     nutrients = [NaN, NaN]
   end
 
-  # Total available biomass
-  if p[:rewire_method] ∈ [:ADBM, :Gilljam]
-    bm_matrix = p[:w] .* ( biomass'.*p[:A]) .* p[:costMat]
-  else
-    bm_matrix = p[:w] .* ( biomass'.*p[:A])
-  end
-  food_available = vec(sum(bm_matrix, 2))
+  # Consumption
+  cons = consumption(biomass, p)
+  gain = cons[:gain]
+  loss = cons[:loss]
 
-  f_den = p[:Γh]*(1.0+p[:c].*biomass).+food_available
-  F = bm_matrix ./ f_den
-
-  xyb = p[:x].*p[:y].*biomass
-  transfered = F.*xyb
-  consumed = transfered./p[:efficiency]
-  consumed[isnan.(consumed)] = 0.0
-
-  gain = vec(sum(transfered, 2))
-  loss = vec(sum(consumed, 1))
-
+  # Growth
   g = get_growth(biomass, p, c = nutrients)
   growth = g[:growth]
   G = g[:G]
 
+  # Balance
   dbdt = growth .+ gain .- loss
 
+  # This step makes sure that extinction events will be detected
   for i in eachindex(dbdt)
    if (dbdt[i] + biomass[i] < 100eps()) & (dbdt[i] + biomass[i] > 0.0)
      dbdt[i] = - (biomass[i]+100eps())
@@ -123,6 +140,7 @@ function dBdt(biomass, p::Dict{Symbol,Any})
    end
  end
 
+ # Nutrient turnover
  if p[:productivity] == :nutrients
    dndt = nutrientuptake(nutrients, biomass, p, G)
    dbdt = vcat(dbdt, dndt)
