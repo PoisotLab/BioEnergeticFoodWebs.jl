@@ -212,6 +212,7 @@ end
 This function takes the simulation outputs from `simulate` and returns the producers
 nutrient intake. Depending on the value given to the keyword `out_type`, it can return
 more specifically:
+
 - nutrient intake for each producer at each time step form end-last to last (`out_type = :all`)
 - the mean nutrient intake for each producer over the last `last` time steps (`out_type = :mean`)
 - the standard deviation of the nutrient intake for each producer over the last `last` time steps (`out_type = :std`)
@@ -243,6 +244,7 @@ end
 This function takes the simulation outputs from `simulate` and returns the consumers
 biomass intake. Depending on the value given to the keyword `out_type`, it can return
 more specifically:
+
 - biomass intake for each species at each time step form end-last to last (`out_type = :all`)
 - the mean biomass intake for each species over the last `last` time steps (`out_type = :mean`)
 - the standard deviation of the biomass intake for each species over the last `last` time steps (`out_type = :std`)
@@ -267,6 +269,38 @@ function consumer_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     end
 end
 
-# """
-# **Metabolic loss**
-# """
+"""
+**Metabolic loss**
+
+This function takes the simulation outputs from `simulate` and returns the species
+metabolic losses. Depending on the value given to the keyword `out_type`, it can return
+more specifically:
+
+- metabolic losses for each species at each time step form end-last to last (`out_type = :all`)
+- the mean metabolic loss for each species over the last `last` time steps (`out_type = :mean`)
+- the standard deviation of the metabolic losses for each species over the last `last` time steps (`out_type = :std`)
+"""
+function metabolism(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
+    p = out[:p] #extract parameters
+    @assert last <= size(out[:B], 1)
+    measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
+    measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
+    function metab(b,p)
+        if p[:productivity] == :nutrients
+            m = p[:x] .* b
+        else
+            m = (p[:x] .* b) .* .!p[:is_producer]
+        end
+        return m
+    end
+    metabolic_losses = hcat(map(x -> metab(x, p), measure_on_mat)...)'
+    if out_type == :all #return all growth rates (each producer at each time step)
+        return metabolic_losses
+    elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
+        return mean(metabolic_losses, 1)
+    elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
+        return std(metabolic_losses, 1)
+    else #if the keyword used is not one of :mean, :all or :std, print an error
+        error("out_type should be one of :all, :mean or :std")
+    end
+end
