@@ -107,7 +107,7 @@ function dBdt(biomass, p::Dict{Symbol,Any})
  end
 
  if p[:productivity] == :nutrients
-   dndt = nutrientuptake(nutrients, p, G, biomass)
+   dndt = nutrientuptake(nutrients, biomass, p, G)
    dbdt = vcat(dbdt, dndt)
  end
 
