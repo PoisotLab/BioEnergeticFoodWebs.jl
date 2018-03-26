@@ -171,7 +171,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
  elseif rewire_method == :stan
      p[:extinctions] = Array{Int,1}()
  end
- check_rewiring_parameters(p, p[:rewire_method])
+ BioEnergeticFoodWebs.check_rewiring_parameters(p, p[:rewire_method])
 
   # Setup some objects
   S = size(A)[1]
