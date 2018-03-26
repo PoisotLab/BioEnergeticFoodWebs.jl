@@ -237,14 +237,28 @@ function nutrient_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     end
 end
 
-# """
-# **Consumers' biomass intake**
-# """
-#
+"""
+**Consumers' biomass intake**
+"""
+function consumer_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
+    p = out[:p] #extract parameters
+    @assert last <= size(out[:B], 1)
+    measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
+    measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
+    cons = map(x -> consumption(x, p), measure_on_mat)
+    gains = hcat(map(x-> x[:gain], cons)...)'
+    #losses = hcat(map(x-> x[:loss], cons)...)'
+    if out_type == :all #return all growth rates (each producer at each time step)
+        return gains
+    elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
+        return mean(gains, 1)
+    elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
+        return std(gains, 1)
+    else #if the keyword used is not one of :mean, :all or :std, print an error
+        error("out_type should be one of :all, :mean or :std")
+    end
+end
+
 # """
 # **Metabolic loss**
-# """
-#
-# """
-# **Consumers' biomass intake**
 # """
