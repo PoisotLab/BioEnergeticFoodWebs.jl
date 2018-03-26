@@ -3,7 +3,7 @@
 
 TODO
 """
-function growthrate(p, b, i)
+function growthrate(p, b, i; c = [0.0, 0.0])
   # Default -- species-level regulation
   compete_with = b[i]
   effective_K = p[:K]
@@ -11,9 +11,8 @@ function growthrate(p, b, i)
   if p[:productivity] == :system
     compete_with = b[i]
     effective_K = p[:K] / p[:np]
-  end
-  # If there is competition
-  if p[:productivity] == :competitive
+    G = 1.0 - compete_with / effective_K
+  elseif p[:productivity] == :competitive # If there is competition
     compete_with = b[i]
     for j in eachindex(b)
       if (i != j) & (p[:is_producer][j])
@@ -21,8 +20,16 @@ function growthrate(p, b, i)
       end
     end
     effective_K = p[:K]
+    G = 1.0 - compete_with / effective_K
+  elseif p[:productivity] == :nutrients
+    limit_n1 = c[1] ./ (p[:K1][i] .+ c[1])
+    limit_n2 = c[2] ./ (p[:K2][i] .+ c[2])
+    limiting_nutrient = hcat(limit_n1, limit_n2)
+    G = minimum(limiting_nutrient, 2)
+  else
+    G = 1.0 - compete_with / effective_K
   end
-  return (1.0 - compete_with / effective_K)
+  return G
 end
 
 """
@@ -30,18 +37,10 @@ end
 
 TODO
 """
-function nutrientuptake(nutrients, biomass, p)
-  #producers growth factor (G)
-  nutrients[nutrients .< 0] = 0
-  limit_n1 = p[:is_producer] .* (nutrients[1] ./ (p[:K1] .+ nutrients[1]))
-  limit_n2 = p[:is_producer] .* (nutrients[2] ./ (p[:K2] .+ nutrients[2]))
-  limiting_nutrient = hcat(limit_n1, limit_n2)
-  G = minimum(limiting_nutrient, 2)
-  growth = G .* biomass
-  #nutrients concentrations
+function nutrientuptake(nutrients, b, p, prodgrowth)
   nutrient_turnover = p[:D] .* (p[:supply] .- nutrients)
-  dndt = nutrient_turnover .- p[:υ] .* sum(growth)
-  NP = Dict(:G => growth, :dndt => dndt)
+  dndt = nutrient_turnover .- p[:υ] .* sum(prodgrowth .* b)
+  return dndt
 end
 
 """
@@ -57,10 +56,8 @@ function dBdt(biomass, p::Dict{Symbol,Any})
   # producer growth if NP model
   if p[:productivity] == :nutrients
     nutrients = biomass[S+1:end] #nutrients concentration
+    nutrients[nutrients .< 0] = 0
     biomass = biomass[1:S] #species biomasses
-    NP_outputs = nutrientuptake(nutrients, biomass, p)
-    G = NP_outputs[:G]
-    dndt = NP_outputs[:dndt]
   end
 
   # Total available biomass
@@ -83,13 +80,14 @@ function dBdt(biomass, p::Dict{Symbol,Any})
   loss = vec(sum(consumed, 1))
 
   growth = zeros(eltype(biomass), S)
+  G = zeros(eltype(biomass), S)
 
-  j = 0
   for i in eachindex(biomass)
     if p[:is_producer][i]
-      j = j+1
       if p[:productivity] == :nutrients #Nutrient intake
-        growth[i] = p[:r] * G[j] - (p[:x][i] * biomass[i])
+        gr = growthrate(p, biomass, i, c = nutrients)[1]
+        G[i] = (p[:r] * gr * biomass[i])
+        growth[i] = G[i] - (p[:x][i] * biomass[i])
       else
         growth[i] = p[:r] * growthrate(p, biomass, i) * biomass[i]
       end
@@ -109,6 +107,7 @@ function dBdt(biomass, p::Dict{Symbol,Any})
  end
 
  if p[:productivity] == :nutrients
+   dndt = nutrientuptake(nutrients, p, G, biomass)
    dbdt = vcat(dbdt, dndt)
  end
 
