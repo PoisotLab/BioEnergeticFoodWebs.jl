@@ -239,6 +239,14 @@ end
 
 """
 **Consumers' biomass intake**
+
+This function takes the simulation outputs from `simulate` and returns the consumers
+biomass intake. Depending on the value given to the keyword `out_type`, it can return
+more specifically:
+- biomass intake for each species at each time step form end-last to last (`out_type = :all`)
+- the mean biomass intake for each species over the last `last` time steps (`out_type = :mean`)
+- the standard deviation of the biomass intake for each species over the last `last` time steps (`out_type = :std`)
+
 """
 function consumer_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
     p = out[:p] #extract parameters
