@@ -20,7 +20,8 @@ export trophic_rank,
   producer_growth,
   nutrient_intake,
   consumer_intake,
-  metabolism
+  metabolism,
+  adbm_model
 
 # Includes
 include(joinpath(".", "trophic_rank.jl"))
