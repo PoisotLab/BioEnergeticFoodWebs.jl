@@ -31,21 +31,59 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
   @assert length(biomass) == size(p[:A],1)
   @assert use ∈ vec([:stiff :nonstiff])
 
+  S = size(p[:A],1)
+
   # Pre-allocate the timeseries matrix
-  t = (float(start), float(stop))
+  tspan = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
-  # Pre-assign function
-  f(t, y) = dBdt(t, y, p)
-
   # Perform the actual integration
-  prob = ODEProblem(f, biomass, t)
-  sol = solve(prob, saveat=t_keep, dense=false, save_timeseries=false, alg_hints=[use])
+  prob = ODEProblem(dBdt, biomass, tspan, p)
+
+  if use == :stiff
+      alg = Rodas4(autodiff=false)
+  else
+      alg = Tsit5()
+  end
+
+  if p[:rewire_method] == :none
+      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
+  else
+      extspecies = Int[]
+      #isext = falses(S)
+
+      function condition(u,t,integrator)
+        # if t == Int(round(t))
+        #   println(minimum(y[.!isext]))
+        # end
+        isext = u .== 0.0
+        !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
+      end
+
+      function affect!(integrator)
+
+        p = update_rewiring_parameters(p,integrator.u)
+        #id extinct species
+        isext = integrator.u .== 0.0
+        minb = minimum(integrator.u[.!isext])
+        sp_min = findin(integrator.u, minb)[1]
+        #push id to extspecies
+        push!(extspecies, sp_min)
+        #isext[extspecies] = true
+        #set biomass to 0 to avoid ghost species
+        info(string("extinction of species ", sp_min))
+        integrator.u[sp_min] = 0.0
+
+      end
+
+      cb = ContinuousCallback(condition,affect!,abstol = 1e-10)
+      sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+  end
 
   output = Dict{Symbol,Any}(
   :p => p,

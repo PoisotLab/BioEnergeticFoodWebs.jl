@@ -36,6 +36,7 @@ pages:
     - Installation: man/installation.md
     - Generating random networks: man/random.md
     - First simulation: man/first_simulation.md
+    - Extinctions: man/extinctions.md
     - Contributing: man/contributing.md
   - Library:
     - Public: lib/public.md

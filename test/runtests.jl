@@ -9,7 +9,10 @@ test_files = [
     "make_parameters.jl",
     "simulate.jl",
     "random.jl",
-    "measures.jl"
+    "measures.jl",
+    "rewiring/ADBM.jl",
+    "rewiring/GilljamRewire.jl",
+    "rewiring/StaniczenkoRewire.jl"
 ]
 
 for current_test in test_files
