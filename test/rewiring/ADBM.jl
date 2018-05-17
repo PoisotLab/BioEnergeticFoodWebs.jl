@@ -31,16 +31,16 @@ module TestADBM
     #ratio method
     p = model_parameters(A, rewire_method = :ADBM, Hmethod = :ratio, Z = 10.0)
     ADBMTest = BioEnergeticFoodWebs.ADBM(S,p,biomass)
-    @test ADBMTest == [0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 1 1 1 0 0; 1 1 1 1 0]
+    @test ADBMTest == [0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 1 1 1 0 0]
 
     #power method
     p = model_parameters(A, rewire_method = :ADBM, Hmethod = :power, Z = 10.0)
     ADBMTest = BioEnergeticFoodWebs.ADBM(S,p,biomass)
-    @test ADBMTest == [0 0 0 0 0; 1 1 1 1 1; 0 0 0 0 0; 1 1 1 1 1; 1 1 1 1 1]
+    @test ADBMTest == [0 0 0 0 0; 1 1 1 1 1; 0 0 0 0 0; 0 0 0 0 0; 1 1 1 1 1]
 
     #biomass Based
     p = model_parameters(A, rewire_method = :ADBM, Nmethod = :biomass, Z = 10.0)
     ADBMTest = BioEnergeticFoodWebs.ADBM(S,p,biomass)
-    @test ADBMTest == [0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 1 1 1 0 0; 1 1 1 1 0]
+    @test ADBMTest == [0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 1 1 1 0 0]
 
 end
