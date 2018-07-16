@@ -193,9 +193,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
  end
 
  if rewire_method == :ADBM
-     adbm_parameters(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+     adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
  elseif rewire_method == :Gilljam
-     gilljam_parameters(p, cost, specialistPrefMag, preferenceMethod)
+     gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
  elseif rewire_method == :stan
      parameters[:extinctions] = Array{Int,1}()
  end
@@ -218,7 +218,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   get_herbivores(parameters)
 
   # Step 9 -- Measure generality and extract the vector of 1/n
-  getW_preference(p)
+  getW_preference(parameters)
 
   # Step 10 -- Get the body mass
   if length(parameters[:bodymass]) == 1
