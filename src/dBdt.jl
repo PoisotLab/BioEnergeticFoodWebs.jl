@@ -144,6 +144,8 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   if p[:productivity] == :nutrients
     dndt = nutrientuptake(nutrients, biomass, p, G)
     derivative = vcat(dbdt, dndt)
+  else
+    derivative = dbdt
   end
 
   return derivative
