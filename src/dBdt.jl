@@ -3,7 +3,7 @@
 
 TODO
 """
-function growthrate(p, b, i; c = [0.0, 0.0])
+function growthrate(parameters, b, i; c = [0.0, 0.0])
   # Default -- species-level regulation
   compete_with = b[i]
   effective_K = parameters[:K]
@@ -39,7 +39,7 @@ This function is used internally by `dBdt` and `producer_growth`. It takes the v
 at each time steps, the model parameters (and the vector of nutrients concentrations
 if `productivity = :nutrients`), and return the producers' growth rates for this time step
 """
-function get_growth(b, p; c = 0)
+function get_growth(b, parameters; c = 0)
     S = size(parameters[:A], 1)
     growth = zeros(eltype(b), S)
     G = zeros(eltype(b), S)
@@ -80,7 +80,7 @@ end
 
 TODO
 """
-function consumption(b, p)
+function consumption(b, parameters)
 
   # Total available biomass
   bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
