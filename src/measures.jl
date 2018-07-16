@@ -16,7 +16,7 @@ end
 Number of species with a biomass larger than the `threshold`. The threshold is
 by default set at `eps()`, which should be close to 10^-16.
 """
-function species_richness(p; threshold::Float64=eps(), last::Int64=1000)
+function species_richness(parameters; threshold::Float64=eps(), last::Int64=1000)
     @assert last <= size(parameters[:B], 1)
     measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
@@ -32,8 +32,8 @@ end
 Proportion of species with a biomass larger than the `threshold`. The threshold is
 by default set at `eps()`, which should be close to 10^-16.
 """
-function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
-    r = species_richness(p, threshold=threshold, last=last)
+function species_persistence(parameters; threshold::Float64=eps(), last::Int64=1000)
+    r = species_richness(parameters, threshold=threshold, last=last)
     m = size(parameters[:B], 2) # Number of species is the number of columns in the biomass matrix
     return r/m
 end
@@ -45,7 +45,7 @@ Population stability is measured as the mean of the negative coefficient
 of variations of all species with an abundance higher than `threshold`. By
 default, the stability is measured over the last `last=1000` timesteps.
 """
-function population_stability(p; threshold::Float64=eps(), last=1000)
+function population_stability(parameters; threshold::Float64=eps(), last=1000)
     @assert last <= size(parameters[:B], 1)
     non_extinct = parameters[:B][end,:] .> threshold
     measure_on = parameters[:B][end-(last-1):end,non_extinct]
@@ -62,7 +62,7 @@ end
 Returns the sum of biomass, averaged over the last `last` timesteps.
 
 """
-function total_biomass(p; last=1000)
+function total_biomass(parameters; last=1000)
     @assert last <= size(parameters[:B], 1)
     measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
@@ -77,7 +77,7 @@ end
 
 Returns the average biomass of all species, over the last `last` timesteps.
 """
-function population_biomass(p; last=1000)
+function population_biomass(parameters; last=1000)
     @assert last <= size(parameters[:B], 1)
     measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
@@ -118,7 +118,7 @@ species) over the last `last` timesteps. Values close to 1 indicate that
 all populations have equal biomasses.
 
 """
-function foodweb_evenness(p; last=1000)
+function foodweb_evenness(parameters; last=1000)
     @assert last <= size(parameters[:B], 1)
     measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
@@ -152,7 +152,7 @@ function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varn
     end
     @assert as ∈ vec([:json :jld])
     if isnan(filename)
-        filename = "befwm_" * string(hash(p))
+        filename = "befwm_" * string(hash(parameters))
     end
     if isnan(varname)
         varname = "befwm_simul"
@@ -160,12 +160,12 @@ function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varn
     if as == :json
         filename = filename * ".json"
         f = open(filename, "w")
-        JSON.print(f, p)
+        JSON.print(f, parameters)
         close(f)
     end
     if as == :jld
         filename = filename * ".jld"
-        JLD.save(filename, varname, p)
+        JLD.save(filename, varname, parameters)
     end
 end
 

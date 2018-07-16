@@ -45,7 +45,7 @@ function get_growth(b, parameters; c = 0)
     G = zeros(eltype(b), S)
     for i in eachindex(b)
       if parameters[:is_producer][i]
-        gr = BioEnergeticFoodWebs.growthrate(p, b, i, c = c)[1]
+        gr = BioEnergeticFoodWebs.growthrate(parameters, b, i, c = c)[1]
         G[i] = (parameters[:r] * gr * b[i])
         if parameters[:productivity] == :nutrients #Nutrient intake
           growth[i] = G[i] - (parameters[:x][i] * b[i])
