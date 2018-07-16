@@ -48,7 +48,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
   t_keep = collect(start:1.0:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt, biomass, tspan, p)
+  prob = ODEProblem(dBdt, biomass, tspan, par)
 
   if use == :stiff
       alg = Rodas4(autodiff=false)
