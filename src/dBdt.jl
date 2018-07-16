@@ -134,19 +134,14 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   # Balance
   dbdt = growth .+ gain .- loss
   for i in eachindex(derivative)
-    if dbdt[i] + biomass[i] < eps(0.0)
+    if dbdt[i] + biomass[i] < eps()
       dbdt[i] = -biomass[i]
     else
       dbdt[i] = dbdt[i]
     end
   end
 
-  if p[:productivity] == :nutrients
-    dndt = nutrientuptake(nutrients, biomass, p, G)
-    derivative = vcat(dbdt, dndt)
-  else
-    derivative = dbdt
-  end
+  p[:productivity] == :nutrients && append!(dbdt, nutrientuptake(nutrients, biomass, p, G))
 
-  return derivative
+  return dbdt
 end
