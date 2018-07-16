@@ -31,7 +31,7 @@ end
 This function identify the potential predators from the rewiring graph R.
 Used internally by rewire().
 """
-function potential_newlinks(A, R, p)
+function potential_newlinks(A, R, parameters)
   S = size(A, 1)
   R_slices = [R[:, i] for i in 1:S]
   #identify "overlap species" = species that share at least one

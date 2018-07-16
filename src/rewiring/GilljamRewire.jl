@@ -1,4 +1,4 @@
-function Gilljam(S::Int64,parameters::Dict{Symbol,Any},biomass::Vector{Float64})
+function Gilljam(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
   #create matrix to work on
   preferenceMat = deepcopy(parameters[:A])
 
