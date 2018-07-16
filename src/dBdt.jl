@@ -65,9 +65,13 @@ end
 
 TODO
 """
-function nutrientuptake(nutrients, b, p, prodgrowth)
-  nutrient_turnover = p[:D] .* (p[:supply] .- nutrients)
-  dndt = nutrient_turnover .- p[:υ] .* sum(prodgrowth .* b)
+function nutrientuptake(nutrients, biomass, parameters, prodgrowth)
+  gr_x_bm = sum(prodgrowth .* biomass)
+  dndt = zeros(eltype(nutrients), length(nutrients))
+  for i in eachindex(dndt)
+    turnover = parameters[:D] * (parameters[:supply][i] - nutrients[i])
+    dndt[i] = turnover - parameters[:υ][i] * gr_x_bm
+  end
   return dndt
 end
 
@@ -127,7 +131,7 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   loss = cons[:loss]
 
   # Growth
-  g = get_growth(biomass, p, c = nutrients)
+  g = BioEnergeticFoodWebs.get_growth(biomass, p, c = nutrients)
   growth = g[:growth]
   G = g[:G]
 
