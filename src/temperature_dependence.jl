@@ -1,1 +1,6 @@
-## temperature dependence functions
+"""
+**Exponential Boltzmann-Arrhenius function**
+
+
+
+"""
