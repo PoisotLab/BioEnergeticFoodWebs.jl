@@ -76,7 +76,7 @@ See the online documentation and the original references for more details.
 """
 
 function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
-        a_invertebrate::Float64=0.314, a_producer::Float64=1.0,
+        a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
         a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         m_producer::Float64=1.0,
@@ -91,7 +91,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         ni::Float64= -0.75, Hmethod::Symbol = :ratio,
         Nmethod::Symbol = :original, cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
-        preferenceMethod::Symbol = :generalist)
+        preferenceMethod::Symbol = :generalist,
+        D::Float64 = 0.25, supply::Array{Float64, 1} = [4.0],
+        υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
+        K2::Array{Float64, 1} = [0.15])
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -135,13 +138,53 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   end
 
   # Step 4 -- productivity type
-  if productivity ∈ [:species, :system, :competitive]
+  if productivity ∈ [:species, :system, :competitive, :nutrients]
     p[:productivity] = productivity
   else
-    error("Invalid value for productivity -- must be :system, :species, or :competitive")
+    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
   end
 
-  # Step 5 -- rewire method
+  # Step 5 -- Identify producers
+  is_producer = vec(sum(A, 2) .== 0)
+  p[:is_producer] = is_producer
+  producers_richness = sum(is_producer)
+
+  # step 6 -- productivity parameters for the NP model
+  if p[:productivity] == :nutrients
+    p[:D] = D
+    p[:supply] = supply
+    if length(p[:supply]) > 1
+      if length(p[:supply]) != 2
+        error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
+      end
+    else
+      p[:supply] = repmat(supply, 2)
+    end
+    p[:υ] = υ
+    if length(p[:υ]) != 2
+        error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
+    end
+
+    p[:K1] = K1
+    p[:K2] = K2
+    if length(p[:K1]) > 1
+      if length(p[:K1]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as species")
+      end
+    else
+      p[:K1] = is_producer .* K1
+    end
+    if length(p[:K2]) > 1
+      if length(p[:K2]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as species")
+      end
+    else
+      p[:K2] = is_producer .* repmat(K2, size(A, 1))
+    end
+
+  end
+
+  # Step 7 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     p[:rewire_method] = rewire_method
@@ -156,7 +199,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
  elseif rewire_method == :stan
      p[:extinctions] = Array{Int,1}()
  end
- check_rewiring_parameters(p, p[:rewire_method])
+ BioEnergeticFoodWebs.check_rewiring_parameters(p, p[:rewire_method])
 
   # Setup some objects
   S = size(A)[1]
@@ -169,41 +212,36 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   y = zeros(Float64, S)
   TR = trophic_rank(A)
   p[:trophic_rank] = TR
-
-  # Step 6 -- Identify producers
-  is_producer = vec(sum(A, 2) .== 0)
-  p[:is_producer] = is_producer
-  producers_richness = sum(is_producer)
   is_herbivore = falses(S)
 
-  # Step 7 -- Identify herbivores (Herbivores consume producers)
+  # Step 8 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(p)
 
-  # Step 8 -- Measure generality and extract the vector of 1/n
+  # Step 9 -- Measure generality and extract the vector of 1/n
   getW_preference(p)
 
-  # Step 9 -- Get the body mass
+  # Step 10 -- Get the body mass
   if length(p[:bodymass]) == 1
     M = p[:Z].^(TR.-1)
     p[:bodymass] = M
   end
 
-  # Step 10 -- Scaling constraints based on organism type
+  # Step 11 -- Scaling constraints based on organism type
   a[p[:vertebrates]] = p[:a_vertebrate]
   a[.!p[:vertebrates]] = p[:a_invertebrate]
   a[is_producer] = p[:a_producer]
 
-  # Step 11 -- Metabolic rate
+  # Step 12 -- Metabolic rate
   body_size_relative = p[:bodymass] ./ p[:m_producer]
   body_size_scaled = body_size_relative.^-0.25
-  x = (a ./ p[:a_producer]) .* body_size_scaled
+  x = a .* body_size_scaled
 
-  # Step 12 -- Assimilation efficiency
+  # Step 13 -- Assimilation efficiency
   y = zeros(S)
   y[p[:vertebrates]] = p[:y_vertebrate]
   y[.!p[:vertebrates]] = p[:y_invertebrate]
 
-  # Step 13 -- Efficiency matrix
+  # Step 14 -- Efficiency matrix
   get_efficiency(p)
 
   # Final Step -- store the parameters in the dict. p

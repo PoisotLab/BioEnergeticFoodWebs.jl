@@ -31,12 +31,17 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
+function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
-  @assert length(biomass) == size(p[:A],1)
+  @assert length(biomass) == size(par[:A],1)
+  @assert length(concentration) == 2
+  if par[:productivity] == :nutrients
+      biomass = vcat(biomass, concentration)
+  end
+
   @assert use ∈ vec([:stiff :nonstiff])
 
-  S = size(p[:A],1)
+  S = size(par[:A],1)
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
@@ -67,7 +72,7 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
 
       function affect!(integrator)
 
-        p = update_rewiring_parameters(p,integrator.u)
+        par = update_rewiring_parameters(par,integrator.u)
         #id extinct species
         isext = integrator.u .== 0.0
         minb = minimum(integrator.u[.!isext])
@@ -85,11 +90,21 @@ function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nons
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 
-  output = Dict{Symbol,Any}(
-  :p => p,
-  :t => sol.t,
-  :B => hcat(sol.u...)'
-  )
+  B = hcat(sol.u...)'
+
+  if par[:productivity] == :nutrients
+      output = Dict{Symbol,Any}(
+      :p => par,
+      :t => sol.t,
+      :B => B[:,1:S],
+      :C => B[:,S+1:end]
+      )
+  else
+      output = Dict{Symbol,Any}(
+      :p => par,
+      :t => sol.t,
+      :B => B)
+  end
 
   return output
 
