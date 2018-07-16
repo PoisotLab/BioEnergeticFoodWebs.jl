@@ -31,7 +31,7 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10 start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
+function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
   @assert length(biomass) == size(parameters[:A],1)
   @assert length(concentration) == 2
