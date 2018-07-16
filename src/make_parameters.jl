@@ -99,7 +99,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   BioEnergeticFoodWebs.check_food_web(A)
 
   # Step 1 -- create a dictionnary to store the parameters
-  p = Dict{Symbol,Any}(
+  parameters = Dict{Symbol,Any}(
   :K              => K,
   :Z              => Z,
   :a_invertebrate => a_invertebrate,
@@ -118,7 +118,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   :A              => A,
   :α              => α
   )
-  BioEnergeticFoodWebs.check_initial_parameters(p)
+  BioEnergeticFoodWebs.check_initial_parameters(parameters)
 
   # Step 2 -- vertebrates ?
   if length(vertebrates) > 1
