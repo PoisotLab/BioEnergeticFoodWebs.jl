@@ -215,7 +215,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   is_herbivore = falses(S)
 
   # Step 8 -- Identify herbivores (Herbivores consume producers)
-  get_herbivores(p)
+  get_herbivores(parameters)
 
   # Step 9 -- Measure generality and extract the vector of 1/n
   getW_preference(p)
@@ -242,7 +242,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   y[.!parameters[:vertebrates]] = parameters[:y_invertebrate]
 
   # Step 14 -- Efficiency matrix
-  get_efficiency(p)
+  get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
   #parameters[:w] = w
@@ -254,12 +254,12 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   parameters[:Γh] = parameters[:Γ]^parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
 
-  BioEnergeticFoodWebs.check_parameters(p)
+  BioEnergeticFoodWebs.check_parameters(parameters)
 
-  return p
+  return parameters
 end
 
-function adbm_parameters(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
     parameters[:e] = e
     parameters[:a_adbm] = a_adbm
     parameters[:ai] = ai
@@ -318,22 +318,22 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
     end
   end
 
-  similarityIndexes = Vector{Vector{Int}}(S)
+  similarity_indexes = Vector{Vector{Int}}(S)
   #convert to indexes
   for i = 1:S
-    similarityIndexes[i] = sortperm(similarity[i,:])
+    similarity_indexes[i] = sortperm(similarity[i,:])
   end
 
-  preferenceParameters = Dict{Symbol,Any}(:similarity => similarityIndexes,
+  preference_parameters = Dict{Symbol,Any}(:similarity => similarity_indexes,
                                           :cost       => cost,
                                           :specialistPrefMag => specialistPrefMag,
                                           :extinctions => Array{Int,1}(),
                                           :costMat => ones(Float64,(S,S)),
                                           :preferenceMethod => preferenceMethod)
-  return(preferenceParameters)
+  return(preference_parameters)
 end
 
-function gilljam_parameters(p, cost, specialistPrefMag, preferenceMethod)
+function gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
   #preference parameters
   rewireP = preference_parameters(cost, specialistPrefMag, parameters[:A], preferenceMethod)
   #check preferenceMethod
