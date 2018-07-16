@@ -84,9 +84,10 @@ function consumption(b, p)
 
   # Total available biomass
   bm_matrix = zeros(eltype(p[:w]), size(p[:w]))
+  need_rewire = (p[:rewire_method] == :ADBM) | (p[:rewire_method] == :Gilljam)
   for i in eachindex(bm_matrix)
     bm_matrix[i] = p[:w][i] * b[last(ind2sub(p[:w], i))] * p[:A][i]
-    if p[:rewire_method] ∈ [:ADBM, :Gilljam]
+    if need_rewire
       bm_matrix[i] *= p[:costMat][i]
     end
   end
