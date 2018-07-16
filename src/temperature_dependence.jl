@@ -17,7 +17,7 @@ In each case, the function returns the biological rate value at a given temperat
 
 | Parameter | Meaning                                                           |
 |:----------|:------------------------------------------------------------------|
-| temp      | temperature range (Celsius degree)                                |
+| temp      | temperature (Celsius degree)                                      |
 | a         | parameter from the Eppley curve for the growth phase              |
 | b         | parameter from the Eppley curve for the growth phase              |
 | z         | location of the maximum of the quadratic portion of the function  |
@@ -53,7 +53,7 @@ end
 
 | Parameter | Meaning                                                                                  |
 |:----------|:-----------------------------------------------------------------------------------------|
-| temp      | temperature range (Kelvin)                                                               |
+| temp      | temperature (Kelvin)                                                                     |
 | b         | fitted parameter from Englund et al (2011), determines the shape of the thermal response |
 | q         | fitted parameter from Englund et al (2011), determines the shape of the thermal response |
 | c         | fitted parameter from Englund et al (2011)                                               |
@@ -82,7 +82,7 @@ end
 
 | Parameter | Meaning                            |
 |:----------|:-----------------------------------|
-| temp      | temperature range (Kelvin)         |
+| temp      | temperature (Kelvin)               |
 | p0        | scaling coefficient                |
 | E         | activation energy                  |
 | k         | Boltzmann constant (k=8.617e-5)    |
@@ -110,7 +110,7 @@ end
 
 | Parameter | Meaning                                         |
 |:----------|:------------------------------------------------|
-| temp      | temperature range (Kelvin)                      |
+| temp      | temperature (Kelvin)                            |
 | p0        | scaling coefficient                             |
 | E         | activation energy                               |
 | Ed        | deactivation energy                             |
@@ -146,7 +146,7 @@ end
 
 | Parameter | Meaning                                       |
 |:----------|:----------------------------------------------|
-| temp      | temperature range (Kelvin)                    |
+| temp      | temperature (Kelvin)                          |
 | p0        | minimal/maximal trait value                   |
 | s         | performance breath (width of function)        |
 | topt      | temperature at which trait value is maximal   |
