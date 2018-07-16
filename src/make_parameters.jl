@@ -2,26 +2,42 @@
 **Create default parameters**
 
 This function creates model parameters, based on a food web
-matrix. Specifically, the default values are:
+matrix A. Specifically, the default values of the keyword parameters are:
 
-| Parameter      | Default Value | Meaning                                                                             |
-|:---------------|:--------------|:------------------------------------------------------------------------------------|
-| K              | 1.0           | carrying capacity of producers                                                      |
-| Z              | 1.0           | consumer-resource body mass ratio                                                   |
-| r              | 1.0           | growth rate of producers                                                            |
-| a_invertebrate | 0.314         | allometric constant for invertebrate consumers                                      |
-| a_producers    | 1.0           | allometric constant of producers                                                    |
-| a_vertebrate   | 0.88          | allometric constant for vertebrate consumers                                        |
-| c              | 0             | quantifies the predator interference                                                |
-| h              | 1             | Hill coefficient                                                                    |
-| e_carnivore    | 0.85          | assimilation efficiency of carnivores                                               |
-| e_herbivore    | 0.45          | assimilation efficiency of herbivores                                               |
-| m_producers    | 1             | body-mass of producers                                                              |
-| y_invertebrate | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate |
-| y_vertebrate   | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate   |
-| Γ              | 0.5           | half-saturation density                                                             |
-| α              | 1.0           | interspecific competition                                                           |
-| productivity   | :species      | type of productivity regulation                                                     |
+| Parameter         | Default Value | Meaning                                                                                     |
+|:------------------|:--------------|:--------------------------------------------------------------------------------------------|
+| K                 | 1.0           | carrying capacity of producers                                                              |
+| Z                 | 1.0           | consumer-resource body mass ratio                                                           |
+| r                 | 1.0           | growth rate of producers                                                                    |
+| a_invertebrate    | 0.314         | allometric constant for invertebrate consumers                                              |
+| a_producers       | 1.0           | allometric constant of producers                                                            |
+| a_vertebrate      | 0.88          | allometric constant for vertebrate consumers                                                |
+| c                 | 0             | quantifies the predator interference                                                        |
+| h                 | 1             | Hill coefficient                                                                            |
+| e_carnivore       | 0.85          | assimilation efficiency of carnivores                                                       |
+| e_herbivore       | 0.45          | assimilation efficiency of herbivores                                                       |
+| m_producers       | 1             | body-mass of producers                                                                      |
+| y_invertebrate    | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate         |
+| y_vertebrate      | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate           |
+| Γ                 | 0.5           | half-saturation density                                                                     |
+| α                 | 1.0           | interspecific competition relatively to intraspecific competition                           |
+| productivity      | :species      | type of productivity regulation                                                             |
+| rewire_method     | :none         | method for rewiring the foodweb following extinction events                                 |
+| e                 | 1             | (ADBM) Scaling constant for the net energy gain                                             |
+| a_adbm            | 0.0189        | (ADBM) Scaling constant for the attack rate                                                 |
+| ai                | -0.491        | (ADBM) Consumer specific scaling exponent for the attack rate                               |
+| aj                | -0.465        | (ADBM) Resource specific scaling exponent for the attack rate                               |
+| b                 | 0.401         | (ADBM) Scaling constant for handling time                                                   |
+| h_adbm            | 1.0           | (ADBM) Scaling constant for handling time                                                   |
+| hi                | 1.0           | (ADBM) Consumer specific scaling exponent for handling time                                 |
+| hj                | 1.0           | (ADBM) Resource specific scaling constant for handling time                                 |
+| n                 | 1.0           | (ADBM) Scaling constant for the resource density                                            |
+| ni                | 0.75          | (ADBM) Species-specific scaling exponent for the resource density                           |
+| Hmethod           | :ratio        | (ADBM) Method used to calculate the handling time                                           |
+| Nmethod           | :original     | (ADBM) Method used to calculate the resource density                                        |
+| cost              | 0.0           | (Gilljam) Rewiring cost (a consumer decrease in efficiency when exploiting novel resource)  |
+| specialistPrefMag | 0.9           | (Gilljam) Strength of the consumer preference for 1 prey if `preferenceMethod = :specialist`|
+| preferenceMethod  | :generalist   | (Gilljam) Scenarios with respect to prey preferences of consumers                           |
 
 All of these values are passed as optional keyword arguments to the function.
 
@@ -43,8 +59,20 @@ user-supplied body-mass vector is correct (mostly because there is no way of
 defining correctness for vectors where body-mass of producers are not equal to
 unity).
 
-The final keyword is `vertebrates`, which is an array of `true` or `false`
+The keyword `vertebrates` is an array of `true` or `false`
 for every species in the matrix. By default, all species are invertebrates.
+
+A rewiring method can pe passed to specified if the foodweb should be rewired
+following extinctions events, and the method that should be used to perform the
+rewiring. This `rewire_method` keyword can be eighter `:none` (no rewiring),
+`:ADBM` (allometric diet breadth model as described in Petchey
+et al., 2008), `:Gilljam` (rewiring mechanism used by Gilljam et al., 2015, based on diet
+similarity) or `:stan` (rewiring mechanism used by Staniczenko et al, 2010, based
+on diet overlap).
+
+If `rewire_method`is `:ADBM` or `:Gilljam`, additional keywords can be passed.
+See the online documentation and the original references for more details.
+
 """
 
 function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,

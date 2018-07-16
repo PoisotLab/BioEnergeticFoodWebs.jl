@@ -17,11 +17,12 @@ module TestSimulateHandChecked
   A = [0 1 0; 0 0 0; 0 1 0]
   p = model_parameters(A)
   b0 = vec([0.2 0.4 0.1])
-  der = BioEnergeticFoodWebs.dBdt(b0, p)
-  # 0.1604888888888889,-0.504,0.08024444444444445
-  @test der[1] ≈ 0.160 atol=0.01
-  @test der[2] ≈ -0.504 atol=0.01
-  @test der[3] ≈ 0.080 atol=0.01
+  der = similar(b0)
+  BioEnergeticFoodWebs.dBdt(der, b0, p, 0.0)
+  # 0.1604888888888889,-0.4,0.08024444444444445
+  @test der[1] ≈ 0.160 atol = 0.01
+  @test der[2] ≈ -0.4 atol = 0.01
+  @test der[3] ≈ 0.080 atol = 0.01
 end
 
 module TestSimulateSanityCheck

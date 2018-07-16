@@ -1,7 +1,7 @@
 module BioEnergeticFoodWebs
 
 using Distributions
-using OrdinaryDiffEq
+using OrdinaryDiffEq, DiffEqCallbacks
 using JSON
 using JLD
 using StatsBase

@@ -44,33 +44,30 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
   S = size(par[:A],1)
 
   # Pre-allocate the timeseries matrix
-  t = (float(start), float(stop))
+  tspan = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
-  # Pre-assign function
-  f(u, p, t) = dBdt(u, par)
-
   # Perform the actual integration
-  prob = ODEProblem(f, biomass, t)
+  prob = ODEProblem(dBdt, biomass, tspan, p)
 
   if use == :stiff
-      alg = Rodas4()
+      alg = Rodas4(autodiff=false)
   else
       alg = Tsit5()
   end
 
-  if par[:rewire_method] == :none
-      sol = solve(prob, alg, dtmax = 1, saveat=t_keep, dense=false, save_timeseries=false)
+  if p[:rewire_method] == :none
+      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
       #isext = falses(S)
 
-      function condition(t,y,integrator)
+      function condition(u,t,integrator)
         # if t == Int(round(t))
         #   println(minimum(y[.!isext]))
         # end
-        isext = y .== 0.0
-        !all(isext) ? minimum(y[.!isext]) : one(eltype(y))
+        isext = u .== 0.0
+        !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
       end
 
       function affect!(integrator)
@@ -89,7 +86,7 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
 
       end
 
-      cb = ContinuousCallback(condition,affect!, abstol = 1e-10)
+      cb = ContinuousCallback(condition,affect!,abstol = 1e-10)
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 

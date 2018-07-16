@@ -130,21 +130,18 @@ function dBdt(biomass, p::Dict{Symbol,Any})
 
   # Balance
   dbdt = growth .+ gain .- loss
+  for i in eachindex(derivative)
+    if dbdt[i] + biomass[i] < eps(0.0)
+      dbdt[i] = -biomass[i]
+    else
+      dbdt[i] = dbdt[i]
+    end
+  end
 
-  # This step makes sure that extinction events will be detected
-  for i in eachindex(dbdt)
-   if (dbdt[i] + biomass[i] < 100eps()) & (dbdt[i] + biomass[i] > 0.0)
-     dbdt[i] = - (biomass[i]+100eps())
-   else
-     dbdt[i] = dbdt[i]
-   end
- end
+  if p[:productivity] == :nutrients
+    dndt = nutrientuptake(nutrients, biomass, p, G)
+    derivative = vcat(dbdt, dndt)
+  end
 
- # Nutrient turnover
- if p[:productivity] == :nutrients
-   dndt = nutrientuptake(nutrients, biomass, p, G)
-   dbdt = vcat(dbdt, dndt)
- end
-
-  return dbdt
+  return derivative
 end
