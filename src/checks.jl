@@ -59,7 +59,7 @@ function check_parameters(p)
   for k in required_keys
     @assert get(p, k, nothing) != nothing
   end
-  @assert length(p[:is_producer]) == length(p[:is_herbivore])
-  @assert size(p[:A]) == size(p[:efficiency])
-  @assert length(p[:is_producer]) == size(p[:A], 1)
+  @assert length(parameters[:is_producer]) == length(parameters[:is_herbivore])
+  @assert size(parameters[:A]) == size(parameters[:efficiency])
+  @assert length(parameters[:is_producer]) == size(parameters[:A], 1)
 end

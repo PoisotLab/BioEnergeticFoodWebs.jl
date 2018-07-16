@@ -17,8 +17,8 @@ Number of species with a biomass larger than the `threshold`. The threshold is
 by default set at `eps()`, which should be close to 10^-16.
 """
 function species_richness(p; threshold::Float64=eps(), last::Int64=1000)
-    @assert last <= size(p[:B], 1)
-    measure_on = p[:B][end-(last-1):end,:]
+    @assert last <= size(parameters[:B], 1)
+    measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
         return NaN
     end
@@ -34,7 +34,7 @@ by default set at `eps()`, which should be close to 10^-16.
 """
 function species_persistence(p; threshold::Float64=eps(), last::Int64=1000)
     r = species_richness(p, threshold=threshold, last=last)
-    m = size(p[:B], 2) # Number of species is the number of columns in the biomass matrix
+    m = size(parameters[:B], 2) # Number of species is the number of columns in the biomass matrix
     return r/m
 end
 
@@ -46,9 +46,9 @@ of variations of all species with an abundance higher than `threshold`. By
 default, the stability is measured over the last `last=1000` timesteps.
 """
 function population_stability(p; threshold::Float64=eps(), last=1000)
-    @assert last <= size(p[:B], 1)
-    non_extinct = p[:B][end,:] .> threshold
-    measure_on = p[:B][end-(last-1):end,non_extinct]
+    @assert last <= size(parameters[:B], 1)
+    non_extinct = parameters[:B][end,:] .> threshold
+    measure_on = parameters[:B][end-(last-1):end,non_extinct]
     if sum(measure_on) == 0
         return NaN
     end
@@ -63,8 +63,8 @@ Returns the sum of biomass, averaged over the last `last` timesteps.
 
 """
 function total_biomass(p; last=1000)
-    @assert last <= size(p[:B], 1)
-    measure_on = p[:B][end-(last-1):end,:]
+    @assert last <= size(parameters[:B], 1)
+    measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
         return NaN
     end
@@ -78,8 +78,8 @@ end
 Returns the average biomass of all species, over the last `last` timesteps.
 """
 function population_biomass(p; last=1000)
-    @assert last <= size(p[:B], 1)
-    measure_on = p[:B][end-(last-1):end,:]
+    @assert last <= size(parameters[:B], 1)
+    measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
         return NaN
     end
@@ -119,8 +119,8 @@ all populations have equal biomasses.
 
 """
 function foodweb_evenness(p; last=1000)
-    @assert last <= size(p[:B], 1)
-    measure_on = p[:B][end-(last-1):end,:]
+    @assert last <= size(parameters[:B], 1)
+    measure_on = parameters[:B][end-(last-1):end,:]
     if sum(measure_on) == 0
         return NaN
     end
@@ -143,7 +143,7 @@ output (ensuring that all output files are unique).
 This function is *not* exported, so it must be called with `BioEnergeticFoodWebs.save`.
 
 """
-function save(p::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varname=NaN)
+function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varname=NaN)
     if as == :JSON
         as = :json
     end
@@ -185,7 +185,7 @@ function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     @assert last <= size(out[:B], 1)
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
-    if p[:productivity] == :nutrients #if the producers do NOT rely on nutrients for their growth
+    if parameters[:productivity] == :nutrients #if the producers do NOT rely on nutrients for their growth
         c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
         c_mat = [c[i,:] for i = 1:last] #make it an array of array
         gr = map((x,y) -> get_growth(x,p,c=y), measure_on_mat, c_mat)
@@ -194,7 +194,7 @@ function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
         gr = map(x -> get_growth(x,p), measure_on_mat)
         growth = hcat(map(x -> x[:growth], gr)...)'
     end
-    growth[:,.!p[:is_producer]] = 0.0
+    growth[:,.!parameters[:is_producer]] = 0.0
     if out_type == :all #return all growth rates (each producer at each time step)
         return growth
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
@@ -220,7 +220,7 @@ more specifically:
 function nutrient_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
     p = out[:p] #extract parameters
     @assert last <= size(out[:B], 1)
-    @assert p[:productivity] == :nutrients
+    @assert parameters[:productivity] == :nutrients
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
     c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
@@ -286,10 +286,10 @@ function metabolism(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol 
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
     function metab(b,p)
-        if p[:productivity] == :nutrients
-            m = p[:x] .* b
+        if parameters[:productivity] == :nutrients
+            m = parameters[:x] .* b
         else
-            m = (p[:x] .* b) .* .!p[:is_producer]
+            m = (parameters[:x] .* b) .* .!parameters[:is_producer]
         end
         return m
     end

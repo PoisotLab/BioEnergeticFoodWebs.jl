@@ -6,24 +6,24 @@ TODO
 function growthrate(p, b, i; c = [0.0, 0.0])
   # Default -- species-level regulation
   compete_with = b[i]
-  effective_K = p[:K]
+  effective_K = parameters[:K]
   # If regulation is system-wide (all species share K)
-  if p[:productivity] == :system
+  if parameters[:productivity] == :system
     compete_with = b[i]
-    effective_K = p[:K] / p[:np]
+    effective_K = parameters[:K] / parameters[:np]
     G = 1.0 - compete_with / effective_K
-  elseif p[:productivity] == :competitive # If there is competition
+  elseif parameters[:productivity] == :competitive # If there is competition
     compete_with = b[i]
     for j in eachindex(b)
-      if (i != j) & (p[:is_producer][j])
-        compete_with += p[:α] * b[j]
+      if (i != j) & (parameters[:is_producer][j])
+        compete_with += parameters[:α] * b[j]
       end
     end
-    effective_K = p[:K]
+    effective_K = parameters[:K]
     G = 1.0 - compete_with / effective_K
-  elseif p[:productivity] == :nutrients
-    limit_n1 = c[1] ./ (p[:K1][i] .+ c[1])
-    limit_n2 = c[2] ./ (p[:K2][i] .+ c[2])
+  elseif parameters[:productivity] == :nutrients
+    limit_n1 = c[1] ./ (parameters[:K1][i] .+ c[1])
+    limit_n2 = c[2] ./ (parameters[:K2][i] .+ c[2])
     limiting_nutrient = hcat(limit_n1, limit_n2)
     G = minimum(limiting_nutrient, 2)
   else
@@ -40,20 +40,20 @@ at each time steps, the model parameters (and the vector of nutrients concentrat
 if `productivity = :nutrients`), and return the producers' growth rates for this time step
 """
 function get_growth(b, p; c = 0)
-    S = size(p[:A], 1)
+    S = size(parameters[:A], 1)
     growth = zeros(eltype(b), S)
     G = zeros(eltype(b), S)
     for i in eachindex(b)
-      if p[:is_producer][i]
+      if parameters[:is_producer][i]
         gr = BioEnergeticFoodWebs.growthrate(p, b, i, c = c)[1]
-        G[i] = (p[:r] * gr * b[i])
-        if p[:productivity] == :nutrients #Nutrient intake
-          growth[i] = G[i] - (p[:x][i] * b[i])
+        G[i] = (parameters[:r] * gr * b[i])
+        if parameters[:productivity] == :nutrients #Nutrient intake
+          growth[i] = G[i] - (parameters[:x][i] * b[i])
         else
           growth[i] = G[i]
         end
       else
-        growth[i] = - p[:x][i] * b[i]
+        growth[i] = - parameters[:x][i] * b[i]
       end
     end
     out = Dict(:growth => growth, :G => G)
@@ -83,12 +83,12 @@ TODO
 function consumption(b, p)
 
   # Total available biomass
-  bm_matrix = zeros(eltype(p[:w]), size(p[:w]))
-  need_rewire = (p[:rewire_method] == :ADBM) | (p[:rewire_method] == :Gilljam)
+  bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
+  need_rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
   for i in eachindex(bm_matrix)
-    bm_matrix[i] = p[:w][i] * b[last(ind2sub(p[:w], i))] * p[:A][i]
+    bm_matrix[i] = parameters[:w][i] * b[last(ind2sub(parameters[:w], i))] * parameters[:A][i]
     if need_rewire
-      bm_matrix[i] *= p[:costMat][i]
+      bm_matrix[i] *= parameters[:costMat][i]
     end
   end
 
@@ -96,16 +96,16 @@ function consumption(b, p)
 
   f_den = zeros(eltype(b), length(b))
   for i in eachindex(f_den)
-    f_den[i] = p[:Γh]*(1.0-p[:c]*b[i])+food_available[i]
+    f_den[i] = parameters[:Γh]*(1.0-parameters[:c]*b[i])+food_available[i]
   end
   F = bm_matrix ./ f_den
 
   xyb = zeros(eltype(b), length(b))
   for i in eachindex(b)
-    xyb[i] = p[:x][i]*p[:y][i]*b[i]
+    xyb[i] = parameters[:x][i]*parameters[:y][i]*b[i]
   end
   transfered = F.*xyb
-  consumed = transfered./p[:efficiency]
+  consumed = transfered./parameters[:efficiency]
   consumed[isnan.(consumed)] = 0.0
 
   gain = vec(sum(transfered, 2))
