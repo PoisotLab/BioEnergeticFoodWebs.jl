@@ -125,7 +125,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   # producer growth if NP model
   if parameters[:productivity] == :nutrients
     nutrients = biomass[S+1:end] #nutrients concentration
-    nutrients[nutrients .< 0] = 0
+    nutrients[nutrients .< 0] = 0.0
     biomass = biomass[1:S] #species biomasses
   else
     nutrients = [NaN, NaN]
