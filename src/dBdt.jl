@@ -109,7 +109,7 @@ This function is the one wrapped by the various integration routines. Based on a
 timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
-function dBdt(biomass, p::Dict{Symbol,Any})
+function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   S = size(p[:A], 1)
 
   # producer growth if NP model
@@ -144,6 +144,8 @@ function dBdt(biomass, p::Dict{Symbol,Any})
   if p[:productivity] == :nutrients
     dndt = nutrientuptake(nutrients, biomass, p, G)
     derivative = vcat(dbdt, dndt)
+  else
+    derivative = dbdt
   end
 
   return derivative
