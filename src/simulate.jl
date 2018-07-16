@@ -1,7 +1,7 @@
 """
 **Main simulation loop**
 
-    simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+    simulate(parameters, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
 
 This function takes two mandatory arguments:
 
@@ -31,24 +31,24 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
+function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10 start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
-  @assert length(biomass) == size(par[:A],1)
+  @assert length(biomass) == size(parameters[:A],1)
   @assert length(concentration) == 2
-  if par[:productivity] == :nutrients
+  if parameters[:productivity] == :nutrients
       biomass = vcat(biomass, concentration)
   end
 
   @assert use ∈ vec([:stiff :nonstiff])
 
-  S = size(par[:A],1)
+  S = size(parameters[:A],1)
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
   t_keep = collect(start:1.0:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt, biomass, tspan, par)
+  prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
   if use == :stiff
       alg = Rodas4(autodiff=false)
@@ -56,23 +56,19 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
       alg = Tsit5()
   end
 
-  if p[:rewire_method] == :none
+  if parameters[:rewire_method] == :none
       sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
-      #isext = falses(S)
 
       function condition(u,t,integrator)
-        # if t == Int(round(t))
-        #   println(minimum(y[.!isext]))
-        # end
         isext = u .== 0.0
         !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
       end
 
       function affect!(integrator)
 
-        par = update_rewiring_parameters(par,integrator.u)
+        parameters = update_rewiring_parameters(parameters, integrator.u)
         #id extinct species
         isext = integrator.u .== 0.0
         minb = minimum(integrator.u[.!isext])
@@ -92,16 +88,16 @@ function simulate(par, biomass, concentration = rand(2).*10; start::Int64=0, sto
 
   B = hcat(sol.u...)'
 
-  if par[:productivity] == :nutrients
+  if parameters[:productivity] == :nutrients
       output = Dict{Symbol,Any}(
-      :p => par,
+      :p => parameters,
       :t => sol.t,
       :B => B[:,1:S],
       :C => B[:,S+1:end]
       )
   else
       output = Dict{Symbol,Any}(
-      :p => par,
+      :p => parameters,
       :t => sol.t,
       :B => B)
   end
