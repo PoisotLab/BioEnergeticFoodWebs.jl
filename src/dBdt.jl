@@ -88,7 +88,10 @@ function consumption(b, p)
   f_den = p[:Γh]*(1.0+p[:c].*b).+food_available
   F = bm_matrix ./ f_den
 
-  xyb = p[:x].*p[:y].*b
+  xyb = zeros(eltype(b), length(b))
+  for i in eachindex(b)
+    xyb[i] = p[:x][i]*p[:y][i]*b[i]
+  end
   transfered = F.*xyb
   consumed = transfered./p[:efficiency]
   consumed[isnan.(consumed)] = 0.0
