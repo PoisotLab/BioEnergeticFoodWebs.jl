@@ -136,12 +136,11 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   G = g[:G]
 
   # Balance
-  dbdt = growth .+ gain .- loss
+  dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
-    if dbdt[i] + biomass[i] < eps()
-      dbdt[i] = -biomass[i]
-    else
-      dbdt[i] = dbdt[i]
+    dbdt[i] = growth[i] + gain[i] - loss[i]
+    if (dbdt[i] + biomass[i]) < eps()
+      dbd[t] = -biomass[i]
     end
   end
 
