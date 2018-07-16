@@ -81,15 +81,22 @@ end
 TODO
 """
 function consumption(b, p)
+
   # Total available biomass
-  if p[:rewire_method] ∈ [:ADBM, :Gilljam]
-    bm_matrix = p[:w] .* (b'.*p[:A]) .* p[:costMat]
-  else
-    bm_matrix = p[:w] .* (b'.*p[:A])
+  bm_matrix = zeros(eltype(p[:w]), size(p[:w]))
+  for i in eachindex(bm_matrix)
+    bm_matrix[i] = p[:w][i] * b[last(ind2sub(p[:w], i))] * p[:A][i]
+    if p[:rewire_method] ∈ [:ADBM, :Gilljam]
+      bm_matrix[i] *= p[:costMat][i]
+    end
   end
+
   food_available = vec(sum(bm_matrix, 2))
 
-  f_den = p[:Γh]*(1.0+p[:c].*b).+food_available
+  f_den = zeros(eltype(b), length(b))
+  for i in eachindex(f_den)
+    f_den[i] = p[:Γh]*(1.0-p[:c]*b[i])+food_available[i]
+  end
   F = bm_matrix ./ f_den
 
   xyb = zeros(eltype(b), length(b))
@@ -102,8 +109,7 @@ function consumption(b, p)
 
   gain = vec(sum(transfered, 2))
   loss = vec(sum(consumed, 1))
-  out = Dict(:gain => gain, :loss => loss)
-  return out
+  return gain, loss
 end
 
 """
@@ -113,11 +119,11 @@ This function is the one wrapped by the various integration routines. Based on a
 timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
-function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
+function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   S = size(p[:A], 1)
 
   # producer growth if NP model
-  if p[:productivity] == :nutrients
+  if parameters[:productivity] == :nutrients
     nutrients = biomass[S+1:end] #nutrients concentration
     nutrients[nutrients .< 0] = 0
     biomass = biomass[1:S] #species biomasses
@@ -126,12 +132,10 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
   end
 
   # Consumption
-  cons = consumption(biomass, p)
-  gain = cons[:gain]
-  loss = cons[:loss]
+  gain, loss = consumption(biomass, parameters)
 
   # Growth
-  g = BioEnergeticFoodWebs.get_growth(biomass, p, c = nutrients)
+  g = BioEnergeticFoodWebs.get_growth(biomass, parameters, c = nutrients)
   growth = g[:growth]
   G = g[:G]
 
@@ -144,7 +148,7 @@ function dBdt(derivative, biomass, p::Dict{Symbol,Any}, t)
     end
   end
 
-  p[:productivity] == :nutrients && append!(dbdt, nutrientuptake(nutrients, biomass, p, G))
+  p[:productivity] == :nutrients && append!(dbdt, nutrientuptake(nutrients, biomass, parameters, G))
   for i in eachindex(dbdt)
     derivative[i] = dbdt[i]
   end
