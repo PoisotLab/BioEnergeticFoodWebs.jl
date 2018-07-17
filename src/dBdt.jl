@@ -64,8 +64,8 @@ end
 
 TODO
 """
-function nutrientuptake(parameters, biomass, nutrients, prodgrowth)
-  gr_x_bm = sum(prodgrowth .* biomass)
+function nutrientuptake(parameters, biomass, nutrients, G)
+  gr_x_bm = sum(G .* biomass)
   dndt = zeros(eltype(nutrients), length(nutrients))
   for i in eachindex(dndt)
     turnover = parameters[:D] * (parameters[:supply][i] - nutrients[i])
@@ -74,41 +74,70 @@ function nutrientuptake(parameters, biomass, nutrients, prodgrowth)
   return dndt
 end
 
-"""
-**Consumption**
-
-TODO
-"""
-function consumption(parameters, biomass)
-
-  # Total available biomass
-  bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
-  need_rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
-  for i in eachindex(bm_matrix)
-    @inbounds bm_matrix[i] = parameters[:w][i] * biomass[last(ind2sub(parameters[:w], i))] * parameters[:A][i]
-    if need_rewire
-      bm_matrix[i] *= parameters[:costMat][i]
+function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}; rewire::Bool=false, costMat=nothing)
+  for i in eachindex(biomass), j in eachindex(biomass)
+    @inbounds bm_matrix[i,j] = w[i,j] * biomass[j] * A[i,j]
+    if rewire
+      bm_matrix[i,j] *= costMat[i,j]
     end
   end
+end
 
+function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
   food_available = vec(sum(bm_matrix, 2))
   f_den = zeros(eltype(biomass), length(biomass))
   for i in eachindex(biomass)
-    f_den[i] = parameters[:Γh]*(1.0-parameters[:c]*biomass[i])+food_available[i]
+    f_den[i] = Γh*(1.0-c*biomass[i])+food_available[i]
   end
-  F = bm_matrix ./ f_den
+  for i in eachindex(biomass), j in eachindex(biomass)
+    F[i,j] = bm_matrix[i,j] / f_den[i]
+  end
+end
 
-  xyb = zeros(eltype(biomass), length(biomass))
+function fill_xyb_matrix!(xyb, biomass, x, y)
   for i in eachindex(biomass)
-    xyb[i] = parameters[:x][i]*parameters[:y][i]*biomass[i]
+    @inbounds xyb[i] = x[i]*y[i]*biomass[i]
   end
-  transfered = F.*xyb
-  consumed = transfered./parameters[:efficiency]
-  consumed[isnan.(consumed)] = 0.0
+end
 
-  gain = vec(sum(transfered, 2))
-  loss = vec(sum(consumed, 1))
+function update_F_matrix!(F, xyb)
+  for i in eachindex(xyb), j in eachindex(xyb)
+    @inbounds F[i,j] = F[i,j] * xyb[i]
+  end
+end
+
+function get_trophic_loss!(F, pe)
+  for i in eachindex(F)
+    F[i] = pe[i] == 0.0 ? 0.0 : F[i]/pe[i]
+  end
+end
+
+function consumption(parameters, biomass)
+
+  # Total available biomass
+  bm_matrix = zeros(eltype(biomass), (length(biomass), length(biomass)))
+  rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
+  costMat = rewire ? parameters[:costMat] : nothing
+  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A]; rewire=rewire, costMat=costMat)
+
+  # Available food
+  F = zeros(eltype(biomass), (length(biomass), length(biomass)))
+  fill_F_matrix!(F, bm_matrix, biomass, parameters[:Γh], parameters[:c])
+
+  # XYB matrix
+  xyb = zeros(eltype(biomass), length(biomass))
+  fill_xyb_matrix!(xyb, biomass, parameters[:x], parameters[:y])
+
+  update_F_matrix!(F, xyb)
+
+  gain = vec(sum(F, 2))
+
+  get_trophic_loss!(F, parameters[:efficiency])
+
+  loss = vec(sum(F, 1))
+
   return gain, loss
+
 end
 
 """
@@ -131,21 +160,21 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   end
 
   # Consumption
-  gain, loss = consumption(biomass, parameters)
+  gain, loss = consumption(parameters, biomass)
 
   # Growth
-  growth, G = BioEnergeticFoodWebs.get_growth(biomass, parameters, c = nutrients)
+  growth, G = get_growth(parameters, biomass; c = nutrients)
 
   # Balance
   dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
     dbdt[i] = growth[i] + gain[i] - loss[i]
-    if (dbdt[i] + biomass[i]) < eps()
-      dbdt[i] = -biomass[i]
+    if (dbdt[i] + biomass[i]) < 10.0*eps()
+      dbdt[i] = - biomass[i]
     end
   end
 
-  parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(nutrients, biomass, parameters, G))
+  parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
     derivative[i] = dbdt[i]
   end
