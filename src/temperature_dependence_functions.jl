@@ -32,7 +32,8 @@ TODO
 """
 
 function extended_eppley(T_param)
-    return (bodymass, T) -> bodymass^T_param.β * T_param.a * exp.(T_param.b * T) * (1 - ((T - T_param.T_opt) / (T_param.range/2)).^2)
+    topt = T_param.T_opt - 273.15
+    return (bodymass, T) -> bodymass^T_param.β * T_param.maxrate_0 * exp(T_param.eppley_exponent * (T-273.15)) * (1 - (((T-273.15) - topt) / (T_param.range/2)).^2)
 end
 
 """
