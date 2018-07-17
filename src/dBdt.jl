@@ -80,13 +80,13 @@ end
 
 TODO
 """
-function consumption(b, parameters)
+function consumption(biomass, parameters)
 
   # Total available biomass
   bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
   need_rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
   for i in eachindex(bm_matrix)
-    bm_matrix[i] = parameters[:w][i] * b[last(ind2sub(parameters[:w], i))] * parameters[:A][i]
+    bm_matrix[i] = parameters[:w][i] * biomass[last(ind2sub(parameters[:w], i))] * parameters[:A][i]
     if need_rewire
       bm_matrix[i] *= parameters[:costMat][i]
     end
@@ -94,15 +94,15 @@ function consumption(b, parameters)
 
   food_available = vec(sum(bm_matrix, 2))
 
-  f_den = zeros(eltype(b), length(b))
+  f_den = zeros(eltype(biomass), length(biomass))
   for i in eachindex(f_den)
-    f_den[i] = parameters[:Γh]*(1.0-parameters[:c]*b[i])+food_available[i]
+    f_den[i] = parameters[:Γh]*(1.0-parameters[:c]*biomass[i])+food_available[i]
   end
   F = bm_matrix ./ f_den
 
-  xyb = zeros(eltype(b), length(b))
-  for i in eachindex(b)
-    xyb[i] = parameters[:x][i]*parameters[:y][i]*b[i]
+  xyb = zeros(eltype(biomass), length(biomass))
+  for i in eachindex(biomass)
+    xyb[i] = parameters[:x][i]*parameters[:y][i]*biomass[i]
   end
   transfered = F.*xyb
   consumed = transfered./parameters[:efficiency]
