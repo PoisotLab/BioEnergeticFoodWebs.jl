@@ -57,7 +57,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   if parameters[:rewire_method] == :none
-      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
+      sol = solve(prob, alg, callback = PositiveDomain(), saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
 
