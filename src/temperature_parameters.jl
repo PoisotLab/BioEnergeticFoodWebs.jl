@@ -1,4 +1,4 @@
-"""
+#=
 **Define parameters of thermal dependence functions**
 
 We included different functions of temperature dependence : 1) Extended Eppley function
@@ -9,7 +9,7 @@ We included different functions of temperature dependence : 1) Extended Eppley f
 
 Here we define the parameters for each of these functions
 
-"""
+=#
 
 """
 **Option 1 : Extended Eppley function**
@@ -49,18 +49,18 @@ beta=-0.25
 
 # Metabolic rate
 
-p0_metabolicRate_producer=-16.54
-p0_metabolicRate_herbivore=-16.54
-p0_metabolicRate_carnivore=-16.54
+p0_metabolicRate_producer=2e10
+p0_metabolicRate_herbivore=2e10
+p0_metabolicRate_carnivore=2e10
 
 p0_metabolicRate=zeros(S)
 p0_metabolicRate[p[:is_producer]]=p0_metabolicRate_producer
 p0_metabolicRate[p[:is_herbivore]]=p0_metabolicRate_herbivore
 p0_metabolicRate[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=p0_metabolicRate_carnivore
 
-E_metabolicRate_producer=-0.69
-E_metabolicRate_herbivore=-0.69
-E_metabolicRate_carnivore=-0.69
+E_metabolicRate_producer=0.65
+E_metabolicRate_herbivore=0.65
+E_metabolicRate_carnivore=0.65
 
 E_metabolicRate=zeros(S)
 E_metabolicRate[p[:is_producer]]=E_metabolicRate_producer
@@ -138,3 +138,5 @@ beta_handlingTime=zeros(S)
 
 beta_handlingTime[p[:is_herbivore]]=beta_handlingTime_herbivore
 beta_handlingTime[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=beta_handlingTime_carnivore
+
+para_exponential_BA_r = hcat(p0_metabolicRate, E_metabolicRate, beta_metabolicRate)
