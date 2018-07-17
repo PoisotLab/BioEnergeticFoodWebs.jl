@@ -108,6 +108,12 @@ module TestSimulateProductivity
   s = simulate(p, ones(4), start=0, stop=15)
   @test s[:B][16,4] ≈ parameters[:K] atol=0.001
 
+  # Using nutrient intake
+  p = model_parameters(A, productivity=:nutrients)
+  G = BioEnergeticFoodWebs.growthrate(p, ones(4), 1 ; c = p[:supply])
+  g = BioEnergeticFoodWebs.get_growth(ones(4), p ; c = p[:supply])[:growth]
+  @test G[1] ≈ 0.964 atol=0.001
+  @test g[1] == g[2] == g[3] == g[4]
 end
 
 module TestSimulateRewiring
