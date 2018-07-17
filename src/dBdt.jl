@@ -64,8 +64,8 @@ end
 
 TODO
 """
-function nutrientuptake(parameters, biomass, nutrients, prodgrowth)
-  gr_x_bm = sum(prodgrowth .* biomass)
+function nutrientuptake(parameters, biomass, nutrients, G)
+  gr_x_bm = sum(G .* biomass)
   dndt = zeros(eltype(nutrients), length(nutrients))
   for i in eachindex(dndt)
     turnover = parameters[:D] * (parameters[:supply][i] - nutrients[i])
@@ -145,7 +145,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
     end
   end
 
-  parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(nutrients, biomass, parameters, G))
+  parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
     derivative[i] = dbdt[i]
   end
