@@ -74,14 +74,8 @@ function nutrientuptake(parameters, biomass, nutrients, G)
   return dndt
 end
 
-"""
-    fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}; rewire::Bool=false, costMat=nothing)
-
-Fill the `bm_matrix` object according to the values in w and A -- used
-internally by consumption.
-"""
 function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}; rewire::Bool=false, costMat=nothing)
-  @simd for i in eachindex(bm_matrix)
+  for i in eachindex(bm_matrix)
     @inbounds bm_matrix[i] = w[i] * biomass[last(ind2sub(bm_matrix, i))] * A[i]
     if rewire
       bm_matrix[i] *= costMat[i]
@@ -89,11 +83,35 @@ function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w
   end
 end
 
-"""
-    consumption(parameters, biomass)
+function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
+  food_available = vec(sum(bm_matrix, 2))
+  f_den = zeros(eltype(biomass), length(biomass))
+  for i in eachindex(biomass)
+    f_den[i] = Γh*(1.0-c*biomass[i])+food_available[i]
+  end
+  for i in eachindex(biomass), j in eachindex(biomass)
+    F[i,j] = bm_matrix[i,j] / f_den[i]
+  end
+end
 
-TODO
-"""
+function fill_xyb_matrix!(xyb, biomass, x, y)
+  for i in eachindex(biomass)
+    @inbounds xyb[i] = x[i]*y[i]*biomass[i]
+  end
+end
+
+function update_F_matrix!(F, xyb)
+  for i in eachindex(xyb), j in eachindex(xyb)
+    @inbounds F[i,j] = F[i,j] * xyb[i]
+  end
+end
+
+function get_trophic_loss!(F, pe)
+  for i in eachindex(F)
+    F[i] = pe[i] == 0.0 ? 0.0 : F[i]/pe[i]
+  end
+end
+
 function consumption(parameters, biomass)
 
   # Total available biomass
@@ -102,25 +120,24 @@ function consumption(parameters, biomass)
   costMat = rewire ? parameters[:costMat] : nothing
   fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A]; rewire=rewire, costMat=costMat)
 
-  food_available = vec(sum(bm_matrix, 2))
-  f_den = zeros(eltype(biomass), length(biomass))
-  for i in eachindex(biomass)
-    f_den[i] = parameters[:Γh]*(1.0-parameters[:c]*biomass[i])+food_available[i]
-  end
-  F = bm_matrix ./ f_den
+  # Available food
+  F = zeros(eltype(bm_matrix), size(bm_matrix))
+  fill_F_matrix!(F, bm_matrix, biomass, parameters[:Γh], parameters[:c])
 
+  # XYB matrix
   xyb = zeros(eltype(biomass), length(biomass))
-  for i in eachindex(biomass)
-    xyb[i] = parameters[:x][i]*parameters[:y][i]*biomass[i]
-  end
-  transfered = F.*xyb
-  consumed = transfered./parameters[:efficiency]
-  consumed[isnan.(consumed)] = 0.0
+  fill_xyb_matrix!(xyb, biomass, parameters[:x], parameters[:y])
 
-  gain = vec(sum(transfered, 2))
-  loss = vec(sum(consumed, 1))
+  update_F_matrix!(F, xyb)
+
+  gain = vec(sum(F, 2))
+
+  get_trophic_loss!(F, parameters[:efficiency])
+
+  loss = vec(sum(F, 1))
+
   return gain, loss
-end
+
 
 """
 **Derivatives**
