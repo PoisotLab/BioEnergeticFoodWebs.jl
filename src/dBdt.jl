@@ -172,7 +172,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
     if (dbdt[i] + biomass[i]) < 10.0*eps()
       dbdt[i] = 0.0
     end
-    if biomass[i] < 0.0()
+    if biomass[i] < 0.0
       dbdt[i] = biomass[i]
 
     end
