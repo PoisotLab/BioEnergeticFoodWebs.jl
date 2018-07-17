@@ -86,7 +86,7 @@ function consumption(biomass, parameters)
   bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
   need_rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
   for i in eachindex(bm_matrix)
-    bm_matrix[i] = parameters[:w][i] * biomass[last(ind2sub(parameters[:w], i))] * parameters[:A][i]
+    @inbounds bm_matrix[i] = parameters[:w][i] * biomass[last(ind2sub(parameters[:w], i))] * parameters[:A][i]
     if need_rewire
       bm_matrix[i] *= parameters[:costMat][i]
     end
