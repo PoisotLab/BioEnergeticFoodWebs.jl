@@ -115,7 +115,7 @@ end
 function consumption(parameters, biomass)
 
   # Total available biomass
-  bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
+  bm_matrix = zeros(eltype(biomass), (length(biomass), length(biomass)))
   rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
   costMat = rewire ? parameters[:costMat] : nothing
   fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A]; rewire=rewire, costMat=costMat)
@@ -169,7 +169,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
     dbdt[i] = growth[i] + gain[i] - loss[i]
-    if (dbdt[i] + biomass[i]) < eps()
+    if (dbdt[i] + biomass[i]) < 10.0*eps()
       dbdt[i] = -biomass[i]
     end
   end
