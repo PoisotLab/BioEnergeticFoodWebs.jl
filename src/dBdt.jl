@@ -93,9 +93,8 @@ function consumption(biomass, parameters)
   end
 
   food_available = vec(sum(bm_matrix, 2))
-
   f_den = zeros(eltype(biomass), length(biomass))
-  for i in eachindex(f_den)
+  for i in eachindex(biomass)
     f_den[i] = parameters[:Γh]*(1.0-parameters[:c]*biomass[i])+food_available[i]
   end
   F = bm_matrix ./ f_den
