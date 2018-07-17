@@ -45,7 +45,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
-  t_keep = collect(start:0.5:stop)
+  t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
