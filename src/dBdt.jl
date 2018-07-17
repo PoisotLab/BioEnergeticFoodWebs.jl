@@ -3,7 +3,7 @@
 
 TODO
 """
-function growthrate(parameters, b, i; c = [0.0, 0.0])
+function growthrate(parameters, biomass, i; c = [0.0, 0.0])
   # Default -- species-level regulation
   compete_with = b[i]
   effective_K = parameters[:K]
@@ -39,13 +39,13 @@ This function is used internally by `dBdt` and `producer_growth`. It takes the v
 at each time steps, the model parameters (and the vector of nutrients concentrations
 if `productivity = :nutrients`), and return the producers' growth rates for this time step
 """
-function get_growth(b, parameters; c = 0)
+function get_growth(biomass, parameters; c = 0)
     S = size(parameters[:A], 1)
     growth = zeros(eltype(b), S)
     G = zeros(eltype(b), S)
     for i in eachindex(b)
       if parameters[:is_producer][i]
-        gr = BioEnergeticFoodWebs.growthrate(parameters, b, i, c = c)[1]
+        gr = growthrate(parameters, biomass, i, c = c)[1]
         G[i] = (parameters[:r] * gr * b[i])
         if parameters[:productivity] == :nutrients #Nutrient intake
           growth[i] = G[i] - (parameters[:x][i] * b[i])
@@ -56,8 +56,7 @@ function get_growth(b, parameters; c = 0)
         growth[i] = - parameters[:x][i] * b[i]
       end
     end
-    out = Dict(:growth => growth, :G => G)
-    return out
+    return growth, G
 end
 
 """
@@ -80,7 +79,7 @@ end
 
 TODO
 """
-function consumption(b, parameters)
+function consumption(biomass, parameters)
 
   # Total available biomass
   bm_matrix = zeros(eltype(parameters[:w]), size(parameters[:w]))
@@ -136,9 +135,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   gain, loss = consumption(biomass, parameters)
 
   # Growth
-  g = BioEnergeticFoodWebs.get_growth(biomass, parameters, c = nutrients)
-  growth = g[:growth]
-  G = g[:G]
+  growth, G = BioEnergeticFoodWebs.get_growth(biomass, parameters, c = nutrients)
 
   # Balance
   dbdt = zeros(eltype(biomass), length(biomass))
