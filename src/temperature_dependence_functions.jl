@@ -10,11 +10,6 @@ We included different functions for temperature dependence :
 In each case, the function returns the biological rate value at a given temperature.
 =#
 
-T_param_expba = @NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)
-T_param_extba = @NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25, deactivation_energy = 1.15, T_opt = 293)
-T_param_gauss = @NT(norm_constant = 0.5, range = 20, β = -0.25, T_opt = 293)
-T_param_eppley = @NT(maxrate_0 = 0.81, eppley_exponent = 0.0631, T_opt = 308.185, range = 35, β = -0.25)
-
 """
 **Option 1 : Extended Eppley function**
 
@@ -88,8 +83,6 @@ Ed=0.72
 topt=295
 p[:bodymass]=1
 beta=-0.25
-
-
 """
 
 function extended_BA(T_param)
