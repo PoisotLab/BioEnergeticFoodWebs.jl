@@ -9,6 +9,6 @@ module TestStaniczenkoRewire
     expected_pl = [0 0 0 0 ; 0 0 1 0 ; 0 0 0 0 ; 0 0 0 0]
     @test BioEnergeticFoodWebs.potential_newlinks(A, expected_rg, p) == expected_pl
     expected_newA = [0 0 0 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
-    p[:extinctions] = [1]
+    parameters[:extinctions] = [1]
     @test BioEnergeticFoodWebs.Staniczenko_rewire(p) == expected_newA
 end

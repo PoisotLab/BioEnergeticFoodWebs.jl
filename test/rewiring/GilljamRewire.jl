@@ -15,9 +15,9 @@ module TestGilljamRewire
     @test GilljamTest[1] == A
     @test GilljamTest[2] == p
 #Testing with extinction
-    p[:extinctions] = 1
+    parameters[:extinctions] = 1
     GilljamTest = BioEnergeticFoodWebs.Gilljam(S,p,biomass)
     @test GilljamTest[1] == [0 0 0; 0 1 0; 0 1 1]
-    p[:costMat][2,2] = 0.0
+    parameters[:costMat][2,2] = 0.0
     @test GilljamTest[2] == p
 end

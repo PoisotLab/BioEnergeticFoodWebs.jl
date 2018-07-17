@@ -4,30 +4,30 @@ This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 
-function get_adbm_terms(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
-  E = p[:e] .* p[:bodymass]
-  if p[:Nmethod] == :original
-    N = p[:n] .* (p[:bodymass] .^ p[:ni])
-  elseif p[:Nmethod] == :biomass
+function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
+  E = parameters[:e] .* parameters[:bodymass]
+  if parameters[:Nmethod] == :original
+    N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
+  elseif parameters[:Nmethod] == :biomass
     N = biomass
   end
-  A = p[:a_adbm] * (p[:bodymass].^p[:aj]) * (p[:bodymass].^p[:ai])' # a * pred * prey
+  A = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
   for i = 1:S #for each prey
     A[:,i] = A[:,i] .* N[i]
   end
   λ = A
-  if p[:Hmethod] == :ratio
+  if parameters[:Hmethod] == :ratio
     H = zeros(Float64,(S,S))
-    ratios = (p[:bodymass] ./ p[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
+    ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
     for i = 1:S , j = 1:S
-      if ratios[j,i] < p[:b]
-      H[j,i] =  p[:h_adbm] / (p[:b] - ratios[j,i])
+      if ratios[j,i] < parameters[:b]
+      H[j,i] =  parameters[:h_adbm] / (parameters[:b] - ratios[j,i])
       else
       H[j,i] = Inf
       end
     end
-  elseif p[:Hmethod] == :power
-    H = p[:h_adbm] * (p[:bodymass].^p[:hj]) * (p[:bodymass].^p[:hi])' # h * pred * prey
+  elseif parameters[:Hmethod] == :power
+    H = parameters[:h_adbm] * (parameters[:bodymass].^parameters[:hj]) * (parameters[:bodymass].^parameters[:hi])' # h * pred * prey
   end
 
   adbmTerms = Dict{Symbol,Any}(
@@ -86,14 +86,14 @@ detemine the web structure. This function is called using the callback to includ
 """
 
 
-function ADBM(S::Int64,p::Dict{Symbol,Any},biomass::Vector{Float64})
+function ADBM(S::Int64,parameters::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
   adbmTerms = get_adbm_terms(S,p,biomass)
   E = adbmTerms[:E]
   λ = adbmTerms[:λ]
   H = adbmTerms[:H]
   for j = 1:S
-    if !p[:is_producer][j]
+    if !parameters[:is_producer][j]
       if biomass[j] > 0.0
         feeding = get_feeding_links(S,E,λ,H,biomass,j)
         adbmMAT[j,feeding] = 1
