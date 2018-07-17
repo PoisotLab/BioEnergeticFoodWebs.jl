@@ -45,7 +45,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
-  t_keep = collect(start:1.0:stop)
+  t_keep = collect(start:0.5:stop)
 
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
@@ -57,7 +57,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   if parameters[:rewire_method] == :none
-      sol = solve(prob, alg, callback = PositiveDomain(), saveat=t_keep, dense=false, save_timeseries=false)
+      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
 
