@@ -81,7 +81,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       end
 
       cb = ContinuousCallback(condition, affect!, abstol = 1e-10)
-      sol = solve(prob, alg, callback = CallbackSet(cb, PositiveDomain()), saveat=t_keep, dense=false, save_timeseries=false)
+      sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 
   B = hcat(sol.u...)'

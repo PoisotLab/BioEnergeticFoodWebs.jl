@@ -121,7 +121,7 @@ function consumption(parameters, biomass)
   fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A]; rewire=rewire, costMat=costMat)
 
   # Available food
-  F = zeros(eltype(bm_matrix), size(bm_matrix))
+  F = zeros(eltype(biomass), (length(biomass), length(biomass)))
   fill_F_matrix!(F, bm_matrix, biomass, parameters[:Γh], parameters[:c])
 
   # XYB matrix
