@@ -171,7 +171,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
     dbdt[i] = growth[i] + gain[i] - loss[i]
     if (dbdt[i] + biomass[i]) < 10.0*eps()
       info("$t\t ext $i $(biomass[i]) $(dbdt[i])")
-      dbdt[i] = -biomass[i]
+      dbdt[i] = 0.0
     end
   end
 
