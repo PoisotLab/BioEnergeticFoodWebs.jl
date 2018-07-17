@@ -138,6 +138,7 @@ function consumption(parameters, biomass)
 
   return gain, loss
 
+end
 
 """
 **Derivatives**
