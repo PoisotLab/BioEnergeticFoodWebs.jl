@@ -79,4 +79,62 @@ beta_metabolicRate[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=beta_metabolicRa
 
 # Growth rate
 
+p0_growthRate=-15.68
+E_growthRate=-0.31
+beta_growthRate=-0.25
+
+p0_growthRate_producer=repmat([p0_growthRate],length(p[:is_producer]))
+E_growthRate_producer=repmat([E_growthRate],length(p[:is_producer]))
+beta_growthRate_producer=repmat([beta_growthRate],length(p[:is_producer]))
+
 # Functional response
+
+# Attack rate
+
+p0_attackRate_herbivore=-13.1
+p0_attackRate_carnivore=-13.1
+
+p0_attackRate=zeros(S)
+
+p0_attackRate[p[:is_herbivore]]=p0_attackRate_herbivore
+p0_attackRate[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=p0_attackRate_carnivore
+
+E_attackRate_herbivore=-0.38
+E_attackRate_carnivore=-0.38
+
+E_attackRate=zeros(S)
+
+E_attackRate[p[:is_herbivore]]=E_attackRate_herbivore
+E_attackRate[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=E_attackRate_carnivore
+
+beta_attackRate_herbivore=0.25
+beta_attackRate_carnivore=0.25
+
+beta_attackRate=zeros(S)
+
+beta_attackRate[p[:is_herbivore]]=beta_attackRate_herbivore
+beta_attackRate[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=beta_attackRate_carnivore
+
+# Handling time
+
+p0_handlingTime_herbivore=9.66
+p0_handlingTime_carnivore=9.66
+
+p0_handlingTime=zeros(S)
+p0_handlingTime[p[:is_herbivore]]=p0_handlingTime_herbivore
+p0_handlingTime[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=p0_handlingTime_carnivore
+
+E_handlingTime_herbivore=0.26
+E_handlingTime_carnivore=0.26
+
+E_handlingTime=zeros(S)
+E_handlingTime[p[:is_herbivore]]=E_handlingTime_herbivore
+E_handlingTime[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=E_handlingTime_carnivore
+
+beta_handlingTime_herbivore=-0.45
+beta_handlingTime_carnivore=-0.45
+
+beta_handlingTime=zeros(S)
+
+beta_handlingTime[p[:is_herbivore]]=beta_handlingTime_herbivore
+beta_handlingTime[(.!p[:is_herbivore]) .& (.!p[:is_producer])]=beta_handlingTime_carnivore
