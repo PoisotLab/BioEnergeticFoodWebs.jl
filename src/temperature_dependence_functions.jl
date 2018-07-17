@@ -110,16 +110,20 @@ beta=-0.25
 
 """
 
-function exponential_BA(para_exponential_BA,p)
+function exponential_BA(para_exponential_BA,p;direction=:increase)
     temp=para_exponential_BA[1]
     p0=para_exponential_BA[2]
     E=para_exponential_BA[3]
     beta=para_exponential_BA[4]
-
     k=8.617e-5 # Boltzmann constant
 
-    return p0.*p[:bodymass].^beta.*exp.(-E./(k*temp))
-
+    if direction==:increase
+        return p0.*p[:bodymass].^beta.*exp.(-E./(k*temp))
+    elseif direction==:decrease
+        return p0.*p[:bodymass].^beta.*exp.(E./(k*temp))
+    else
+        error("Direction should one of :increase or :decrease")
+    end
 end
 
 """
