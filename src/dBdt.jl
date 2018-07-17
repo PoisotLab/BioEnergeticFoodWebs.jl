@@ -131,10 +131,10 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   end
 
   # Consumption
-  gain, loss = consumption(biomass, parameters)
+  gain, loss = consumption(parameters, biomass)
 
   # Growth
-  growth, G = BioEnergeticFoodWebs.get_growth(biomass, parameters, c = nutrients)
+  growth, G = get_growth(parameters, biomass; c = nutrients)
 
   # Balance
   dbdt = zeros(eltype(biomass), length(biomass))
