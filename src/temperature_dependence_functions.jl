@@ -59,7 +59,12 @@ beta=-0.25
 
 function exponentialBA(T_param)
     k=8.617e-5
-    return (bodymass, T) -> T_param.norm_constant.*((bodymass.^T_param.β).*exp.(-T_param.activation_energy./(k*T)))
+    return (bodymass, T) -> T_param.norm_constant*((bodymass^T_param.β)*exp(-T_param.activation_energy/(k*T)))
+end
+
+function exponentialBA2(T_param)
+    k=8.617e-5
+    return (bodymass, T) -> T_param.norm_constant*(bodymass.^T_param.β)*exp(T_param.activation_energy*((T_param.T0-T)/(k*T*T_param.T0)))
 end
 
 """
