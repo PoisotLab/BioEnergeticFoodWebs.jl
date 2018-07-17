@@ -75,10 +75,10 @@ function nutrientuptake(parameters, biomass, nutrients, G)
 end
 
 function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}; rewire::Bool=false, costMat=nothing)
-  for i in eachindex(bm_matrix)
-    @inbounds bm_matrix[i] = w[i] * biomass[last(ind2sub(bm_matrix, i))] * A[i]
+  for i in eachindex(biomass), j in eachindex(biomass)
+    @inbounds bm_matrix[i,j] = w[i,j] * biomass[last(ind2sub(bm_matrix, i))] * A[i,j]
     if rewire
-      bm_matrix[i] *= costMat[i]
+      bm_matrix[i,j] *= costMat[i,j]
     end
   end
 end
