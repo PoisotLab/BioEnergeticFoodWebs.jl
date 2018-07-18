@@ -61,7 +61,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       #  !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
       #end
       function condition(u,t,integrator)
-        return !all(integrator.u .< 100.0*eps()) ? 0 : 1
+        return !all(integrator.u .< 100.0*eps())
       end
 
       function affect!(integrator)
@@ -71,7 +71,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
         parameters = update_rewiring_parameters(parameters, integrator.u)
       end
 
-      cb = ContinuousCallback(condition, affect!, abstol = 1e-10)
+      cb = DiscreteCallback(condition, affect!, abstol = 1e-10)
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 
