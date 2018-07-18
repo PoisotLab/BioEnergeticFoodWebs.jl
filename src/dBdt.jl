@@ -149,6 +149,7 @@ parameters `p`, it will return `dB/dt` for every species.
 """
 function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   S = size(parameters[:A], 1)
+  orig_biomass = copy(biomass)
 
   # producer growth if NP model
   if parameters[:productivity] == :nutrients
@@ -176,7 +177,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
 
   parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
-    derivative[i] = dbdt[i]
+    derivative[i] = orig_biomass[i] == 0.0 ? 0.0 : dbdt[i]
   end
   return dbdt
 end

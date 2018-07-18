@@ -70,7 +70,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function)
   sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false)
 
-
   B = hcat(sol.u...)'
 
   if parameters[:productivity] == :nutrients
