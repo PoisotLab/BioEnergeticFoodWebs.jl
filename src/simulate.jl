@@ -55,7 +55,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   function remove_species!(integrator)
-    info("Removing a species")
     for i in eachindex(integrator.u)
       integrator.u[i] = integrator.u[i] < 10.0*eps() ? 0.0 : integrator.u[i]
     end
@@ -69,7 +68,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
 
   extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function; save_positions=(true,true))
-  sol = solve(prob, alg, callback = CallbackSet(extinction_callback, PositiveDomain()), saveat=t_keep, dense=false, save_timeseries=false)
+  sol = solve(prob, alg, callback = CallbackSet(extinction_callback, PositiveDomain()), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
 
   B = hcat(sol.u...)'
 
