@@ -5,6 +5,7 @@ using OrdinaryDiffEq, DiffEqCallbacks
 using JSON
 using JLD
 using StatsBase
+using NamedTuples 
 
 export trophic_rank,
   model_parameters,
