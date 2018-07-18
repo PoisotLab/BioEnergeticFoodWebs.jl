@@ -98,7 +98,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         T::Float64 = 273.15,
         handling::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
         attackrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
-        metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
+        metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138), p),
         growthrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)))
 
   BioEnergeticFoodWebs.check_food_web(A)
