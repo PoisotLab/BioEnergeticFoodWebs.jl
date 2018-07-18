@@ -29,6 +29,25 @@ function no_effect_r()
 end
 
 """
+****
+TODO
+"""
+
+function no_effect_handlingt()
+    return (bodymass, T) ->
+end
+
+"""
+****
+TODO
+"""
+
+function no_effect_attackr()
+    return (bodymass, T) ->
+end
+
+
+"""
 **Option 1 : Extended Eppley function**
 
 This function can be called as an argument in `model_parameters` to define an extended Eppley funtion (ref) for one of:
