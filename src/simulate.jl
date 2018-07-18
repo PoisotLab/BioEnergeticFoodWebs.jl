@@ -40,6 +40,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   @assert use ∈ vec([:stiff :nonstiff])
+  alg = use == :stiff ? Rodas4(autodiff=false) : Tsit5()
 
   S = size(parameters[:A],1)
 
@@ -50,34 +51,34 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
-  if use == :stiff
-      alg = Rodas4(autodiff=false)
-  else
-      alg = Tsit5()
-  end
-
   if parameters[:rewire_method] == :none
       sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
   else
       extspecies = Int[]
 
+      #function condition(u,t,integrator)
+      #  isext = u .== 0.0
+      #  !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
+      #end
       function condition(u,t,integrator)
-        isext = u .== 0.0
-        !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
+        !all(sim[:B][end,:] .< 10.0*eps())
       end
 
       function affect!(integrator)
-        parameters = update_rewiring_parameters(parameters, integrator.u)
         #id extinct species
         isext = integrator.u .== 0.0
-        minb = minimum(integrator.u[.!isext])
-        sp_min = findin(integrator.u, minb)[1]
+        for i in eachindex(integrator.u)
+          integrator.u[i] = integrator.u[i] < 10.0*eps() $ 0.0 : integrator.u[i]
+        end
+        parameters = update_rewiring_parameters(parameters, integrator.u)
+        #minb = minimum(integrator.u[.!isext])
+        #sp_min = findin(integrator.u, minb)[1]
         #push id to extspecies
-        push!(extspecies, sp_min)
+        #push!(extspecies, sp_min)
         #isext[extspecies] = true
         #set biomass to 0 to avoid ghost species
-        info(string("extinction of species ", sp_min))
-        integrator.u[sp_min] = 0.0
+        #info(string("extinction of species ", sp_min))
+        #integrator.u[sp_min] = 0.0
       end
 
       cb = ContinuousCallback(condition, affect!, abstol = 1e-10)
