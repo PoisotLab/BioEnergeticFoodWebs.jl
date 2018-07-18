@@ -11,12 +11,21 @@ In each case, the function returns the biological rate value at a given temperat
 =#
 
 """
-**Title**
+****
 TODO
 """
 
 function no_effect_x(T_param)
     return (bodymass, T) -> a .* (bodymass.^-0.25)
+end
+
+"""
+****
+TODO
+"""
+
+function no_effect_r()
+    return (bodymass, T) -> 1.0
 end
 
 """
