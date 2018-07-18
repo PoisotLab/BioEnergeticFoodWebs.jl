@@ -79,7 +79,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
         a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
-        m_producer::Float64=1.0,
+        #m_producer::Float64=1.0,
         y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
         Γ::Float64=0.5, α::Float64=1.0,
         productivity::Symbol=:species,
@@ -94,7 +94,12 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         preferenceMethod::Symbol = :generalist,
         D::Float64 = 0.25, supply::Array{Float64, 1} = [4.0],
         υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
-        K2::Array{Float64, 1} = [0.15])
+        K2::Array{Float64, 1} = [0.15],
+        T::Float64 = 273.15,
+        handling::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
+        attackrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
+        metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
+        growthrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)))
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -109,12 +114,11 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   :e_carnivore    => e_carnivore,
   :e_herbivore    => e_herbivore,
   :h              => h,
-  :m_producer     => m_producer,
   :r              => r,
   :vertebrates    => falses(size(A)[1]),
   :y_invertebrate => y_invertebrate,
   :y_vertebrate   => y_vertebrate,
-  :Γ              => Γ,
+  #:Γ              => Γ,
   :A              => A,
   :α              => α
   )
@@ -210,6 +214,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   a = zeros(Float64, S)
   x = zeros(Float64, S)
   y = zeros(Float64, S)
+  r = zeros(Float64, S) # producers groth rate
+  attack_r = zeros(Float64, S) # attack rates
+  handling_t = zeros(Float64, S) # handling times
+  Γ = zeros(Float64, S) #B0, half saturation density
   TR = trophic_rank(A)
   p[:trophic_rank] = TR
   is_herbivore = falses(S)
@@ -232,11 +240,13 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   a[is_producer] = p[:a_producer]
 
   # Step 12 -- Metabolic rate
+  m_producer = minimum(p[:bodymass][is_producer])
+  p[:m_producer] = m_producer
   body_size_relative = p[:bodymass] ./ p[:m_producer]
-  body_size_scaled = body_size_relative.^-0.25
-  x = a .* body_size_scaled
+  # body_size_scaled = body_size_relative.^-0.25
+  x = metabolicrate(body_size_relative, T)
 
-  # Step 13 -- Assimilation efficiency
+  # Step 13 -- Maximum relative consumption rate
   y = zeros(S)
   y[p[:vertebrates]] = p[:y_vertebrate]
   y[.!p[:vertebrates]] = p[:y_invertebrate]
