@@ -61,7 +61,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       #  !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
       #end
       function condition(u,t,integrator)
-        !all(integrator.u .< 100.0*eps())
+        return !all(integrator.u .< 100.0*eps()) ? 0 : 1
       end
 
       function affect!(integrator)
