@@ -11,6 +11,15 @@ In each case, the function returns the biological rate value at a given temperat
 =#
 
 """
+**Title**
+TODO
+"""
+
+function no_effect_x(T_param)
+    return (bodymass, T) -> T_param.a * bodymass
+end
+
+"""
 **Option 1 : Extended Eppley function**
 
 This function can be called as an argument in `model_parameters` to define an extended Eppley funtion (ref) for one of:
@@ -60,11 +69,6 @@ beta=-0.25
 function exponentialBA(T_param)
     k=8.617e-5
     return (bodymass, T) -> T_param.norm_constant*((bodymass^T_param.β)*exp(-T_param.activation_energy/(k*T)))
-end
-
-function exponentialBA2(T_param)
-    k=8.617e-5
-    return (bodymass, T) -> T_param.norm_constant*(bodymass.^T_param.β)*exp(T_param.activation_energy*((T_param.T0-T)/(k*T*T_param.T0)))
 end
 
 """
