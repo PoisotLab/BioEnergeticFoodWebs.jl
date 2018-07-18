@@ -170,9 +170,9 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
     dbdt[i] = growth[i] + gain[i] - loss[i]
-    if (dbdt[i] + biomass[i]) < 10.0*eps()
-      dbdt[i] = - biomass[i]
-    end
+    #if (dbdt[i] + biomass[i]) < 10.0*eps()
+    #  dbdt[i] = - biomass[i]
+    #end
   end
 
   parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
