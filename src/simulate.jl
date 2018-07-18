@@ -65,10 +65,10 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     parameters = update_rewiring_parameters(parameters, integrator.u)
   end
 
-  affect_function = parameters[:rewire_function] == :none ? remove_species! : remove_species_and_rewire!
+  affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
 
   extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function)
-  sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+  sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false)
 
 
   B = hcat(sol.u...)'
