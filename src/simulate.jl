@@ -50,30 +50,26 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
-
-  if parameters[:rewire_method] == :none
-      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
-  else
-      extspecies = Int[]
-
-      #function condition(u,t,integrator)
-      #  isext = u .== 0.0
-      #  !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
-      #end
-      function condition(u,t,integrator)
-        return !all(integrator.u .< 100.0*eps())
-      end
-
-      function affect!(integrator)
-        for i in eachindex(integrator.u)
-          integrator.u[i] = integrator.u[i] < 100.0*eps() $ 0.0 : integrator.u[i]
-        end
-        parameters = update_rewiring_parameters(parameters, integrator.u)
-      end
-
-      cb = DiscreteCallback(condition, affect!, abstol = 1e-10)
-      sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+  function species_under_extinction_threshold(u, t, integrator)
+    return !all(integrator.u .< 100.0*eps())
   end
+
+  function remove_species!(integrator)
+    for i in eachindex(integrator.u)
+      integrator.u[i] = integrator.u[i] < 100.0*eps() $ 0.0 : integrator.u[i]
+    end
+  end
+
+  function remove_species_and_rewire!(integrator)
+    remove_species!(integrator)
+    parameters = update_rewiring_parameters(parameters, integrator.u)
+  end
+
+  affect_function = parameters[:rewire_function] == :none ? remove_species! : remove_species_and_rewire!
+
+  extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function)
+  sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+
 
   B = hcat(sol.u...)'
 
