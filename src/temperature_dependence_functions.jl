@@ -11,12 +11,21 @@ In each case, the function returns the biological rate value at a given temperat
 =#
 
 """
-**Title**
+****
 TODO
 """
 
-function no_effect_x3(T_param, p)
+function no_effect_x(T_param, p)
     return (bodymass, T) ->  (T_param.a_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.a_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.a_producer .* p[:is_producer]) .* (bodymass.^-0.25)
+end
+
+"""
+****
+TODO
+"""
+
+function no_effect_r()
+    return (bodymass, T) -> 1.0
 end
 
 """

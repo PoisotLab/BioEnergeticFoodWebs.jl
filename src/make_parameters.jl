@@ -75,7 +75,7 @@ See the online documentation and the original references for more details.
 
 """
 
-function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
+function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
         a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
@@ -96,10 +96,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
         υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
         K2::Array{Float64, 1} = [0.15],
         T::Float64 = 273.15,
-        handling::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
+        handlingtime::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
         attackrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
-        metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138), p),
-        growthrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)))
+        metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
+        growthrate::Function = no_effect_r())
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -246,12 +246,22 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   # body_size_scaled = body_size_relative.^-0.25
   x = metabolicrate(body_size_relative, T)
 
-  # Step 13 -- Maximum relative consumption rate
+  # Step 13 -- Growth rate
+  r = growthrate(body_size_relative, T)
+
+  # Step 14 -- Handling time
+  handling_t = handlingtime(body_size_relative, T)
+
+  # Step 15 -- Attack rate
+  attack_r = attackrate(body_size_relative, T)
+
+
+  # Step 16 -- Maximum relative consumption rate
   y = zeros(S)
   y[p[:vertebrates]] = p[:y_vertebrate]
   y[.!p[:vertebrates]] = p[:y_invertebrate]
 
-  # Step 14 -- Efficiency matrix
+  # Step 17 -- Efficiency matrix
   get_efficiency(p)
 
   # Final Step -- store the parameters in the dict. p
