@@ -16,7 +16,7 @@ TODO
 """
 
 function no_effect_x(T_param)
-    return (bodymass, T) -> T_param.a * bodymass
+    return (bodymass, T) -> T_param.a * (bodymass^-0.25)
 end
 
 """
