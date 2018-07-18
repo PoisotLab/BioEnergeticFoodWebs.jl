@@ -51,12 +51,12 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
   function species_under_extinction_threshold(u, t, integrator)
-    return !all(integrator.u .< 100.0*eps())
+    return !all(integrator.u .< 10.0*eps())
   end
 
   function remove_species!(integrator)
     for i in eachindex(integrator.u)
-      integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
+      integrator.u[i] = integrator.u[i] < 10.0*eps() ? 0.0 : integrator.u[i]
     end
   end
 

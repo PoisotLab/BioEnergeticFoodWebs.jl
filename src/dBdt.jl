@@ -177,7 +177,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
 
   parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
-    derivative[i] = orig_biomass[i] == 0.0 ? 0.0 : dbdt[i]
+    derivative[i] = dbdt[i]
   end
   return dbdt
 end
