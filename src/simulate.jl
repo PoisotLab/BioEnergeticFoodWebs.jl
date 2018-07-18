@@ -61,24 +61,14 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       #  !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
       #end
       function condition(u,t,integrator)
-        !all(integrator.u .< 10.0*eps())
+        !all(integrator.u .< 100.0*eps())
       end
 
       function affect!(integrator)
-        #id extinct species
-        isext = integrator.u .== 0.0
         for i in eachindex(integrator.u)
-          integrator.u[i] = integrator.u[i] < 10.0*eps() $ 0.0 : integrator.u[i]
+          integrator.u[i] = integrator.u[i] < 100.0*eps() $ 0.0 : integrator.u[i]
         end
         parameters = update_rewiring_parameters(parameters, integrator.u)
-        #minb = minimum(integrator.u[.!isext])
-        #sp_min = findin(integrator.u, minb)[1]
-        #push id to extspecies
-        #push!(extspecies, sp_min)
-        #isext[extspecies] = true
-        #set biomass to 0 to avoid ghost species
-        #info(string("extinction of species ", sp_min))
-        #integrator.u[sp_min] = 0.0
       end
 
       cb = ContinuousCallback(condition, affect!, abstol = 1e-10)
