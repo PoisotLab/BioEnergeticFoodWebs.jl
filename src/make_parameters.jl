@@ -244,16 +244,16 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   p[:m_producer] = m_producer
   body_size_relative = p[:bodymass] ./ p[:m_producer]
   # body_size_scaled = body_size_relative.^-0.25
-  x = metabolicrate(body_size_relative, T)
+  x = metabolicrate(body_size_relative, T, p)
 
   # Step 13 -- Growth rate
-  r = growthrate(body_size_relative, T)
+  r = growthrate(body_size_relative, T, p)
 
   # Step 14 -- Handling time
-  handling_t = handlingtime(body_size_relative, T)
+  handling_t = handlingtime(body_size_relative, T, p)
 
   # Step 15 -- Attack rate
-  attack_r = attackrate(body_size_relative, T)
+  attack_r = attackrate(body_size_relative, T, p)
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 / handling_t

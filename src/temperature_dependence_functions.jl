@@ -15,8 +15,8 @@ In each case, the function returns the biological rate value at a given temperat
 TODO
 """
 
-function no_effect_x(T_param, p)
-    return (bodymass, T) ->  (T_param.a_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.a_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.a_producer .* p[:is_producer]) .* (bodymass.^-0.25)
+function no_effect_x(T_param)
+    return (bodymass, T, p) ->  (T_param.a_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.a_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.a_producer .* p[:is_producer]) .* (bodymass.^-0.25)
 end
 
 """
@@ -25,7 +25,7 @@ TODO
 """
 
 function no_effect_r(T_param)
-    return (bodymass, T) -> T_param.r
+    return (bodymass, T, p) -> T_param.r
 end
 
 """
@@ -33,8 +33,8 @@ end
 TODO
 """
 
-function no_effect_handlingt(T_param, p)
-     return (bodymass, T) ->  1 ./ (T_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.y_producer .* p[:is_producer])
+function no_effect_handlingt(T_param)
+     return (bodymass, T, p) ->  1 ./ (T_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.y_producer .* p[:is_producer])
 end
 
 """
@@ -42,8 +42,8 @@ end
 TODO
 """
 
-function no_effect_attackr(T_param, p)
-    return (bodymass, T) -> 1 ./ (T_param.Γ .* handling_t)
+function no_effect_attackr(T_param)
+    return (bodymass, T, p) -> 1 ./ (T_param.Γ .* handling_t)
 end
 
 
@@ -70,7 +70,7 @@ TODO
 
 function extended_eppley(T_param)
     topt = T_param.T_opt - 273.15
-    return (bodymass, T) -> bodymass^T_param.β * T_param.maxrate_0 * exp(T_param.eppley_exponent * (T-273.15)) * (1 - (((T-273.15) - topt) / (T_param.range/2)).^2)
+    return (bodymass, T, p) -> bodymass^T_param.β * T_param.maxrate_0 * exp(T_param.eppley_exponent * (T-273.15)) * (1 - (((T-273.15) - topt) / (T_param.range/2)).^2)
 end
 
 """
@@ -96,7 +96,7 @@ beta=-0.25
 
 function exponentialBA(T_param)
     k=8.617e-5
-    return (bodymass, T) -> T_param.norm_constant*((bodymass^T_param.β)*exp(-T_param.activation_energy/(k*T)))
+    return (bodymass, T, p) -> T_param.norm_constant*((bodymass^T_param.β)*exp(-T_param.activation_energy/(k*T)))
 end
 
 """
@@ -129,7 +129,7 @@ function extended_BA(T_param)
     pwr = T_param.β*exp(-T_param.activation_energy/kt)
     Δenergy = T_param.deactivation_energy - T_param.activation_energy
     lt = 1 / (1 + exp(-1 / kt * (T_param.deactivation_energy - (T_param.deactivation_energy / T_param.T_opt + k * log(T_param.activation_energy / Δenergy))*T)))
-    return(bodymass, T) -> T_param.norm_const * (bodymass^pwr) * lt
+    return(bodymass, T, p) -> T_param.norm_const * (bodymass^pwr) * lt
 end
 
 
@@ -157,8 +157,8 @@ beta=-0.25
 
 function gaussian(T_param)
     if T_param.shape = :hump
-        return(bodymass, T) -> bodymass^T_param.β * T_param.norm_const * exp(-(T-T_param.T_opt)^2/(2*T_param.range^2))
+        return(bodymass, T, p) -> bodymass^T_param.β * T_param.norm_const * exp(-(T-T_param.T_opt)^2/(2*T_param.range^2))
     elseif T_param.shape = :U
-        return(bodymass, T) -> bodymass^T_param.β * T_param.norm_const * exp((T-T_param.T_opt)^2/(2*T_param.range^2))
+        return(bodymass, T, p) -> bodymass^T_param.β * T_param.norm_const * exp((T-T_param.T_opt)^2/(2*T_param.range^2))
     end
 end
