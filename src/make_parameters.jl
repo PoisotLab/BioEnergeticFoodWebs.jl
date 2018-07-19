@@ -97,9 +97,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         K2::Array{Float64, 1} = [0.15],
         T::Float64 = 273.15,
         handlingtime::Function = no_effect_handlingt(@NT(y_vertebrate = 4.0, y_invertebrate = 8.0)),
-        attackrate::Function = no_effect_attackr(),
+        attackrate::Function = no_effect_attackr(@NT(Γ = 0.5)),
         metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
-        growthrate::Function = no_effect_r(@NT(Γ = 0.5)))
+        growthrate::Function = no_effect_r())
 
   BioEnergeticFoodWebs.check_food_web(A)
 
