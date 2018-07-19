@@ -19,18 +19,18 @@ function check_initial_parameters(p)
   required_keys = [
     :Z,
     :vertebrates,
-    :a_vertebrate,
-    :a_invertebrate,
-    :a_producer,
-    :m_producer,
-    :y_vertebrate,
-    :y_invertebrate,
+    #:a_vertebrate,
+    #:a_invertebrate,
+    #:a_producer,
+    #:m_producer,
+    #:y_vertebrate,
+    #:y_invertebrate,
     :e_herbivore,
     :e_carnivore,
     :h,
-    :Γ,
+    #:Γ,
     :c,
-    :r,
+    #:r,
     :K
   ]
   for k in required_keys
