@@ -76,11 +76,12 @@ See the online documentation and the original references for more details.
 """
 
 function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
-        a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
-        a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
+        #a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
+        #a_vertebrate::Float64=0.88,
+        c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         #m_producer::Float64=1.0,
-        y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
+        #y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
         Γ::Float64=0.5, α::Float64=1.0,
         productivity::Symbol=:species,
         bodymass::Array{Float64, 1}=[0.0],
@@ -107,8 +108,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   p = Dict{Symbol,Any}(
   :K              => K,
   :Z              => Z,
-  :a_invertebrate => a_invertebrate,
-  :a_producer     => a_producer,
+  #:a_invertebrate => a_invertebrate,
+  #:a_producer     => a_producer,
   :a_vertebrate   => a_vertebrate,
   :c              => c,
   :e_carnivore    => e_carnivore,
@@ -116,8 +117,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   :h              => h,
   :r              => r,
   :vertebrates    => falses(size(A)[1]),
-  :y_invertebrate => y_invertebrate,
-  :y_vertebrate   => y_vertebrate,
+  #:y_invertebrate => y_invertebrate,
+  #:y_vertebrate   => y_vertebrate,
   #:Γ              => Γ,
   :A              => A,
   :α              => α
@@ -211,9 +212,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   efficiency = zeros(Float64, size(A))
   w = zeros(Float64, S)
   M = zeros(Float64, S)
-  a = zeros(Float64, S)
+  #a = zeros(Float64, S)
   x = zeros(Float64, S)
-  y = zeros(Float64, S)
+  #y = zeros(Float64, S)
   r = zeros(Float64, S) # producers groth rate
   attack_r = zeros(Float64, S) # attack rates
   handling_t = zeros(Float64, S) # handling times
@@ -235,9 +236,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   end
 
   # Step 11 -- Scaling constraints based on organism type
-  a[p[:vertebrates]] = p[:a_vertebrate]
-  a[.!p[:vertebrates]] = p[:a_invertebrate]
-  a[is_producer] = p[:a_producer]
+  # a[p[:vertebrates]] = p[:a_vertebrate]
+  # a[.!p[:vertebrates]] = p[:a_invertebrate]
+  # a[is_producer] = p[:a_producer]
 
   # Step 12 -- Metabolic rate
   m_producer = minimum(p[:bodymass][is_producer])
