@@ -272,7 +272,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   #p[:efficiency] = efficiency
   p[:y] = y
   p[:x] = x
-  p[:a] = a
+  #p[:a] = a
   #p[:is_herbivore] = is_herbivore
   p[:Γh] = p[:Γ]^p[:h]
   p[:np] = sum(p[:is_producer])
