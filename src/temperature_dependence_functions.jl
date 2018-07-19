@@ -156,9 +156,9 @@ beta=-0.25
 """
 
 function gaussian(T_param)
-    if T_param.shape = :hump
+    if T_param.shape == :hump
         return(bodymass, T, p) -> bodymass^T_param.β * T_param.norm_const * exp(-(T-T_param.T_opt)^2/(2*T_param.range^2))
-    elseif T_param.shape = :U
+    elseif T_param.shape == :U
         return(bodymass, T, p) -> bodymass^T_param.β * T_param.norm_const * exp((T-T_param.T_opt)^2/(2*T_param.range^2))
     end
 end
