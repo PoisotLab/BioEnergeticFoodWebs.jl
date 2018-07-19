@@ -275,7 +275,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   p[:x] = x
   #p[:a] = a
   #p[:is_herbivore] = is_herbivore
-  p[:Γh] = p[:Γ]^p[:h]
+  p[:Γh] = p[:Γ] .^ p[:h]
   p[:np] = sum(p[:is_producer])
   p[:ar] = attack_r
   p[:r] = r
