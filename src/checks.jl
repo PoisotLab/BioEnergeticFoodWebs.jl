@@ -52,7 +52,7 @@ function check_parameters(p)
     :efficiency,
     :y,
     :x,
-    :a,
+    #:a,
     :is_herbivore,
     :is_producer
   ]
