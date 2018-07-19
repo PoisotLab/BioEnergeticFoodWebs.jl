@@ -5,7 +5,7 @@ using OrdinaryDiffEq, DiffEqCallbacks
 using JSON
 using JLD
 using StatsBase
-using NamedTuples 
+using NamedTuples
 
 export trophic_rank,
   model_parameters,
@@ -40,6 +40,6 @@ include(joinpath(".", "rewiring/parameters/checkParameters.jl"))
 #include(joinpath(".", "rewiring/parameters/makeParameters.jl"))
 include(joinpath(".", "rewiring/parameters/updateParameters.jl"))
 
-
+include(joinpath(".", "temperature_dependence_functions.jl"))
 
 end
