@@ -24,8 +24,8 @@ end
 TODO
 """
 
-function no_effect_r()
-    return (bodymass, T) -> 1.0
+function no_effect_r(T_param)
+    return (bodymass, T) -> T_param.r
 end
 
 """
