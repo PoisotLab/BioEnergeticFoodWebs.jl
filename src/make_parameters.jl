@@ -251,15 +251,18 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   # Step 14 -- Handling time
   handling_t = handlingtime(body_size_relative, T, p)
+  y = 1 ./ handling_t
+
+  # Step 16 -- Maximum relative consumption rate
+  y = 1 ./ handling_t
+  p[:ht] = handling_t
 
   # Step 15 -- Attack rate
   attack_r = attackrate(body_size_relative, T, p)
 
-  # Step 16 -- Maximum relative consumption rate
-  y = 1 / handling_t
-
   # Step 17 -- Half-saturation constant
-  Γ = 1 / (attack_r * handling_t)
+  Γ = 1 ./ (attack_r .* handling_t)
+  Γ[isnan.(Γ)] = 0.0
 
   # Step 18 -- Efficiency matrix
   get_efficiency(p)
@@ -273,6 +276,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   #p[:is_herbivore] = is_herbivore
   p[:Γh] = p[:Γ]^p[:h]
   p[:np] = sum(p[:is_producer])
+  p[:ar] = attack_r
+  p[:r] = r
 
   BioEnergeticFoodWebs.check_parameters(p)
 

@@ -34,7 +34,7 @@ TODO
 """
 
 function no_effect_handlingt(T_param)
-     return (bodymass, T, p) ->  1 ./ (T_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.y_producer .* p[:is_producer])
+     return (bodymass, T, p) ->  1 ./ (T_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]))
 end
 
 """
@@ -43,7 +43,7 @@ TODO
 """
 
 function no_effect_attackr(T_param)
-    return (bodymass, T, p) -> 1 ./ (T_param.Γ .* handling_t)
+    return (bodymass, T, p) -> 1 ./ (T_param.Γ .* p[:ht])
 end
 
 
