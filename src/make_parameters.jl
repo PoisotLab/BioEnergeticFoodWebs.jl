@@ -258,7 +258,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   y = 1 / handling_t
 
   # Step 17 -- Half-saturation constant
-  Γ = 1 / attack_r .* handling_t
+  Γ = 1 / (attack_r * handling_t)
 
   # Step 18 -- Efficiency matrix
   get_efficiency(p)
