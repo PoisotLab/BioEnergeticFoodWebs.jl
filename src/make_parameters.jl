@@ -76,8 +76,9 @@ See the online documentation and the original references for more details.
 """
 
 function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
-        a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
-        a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
+        #a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
+        #a_vertebrate::Float64=0.88,
+        c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         #m_producer::Float64=1.0,
         α::Float64=1.0,
@@ -96,9 +97,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         K2::Array{Float64, 1} = [0.15],
         T::Float64 = 273.15,
         handlingtime::Function = no_effect_handlingt(@NT(y_vertebrate = 4.0, y_invertebrate = 8.0)),
-        attackrate::Function = no_effect_attackr(),
+        attackrate::Function = no_effect_attackr(@NT(Γ = 0.5)),
         metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
-        growthrate::Function = no_effect_r(@NT(Γ = 0.5)))
+        growthrate::Function = no_effect_r(@NT(r = 1.0)))
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -106,8 +107,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   p = Dict{Symbol,Any}(
   :K              => K,
   :Z              => Z,
-  :a_invertebrate => a_invertebrate,
-  :a_producer     => a_producer,
+  #:a_invertebrate => a_invertebrate,
+  #:a_producer     => a_producer,
   :a_vertebrate   => a_vertebrate,
   :c              => c,
   :e_carnivore    => e_carnivore,
@@ -115,8 +116,8 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   :h              => h,
   :r              => r,
   :vertebrates    => falses(size(A)[1]),
-  :y_invertebrate => y_invertebrate,
-  :y_vertebrate   => y_vertebrate,
+  #:y_invertebrate => y_invertebrate,
+  #:y_vertebrate   => y_vertebrate,
   #:Γ              => Γ,
   :A              => A,
   :α              => α
@@ -210,9 +211,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   efficiency = zeros(Float64, size(A))
   w = zeros(Float64, S)
   M = zeros(Float64, S)
-  a = zeros(Float64, S)
+  #a = zeros(Float64, S)
   x = zeros(Float64, S)
-  y = zeros(Float64, S)
+  #y = zeros(Float64, S)
   r = zeros(Float64, S) # producers groth rate
   attack_r = zeros(Float64, S) # attack rates
   handling_t = zeros(Float64, S) # handling times
@@ -234,25 +235,25 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   end
 
   # Step 11 -- Scaling constraints based on organism type
-  a[p[:vertebrates]] = p[:a_vertebrate]
-  a[.!p[:vertebrates]] = p[:a_invertebrate]
-  a[is_producer] = p[:a_producer]
+  # a[p[:vertebrates]] = p[:a_vertebrate]
+  # a[.!p[:vertebrates]] = p[:a_invertebrate]
+  # a[is_producer] = p[:a_producer]
 
   # Step 12 -- Metabolic rate
   m_producer = minimum(p[:bodymass][is_producer])
   p[:m_producer] = m_producer
   body_size_relative = p[:bodymass] ./ p[:m_producer]
   # body_size_scaled = body_size_relative.^-0.25
-  x = metabolicrate(body_size_relative, T)
+  x = metabolicrate(body_size_relative, T, p)
 
   # Step 13 -- Growth rate
-  r = growthrate(body_size_relative, T)
+  r = growthrate(body_size_relative, T, p)
 
   # Step 14 -- Handling time
-  handling_t = handlingtime(body_size_relative, T)
+  handling_t = handlingtime(body_size_relative, T, p)
 
   # Step 15 -- Attack rate
-  attack_r = attackrate(body_size_relative, T)
+  attack_r = attackrate(body_size_relative, T, p)
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 / handling_t
