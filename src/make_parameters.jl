@@ -81,8 +81,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         c::Float64=0.0, h::Number=1.0,
         e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
         #m_producer::Float64=1.0,
-        #y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
-        Γ::Float64=0.5, α::Float64=1.0,
+        α::Float64=1.0,
         productivity::Symbol=:species,
         bodymass::Array{Float64, 1}=[0.0],
         vertebrates::Array{Bool, 1}=[false], rewire_method = :none,
@@ -97,10 +96,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
         K2::Array{Float64, 1} = [0.15],
         T::Float64 = 273.15,
-        handlingtime::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
-        attackrate::Function = exponentialBA(@NT(norm_constant = 0.2e11, activation_energy = 0.65, β = -0.25)),
+        handlingtime::Function = no_effect_handlingt(@NT(y_vertebrate = 4.0, y_invertebrate = 8.0)),
+        attackrate::Function = no_effect_attackr(),
         metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
-        growthrate::Function = no_effect_r())
+        growthrate::Function = no_effect_r(@NT(Γ = 0.5)))
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -256,13 +255,13 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   # Step 15 -- Attack rate
   attack_r = attackrate(body_size_relative, T)
 
-
   # Step 16 -- Maximum relative consumption rate
-  y = zeros(S)
-  y[p[:vertebrates]] = p[:y_vertebrate]
-  y[.!p[:vertebrates]] = p[:y_invertebrate]
+  y = 1 / handling_t
 
-  # Step 17 -- Efficiency matrix
+  # Step 17 -- Half-saturation constant
+  Γ = 1 / attack_r .* handling_t
+
+  # Step 18 -- Efficiency matrix
   get_efficiency(p)
 
   # Final Step -- store the parameters in the dict. p
