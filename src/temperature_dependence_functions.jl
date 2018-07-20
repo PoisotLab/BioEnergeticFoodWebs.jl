@@ -76,21 +76,12 @@ end
 """
 **Option 3 : Exponential Boltzmann-Arrhenius function**
 
-| Parameter    | Meaning                               |
-|:-------------|:--------------------------------------|
-| temp         | temperature range (Kelvin)            |
-| p0           | scaling coefficient                   |
-| E            | activation energy                     |
-| p[:bodymass] | body mass                             |
-| beta         | allometric exponent                   |
-| k            | Boltzmann constant (k=8.617e-5)       |
-
-Parameters are for instance:
-
-p0=0.2e11
-E=0.65
-m=1
-beta=-0.25
+| Parameter         | Meaning                               | Default values | Reference |
+|:------------------|:--------------------------------------|----------------|-----------|
+| norm_constant     | scaling coefficient                   | 0.2e11         |           |
+| activation_energy | activation energy                     | 0.65           |           |
+| β                 | allometric exponent                   | -0.25          |           |
+| k                 | Boltzmann constant (k=8.617e-5)       | NA             |           |
 
 """
 
@@ -117,14 +108,14 @@ Parameters are for instance:
 
 p0=0.2e12
 E=0.65
-Ed=0.72
+Ed=1.15
 topt=295
 p[:bodymass]=1
 beta=-0.25
 """
 
 function extended_BA(T_param)
-    kt = 8.617e-5 # Boltzmann constant
+    k = 8.617e-5 # Boltzmann constant
     kt = k * T
     pwr = T_param.β.*exp(.-T_param.activation_energy./kt)
     Δenergy = T_param.deactivation_energy .- T_param.activation_energy
