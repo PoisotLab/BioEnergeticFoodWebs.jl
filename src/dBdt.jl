@@ -92,6 +92,7 @@ function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
   for i in eachindex(biomass), j in eachindex(biomass)
     F[i,j] = bm_matrix[i,j] / f_den[i]
   end
+  F[isnan.(F)] = 0.0
 end
 
 function fill_xyb_matrix!(xyb, biomass, x, y)
