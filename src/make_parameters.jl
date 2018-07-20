@@ -282,7 +282,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   BioEnergeticFoodWebs.check_parameters(parameters)
 
-  return p
+  return parameters
 end
 
 function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
