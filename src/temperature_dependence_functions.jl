@@ -86,7 +86,7 @@ end
 
 """
 
-function exponentialBA(T_param)
+function exponential_BA(T_param)
     k=8.617e-5
     return (bodymass, T, p) -> T_param.norm_constant .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T .- T_param.T0) ./ (k * T .* T_param.T0))
 end
