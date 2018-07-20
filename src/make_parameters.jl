@@ -209,7 +209,6 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   S = size(A)[1]
   F = zeros(Float64, size(A))
   efficiency = zeros(Float64, size(A))
-  w = zeros(Float64, S)
   M = zeros(Float64, S)
   #a = zeros(Float64, S)
   x = zeros(Float64, S)
@@ -269,7 +268,6 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
-  parameters[:w] = w
   parameters[:efficiency] = efficiency
   parameters[:y] = y
   parameters[:x] = x
