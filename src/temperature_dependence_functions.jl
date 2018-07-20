@@ -60,7 +60,7 @@ This function can be called as an argument in `model_parameters` to define an ex
 |:----------------|:------------------------------------------------------------------|:--------------|:----------|
 | maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          |    TODO   |
 | eppley_exponent | Exponential rate of increase                                      | 0.0631        |    TODO   |
-| T_opt           | location of the maximum of the quadratic portion of the function  | 308.185       |    TODO   |
+| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        |    TODO   |
 | range           | thermal breadth                                                   | 35            |    TODO   |
 | β               | allometric exponent                                               | -0.25         |    TODO   |
 
