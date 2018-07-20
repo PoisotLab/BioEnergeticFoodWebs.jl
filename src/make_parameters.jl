@@ -244,13 +244,13 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:m_producer] = m_producer
   body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
   # body_size_scaled = body_size_relative.^-0.25
-  x = metabolicrate(body_size_relative, T, p)
+  x = metabolicrate(body_size_relative, T, parameters)
 
   # Step 13 -- Growth rate
-  r = growthrate(body_size_relative, T, p)
+  r = growthrate(body_size_relative, T, parameters)
 
   # Step 14 -- Handling time
-  handling_t = handlingtime(body_size_relative, T, p)
+  handling_t = handlingtime(body_size_relative, T, parameters)
   y = 1 ./ handling_t
 
   # Step 16 -- Maximum relative consumption rate
@@ -258,7 +258,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:ht] = handling_t
 
   # Step 15 -- Attack rate
-  attack_r = attackrate(body_size_relative, T, p)
+  attack_r = attackrate(body_size_relative, T, parameters)
 
   # Step 17 -- Half-saturation constant
   Γ = 1 ./ (attack_r .* handling_t)
@@ -266,7 +266,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:Γ] = Γ
 
   # Step 18 -- Efficiency matrix
-  get_efficiency(p)
+  get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
   parameters[:w] = w
@@ -280,7 +280,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:ar] = attack_r
   parameters[:r] = r
 
-  BioEnergeticFoodWebs.check_parameters(p)
+  BioEnergeticFoodWebs.check_parameters(parameters)
 
   return p
 end
