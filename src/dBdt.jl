@@ -87,7 +87,7 @@ function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
   food_available = vec(sum(bm_matrix, 2))
   f_den = zeros(eltype(biomass), length(biomass))
   for i in eachindex(biomass)
-    f_den[i] = Γh*(1.0-c*biomass[i])+food_available[i]
+    f_den[i] = Γh[i]*(1.0-c*biomass[i])+food_available[i]
   end
   for i in eachindex(biomass), j in eachindex(biomass)
     F[i,j] = bm_matrix[i,j] / f_den[i]
