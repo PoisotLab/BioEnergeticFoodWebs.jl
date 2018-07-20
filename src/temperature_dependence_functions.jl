@@ -116,10 +116,9 @@ beta=-0.25
 
 function extended_BA(T_param)
     k = 8.617e-5 # Boltzmann constant
-    kt = k * T
-    pwr = T_param.β.*exp(.-T_param.activation_energy./kt)
+    pwr = T_param.β.*exp(.-T_param.activation_energy./ k * T)
     Δenergy = T_param.deactivation_energy .- T_param.activation_energy
-    lt = 1 ./ (1 + exp.(-1 / kt .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T)))
+    lt = 1 ./ (1 + exp.(-1 / k * T .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T)))
     return(bodymass, T, p) -> T_param.norm_const .* (bodymass.^pwr) .* lt
 end
 
