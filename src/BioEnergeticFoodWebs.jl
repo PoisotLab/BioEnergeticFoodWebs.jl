@@ -22,7 +22,16 @@ export trophic_rank,
   nutrient_intake,
   consumer_intake,
   metabolism,
-  adbm_model
+  adbm_model,
+  no_effect_x,
+  no_effect_r,
+  no_effect_handlingt,
+  no_effect_attackr,
+  extended_eppley,
+  exponentialBA,
+  extended_BA,
+  gaussian
+
 
 # Includes
 include(joinpath(".", "trophic_rank.jl"))
