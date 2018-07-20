@@ -70,7 +70,7 @@ TODO
 
 function extended_eppley(T_param)
     topt = T_param.T_opt - 273.15
-    return (bodymass, T, p) -> bodymass^T_param.β * T_param.maxrate_0 * exp(T_param.eppley_exponent * (T-273.15)) * (1 - (((T-273.15) - topt) / (T_param.range/2)).^2)
+    return (bodymass, T, p) -> bodymass.^T_param.β .* T_param.maxrate_0 .* exp(T_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- topt) ./ (T_param.range./2)).^2)
 end
 
 """
@@ -126,10 +126,10 @@ beta=-0.25
 function extended_BA(T_param)
     kt = 8.617e-5 # Boltzmann constant
     kt = k * T
-    pwr = T_param.β*exp(-T_param.activation_energy/kt)
-    Δenergy = T_param.deactivation_energy - T_param.activation_energy
-    lt = 1 / (1 + exp(-1 / kt * (T_param.deactivation_energy - (T_param.deactivation_energy / T_param.T_opt + k * log(T_param.activation_energy / Δenergy))*T)))
-    return(bodymass, T, p) -> T_param.norm_const * (bodymass^pwr) * lt
+    pwr = T_param.β.*exp(.-T_param.activation_energy./kt)
+    Δenergy = T_param.deactivation_energy .- T_param.activation_energy
+    lt = 1 ./ (1 + exp.(-1 / kt .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T)))
+    return(bodymass, T, p) -> T_param.norm_const .* (bodymass.^pwr) .* lt
 end
 
 
@@ -157,8 +157,8 @@ beta=-0.25
 
 function gaussian(T_param)
     if T_param.shape == :hump
-        return(bodymass, T, p) -> bodymass^T_param.β * T_param.norm_const * exp(-(T-T_param.T_opt)^2/(2*T_param.range^2))
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_const .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
     elseif T_param.shape == :U
-        return(bodymass, T, p) -> bodymass^T_param.β * T_param.norm_const * exp((T-T_param.T_opt)^2/(2*T_param.range^2))
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_const .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
     end
 end
