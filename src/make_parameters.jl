@@ -235,14 +235,14 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   end
 
   # Step 11 -- Scaling constraints based on organism type
-  # a[p[:vertebrates]] = p[:a_vertebrate]
-  # a[.!p[:vertebrates]] = p[:a_invertebrate]
-  # a[is_producer] = p[:a_producer]
+  # a[parameters[:vertebrates]] = parameters[:a_vertebrate]
+  # a[.!parameters[:vertebrates]] = parameters[:a_invertebrate]
+  # a[is_producer] = parameters[:a_producer]
 
   # Step 12 -- Metabolic rate
-  m_producer = minimum(p[:bodymass][is_producer])
-  p[:m_producer] = m_producer
-  body_size_relative = p[:bodymass] ./ p[:m_producer]
+  m_producer = minimum(parameters[:bodymass][is_producer])
+  parameters[:m_producer] = m_producer
+  body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
   # body_size_scaled = body_size_relative.^-0.25
   x = metabolicrate(body_size_relative, T, p)
 
@@ -255,7 +255,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 ./ handling_t
-  p[:ht] = handling_t
+  parameters[:ht] = handling_t
 
   # Step 15 -- Attack rate
   attack_r = attackrate(body_size_relative, T, p)
@@ -263,22 +263,22 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   # Step 17 -- Half-saturation constant
   Γ = 1 ./ (attack_r .* handling_t)
   Γ[isnan.(Γ)] = 0.0
-  p[:Γ] = Γ
+  parameters[:Γ] = Γ
 
   # Step 18 -- Efficiency matrix
   get_efficiency(p)
 
   # Final Step -- store the parameters in the dict. p
-  p[:w] = w
-  p[:efficiency] = efficiency
-  p[:y] = y
-  p[:x] = x
-  #p[:a] = a
-  #p[:is_herbivore] = is_herbivore
-  p[:Γh] = p[:Γ] .^ p[:h]
-  p[:np] = sum(p[:is_producer])
-  p[:ar] = attack_r
-  p[:r] = r
+  parameters[:w] = w
+  parameters[:efficiency] = efficiency
+  parameters[:y] = y
+  parameters[:x] = x
+  #parameters[:a] = a
+  #parameters[:is_herbivore] = is_herbivore
+  parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
+  parameters[:np] = sum(parameters[:is_producer])
+  parameters[:ar] = attack_r
+  parameters[:r] = r
 
   BioEnergeticFoodWebs.check_parameters(p)
 
