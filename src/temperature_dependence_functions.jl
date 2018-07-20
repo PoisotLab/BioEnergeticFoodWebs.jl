@@ -1,7 +1,20 @@
 #=
-**Functions of thermal performance curve for model parameters**
+Functions for biological traits :
+     - metabolic rate
+     - growth rate
+     - handling time
+     - attack rate
 
-We included different functions for temperature dependence :
+When temperature is not included, the functions :
+    - no_effect_x for metabolic rate
+    - no_effect_r for growth rate
+    - no_effect_handlingt for handling time
+    - no_effect_attackr for attack rate
+
+return the default values, rates are temperature independent.
+
+When temperature is included, they are different functions of temperature dependence :
+
 1) Extended Eppley function
 2) Exponential Boltzmann-Arrhenius function
 3) Extended Boltzmann-Arrhenius function (Johnson-Lewin)
@@ -11,8 +24,8 @@ In each case, the function returns the biological rate value at a given temperat
 =#
 
 """
-****
-TODO
+**No effect of temperature on metabolic rate**
+
 """
 
 function no_effect_x(T_param)
@@ -20,7 +33,7 @@ function no_effect_x(T_param)
 end
 
 """
-****
+**No effect of temperature on growth rate**
 TODO
 """
 
@@ -29,7 +42,7 @@ function no_effect_r(T_param)
 end
 
 """
-****
+**No effect of temperature on handling time**
 TODO
 """
 
@@ -38,7 +51,7 @@ function no_effect_handlingt(T_param)
 end
 
 """
-****
+**No effect of temperature on attack rate**
 TODO
 """
 
