@@ -80,6 +80,7 @@ end
 |:------------------|:--------------------------------------|----------------|-----------|
 | norm_constant     | scaling coefficient                   | 0.2e11         |           |
 | activation_energy | activation energy                     | 0.65           |           |
+| T0                | normalization temperature (K)         | 293.15         |           |
 | β                 | allometric exponent                   | -0.25          |           |
 | k                 | Boltzmann constant (k=8.617e-5)       | NA             |           |
 
@@ -87,7 +88,7 @@ end
 
 function exponentialBA(T_param)
     k=8.617e-5
-    return (bodymass, T, p) -> T_param.norm_constant.*((bodymass.^T_param.β).*exp.(.-T_param.activation_energy./(k*T)))
+    return (bodymass, T, p) -> T_param.norm_constant .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T .- T_param.T0) ./ (k * T .* T_param.T0))
 end
 
 """
@@ -117,7 +118,7 @@ beta=-0.25
 function extended_BA(T_param)
     k = 8.617e-5 # Boltzmann constant
     Δenergy = T_param.deactivation_energy .- T_param.activation_energy
-    return(bodymass, T, p) -> T_param.norm_constant .* bodymass.^(T_param.β).*exp(.-T_param.activation_energy./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
+    return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
 end
 
 
