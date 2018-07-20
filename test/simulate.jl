@@ -35,14 +35,14 @@ module TestSimulateSanityCheck
   n = rand(4)
 
   s = simulate(p, n, start=0, stop=25)
-  @test s[:B][26,4] ≈ p[:K] atol=0.002
+  @test s[:B][26,4] ≈ parameters[:K] atol=0.002
 
   # Using system-wide regulation, producers with no consumption reach K / n
   A = zeros(Int64, (4, 4))
   p = model_parameters(A, productivity=:system)
   n = rand(4)
   s = simulate(p, n, start=0, stop=15)
-  @test s[:B][16,4] ≈ p[:K]/4 atol=0.001
+  @test s[:B][16,4] ≈ parameters[:K]/4 atol=0.001
 
   # A consumer with a resource with 0 biomass goes extinct
   A = [0 1; 0 0]
@@ -79,35 +79,41 @@ module TestSimulateProductivity
   # Using system-wide regulation, producers with no consumption reach K / n
   p = model_parameters(A, productivity=:system)
   s = simulate(p, n, start=0, stop=15)
-  @test s[:B][16,4] ≈ p[:K]/4 atol=0.001
+  @test s[:B][16,4] ≈ parameters[:K]/4 atol=0.001
 
   # Using species-wide regulation, producers with no consumption reach K
   p = model_parameters(A, productivity=:species)
   s = simulate(p, n, start=0, stop=15)
-  @test s[:B][16,4] ≈ p[:K] atol=0.001
+  @test s[:B][16,4] ≈ parameters[:K] atol=0.001
 
   # NOTE The following tests start with n = [1 1 1 1]
 
   # Using competitive regulation with α = 1 is neutral
   p = model_parameters(A, productivity=:competitive, α=1.0)
   s = simulate(p, ones(4), start=0, stop=15)
-  @test s[:B][16,4] ≈ p[:K]/4 atol=0.001
+  @test s[:B][16,4] ≈ parameters[:K]/4 atol=0.001
 
   # Using competitive regulation with α > 1 is exclusive
   p = model_parameters(A, productivity=:competitive, α=1.05)
   s = simulate(p, ones(4), start=0, stop=15)
-  @test s[:B][16,4] < p[:K]/4
+  @test s[:B][16,4] < parameters[:K]/4
 
   # Using competitive regulation with α < 1 is overyielding
   p = model_parameters(A, productivity=:competitive, α=0.95)
   s = simulate(p, ones(4), start=0, stop=15)
-  @test s[:B][16,4] > p[:K]/4
+  @test s[:B][16,4] > parameters[:K]/4
 
   # Using competitive regulation with α = 0 is species-level regulation
   p = model_parameters(A, productivity=:competitive, α=0.0)
   s = simulate(p, ones(4), start=0, stop=15)
-  @test s[:B][16,4] ≈ p[:K] atol=0.001
+  @test s[:B][16,4] ≈ parameters[:K] atol=0.001
 
+  # Using nutrient intake
+  p = model_parameters(A, productivity=:nutrients)
+  G = BioEnergeticFoodWebs.growthrate(p, ones(4), 1 ; c = p[:supply])
+  g = BioEnergeticFoodWebs.get_growth(ones(4), p ; c = p[:supply])[:growth]
+  @test G[1] ≈ 0.964 atol=0.001
+  @test g[1] == g[2] == g[3] == g[4]
 end
 
 module TestSimulateRewiring
@@ -122,15 +128,15 @@ module TestSimulateRewiring
 
   # p = model_parameters(A, rewire_method = :Gilljam)
   # @test_warn "INFO: extinction of species 2" simulate(p, b)
-  # @test p[:A] == A_after
+  # @test parameters[:A] == A_after
   # p = model_parameters(A, rewire_method = :stan)
   # @test_warn "INFO: extinction of species 2" simulate(p, b)
   # @test_warn "INFO: extinction of species 2" simulate(p, b)
-  # @test p[:A] == A_after
+  # @test parameters[:A] == A_after
   # p = model_parameters(A, rewire_method = :ADBM)
   # @test_warn "INFO: extinction of species 2" simulate(p, b)
   # @test_warn "INFO: extinction of species 2" simulate(p, b)
-  # @test p[:A] == A_after
+  # @test parameters[:A] == A_after
 
   #don't print info message when rewire_method = :none, even when an extinction occurs
   p = model_parameters(A)
@@ -156,7 +162,7 @@ module TestSimulateNP
   p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2)
   G = zeros(3)
   for i in 1:3
-    if p[:is_producer][i]
+    if parameters[:is_producer][i]
       G[i] = BioEnergeticFoodWebs.growthrate(p, b0, i, c = c0)[1]
     else
       G[i] = 0.0
@@ -169,7 +175,7 @@ module TestSimulateNP
   c0 = [0.0, 1.0]
   G = zeros(3)
   for i in 1:3
-    if p[:is_producer][i]
+    if parameters[:is_producer][i]
       G[i] = BioEnergeticFoodWebs.growthrate(p, b0, i, c = c0)[1]
     else
       G[i] = 0.0
@@ -183,7 +189,7 @@ module TestSimulateNP
   c0 = [3.0, 3.0]
   G = zeros(3)
   for i in 1:3
-    if p[:is_producer][i]
+    if parameters[:is_producer][i]
       G[i] = BioEnergeticFoodWebs.growthrate(p, b0, i, c = c0)[1]
     else
       G[i] = 0.0

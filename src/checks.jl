@@ -15,7 +15,7 @@ end
 """
 **Check initial parameters**
 """
-function check_initial_parameters(p)
+function check_initial_parameters(parameters)
   required_keys = [
     :Z,
     :vertebrates,
@@ -34,7 +34,7 @@ function check_initial_parameters(p)
     :K
   ]
   for k in required_keys
-    @assert get(p, k, nothing) != nothing
+    @assert get(parameters, k, nothing) != nothing
   end
 end
 
@@ -44,8 +44,8 @@ end
 This function will make sure that all the required parameters are here,
 and that the arrays and matrices have matching dimensions.
 """
-function check_parameters(p)
-  check_initial_parameters(p)
+function check_parameters(parameters)
+  check_initial_parameters(parameters)
 
   required_keys = [
     :w,
@@ -57,9 +57,9 @@ function check_parameters(p)
     :is_producer
   ]
   for k in required_keys
-    @assert get(p, k, nothing) != nothing
+    @assert get(parameters, k, nothing) != nothing
   end
-  @assert length(p[:is_producer]) == length(p[:is_herbivore])
-  @assert size(p[:A]) == size(p[:efficiency])
-  @assert length(p[:is_producer]) == size(p[:A], 1)
+  @assert length(parameters[:is_producer]) == length(parameters[:is_herbivore])
+  @assert size(parameters[:A]) == size(parameters[:efficiency])
+  @assert length(parameters[:is_producer]) == size(parameters[:A], 1)
 end

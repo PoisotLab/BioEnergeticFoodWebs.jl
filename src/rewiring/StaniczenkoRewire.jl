@@ -31,7 +31,7 @@ end
 This function identify the potential predators from the rewiring graph R.
 Used internally by rewire().
 """
-function potential_newlinks(A, R, p)
+function potential_newlinks(A, R, parameters)
   S = size(A, 1)
   R_slices = [R[:, i] for i in 1:S]
   #identify "overlap species" = species that share at least one
@@ -49,7 +49,7 @@ function potential_newlinks(A, R, p)
   P = convert(Array{Int64,2}, zeros(S, S))
   #return the identified new potential consumers
   map((x,y) -> P[x,y] = 1, new_pred, find(sp .== true))
-  TR = p[:trophic_rank]
+  TR = parameters[:trophic_rank]
   idx = findn(P .== 1)
   map((x,y) -> if TR[x] <= TR[y]
                  P[x,y]=0
@@ -70,17 +70,17 @@ and sample a new predator for each of them (when possible) from the matrix of
 potential predators (from `potential_predators()`).
 """
 function Staniczenko_rewire(p)
-  S = size(p[:A], 1)
-  A = p[:A]
+  S = size(parameters[:A], 1)
+  A = parameters[:A]
   #identify extinct species
-  Ɛ = p[:extinctions]
+  Ɛ = parameters[:extinctions]
   #identify potential new links
   R = rewiring_graph(A)
   P = potential_newlinks(A, R, p)
   #keep those that contain one of the released preys
   released_preys = unique(findn(A[Ɛ,:])[2])
   [filter!(x -> x .!= i, released_preys) for i in Ɛ]
-  all_possible_predators = map(x -> find(x .== 1), [P[:,i] for i in released_preys])
+  all_possible_predators = map(x -> find(x .== 1), [parameters[:,i] for i in released_preys])
   trm = find(x -> x != Int64[], all_possible_predators)
   filter!(x -> x != Int64[], all_possible_predators)
   released_preys = released_preys[trm]
