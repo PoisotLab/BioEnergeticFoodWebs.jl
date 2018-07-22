@@ -63,22 +63,25 @@ end
 """
 **Option 1 : Extended Eppley function**
 
-This function can be called as an argument in `model_parameters` to define an extended Eppley funtion (ref) for one of:
+This function can be called as an argument in `model_parameters` to define an extended Eppley funtion (Eppley 1972, Thomas et al. 2012) for one of:
     - metabolic rate
     - producers growth rate
-    - handling time
     - attack rate
+    - handling time (not recommended as it is a hump-shaped curve)
 
-| Parameter       | Meaning                                                           | Default values| Reference |
-|:----------------|:------------------------------------------------------------------|:--------------|:----------|
-| maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          |    TODO   |
-| eppley_exponent | Exponential rate of increase                                      | 0.0631        |    TODO   |
-| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        |    TODO   |
-| range           | thermal breadth                                                   | 35            |    TODO   |
-| β               | allometric exponent                                               | -0.25         |    TODO   |
+
+| Parameter       | Meaning                                                           | Default values| Reference               |
+|:----------------|:------------------------------------------------------------------|:--------------|:------------------------|
+| maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          |    Eppley 1972          |
+| eppley_exponent | Exponential rate of increase                                      | 0.0631        |    Eppley 1972          |
+| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        |    NA                   |
+| range           | thermal breadth                                                   | 35            |    NA                   |
+| β               | allometric exponent                                               | -0.25         |    Gillooly et al. 2002 |
+
+Default values are given for growth rate r.
 
 Example:
-TODO
+growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)
 """
 
 function extended_eppley(T_param)
