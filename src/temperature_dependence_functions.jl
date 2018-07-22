@@ -92,13 +92,24 @@ end
 """
 **Option 3 : Exponential Boltzmann-Arrhenius function**
 
-| Parameter         | Meaning                               | Default values | Reference |
-|:------------------|:--------------------------------------|----------------|-----------|
-| norm_constant     | scaling coefficient                   | 0.2e11         |           |
-| activation_energy | activation energy                     | 0.65           |           |
-| T0                | normalization temperature (K)         | 293.15         |           |
-| β                 | allometric exponent                   | -0.25          |           |
-| k                 | Boltzmann constant (k=8.617e-5)       | NA             |           |
+This function can be called as an argument in `model_parameters` to define an exponential Boltzmann-Arrhénius function (Gillooly et al. 2001, Brown et al. 2004) for one of:
+    - metabolic rate
+    - producers growth rate
+    - attack rate
+    - handling time (not recommended as it is a hump-shaped curve)
+
+
+| Parameter         | Meaning                               | Default values | Reference                             |
+|:------------------|:--------------------------------------|:---------------|:--------------------------------------|
+| norm_constant     | scaling coefficient                   | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy | activation energy                     | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
+| β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
+
+Default values are given for metabolic rate x.
+
+Example:
+metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)
 
 """
 
