@@ -188,10 +188,10 @@ function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     if parameters[:productivity] == :nutrients #if the producers do NOT rely on nutrients for their growth
         c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
         c_mat = [c[i,:] for i = 1:last] #make it an array of array
-        gr = map((x,y) -> get_growth(x,parameters,c=y), measure_on_mat, c_mat)
+        gr = map((x,y) -> get_growth(parameters,x,c=y), measure_on_mat, c_mat)
         growth = hcat(map(x -> x[:growth], gr)...)'
     else
-        gr = map(x -> get_growth(x,parameters), measure_on_mat)
+        gr = map(x -> get_growth(parameters,x), measure_on_mat)
         growth = hcat(map(x -> x[:growth], gr)...)'
     end
     growth[:,.!parameters[:is_producer]] = 0.0
