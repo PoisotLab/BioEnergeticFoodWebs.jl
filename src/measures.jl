@@ -226,7 +226,7 @@ function nutrient_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
     c_mat = [c[i,:] for i = 1:last] #make it an array of array
     gr = map((x,y) -> BioEnergeticFoodWebs.get_growth(parameters,x,c=y), measure_on_mat, c_mat)
-    intake = hcat(map(x -> x[:G], gr)...)'
+    intake = hcat(map(x -> x[2], gr)...)'
     if out_type == :all #return all growth rates (each producer at each time step)
         return intake
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
