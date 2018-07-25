@@ -255,8 +255,8 @@ function consumer_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     @assert last <= size(out[:B], 1)
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
-    cons = map(x -> consumption(x, parameters), measure_on_mat)
-    gains = hcat(map(x-> x[:gain], cons)...)'
+    cons = map(x -> consumption(parameters, x), measure_on_mat)
+    gains = hcat(map(x-> x[1], cons)...)'
     #losses = hcat(map(x-> x[:loss], cons)...)'
     if out_type == :all #return all growth rates (each producer at each time step)
         return gains
