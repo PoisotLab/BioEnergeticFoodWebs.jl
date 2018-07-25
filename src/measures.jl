@@ -189,10 +189,10 @@ function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
         c = out[:C][end-(last-1):end,:] #extract the timesteps of interest for the nutrients concentration
         c_mat = [c[i,:] for i = 1:last] #make it an array of array
         gr = map((x,y) -> get_growth(parameters,x,c=y), measure_on_mat, c_mat)
-        growth = hcat(map(x -> x[:growth], gr)...)'
+        growth = hcat(map(x -> x[1], gr)...)'
     else
         gr = map(x -> get_growth(parameters,x), measure_on_mat)
-        growth = hcat(map(x -> x[:growth], gr)...)'
+        growth = hcat(map(x -> x[1], gr)...)'
     end
     growth[:,.!parameters[:is_producer]] = 0.0
     if out_type == :all #return all growth rates (each producer at each time step)
