@@ -181,7 +181,7 @@ more specifically:
 - the standard deviation of the growth rate for each producer over the last `last` time steps (`out_type = :std`)
 """
 function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
-    p = out[:p] #extract parameters
+    parameters = out[:p] #extract parameters
     @assert last <= size(out[:B], 1)
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
@@ -218,7 +218,7 @@ more specifically:
 - the standard deviation of the nutrient intake for each producer over the last `last` time steps (`out_type = :std`)
 """
 function nutrient_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
-    p = out[:p] #extract parameters
+    parameters = out[:p] #extract parameters
     @assert last <= size(out[:B], 1)
     @assert parameters[:productivity] == :nutrients
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
@@ -251,7 +251,7 @@ more specifically:
 
 """
 function consumer_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
-    p = out[:p] #extract parameters
+    parameters = out[:p] #extract parameters
     @assert last <= size(out[:B], 1)
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
@@ -281,7 +281,7 @@ more specifically:
 - the standard deviation of the metabolic losses for each species over the last `last` time steps (`out_type = :std`)
 """
 function metabolism(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol = :all)
-    p = out[:p] #extract parameters
+    parameters = out[:p] #extract parameters
     @assert last <= size(out[:B], 1)
     measure_on = out[:B][end-(last-1):end,:] #extract the biomasses that will be used
     measure_on_mat = [measure_on[i,:] for i = 1:last] #make it an array of array so we can use the map function
