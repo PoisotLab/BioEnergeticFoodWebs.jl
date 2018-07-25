@@ -45,7 +45,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
-  t_keep = collect(start:1.0:stop)
+  t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
@@ -67,7 +67,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       end
 
       function affect!(integrator)
-
         parameters = update_rewiring_parameters(parameters, integrator.u)
         #id extinct species
         isext = integrator.u .== 0.0
@@ -79,10 +78,9 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
         #set biomass to 0 to avoid ghost species
         info(string("extinction of species ", sp_min))
         integrator.u[sp_min] = 0.0
-
       end
 
-      cb = ContinuousCallback(condition,affect!,abstol = 1e-10)
+      cb = ContinuousCallback(condition, affect!, abstol = 1e-10)
       sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
   end
 
