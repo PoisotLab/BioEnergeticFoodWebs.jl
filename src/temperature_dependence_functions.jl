@@ -113,7 +113,7 @@ function extended_eppley(T_param)
 end
 
 """
-**Option 3 : Exponential Boltzmann-Arrhenius function**
+**Option 2 : Exponential Boltzmann-Arrhenius function**
 
 This function can be called as an argument in `model_parameters` to define an exponential Boltzmann-Arrhénius function (Gillooly et al. 2001, Brown et al. 2004) for one of:
     - metabolic rate
@@ -142,7 +142,7 @@ function exponential_BA(T_param)
 end
 
 """
-**Option 4 : Extended Boltzmann-Arrhenius function**
+**Option 3 : Extended Boltzmann-Arrhenius function**
 
 
 | Parameter          | Meaning                                               | Default values | Reference            |
@@ -169,7 +169,7 @@ end
 
 
 """
-**Option 5 : Gaussian function**
+**Option 4 : Gaussian function**
 
 | Parameter    | Meaning                                        | Default values | Reference            |
 |:-------------|:-----------------------------------------------|:---------------|:---------------------|
