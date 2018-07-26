@@ -143,7 +143,7 @@ output (ensuring that all output files are unique).
 This function is *not* exported, so it must be called with `BioEnergeticFoodWebs.save`.
 
 """
-function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varname=NaN)
+function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=nothing, varname=nothing)
     if as == :JSON
         as = :json
     end
@@ -151,10 +151,10 @@ function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=NaN, varn
         as = :jld
     end
     @assert as ∈ vec([:json :jld])
-    if isnan(filename)
+    if filename == nothing
         filename = "befwm_" * string(hash(parameters))
     end
-    if isnan(varname)
+    if varname == nothing
         varname = "befwm_simul"
     end
     if as == :json
