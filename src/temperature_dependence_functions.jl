@@ -156,7 +156,7 @@ end
 Default values are given as an example for growth rate r.
 
 Example:
-growthrate=exponential_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, T_opt=298.15, β = -0.25)
+growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, T0 = 298.15, β = -0.25)
 
 
 """
@@ -171,22 +171,18 @@ end
 """
 **Option 5 : Gaussian function**
 
-| Parameter    | Meaning                                        |
-|:-------------|:-----------------------------------------------|
-| temp         | temperature range (Kelvin)                     |
-| p0           | minimal/maximal trait value                    |
-| s            | performance breath (width of function)         |
-| topt         | temperature at which trait value is maximal    |
-| p[:bodymass] | body mass                                      |
-| beta         | allometric exponent                            |
+| Parameter    | Meaning                                        | Default values | Reference            |
+|:-------------|:-----------------------------------------------|:---------------|:---------------------|
+| shape        | hump-shaped (:hump) or U-shaped (:U) curve     | :hump          | Amarasekare 2015     |
+| norm_constant| minimal/maximal trait value                    | 0.5            | NA                   |
+| range        | performance breath (width of function)         | 20             | Amarasekare 2015     |
+| T_opt        | temperature at which trait value is maximal    | 295            | Amarasekare 2015     |
+| β            | allometric exponent                            | -0.25          | Gillooly et al 2002  |
 
-Parameters are for instance:
+Default values are given as an example for growth rate r.
 
-p0=0.5
-s=20
-topt=295
-p[:bodymass]=1
-beta=-0.25
+Example:
+growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)
 
 """
 
