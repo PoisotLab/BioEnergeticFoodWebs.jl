@@ -101,7 +101,7 @@ This function can be called as an argument in `model_parameters` to define an ex
 | range           | thermal breadth                                                   | 35            |    NA                   |
 | β               | allometric exponent                                               | -0.25         |    Gillooly et al. 2002 |
 
-Default values are given for growth rate r.
+Default values are given as an example for growth rate r.
 
 Example:
 growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)
@@ -129,7 +129,7 @@ This function can be called as an argument in `model_parameters` to define an ex
 | T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
 | β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
 
-Default values are given for metabolic rate x.
+Default values are given as an example for metabolic rate x.
 
 Example:
 metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)
@@ -145,21 +145,20 @@ end
 **Option 4 : Extended Boltzmann-Arrhenius function**
 
 
-| Parameter     | Meaning                                               | Default values | Reference    |
-|:--------------|:------------------------------------------------------|:---------------|--------------|
-| p0            | scaling coefficient                                   |
-| E             | activation energy                                     |
-| Ed            | deactivation energy                                   |
-| topt          | temperature at which trait value is maximal           |
-| beta          | allometric exponent                                   |
+| Parameter          | Meaning                                               | Default values | Reference            |
+|:-------------------|:------------------------------------------------------|:---------------|----------------------|
+| norm_constant      | scaling coefficient                                   | 3e8            | NA                   |
+| activation_energy  | activation energy                                     | 0.53           | Dell et al 2011      |
+| deactivation_energy| deactivation energy                                   | 1.15           | Dell et al 2011      |
+| T_opt              | temperature at which trait value is maximal           | 298.15         | NA                   |
+| β                  | allometric exponent                                   | -0.25          | Gillooly et al. 2002 |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=exponential_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, T_opt=298.15, β = -0.25)
 
 
-p0=0.2e12
-E=0.65
-Ed=1.15
-topt=295
-p[:bodymass]=1
-beta=-0.25
 """
 
 function extended_BA(T_param)
