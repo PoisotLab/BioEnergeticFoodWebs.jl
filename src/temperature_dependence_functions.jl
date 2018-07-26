@@ -1,5 +1,5 @@
 #=
-Functions for biological traits :
+Functions for biological rates :
      - metabolic rate
      - growth rate
      - handling time
@@ -11,16 +11,39 @@ When temperature is not included, the functions :
     - no_effect_handlingt for handling time
     - no_effect_attackr for attack rate
 
-return the default values, rates are temperature independent.
+return the default values for temperature independent rates.
 
-When temperature is included, they are different functions of temperature dependence :
+When temperature is included, they are 4 different functions of temperature dependence :
 
 1) Extended Eppley function
 2) Exponential Boltzmann-Arrhenius function
 3) Extended Boltzmann-Arrhenius function (Johnson-Lewin)
 4) Gaussian (inverted Gaussian) function
 
-In each case, the function returns the biological rate value at a given temperature.
+That can be changed in the following way:
+
+A = [0 1 1 ; 0 0 0 ; 0 0 0]
+p = model_parameters(A, T = 295, bodymass = 1, metabolicrate = extended_BA(@NT(T_parameters))
+
+where:
+- T is the temperature in Kelvin,
+- bodymass is the species bodymass,
+- T_parameters are the parameters associated with the extended_BA function.
+
+This allows to directly specify the function to use for each rate and the set of parameters associated with this function within the parameters.
+Internally the metabolicrate function (whichever is chosen) takes 3 arguments:
+
+- species body mass (standardized by the smaller producer species),
+- the temperature T,
+- the set of parameters p.
+
+model_parameters still returns a Dict, containing:
+
+- x, the metabolic rate (unchanged)
+- r, the intrinsic producer's growth rate, which is now specified for each species
+- y, the maximum consumption rate, which is 1/ht, with ht being the handling time
+- Γ, the half saturation density, which is 1/(ar * ht), with ar being the attack rate
+
 =#
 
 """
@@ -121,18 +144,15 @@ end
 """
 **Option 4 : Extended Boltzmann-Arrhenius function**
 
-| Parameter     | Meaning                                               |
-|:--------------|:------------------------------------------------------|
-| temp          | temperature range (Kelvin)                            |
+
+| Parameter     | Meaning                                               | Default values | Reference    |
+|:--------------|:------------------------------------------------------|:---------------|--------------|
 | p0            | scaling coefficient                                   |
 | E             | activation energy                                     |
 | Ed            | deactivation energy                                   |
 | topt          | temperature at which trait value is maximal           |
-| p[:bodymass]  | body mass                                             |
 | beta          | allometric exponent                                   |
-| k             | Boltzmann constant (k=8.617e-5)                       |
 
-Parameters are for instance:
 
 p0=0.2e12
 E=0.65
