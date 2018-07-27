@@ -42,7 +42,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   @assert use ∈ vec([:stiff :nonstiff])
   alg = use == :stiff ? Rodas4(autodiff=false) : Tsit5()
 
-  S = size(parameters[:A],1)
+  S = size(parameters[:A], 1)
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
@@ -50,8 +50,9 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
+
   function species_under_extinction_threshold(u, t, integrator)
-    return !all(integrator.u .< 100.0*eps())
+    return minimum(integrator.u) < (100.0*eps())
   end
 
   function remove_species!(integrator)
@@ -66,8 +67,8 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
+  extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function; save_positions=(true,true))
 
-  extinction_callback = ContinuousCallback(species_under_extinction_threshold, affect_function; save_positions=(true,true))
   sol = solve(prob, alg, callback = CallbackSet(extinction_callback, PositiveDomain()), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
 
   B = hcat(sol.u...)'
