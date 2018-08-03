@@ -49,6 +49,22 @@ model_parameters still returns a Dict, containing:
 """
 **No effect of temperature on metabolic rate**
 
+This function is by default called as an argument in `model_parameters` to define a temperature independent metabolic rate.
+It returns the default values of metabolic rate when there is no effect of temperature (see Delmas et al 2017).
+The function accounts for different metabolic rate according to the type of species (vertebrate, invertebrate, producer)
+
+| Parameter       | Meaning             | Default values | Reference                       |
+|:----------------|:--------------------|:---------------|:--------------------------------|
+| a_vertebrate    | allometric constant | 0.88           | Brose, Williams & Martinez 2006 |
+| a_invertebrate  | allometric constant | 0.3141         | Brose, Williams & Martinez 2006 |
+| a_producer      | allometric constant | 0.138          | Brose, Williams & Martinez 2006 |
+
+Internally the function takes 3 arguments:
+
+- species body mass (standardized by the smaller producer species),
+- the temperature T,
+- the set of parameters p.
+
 """
 
 function no_effect_x(T_param)
@@ -57,7 +73,20 @@ end
 
 """
 **No effect of temperature on growth rate**
-TODO
+
+This function is by default called as an argument in `model_parameters` to define a temperature independent growth rate.
+It returns a default value for growth rate when there is no effect of temperature (see Delmas et al 2017).
+
+| Parameter       | Meaning             | Default values | Reference                       |
+|:----------------|:--------------------|:---------------|:--------------------------------|
+| r               | growth rate         | 1              | Brose, Williams & Martinez 2006 |
+
+Internally the function takes 3 arguments (unused in this case):
+
+- species body mass (standardized by the smaller producer species),
+- the temperature T,
+- the set of parameters p.
+
 """
 
 function no_effect_r(T_param)
@@ -66,7 +95,22 @@ end
 
 """
 **No effect of temperature on handling time**
-TODO
+
+This function is by default called as an argument in `model_parameters` to define a temperature independent handling time.
+It returns a default value for handling time which is defined by 1/y, y being the maximum consumption rate.
+The function accounts for different maximum consumption rate values according to the type of species (vertebrate or invertebrate).
+
+| Parameter       | Meaning                                    | Default values | Reference                       |
+|:----------------|:-------------------------------------------|:---------------|:--------------------------------|
+| y_vertebrate    | maximum consumption rate for vertebrates   | 4.0            | Brose, Williams & Martinez 2006 |
+| y_invertebrate  | maximum consumption rate for invertebrates | 8.0            | Brose, Williams & Martinez 2006 |
+
+Internally the function takes 3 arguments (unused in this case):
+
+- species body mass (standardized by the smaller producer species),
+- the temperature T,
+- the set of parameters p.
+
 """
 
 function no_effect_handlingt(T_param)
@@ -75,7 +119,20 @@ end
 
 """
 **No effect of temperature on attack rate**
-TODO
+
+This function is by default called as an argument in `model_parameters` to define a temperature independent attack rate.
+It returns a default value for handling time which is defined by 1/(Γ*h), Γ being the half saturation density.
+
+| Parameter  | Meaning                   | Default values | Reference                       |
+|:-----------|:--------------------------|:---------------|:--------------------------------|
+| Γ          | half-saturation density   | 0.5            | Brose, Williams & Martinez 2006 |
+
+Internally the function takes 3 arguments (unused in this case):
+
+- species body mass (standardized by the smaller producer species),
+- the temperature T,
+- the set of parameters p.
+
 """
 
 function no_effect_attackr(T_param)
@@ -93,13 +150,13 @@ This function can be called as an argument in `model_parameters` to define an ex
     - handling time (not recommended as it is a hump-shaped curve)
 
 
-| Parameter       | Meaning                                                           | Default values| Reference               |
-|:----------------|:------------------------------------------------------------------|:--------------|:------------------------|
-| maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          |    Eppley 1972          |
-| eppley_exponent | Exponential rate of increase                                      | 0.0631        |    Eppley 1972          |
-| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        |    NA                   |
-| range           | thermal breadth                                                   | 35            |    NA                   |
-| β               | allometric exponent                                               | -0.25         |    Gillooly et al. 2002 |
+| Parameter       | Meaning                                                           | Default values| Reference            |
+|:----------------|:------------------------------------------------------------------|:--------------|:---------------------|
+| maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          | Eppley 1972          |
+| eppley_exponent | Exponential rate of increase                                      | 0.0631        | Eppley 1972          |
+| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        | NA                   |
+| range           | thermal breadth                                                   | 35            | NA                   |
+| β               | allometric exponent                                               | -0.25         | Gillooly et al. 2002 |
 
 Default values are given as an example for growth rate r.
 
