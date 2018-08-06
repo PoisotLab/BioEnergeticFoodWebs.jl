@@ -213,7 +213,7 @@ end
 Default values are given as an example for growth rate r.
 
 Example:
-growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, T0 = 298.15, β = -0.25)
+growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)
 
 
 """
