@@ -28,7 +28,7 @@ export trophic_rank,
   no_effect_handlingt,
   no_effect_attackr,
   extended_eppley,
-  exponentialBA,
+  exponential_BA,
   extended_BA,
   gaussian
 
