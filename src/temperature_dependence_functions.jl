@@ -161,7 +161,7 @@ This function can be called as an argument in `model_parameters` to define an ex
 Default values are given as an example for growth rate r.
 
 Example:
-growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)
+growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25))
 """
 
 function extended_eppley(T_param)
@@ -189,7 +189,7 @@ This function can be called as an argument in `model_parameters` to define an ex
 Default values are given as an example for metabolic rate x.
 
 Example:
-metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)
+metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31))
 
 """
 
@@ -213,7 +213,7 @@ end
 Default values are given as an example for growth rate r.
 
 Example:
-growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)
+growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
 
 
 """
@@ -239,7 +239,7 @@ end
 Default values are given as an example for growth rate r.
 
 Example:
-growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)
+growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
 
 """
 
