@@ -40,8 +40,9 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   @assert use ∈ vec([:stiff :nonstiff])
+  alg = use == :stiff ? Rodas4(autodiff=false) : Tsit5()
 
-  S = size(parameters[:A],1)
+  S = size(parameters[:A], 1)
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
@@ -50,39 +51,25 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
-  if use == :stiff
-      alg = Rodas4(autodiff=false)
-  else
-      alg = Tsit5()
+  function species_under_extinction_threshold(u, t, integrator)
+    return minimum(integrator.u) < (100.0*eps())
   end
 
-  if parameters[:rewire_method] == :none
-      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
-  else
-      extspecies = Int[]
-
-      function condition(u,t,integrator)
-        isext = u .== 0.0
-        !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
-      end
-
-      function affect!(integrator)
-        parameters = update_rewiring_parameters(parameters, integrator.u)
-        #id extinct species
-        isext = integrator.u .== 0.0
-        minb = minimum(integrator.u[.!isext])
-        sp_min = findin(integrator.u, minb)[1]
-        #push id to extspecies
-        push!(extspecies, sp_min)
-        #isext[extspecies] = true
-        #set biomass to 0 to avoid ghost species
-        info(string("extinction of species ", sp_min))
-        integrator.u[sp_min] = 0.0
-      end
-
-      cb = ContinuousCallback(condition, affect!, abstol = 1e-10)
-      sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+  function remove_species!(integrator)
+    for i in eachindex(integrator.u)
+      integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
+    end
   end
+
+  function remove_species_and_rewire!(integrator)
+    remove_species!(integrator)
+    parameters = update_rewiring_parameters(parameters, integrator.u)
+  end
+
+  affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
+  extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function; save_positions=(false,false))
+
+  sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
 
   B = hcat(sol.u...)'
 
