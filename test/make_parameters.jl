@@ -4,7 +4,7 @@ module TestMakeParameters
 
   # Test the keyword interface
   correct_network = [0 1 0 0; 0 0 1 1; 0 0 0 0; 0 0 0 0]
-  p = model_parameters(correct_network, Z=2.0)
+  parameters = model_parameters(correct_network, Z=2.0)
   @test parameters[:Z] == 2.0
 
   # Test that producers, etc, are identified
@@ -20,7 +20,7 @@ module TestMakeParameters
 
   # Test the direct interface
   correct_network = [0 1 0 0; 0 0 1 1; 0 0 0 0; 0 0 0 0]
-  p = BioEnergeticFoodWebs.model_parameters(correct_network, Z=2.0)
+  parameters = BioEnergeticFoodWebs.model_parameters(correct_network, Z=2.0)
   @test parameters[:Z] == 2.0
 
   # Test that there is an exception if the vertebrates is of the wrong size
@@ -29,7 +29,7 @@ module TestMakeParameters
 
   # Test that there the vertebrates can be passed
   right_vert = vec([true false true false])
-  p = model_parameters(correct_network, vertebrates=right_vert)
+  parameters = model_parameters(correct_network, vertebrates=right_vert)
   @test right_vert == parameters[:vertebrates]
 
   # Test that there is an exception if the body masses is of the wrong size
@@ -38,13 +38,13 @@ module TestMakeParameters
 
   # Test that there the bodymasses can be passed
   right_bs = rand(4)
-  p = model_parameters(correct_network, bodymass=right_bs)
+  parameters = model_parameters(correct_network, bodymass=right_bs)
   @test right_bs == parameters[:bodymass]
 
   # Test that the metabolic rates are calculated from bodymass
   p = model_parameters(correct_network)
-  p_b = model_parameters(correct_network, bodymass = parameters[:bodymass])
-  @test parameters[:x] == p_b[:x]
+  p_b = model_parameters(correct_network, bodymass = p[:bodymass])
+  @test p[:x] == p_b[:x]
 
   # Test that there is an exception if the wrong productivity is used
   wrong_pr = :global
@@ -52,7 +52,7 @@ module TestMakeParameters
 
   # Test that there the productivity can be passed
   right_pr = :system
-  p = model_parameters(correct_network, productivity=right_pr)
+  parameters = model_parameters(correct_network, productivity=right_pr)
   @test right_pr == parameters[:productivity]
 
   # Test that there is an exception if the wrong rewiring method is used
@@ -61,12 +61,12 @@ module TestMakeParameters
 
   # Test that the rewire method can be passed
   right_rm = :ADBM
-  p = model_parameters(correct_network, rewire_method=right_rm)
+  parameters = model_parameters(correct_network, rewire_method=right_rm)
   @test right_rm == parameters[:rewire_method]
 
   # Test the adbm_parameters function:
   # Test that the parameters can be passed
-  p = model_parameters(correct_network, rewire_method=:none)
+  parameters = model_parameters(correct_network, rewire_method=:none)
   test_e = 2.0
   test_a_adbm = 0.02
   test_ai = -0.5
@@ -79,7 +79,7 @@ module TestMakeParameters
   test_ni= -0.8
   test_Hmethod = :power
   test_Nmethod = :biomass
-  BioEnergeticFoodWebs.adbm_parameters(p, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod)
+  BioEnergeticFoodWebs.adbm_parameters(parameters, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod)
   @test test_e == parameters[:e]
   @test test_a_adbm == parameters[:a_adbm]
   @test test_ai == parameters[:ai]
@@ -160,7 +160,7 @@ module TestMakeParameters
       # exception if the wrong preferenceMethod is passed
   wrong_pm = :gen
   @test_throws ErrorException model_parameters(correct_network, rewire_method=:Gilljam, preferenceMethod=wrong_pm)
-  p = model_parameters(correct_network, rewire_method = :Gilljam, preferenceMethod = :specialist)
+  parameters = model_parameters(correct_network, rewire_method = :Gilljam, preferenceMethod = :specialist)
   @test parameters[:similarity] == n1_simIndex
   @test parameters[:specialistPrefMag] == .9
   @test parameters[:extinctions] == Int[]
@@ -185,9 +185,9 @@ module TestUpdateParameters
 
   # Test with ADBM rewiring method
   RWmethod = :ADBM
-  p = model_parameters(A, rewire_method = RWmethod)
-  old_p = copy(p)
-  BioEnergeticFoodWebs.update_rewiring_parameters(p, b)
+  parameters = model_parameters(A, rewire_method = RWmethod)
+  old_p = copy(parameters)
+  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
 
   #check that all links from and to 3 are gone
   @test parameters[:A] == Int.(zeros(A))
@@ -195,34 +195,34 @@ module TestUpdateParameters
   #species 1 was an herbivore ...
   @test BioEnergeticFoodWebs.get_herbivores(old_p) == [true, false, false]
   #...but not anymore
-  @test BioEnergeticFoodWebs.get_herbivores(p) == [false, false, false]
+  @test BioEnergeticFoodWebs.get_herbivores(parameters) == [false, false, false]
   # it is still a consumer though
-  @test parameters[:is_producer] == old_parameters[:is_producer] == [false, true, true]
+  @test parameters[:is_producer] == old_p[:is_producer] == [false, true, true]
   #preferences have been updated
   @test BioEnergeticFoodWebs.getW_preference(old_p) == float.([0 0 1 ; 0 0 0 ; 0 0 0])
   @test BioEnergeticFoodWebs.getW_preference(p) == zeros(A)
   #efficiency have been updated
-  @test BioEnergeticFoodWebs.get_efficiency(old_p) == float.([0 0 old_parameters[:e_herbivore] ; 0 0 0 ; 0 0 0])
+  @test BioEnergeticFoodWebs.get_efficiency(old_p) == float.([0 0 old_p[:e_herbivore] ; 0 0 0 ; 0 0 0])
   @test BioEnergeticFoodWebs.get_efficiency(p) == zeros(A)
 
   # Test with Gilljam rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5] #extinction of species 3
   RWmethod = :Gilljam
-  p = model_parameters(A, rewire_method = RWmethod)
-  old_p = copy(p)
-  BioEnergeticFoodWebs.update_rewiring_parameters(p, b)
+  parameters = model_parameters(A, rewire_method = RWmethod)
+  old_p = copy(parameters)
+  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
 
   #check that all links from and to 3 are gone
   @test parameters[:A][:,3] ==  parameters[:A][3,:] == zeros(4)
   @test parameters[:extinctions] == [3]
-  @test BioEnergeticFoodWebs.get_herbivores(p) == [true, true, false, false]
-  @test parameters[:is_producer] == old_parameters[:is_producer] == [false, false, true, true]
+  @test BioEnergeticFoodWebs.get_herbivores(parameters) == [true, true, false, false]
+  @test parameters[:is_producer] == old_p[:is_producer] == [false, false, true, true]
   eff = float.(zeros(parameters[:A]))
   eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
-  @test BioEnergeticFoodWebs.get_efficiency(p) == eff
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
   pref = float.(parameters[:A])
-  @test BioEnergeticFoodWebs.getW_preference(p) == pref
+  @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
 
   #with specialists
   p_specialists = model_parameters(A, rewire_method = RWmethod, preferenceMethod = :specialist)
@@ -235,18 +235,18 @@ module TestUpdateParameters
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5]
   RWmethod = :stan
-  p = model_parameters(A, rewire_method = RWmethod)
-  old_p = copy(p)
-  BioEnergeticFoodWebs.update_rewiring_parameters(p, b)
+  parameters = model_parameters(A, rewire_method = RWmethod)
+  old_p = copy(parameters)
+  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
   #no released prey => no new link
   @test parameters[:A][:,3] ==  parameters[:A][3,:] == zeros(4)
   # 1 is not an herbivore anymore (no resource)
-  @test BioEnergeticFoodWebs.get_herbivores(p) == [false, true, false, false]
+  @test BioEnergeticFoodWebs.get_herbivores(parameters) == [false, true, false, false]
   pref = float.(parameters[:A])
-  @test BioEnergeticFoodWebs.getW_preference(p) == pref
+  @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
   eff = float.(zeros(parameters[:A]))
   eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
-  @test BioEnergeticFoodWebs.get_efficiency(p) == eff
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
 
 end
 
@@ -263,7 +263,7 @@ module TestUpdateParameters
   turnover_rate = 0.3
   s = [3.0, 4.0]
   content = [0.8, 0.6]
-  p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
+  parameters = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
   @test parameters[:K1] == k1
   @test parameters[:K2] == k2
   @test parameters[:D] == turnover_rate
@@ -271,7 +271,7 @@ module TestUpdateParameters
   @test parameters[:υ] == content
 
   # Test that the NP parameters are not returned when the function is called with productivity != :nutrient
-  p = model_parameters(A, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
+  parameters = model_parameters(A, K1 = k1, K2 = k2, D = turnover_rate, supply = s, υ = content)
   @test_throws KeyError parameters[:K1]
   @test_throws KeyError parameters[:K2]
   @test_throws KeyError parameters[:D]
@@ -289,7 +289,7 @@ module TestUpdateParameters
   @test_throws ErrorException model_parameters(A, productivity = :nutrients, υ = content)
 
   # Producer metabolic rates
-  p = model_parameters(A, productivity = :nutrients)
+  parameters = model_parameters(A, productivity = :nutrients)
   @test parameters[:x] == [0.314, 0.138, 0.138]
 
 end
