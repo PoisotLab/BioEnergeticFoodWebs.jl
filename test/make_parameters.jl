@@ -200,7 +200,7 @@ module TestUpdateParameters
   @test parameters[:is_producer] == old_p[:is_producer] == [false, true, true]
   #preferences have been updated
   @test BioEnergeticFoodWebs.getW_preference(old_p) == float.([0 0 1 ; 0 0 0 ; 0 0 0])
-  @test BioEnergeticFoodWebs.getW_preference(p) == zeros(A)
+  @test BioEnergeticFoodWebs.getW_preference(parameters) == zeros(A)
   #efficiency have been updated
   @test BioEnergeticFoodWebs.get_efficiency(old_p) == float.([0 0 old_p[:e_herbivore] ; 0 0 0 ; 0 0 0])
   @test BioEnergeticFoodWebs.get_efficiency(p) == zeros(A)
