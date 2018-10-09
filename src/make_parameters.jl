@@ -38,6 +38,7 @@ matrix A. Specifically, the default values of the keyword parameters are:
 | cost              | 0.0           | (Gilljam) Rewiring cost (a consumer decrease in efficiency when exploiting novel resource)  |
 | specialistPrefMag | 0.9           | (Gilljam) Strength of the consumer preference for 1 prey if `preferenceMethod = :specialist`|
 | preferenceMethod  | :generalist   | (Gilljam) Scenarios with respect to prey preferences of consumers                           |
+| D                 | 0.25          | global turnover rate                                                                        |
 
 All of these values are passed as optional keyword arguments to the function.
 
@@ -250,7 +251,6 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   # Step 14 -- Handling time
   handling_t = handlingtime(body_size_relative, T, parameters)
-  y = 1 ./ handling_t
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 ./ handling_t
