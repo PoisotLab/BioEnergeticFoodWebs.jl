@@ -268,7 +268,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
-  parameters[:efficiency] = efficiency
+  #parameters[:efficiency] = efficiency
   parameters[:y] = y
   parameters[:x] = x
   #parameters[:a] = a
