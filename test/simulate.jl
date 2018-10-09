@@ -78,7 +78,7 @@ module TestSimulateProductivity
 
   # Using system-wide regulation, producers with no consumption reach K / n
   parameters = model_parameters(A, productivity=:system)
-  s = simulate(p, n, start=0, stop=15)
+  s = simulate(parameters, n, start=0, stop=15)
   @test s[:B][end,4] ≈ parameters[:K]/4 atol=0.001
 
   # Using species-wide regulation, producers with no consumption reach K
