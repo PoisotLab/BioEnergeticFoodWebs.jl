@@ -268,7 +268,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
-  parameters[:efficiency] = efficiency
+  #parameters[:efficiency] = efficiency
   parameters[:y] = y
   parameters[:x] = x
   #parameters[:a] = a
@@ -362,16 +362,16 @@ function gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMetho
   rewireP = preference_parameters(cost, specialistPrefMag, parameters[:A], preferenceMethod)
   #check preferenceMethod
   if preferenceMethod ∈ [:generalist, :specialist]
-    rewireparameters[:preferenceMethod] = preferenceMethod
-    rewireparameters[:specialistPref] = get_specialist_preferences(rewireP,parameters[:A])
+    rewireP[:preferenceMethod] = preferenceMethod
+    rewireP[:specialistPref] = get_specialist_preferences(rewireP,parameters[:A])
   else
     error("Invalid value for preferenceMethod -- must be :generalist or :specialist")
   end
-  parameters[:similarity] = rewireparameters[:similarity]
-  parameters[:specialistPrefMag] = rewireparameters[:specialistPrefMag]
-  parameters[:extinctions] = rewireparameters[:extinctions]
-  parameters[:preferenceMethod] = rewireparameters[:preferenceMethod]
-  parameters[:cost] = rewireparameters[:cost]
-  parameters[:costMat] = rewireparameters[:costMat]
-  parameters[:specialistPref] = rewireparameters[:specialistPref]
+  parameters[:similarity] = rewireP[:similarity]
+  parameters[:specialistPrefMag] = rewireP[:specialistPrefMag]
+  parameters[:extinctions] = rewireP[:extinctions]
+  parameters[:preferenceMethod] = rewireP[:preferenceMethod]
+  parameters[:cost] = rewireP[:cost]
+  parameters[:costMat] = rewireP[:costMat]
+  parameters[:specialistPref] = rewireP[:specialistPref]
 end

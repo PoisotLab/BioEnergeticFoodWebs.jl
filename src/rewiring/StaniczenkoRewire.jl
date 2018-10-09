@@ -69,14 +69,14 @@ This function identify the resources that are released following an extinction e
 and sample a new predator for each of them (when possible) from the matrix of
 potential predators (from `potential_predators()`).
 """
-function Staniczenko_rewire(p)
+function Staniczenko_rewire(parameters)
   S = size(parameters[:A], 1)
   A = parameters[:A]
   #identify extinct species
   Ɛ = parameters[:extinctions]
   #identify potential new links
   R = rewiring_graph(A)
-  P = potential_newlinks(A, R, p)
+  P = potential_newlinks(A, R, parameters)
   #keep those that contain one of the released preys
   released_preys = unique(findn(A[Ɛ,:])[2])
   [filter!(x -> x .!= i, released_preys) for i in Ɛ]
