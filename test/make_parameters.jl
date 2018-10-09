@@ -203,7 +203,7 @@ module TestUpdateParameters
   @test BioEnergeticFoodWebs.getW_preference(parameters) == zeros(A)
   #efficiency have been updated
   @test BioEnergeticFoodWebs.get_efficiency(old_p) == float.([0 0 old_p[:e_herbivore] ; 0 0 0 ; 0 0 0])
-  @test BioEnergeticFoodWebs.get_efficiency(p) == zeros(A)
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == zeros(A)
 
   # Test with Gilljam rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
