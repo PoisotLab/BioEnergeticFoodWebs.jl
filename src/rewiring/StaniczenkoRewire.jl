@@ -80,7 +80,7 @@ function Staniczenko_rewire(parameters)
   #keep those that contain one of the released preys
   released_preys = unique(findn(A[Ɛ,:])[2])
   [filter!(x -> x .!= i, released_preys) for i in Ɛ]
-  all_possible_predators = map(x -> find(x .== 1), [parameters[:,i] for i in released_preys])
+  all_possible_predators = map(x -> find(x .== 1), [P[:,i] for i in released_preys])
   trm = find(x -> x != Int64[], all_possible_predators)
   filter!(x -> x != Int64[], all_possible_predators)
   released_preys = released_preys[trm]
