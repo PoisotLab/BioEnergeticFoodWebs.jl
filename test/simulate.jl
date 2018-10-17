@@ -153,13 +153,24 @@ module TestSimulateNP
   using Base.Test
   using BioEnergeticFoodWebs
 
-  # A = [0 1 1 ; 0 0 0 ; 0 0 0]
-  # b0 = [0.5, 0.5, 0.5]
-  # k1 = [0, 0.1, 0.2]
-  # k2 = [0, 0.15, 0.15]
-  # # When nutrient concentration is 0, then producers growth is 0 and nutrient growth is 1
-  # c0 = [0.0, 0.0]
-  # p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2)
+  A = [0 1 ; 0 0]
+  b0 = [0.5, 0.5]
+  c0 = [2.0, 2.0]
+  k1 = [0.2]
+  k2 = [0.4]
+
+  p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2)
+
+  @test BioEnergeticFoodWebs.growthrate(p, b0, 2, c = c0)[1] ≈ 2/2.4 atol=0.001
+  netgrowth, G = BioEnergeticFoodWebs.get_growth(p, b0, c = c0)
+  @test G[2] ≈ 0.41667 atol=0.001
+  @test netgrowth[2] ≈ 0.3477 atol=0.001
+  dN1dt, dN2dt = BioEnergeticFoodWebs.nutrientuptake(p, b0, c0, G)
+  @test dN1dt ≈ 0.0833 atol=0.001
+  @test dN2dt ≈ 0.2917 atol=0.001
+
+  # When nutrient concentration is 0, then producers growth is 0 and nutrient growth is 1
+  c0 = [0.0, 0.0]
   # G = zeros(3)
   # for i in 1:3
   #   if parameters[:is_producer][i]
