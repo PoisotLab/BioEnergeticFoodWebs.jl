@@ -252,7 +252,7 @@ end
 
 # Nutrient Intake model - parameters
 
-module TestUpdateParameters
+module TestNIParameters
   using BioEnergeticFoodWebs
   using Base.Test
 
