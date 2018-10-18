@@ -64,7 +64,7 @@ end
 
 TODO
 """
-function nutrientuptake2(parameters, biomass, nutrients, G)
+function nutrientuptake(parameters, biomass, nutrients, G)
   gr_x_bm = sum(G) #G here is already weighted by biomass (see get_growth)
   dndt = zeros(eltype(nutrients), length(nutrients))
   for i in eachindex(dndt)
