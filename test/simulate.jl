@@ -169,48 +169,15 @@ module TestSimulateNP
   @test dN1dt ≈ 0.0833 atol=0.001
   @test dN2dt ≈ 0.2917 atol=0.001
 
-  # When nutrient concentration is 0, then producers growth is 0 and nutrient growth is 1
-  c0 = [0.0, 0.0]
-  # G = zeros(3)
-  # for i in 1:3
-  #   if parameters[:is_producer][i]
-  #     G[i] = BioEnergeticFoodWebs.growthrate(p, b0, i, c = c0)[1]
-  #   else
-  #     G[i] = 0.0
-  #   end
-  # end
-  # n = BioEnergeticFoodWebs.nutrientuptake(c0, b0, p, G)
-  # @test n ≈ [1.0, 1.0] atol=0.001
-  # @test G ≈ [0.0, 0.0, 0.0] atol=0.001
+  # When nutrient supply or turnover is 0, then producers growth is 0 and nutrient growth is 1
 
-  # c0 = [0.0, 1.0]
-  # G = zeros(3)
-  # for i in 1:3
-  #   if parameters[:is_producer][i]
-  #     G[i] = BioEnergeticFoodWebs.growthrate(p, b0, i, c = c0)[1]
-  #   else
-  #     G[i] = 0.0
-  #   end
-  # end
-  # n = BioEnergeticFoodWebs.nutrientuptake(c0, b0, p, G)
-  # @test n[1] ≈ 1.0 atol=0.001
-  # @test G ≈ [0.0, 0.0, 0.0] atol=0.001
-  #
-  # #sanity check
-  # c0 = [3.0, 3.0]
-  # G = zeros(3)
-  # for i in 1:3
-  #   if parameters[:is_producer][i]
-  #     G[i] = BioEnergeticFoodWebs.growthrate(p, b0, i, c = c0)[1]
-  #   else
-  #     G[i] = 0.0
-  #   end
-  # end
-  # n = BioEnergeticFoodWebs.nutrientuptake(c0, b0, p, G)
-  # @test G[1] ≈ 0.0 atol=0.001
-  # @test G[2] ≈ 0.9524 atol=0.001
-  # @test G[3] ≈ 0.9375 atol=0.001
-  # @test n[1] ≈ -0.69494 atol=0.001
-  # @test n[2] ≈ -0.2225 atol=0.001
+  p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, supply = [0.0])
+  s = simulate(p, b0, concentration = c0, stop = 1000)
+  @test s[:B][end,1] ≈ .0 atol=1e-6
+  @test s[:B][end,2] ≈ .0 atol=1e-6
 
+  p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, D = 0.0)
+  s = simulate(p, b0, concentration = c0, stop = 1000)
+  @test s[:B][end,1] ≈ .0 atol=1e-6
+  @test s[:B][end,2] ≈ .0 atol=1e-6
 end
