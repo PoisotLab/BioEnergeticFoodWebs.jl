@@ -212,9 +212,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   efficiency = zeros(Float64, size(A))
   M = zeros(Float64, S)
   #a = zeros(Float64, S)
-  x = zeros(Float64, S)
+  x = zeros(Float64, S) # metabolic rate
   #y = zeros(Float64, S)
-  r = zeros(Float64, S) # producers groth rate
+  r = zeros(Float64, S) # producers growth rate
   attack_r = zeros(Float64, S) # attack rates
   handling_t = zeros(Float64, S) # handling times
   Γ = zeros(Float64, S) #B0, half saturation density
