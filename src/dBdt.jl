@@ -46,7 +46,7 @@ function get_growth(parameters, biomass; c = 0)
     for i in eachindex(biomass)
       if parameters[:is_producer][i]
         gr = growthrate(parameters, biomass, i, c = c)[1]
-        G[i] = (parameters[:r] * gr * biomass[i])
+        G[i] = (parameters[:r][i] * gr * biomass[i])
         if parameters[:productivity] == :nutrients #Nutrient intake
           growth[i] = G[i] - (parameters[:x][i] * biomass[i])
         else
