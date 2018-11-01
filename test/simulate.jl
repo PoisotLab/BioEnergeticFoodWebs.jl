@@ -139,13 +139,13 @@ module TestSimulateRewiring
   # @test parameters[:A] == A_after
 
   #don't print info message when rewire_method = :none, even when an extinction occurs
-  p = model_parameters(A)
-  @test_nowarn simulate(p, b)
+  # p = model_parameters(A)
+  # @test_nowarn simulate(p, b)
   #don't print info message when rewire_method != :none but no extinction occurs
-  A = [0 0 0 ; 0 0 0 ; 0 0 0] #free producers
-  p = model_parameters(A, rewire_method = :stan)
-  b = rand(3)
-  @test_nowarn simulate(p, b)
+  # A = [0 0 0 ; 0 0 0 ; 0 0 0] #free producers
+  # p = model_parameters(A, rewire_method = :stan)
+  # b = rand(3)
+  # @test_nowarn simulate(p, b)
 
 end
 
