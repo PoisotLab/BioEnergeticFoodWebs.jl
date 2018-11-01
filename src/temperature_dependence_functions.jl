@@ -90,7 +90,7 @@ Internally the function takes 3 arguments (unused in this case):
 """
 
 function no_effect_r(T_param)
-    return (bodymass, T, p) -> T_param.r
+    return (bodymass, T, p) -> repeat([T_param.r], size(p[:A], 1))
 end
 
 """
