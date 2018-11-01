@@ -30,7 +30,8 @@ export trophic_rank,
   extended_eppley,
   exponential_BA,
   extended_BA,
-  gaussian
+  gaussian,
+  temperature_size_rule
 
 
 # Includes
