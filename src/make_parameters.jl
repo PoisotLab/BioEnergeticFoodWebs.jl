@@ -100,7 +100,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         handlingtime::Function = no_effect_handlingt(@NT(y_vertebrate = 4.0, y_invertebrate = 8.0)),
         attackrate::Function = no_effect_attackr(@NT(Γ = 0.5)),
         metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
-        growthrate::Function = no_effect_r(@NT(r = 1.0)))
+        growthrate::Function = no_effect_r(@NT(r = 1.0)),
+        dry_mass_293::Array{Float64, 1}=[0.0],
+        TSR_type::Symbol = :no_response_WM)
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -121,7 +123,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   #:y_vertebrate   => y_vertebrate,
   #:Γ              => Γ,
   :A              => A,
-  :α              => α
+  :α              => α,
+  :TSR_type       => TSR_type,
+  :dry_mass_293   => dry_mass_293,
+  :T              => T
   )
   BioEnergeticFoodWebs.check_initial_parameters(parameters)
 
@@ -229,10 +234,11 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   getW_preference(parameters)
 
   # Step 10 -- Get the body mass
-  if length(parameters[:bodymass]) == 1
-    M = parameters[:Z].^(TR.-1)
-    parameters[:bodymass] = M
-  end
+  parameters[:bodymass] = temperature_size_rule(parameters)
+  #if length(parameters[:bodymass]) == 1
+    #M = parameters[:Z].^(TR.-1)
+    #parameters[:bodymass] = M
+  #end
 
   # Step 11 -- Scaling constraints based on organism type
   # a[parameters[:vertebrates]] = parameters[:a_vertebrate]
