@@ -7,19 +7,19 @@ function temperature_size_rule(dry_mass_20, temperature_K, TSR_type)
 
     temperature_C = temperature_K - 273.15
 
-    if TSR_type == mean_aquatic
+    if TSR_type == :mean_aquatic
         PCM = -3.90-0.53*log10(dry_mass_20)     # PCM = Percentage change in body-mass per degrés C
 
-    elseif TSR_type == mean_terrestrial
+    elseif TSR_type == :mean_terrestrial
         PCM = -1.72+0.54*log10(dry_mass_20)
 
-    elseif TSR_type == maximum
+    elseif TSR_type == :maximum
         PCM = -8
 
-    elseif TSR_type == reverse
+    elseif TSR_type == :reverse
         PCM = 4
 
-    elseif TSR_type == no_response
+    elseif TSR_type == :no_response
         PCM = 0
 
     else
