@@ -60,3 +60,24 @@ module TestExtendedBA
     @test testvalues[2] ≈ 0.049 atol = 0.001
     @test testvalues[3] == testvalues[1]
 end
+
+module TestGaussian
+    using BioEnergeticFoodWebs
+    using Base.Test
+
+    A = [0 1 0 ; 0 0 0 ; 0 1 0]
+    p = model_parameters(A)
+    gaussianFunction = gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
+    body_size_relative = p[:bodymass]
+    testvalues = gaussianFunction(body_size_relative, 273.15, p)
+    @test testvalues[1] ≈ 0.276 atol = 0.001
+    @test testvalues[2] ≈ 0.276 atol = 0.001
+    @test testvalues[3] ≈ 0.276 atol = 0.001
+    @test length(testvalues) == size(A,1)
+
+    body_size_relative = [10.0, 1.0, 10.0]
+    testvalues = gaussianFunction(body_size_relative, 273.15, p)
+    @test testvalues[1] ≈ 0.155 atol = 0.001
+    @test testvalues[2] ≈ 0.276 atol = 0.001
+    @test testvalues[3] == testvalues[1]
+end
