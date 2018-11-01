@@ -248,7 +248,5 @@ function gaussian(T_param)
         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
     elseif T_param.shape == :U
         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    else
-        error("when calling `gaussian` the shape must be eighter `:hump` or `:U`")
     end
 end
