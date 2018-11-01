@@ -51,6 +51,6 @@ include(joinpath(".", "rewiring/parameters/checkParameters.jl"))
 include(joinpath(".", "rewiring/parameters/updateParameters.jl"))
 
 include(joinpath(".", "temperature_dependence_functions.jl"))
-include(joinpath(".", "temperature_size_rule.jl"))
+include(joinpath(".", "temperature_size_rule_function.jl"))
 
 end
