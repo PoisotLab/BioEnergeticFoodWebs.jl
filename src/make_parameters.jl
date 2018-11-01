@@ -251,6 +251,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   # Step 14 -- Handling time
   handling_t = handlingtime(body_size_relative, T, parameters)
+  parameters[:ht] = handling_t
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 ./ handling_t
@@ -276,7 +277,6 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:np] = sum(parameters[:is_producer])
   parameters[:ar] = attack_r
   parameters[:r] = r
-  parameters[:ht] = handling_t
 
 
   BioEnergeticFoodWebs.check_parameters(parameters)
