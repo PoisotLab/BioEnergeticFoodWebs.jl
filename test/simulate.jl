@@ -203,6 +203,8 @@ module TestSimulateTemperatureEffect
   @test p[:r][1] ≈ -0.843 atol = 0.001
   @test p[:r][1] == p[:r][2] == p[:r][3]
 
+  s = simulate(p, rand(size(A,1)))
+
   p = model_parameters(A,
       handlingtime = gaussian(@NT(shape = :U, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)),
       attackrate = extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)),
@@ -210,5 +212,7 @@ module TestSimulateTemperatureEffect
       growthrate =extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)))
   @test p[:ht][1] ≈ 0.908 atol = 0.001
   @test p[:ht][1] == p[:ht][2] == p[:ht][3]
+
+  s = simulate(p, rand(size(A,1)))
 
 end
