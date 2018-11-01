@@ -26,33 +26,39 @@ temperature_size_rule(DM20, temperature, TSR_t)
 It returns the body mass of the organisms at the given temperature according to the given TS response slope.
 =#
 
-function temperature_size_rule(dry_mass_293, temperature_K, TSR_type)
+function temperature_size_rule(parameters)
 
-    temperature_C = temperature_K - 273.15
+    temperature_C = parameters[:T] - 273.15
 
-    if TSR_type == :mean_aquatic
-        PCM = -3.90-0.53*log10.(dry_mass_293)     # PCM = Percentage change in body-mass per degrés C
+    if parameters[:TSR_type] == :no_response_FM
+        length(parameters[:bodymass]) == 1
+          M = parameters[:Z].^(parameters[:trophic_rank].-1)
+          parameters[:bodymass] = M
 
-    elseif TSR_type == :mean_terrestrial
-        PCM = -1.72+0.54*log10.(dry_mass_293)
-
-    elseif TSR_type == :maximum
-        PCM = -8
-
-    elseif TSR_type == :reverse
-        PCM = 4
-
-    elseif TSR_type == :no_response
+    elseif parameters[:TSR_type] != :no_response_FM
         PCM = 0
+        if parameters[:TSR_type] == :mean_aquatic
+            PCM = -3.90-0.53*log10.(parameters[:dry_mass_293])     # PCM = Percentage change in body-mass per degrés C
+
+        elseif parameters[:TSR_type] == :mean_terrestrial
+            PCM = -1.72+0.54*log10.(dry_mass_293)
+
+        elseif parameters[:TSR_type] == :maximum
+            PCM = -8
+
+        elseif parameters[:TSR_type] == :reverse
+            PCM = 4
+
+        elseif parameters[:TSR_type] == :no_response_DM
+            PCM = 0
+        end
+
+        convert_dfmass = 6.5
+        TS_response = log.(PCM/100+1)               # Sign and magnitude of TS response
+        parameters[:bodymass] = convert_dfmass.*dry_mass_293.*exp.(TS_response.*(temperature_C-20))  # dry mass converted to fresh mass
 
     else
-        println("TSR_type should be one of : mean_aquatic, mean_terrestrial, maximum, reverse or no_response")
-
+        error("TSR_type should be one of : mean_aquatic, mean_terrestrial, maximum, reverse, no_response_FM or no_response_DM")
     end
 
-    convert_dfmass = 6.5
-    TS_response = log.(PCM/100+1)               # Sign and magnitude of TS response
-    fresh_mass = convert_dfmass.*dry_mass_293.*exp.(TS_response.*(temperature_C-20))  # dry mass converted to fresh mass
-
-    return fresh_mass
 end
