@@ -39,3 +39,24 @@ module TestExponentialBA
     @test testvalues[2] ≈ -122.216 atol = 0.001
     @test testvalues[3] == testvalues[1]
 end
+
+module TestExtendedBA
+    using BioEnergeticFoodWebs
+    using Base.Test
+
+    A = [0 1 0 ; 0 0 0 ; 0 1 0]
+    p = model_parameters(A)
+    BAfunction = extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
+    body_size_relative = p[:bodymass]
+    testvalues = BAfunction(body_size_relative, 273.15, p)
+    @test testvalues[1] ≈ 0.049 atol = 0.001
+    @test testvalues[2] ≈ 0.049 atol = 0.001
+    @test testvalues[3] ≈ 0.049 atol = 0.001
+    @test length(testvalues) == size(A,1)
+
+    body_size_relative = [10.0, 1.0, 10.0]
+    testvalues = BAfunction(body_size_relative, 273.15, p)
+    @test testvalues[1] ≈ 0.028 atol = 0.001
+    @test testvalues[2] ≈ 0.049 atol = 0.001
+    @test testvalues[3] == testvalues[1]
+end
