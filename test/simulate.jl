@@ -202,4 +202,13 @@ module TestSimulateTemperatureEffect
   @test p[:x][1] == p[:x][2] == p[:x][3]
   @test p[:r][1] ≈ -0.843 atol = 0.001
   @test p[:r][1] == p[:r][2] == p[:r][3]
+
+  p = model_parameters(A,
+      handlingtime = gaussian(@NT(shape = :U, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)),
+      attackrate = extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)),
+      metabolicrate = exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)),
+      growthrate =extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)))
+  @test p[:ht][1] ≈ 0.908 atol = 0.001
+  @test p[:ht][1] == p[:ht][2] == p[:ht][3]
+
 end
