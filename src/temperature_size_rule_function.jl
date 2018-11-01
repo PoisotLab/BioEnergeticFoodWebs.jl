@@ -31,10 +31,10 @@ function temperature_size_rule(dry_mass_293, temperature_K, TSR_type)
     temperature_C = temperature_K - 273.15
 
     if TSR_type == :mean_aquatic
-        PCM = -3.90-0.53*log10(dry_mass_293)     # PCM = Percentage change in body-mass per degrés C
+        PCM = -3.90-0.53*log10.(dry_mass_293)     # PCM = Percentage change in body-mass per degrés C
 
     elseif TSR_type == :mean_terrestrial
-        PCM = -1.72+0.54*log10(dry_mass_293)
+        PCM = -1.72+0.54*log10.(dry_mass_293)
 
     elseif TSR_type == :maximum
         PCM = -8
@@ -51,8 +51,8 @@ function temperature_size_rule(dry_mass_293, temperature_K, TSR_type)
     end
 
     convert_dfmass = 6.5
-    TS_response = log(PCM/100+1)               # Sign and magnitude of TS response
-    fresh_mass = convert_dfmass*dry_mass_293*exp(TS_response*(temperature_C-20))  # dry mass converted to fresh mass
+    TS_response = log.(PCM/100+1)               # Sign and magnitude of TS response
+    fresh_mass = convert_dfmass.*dry_mass_293.*exp.(TS_response.*(temperature_C-20))  # dry mass converted to fresh mass
 
     return fresh_mass
 end
