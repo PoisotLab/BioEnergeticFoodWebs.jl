@@ -249,7 +249,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   getW_preference(parameters)
 
   # Step 11 -- Get the body mass
-  parameters[:bodymass] = temperature_size_rule(parameters)
+  temperature_size_rule(parameters)
   #if length(parameters[:bodymass]) == 1
     #M = parameters[:Z].^(TR.-1)
     #parameters[:bodymass] = M
