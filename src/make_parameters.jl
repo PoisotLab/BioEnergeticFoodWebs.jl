@@ -100,7 +100,9 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
         handlingtime::Function = no_effect_handlingt(@NT(y_vertebrate = 4.0, y_invertebrate = 8.0)),
         attackrate::Function = no_effect_attackr(@NT(Γ = 0.5)),
         metabolicrate::Function = no_effect_x(@NT(a_vertebrate = 0.88, a_invertebrate = 0.314, a_producer = 0.138)),
-        growthrate::Function = no_effect_r(@NT(r = 1.0)))
+        growthrate::Function = no_effect_r(@NT(r = 1.0)),
+        dry_mass_293::Array{Float64, 1}=[0.0],
+        TSR_type::Symbol = :no_response_WM)
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -121,7 +123,10 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   #:y_vertebrate   => y_vertebrate,
   #:Γ              => Γ,
   :A              => A,
-  :α              => α
+  :α              => α,
+  :TSR_type       => TSR_type,
+  :dry_mass_293   => dry_mass_293,
+  :T              => T
   )
   BioEnergeticFoodWebs.check_initial_parameters(parameters)
 
@@ -134,7 +139,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
     end
   end
 
-  # Step 3 -- body mass
+  # Step 3 -- body mass and dry mass at 293 K
   parameters[:bodymass] = bodymass
   if length(parameters[:bodymass]) > 1
     if length(parameters[:bodymass]) != size(A, 1)
@@ -142,11 +147,19 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
     end
   end
 
-  # Step 4 -- productivity type
-  if productivity ∈ [:species, :system, :competitive, :nutrients]
-    parameters[:productivity] = productivity
+  parameters[:dry_mass_293] = dry_mass_293
+  if length(parameters[:dry_mass_293]) > 1
+    parameters[:dry_mass_293] = dry_mass_293
+    if length(parameters[:dry_mass_293]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
+    end
+  end
+
+  # Step 4 -- TSR type
+  if TSR_type ∈ [:no_response_WM, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response_DM]
+    parameters[:TSR_type] = TSR_type
   else
-    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+    error("Invalid value for TSR_type -- must be :no_response_WM, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response_DM")
   end
 
   # Step 5 -- Identify producers
@@ -154,7 +167,14 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:is_producer] = is_producer
   producers_richness = sum(is_producer)
 
-  # step 6 -- productivity parameters for the NP model
+  # Step 6 -- productivity type
+  if productivity ∈ [:species, :system, :competitive, :nutrients]
+    parameters[:productivity] = productivity
+  else
+    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+  end
+
+  # step 7 -- productivity parameters for the NP model
   if parameters[:productivity] == :nutrients
     parameters[:D] = D
     parameters[:supply] = supply
@@ -189,7 +209,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   end
 
-  # Step 7 -- rewire method
+  # Step 8 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     parameters[:rewire_method] = rewire_method
@@ -222,17 +242,18 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:trophic_rank] = TR
   is_herbivore = falses(S)
 
-  # Step 8 -- Identify herbivores (Herbivores consume producers)
+  # Step 9 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(parameters)
 
-  # Step 9 -- Measure generality and extract the vector of 1/n
+  # Step 10 -- Measure generality and extract the vector of 1/n
   getW_preference(parameters)
 
-  # Step 10 -- Get the body mass
-  if length(parameters[:bodymass]) == 1
-    M = parameters[:Z].^(TR.-1)
-    parameters[:bodymass] = M
-  end
+  # Step 11 -- Get the body mass
+  temperature_size_rule(parameters)
+  #if length(parameters[:bodymass]) == 1
+    #M = parameters[:Z].^(TR.-1)
+    #parameters[:bodymass] = M
+  #end
 
   # Step 11 -- Scaling constraints based on organism type
   # a[parameters[:vertebrates]] = parameters[:a_vertebrate]
