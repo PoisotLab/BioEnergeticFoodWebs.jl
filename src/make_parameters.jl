@@ -147,6 +147,11 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
     end
   end
 
+  parameters[:dry_mass_293] = dry_mass_293
+  if length(parameters[:dry_mass_293]) != size(A, 1)
+    error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
+  end
+
   # Step 4 -- productivity type
   if productivity ∈ [:species, :system, :competitive, :nutrients]
     parameters[:productivity] = productivity
