@@ -250,3 +250,14 @@ function gaussian(T_param)
         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
     end
 end
+
+"""
+**TODO**
+- handling time
+- body masses
+- β_resource
+"""
+
+function handling_time_scaling(p, β_resource)
+    return p[:ht] = p[:ht] * (p[:bodymass]' .^ β_resource)
+end
