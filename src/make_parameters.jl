@@ -139,7 +139,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
     end
   end
 
-  # Step 3 -- body mass
+  # Step 3 -- body mass and dry mass at 293 K
   parameters[:bodymass] = bodymass
   if length(parameters[:bodymass]) > 1
     if length(parameters[:bodymass]) != size(A, 1)
@@ -152,11 +152,11 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
     error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
   end
 
-  # Step 4 -- productivity type
-  if productivity ∈ [:species, :system, :competitive, :nutrients]
-    parameters[:productivity] = productivity
+  # Step 4 -- TSR type
+  if TSR_type ∈ [:no_response_WM, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response_DM]
+    parameters[:TSR_type] = TSR_type
   else
-    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+    error("Invalid value for TSR_type -- must be :no_response_WM, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response_DM")
   end
 
   # Step 5 -- Identify producers
@@ -164,7 +164,14 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:is_producer] = is_producer
   producers_richness = sum(is_producer)
 
-  # step 6 -- productivity parameters for the NP model
+  # Step 6 -- productivity type
+  if productivity ∈ [:species, :system, :competitive, :nutrients]
+    parameters[:productivity] = productivity
+  else
+    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+  end
+
+  # step 7 -- productivity parameters for the NP model
   if parameters[:productivity] == :nutrients
     parameters[:D] = D
     parameters[:supply] = supply
@@ -199,7 +206,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   end
 
-  # Step 7 -- rewire method
+  # Step 8 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     parameters[:rewire_method] = rewire_method
@@ -232,13 +239,13 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   parameters[:trophic_rank] = TR
   is_herbivore = falses(S)
 
-  # Step 8 -- Identify herbivores (Herbivores consume producers)
+  # Step 9 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(parameters)
 
-  # Step 9 -- Measure generality and extract the vector of 1/n
+  # Step 10 -- Measure generality and extract the vector of 1/n
   getW_preference(parameters)
 
-  # Step 10 -- Get the body mass
+  # Step 11 -- Get the body mass
   parameters[:bodymass] = temperature_size_rule(parameters)
   #if length(parameters[:bodymass]) == 1
     #M = parameters[:Z].^(TR.-1)
