@@ -141,7 +141,8 @@ end
 
 
 """
-**Option 1 : Extended Eppley function**
+TODO
+**Option 1 : Extended Eppley function for growth rate**
 
 This function can be called as an argument in `model_parameters` to define an extended Eppley funtion (Eppley 1972, Thomas et al. 2012) for one of:
     - metabolic rate
@@ -164,9 +165,47 @@ Example:
 growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25))
 """
 
-function extended_eppley(T_param)
+function extended_eppley_growthR(T_param)
     topt = T_param.T_opt - 273.15
+
     return (bodymass, T, p) -> bodymass.^T_param.β .* T_param.maxrate_0 .* exp(T_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- topt) ./ (T_param.range./2)).^2)
+end
+
+"""
+TODO
+**Option 1 : Extended Eppley function for metabolic rate**
+
+This function can be called as an argument in `model_parameters` to define an extended Eppley funtion (Eppley 1972, Thomas et al. 2012) for one of:
+    - metabolic rate
+    - producers growth rate
+    - attack rate
+    - handling time (not recommended as it is a hump-shaped curve)
+
+
+| Parameter       | Meaning                                                           | Default values| Reference            |
+|:----------------|:------------------------------------------------------------------|:--------------|:---------------------|
+| maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          | Eppley 1972          |
+| eppley_exponent | Exponential rate of increase                                      | 0.0631        | Eppley 1972          |
+| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        | NA                   |
+| range           | thermal breadth                                                   | 35            | NA                   |
+| β               | allometric exponent                                               | -0.25         | Gillooly et al. 2002 |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25))
+"""
+
+function extended_eppley_metabolicR(T_param)
+
+    maxrate_0_all = T_param.maxrate_0_producer .* p[:is_producer] .+ T_param.maxrate_0_vertebrate .* p[:vertebrates] .+ T_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+    eppley_exponent_all = T_param.eppley_exponent_producer .* p[:is_producer] .+ T_param.eppley_exponent_vertebrate .* p[:vertebrates] .+ T_param.eppley_exponent_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+    T_opt_all = T_param.T_opt_producer .* p[:is_producer] .+ T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+    T_opt_all = T_opt_all - 273.15
+    range_all = T_param.range_producer .* p[:is_producer] .+ T_param.range_vertebrate .* p[:vertebrates] .+ T_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+    β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+
+    return (bodymass, T, p) -> bodymass.^β_all .* maxrate_0_all .* exp(eppley_exponent_all .* (T.-273.15)) .* (1 .- (((T.-273.15) .- T_opt_all) ./ (range_all./2)).^2)
 end
 
 """
@@ -261,3 +300,19 @@ end
 function handling_time_scaling(p, β_resource)
     return p[:ht] = p[:ht] * (p[:bodymass]' .^ β_resource)
 end
+
+
+# S = size(parameters[:A], 1)
+# # Efficiency matrix
+# efficiency = zeros(Float64,(S, S))
+# for consumer in 1:S
+# for resource in 1:S
+#   if parameters[:A][consumer, resource] == 1
+#     if parameters[:is_producer][resource]
+#       efficiency[consumer, resource] = parameters[:e_herbivore]
+#     else
+#       efficiency[consumer, resource] = parameters[:e_carnivore]
+#     end
+#   end
+# end
+# end
