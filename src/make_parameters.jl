@@ -148,8 +148,11 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
   end
 
   parameters[:dry_mass_293] = dry_mass_293
-  if length(parameters[:dry_mass_293]) != size(A, 1)
-    error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
+  if length(parameters[:dry_mass_293]) > 1
+    parameters[:dry_mass_293] = dry_mass_293
+    if length(parameters[:dry_mass_293]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
+    end
   end
 
   # Step 4 -- TSR type
