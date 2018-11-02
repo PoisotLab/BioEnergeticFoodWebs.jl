@@ -213,6 +213,6 @@ module TestSimulateTemperatureEffect
   @test p[:ht][1] ≈ 0.908 atol = 0.001
   @test p[:ht][1] == p[:ht][2] == p[:ht][3]
 
-  s = simulate(p, rand(size(A,1)))
+  s = simulathe(p, rand(size(A,1)))
 
 end
