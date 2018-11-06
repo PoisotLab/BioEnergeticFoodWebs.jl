@@ -228,6 +228,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
 
   # Setup some objects
   S = size(A)[1]
+  parameters[:S] = S
   F = zeros(Float64, size(A))
   efficiency = zeros(Float64, size(A))
   M = zeros(Float64, S)
