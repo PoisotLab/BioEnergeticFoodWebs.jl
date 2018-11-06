@@ -165,7 +165,7 @@ Example:
 growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25))
 """
 
-function extended_eppley_growthR(T_param)
+function extended_eppley_r(T_param)
     topt = T_param.T_opt - 273.15
 
     return (bodymass, T, p) -> bodymass.^T_param.β .* T_param.maxrate_0 .* exp(T_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- topt) ./ (T_param.range./2)).^2)
@@ -196,20 +196,22 @@ Example:
 growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25))
 """
 
-function extended_eppley_metabolicR(T_param)
+function extended_eppley_x(T_param)
 
-    maxrate_0_all = T_param.maxrate_0_producer .* p[:is_producer] .+ T_param.maxrate_0_vertebrate .* p[:vertebrates] .+ T_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-    eppley_exponent_all = T_param.eppley_exponent_producer .* p[:is_producer] .+ T_param.eppley_exponent_vertebrate .* p[:vertebrates] .+ T_param.eppley_exponent_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-    T_opt_all = T_param.T_opt_producer .* p[:is_producer] .+ T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-    T_opt_all = T_opt_all - 273.15
-    range_all = T_param.range_producer .* p[:is_producer] .+ T_param.range_vertebrate .* p[:vertebrates] .+ T_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-    β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+    return (bodymass, T, p) -> for i in 1:1
+                                    maxrate_0_all = T_param.maxrate_0_producer .* p[:is_producer] .+ T_param.maxrate_0_vertebrate .* p[:vertebrates] .+ T_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                    eppley_exponent_all = T_param.eppley_exponent_producer .* p[:is_producer] .+ T_param.eppley_exponent_vertebrate .* p[:vertebrates] .+ T_param.eppley_exponent_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                    T_opt_all = T_param.T_opt_producer .* p[:is_producer] .+ T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                    T_opt_all = T_opt_all - 273.15
+                                    range_all = T_param.range_producer .* p[:is_producer] .+ T_param.range_vertebrate .* p[:vertebrates] .+ T_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                    β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
 
-    return (bodymass, T, p) -> bodymass.^β_all .* maxrate_0_all .* exp(eppley_exponent_all .* (T.-273.15)) .* (1 .- (((T.-273.15) .- T_opt_all) ./ (range_all./2)).^2)
+                                    return bodymass.^β_all .* maxrate_0_all .* exp.(eppley_exponent_all .* (T.-273.15)) .* (1 .- (((T.-273.15) .- T_opt_all) ./ (range_all./2)).^2)
+                                end
 end
 
 """
-**Option 2 : Exponential Boltzmann-Arrhenius function**
+**Option 2 : Exponential Boltzmann-Arrhenius function for growth rate**
 
 This function can be called as an argument in `model_parameters` to define an exponential Boltzmann-Arrhénius function (Gillooly et al. 2001, Brown et al. 2004) for one of:
     - metabolic rate
@@ -232,13 +234,129 @@ metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.
 
 """
 
-function exponential_BA(T_param)
+function exponential_BA_r(T_param)
     k=8.617e-5
     return (bodymass, T, p) -> T_param.norm_constant .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T .- T_param.T0) ./ (k * T .* T_param.T0))
 end
 
 """
-**Option 3 : Extended Boltzmann-Arrhenius function**
+**Option 2 : Exponential Boltzmann-Arrhenius function for metabolic rate**
+
+This function can be called as an argument in `model_parameters` to define an exponential Boltzmann-Arrhénius function (Gillooly et al. 2001, Brown et al. 2004) for one of:
+    - metabolic rate
+    - producers growth rate
+    - attack rate
+    - handling time (not recommended as it is a hump-shaped curve)
+
+
+| Parameter         | Meaning                               | Default values | Reference                             |
+|:------------------|:--------------------------------------|:---------------|:--------------------------------------|
+| norm_constant     | scaling coefficient                   | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy | activation energy                     | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
+| β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
+
+Default values are given as an example for metabolic rate x.
+
+Example:
+metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31))
+
+"""
+
+function exponential_BA_x(T_param)
+    k=8.617e-5
+    return (bodymass, T, p) -> T_param.norm_constant .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T .- T_param.T0) ./ (k * T .* T_param.T0))
+end
+
+"""
+**Option 2 : Exponential Boltzmann-Arrhenius function for attack rate**
+
+This function can be called as an argument in `model_parameters` to define an exponential Boltzmann-Arrhénius function (Gillooly et al. 2001, Brown et al. 2004) for one of:
+    - metabolic rate
+    - producers growth rate
+    - attack rate
+    - handling time (not recommended as it is a hump-shaped curve)
+
+
+| Parameter         | Meaning                               | Default values | Reference                             |
+|:------------------|:--------------------------------------|:---------------|:--------------------------------------|
+| norm_constant     | scaling coefficient                   | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy | activation energy                     | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
+| β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
+
+Default values are given as an example for metabolic rate x.
+
+Example:
+metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31))
+
+"""
+
+function exponential_BA_attackr(T_param)
+    k=8.617e-5
+
+    return (bodymass, T, p) -> for i in 1:1
+                                # define empty matrices
+                                S = p[:S]
+                                norm_constant_all = zeros(Float64,(p[:S], p[:S]))
+                                β_all = zeros(Float64,(p[:S], p[:S]))
+                                activation_energy_all = zeros(Float64,(p[:S], p[:S]))
+                                T0_all = zeros(Float64,(p[:S], p[:S]))
+                                # norm_constant varies for carnivores and herbivores
+                                for consumer in 1:p[:S]
+                                    for resource in 1:p[:S]
+                                        if p[:A][consumer, resource] == 1
+                                            if p[:is_producer][resource]
+                                                norm_constant_all[consumer, resource] = T_param.norm_constant_herbivore
+                                            else
+                                                norm_constant_all[consumer, resource] = T_param.norm_constant_carnivore
+                                            end
+                                        end
+                                    end
+                                end
+                                # β varies for carnivores and herbivores
+                                for consumer in 1:p[:S]
+                                    for resource in 1:p[:S]
+                                        if p[:A][consumer, resource] == 1
+                                            if p[:is_producer][resource]
+                                                β_all[consumer, resource] = T_param.β_herbivore
+                                            else
+                                                β_all[consumer, resource] = T_param.β_carnivore
+                                            end
+                                        end
+                                    end
+                                end
+                                # activation energy varies for carnivores and herbivores
+                                for consumer in 1:p[:S]
+                                    for resource in 1:p[:S]
+                                        if p[:A][consumer, resource] == 1
+                                            if p[:is_producer][resource]
+                                                activation_energy_all[consumer, resource] = T_param.activation_energy_herbivore
+                                            else
+                                                activation_energy_all[consumer, resource] = T_param.activation_energy_carnivore
+                                            end
+                                        end
+                                    end
+                                end
+                            # T0 varies for carnivores and herbivores
+                            for consumer in 1:p[:S]
+                                for resource in 1:p[:S]
+                                    if p[:A][consumer, resource] == 1
+                                        if p[:is_producer][resource]
+                                            T0_all[consumer, resource] = T_param.T0_herbivore
+                                        else
+                                            T0_all[consumer, resource] = T_param.T0_carnivore
+                                        end
+                                    end
+                                end
+                            end
+                            return norm_constant_all .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
+                        end
+end
+
+
+"""
+**Option 3 : Extended Boltzmann-Arrhenius function for growth rate**
 
 
 | Parameter          | Meaning                                               | Default values | Reference            |
@@ -257,7 +375,7 @@ growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deacti
 
 """
 
-function extended_BA(T_param)
+function extended_BA_r(T_param)
     k = 8.617e-5 # Boltzmann constant
     Δenergy = T_param.deactivation_energy .- T_param.activation_energy
     return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
@@ -265,7 +383,108 @@ end
 
 
 """
-**Option 4 : Gaussian function**
+**Option 3 : Extended Boltzmann-Arrhenius function for metabolic rate**
+
+
+| Parameter          | Meaning                                               | Default values | Reference            |
+|:-------------------|:------------------------------------------------------|:---------------|----------------------|
+| norm_constant      | scaling coefficient                                   | 3e8            | NA                   |
+| activation_energy  | activation energy                                     | 0.53           | Dell et al 2011      |
+| deactivation_energy| deactivation energy                                   | 1.15           | Dell et al 2011      |
+| T_opt              | temperature at which trait value is maximal           | 298.15         | NA                   |
+| β                  | allometric exponent                                   | -0.25          | Gillooly et al. 2002 |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
+
+
+"""
+function extended_BA_x(T_param)
+    k = 8.617e-5 # Boltzmann constant
+    Δenergy = T_param.deactivation_energy .- T_param.activation_energy
+    return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
+end
+
+"""
+**Option 3 : Extended Boltzmann-Arrhenius function for attack rate**
+
+
+| Parameter          | Meaning                                               | Default values | Reference            |
+|:-------------------|:------------------------------------------------------|:---------------|----------------------|
+| norm_constant      | scaling coefficient                                   | 3e8            | NA                   |
+| activation_energy  | activation energy                                     | 0.53           | Dell et al 2011      |
+| deactivation_energy| deactivation energy                                   | 1.15           | Dell et al 2011      |
+| T_opt              | temperature at which trait value is maximal           | 298.15         | NA                   |
+| β                  | allometric exponent                                   | -0.25          | Gillooly et al. 2002 |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
+
+
+"""
+function extended_BA_attackr(T_param)
+    k = 8.617e-5 # Boltzmann constant
+    Δenergy = T_param.deactivation_energy .- T_param.activation_energy
+    return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
+end
+
+"""
+**Option 4 : Gaussian function for growth rate**
+
+| Parameter    | Meaning                                        | Default values | Reference            |
+|:-------------|:-----------------------------------------------|:---------------|:---------------------|
+| shape        | hump-shaped (:hump) or U-shaped (:U) curve     | :hump          | Amarasekare 2015     |
+| norm_constant| minimal/maximal trait value                    | 0.5            | NA                   |
+| range        | performance breath (width of function)         | 20             | Amarasekare 2015     |
+| T_opt        | temperature at which trait value is maximal    | 295            | Amarasekare 2015     |
+| β            | allometric exponent                            | -0.25          | Gillooly et al 2002  |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
+
+"""
+function gaussian_r(T_param)
+    if T_param.shape == :hump
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+    elseif T_param.shape == :U
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+    end
+end
+
+"""
+**Option 4 : Gaussian function for metabolic rate**
+
+| Parameter    | Meaning                                        | Default values | Reference            |
+|:-------------|:-----------------------------------------------|:---------------|:---------------------|
+| shape        | hump-shaped (:hump) or U-shaped (:U) curve     | :hump          | Amarasekare 2015     |
+| norm_constant| minimal/maximal trait value                    | 0.5            | NA                   |
+| range        | performance breath (width of function)         | 20             | Amarasekare 2015     |
+| T_opt        | temperature at which trait value is maximal    | 295            | Amarasekare 2015     |
+| β            | allometric exponent                            | -0.25          | Gillooly et al 2002  |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
+
+"""
+function gaussian_x(T_param)
+    if T_param.shape == :hump
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+    elseif T_param.shape == :U
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+    end
+end
+
+
+"""
+**Option 4 : Gaussian function for handling time rate**
 
 | Parameter    | Meaning                                        | Default values | Reference            |
 |:-------------|:-----------------------------------------------|:---------------|:---------------------|
@@ -282,7 +501,34 @@ growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 
 
 """
 
-function gaussian(T_param)
+function gaussian_handlingt(T_param)
+    if T_param.shape == :hump
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+    elseif T_param.shape == :U
+        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+    end
+end
+
+
+"""
+**Option 4 : Gaussian function for attack rate rate**
+
+| Parameter    | Meaning                                        | Default values | Reference            |
+|:-------------|:-----------------------------------------------|:---------------|:---------------------|
+| shape        | hump-shaped (:hump) or U-shaped (:U) curve     | :hump          | Amarasekare 2015     |
+| norm_constant| minimal/maximal trait value                    | 0.5            | NA                   |
+| range        | performance breath (width of function)         | 20             | Amarasekare 2015     |
+| T_opt        | temperature at which trait value is maximal    | 295            | Amarasekare 2015     |
+| β            | allometric exponent                            | -0.25          | Gillooly et al 2002  |
+
+Default values are given as an example for growth rate r.
+
+Example:
+growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
+
+"""
+
+function gaussian_attackr(T_param)
     if T_param.shape == :hump
         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
     elseif T_param.shape == :U
@@ -300,19 +546,3 @@ end
 function handling_time_scaling(p, β_resource)
     return p[:ht] = p[:ht] * (p[:bodymass]' .^ β_resource)
 end
-
-
-# S = size(parameters[:A], 1)
-# # Efficiency matrix
-# efficiency = zeros(Float64,(S, S))
-# for consumer in 1:S
-# for resource in 1:S
-#   if parameters[:A][consumer, resource] == 1
-#     if parameters[:is_producer][resource]
-#       efficiency[consumer, resource] = parameters[:e_herbivore]
-#     else
-#       efficiency[consumer, resource] = parameters[:e_carnivore]
-#     end
-#   end
-# end
-# end
