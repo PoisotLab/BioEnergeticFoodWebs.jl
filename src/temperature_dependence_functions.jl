@@ -304,60 +304,11 @@ function exponential_BA_functionalr(T_param)
     k=8.617e-5
 
     return (bodymass, T, p) -> for i in 1:1
-                                # define empty matrices
-                                S = p[:S]
-                                norm_constant_all = zeros(Float64,(p[:S], p[:S]))
-                                β_all = zeros(Float64,(p[:S], p[:S]))
-                                activation_energy_all = zeros(Float64,(p[:S], p[:S]))
-                                T0_all = zeros(Float64,(p[:S], p[:S]))
-                                # norm_constant varies for carnivores and herbivores
-                                for consumer in 1:p[:S]
-                                    for resource in 1:p[:S]
-                                        if p[:A][consumer, resource] == 1
-                                            if p[:is_producer][resource]
-                                                norm_constant_all[consumer, resource] = T_param.norm_constant_herbivore
-                                            else
-                                                norm_constant_all[consumer, resource] = T_param.norm_constant_carnivore
-                                            end
-                                        end
-                                    end
-                                end
-                                # β varies for carnivores and herbivores
-                                for consumer in 1:p[:S]
-                                    for resource in 1:p[:S]
-                                        if p[:A][consumer, resource] == 1
-                                            if p[:is_producer][resource]
-                                                β_all[consumer, resource] = T_param.β_herbivore
-                                            else
-                                                β_all[consumer, resource] = T_param.β_carnivore
-                                            end
-                                        end
-                                    end
-                                end
-                                # activation energy varies for carnivores and herbivores
-                                for consumer in 1:p[:S]
-                                    for resource in 1:p[:S]
-                                        if p[:A][consumer, resource] == 1
-                                            if p[:is_producer][resource]
-                                                activation_energy_all[consumer, resource] = T_param.activation_energy_herbivore
-                                            else
-                                                activation_energy_all[consumer, resource] = T_param.activation_energy_carnivore
-                                            end
-                                        end
-                                    end
-                                end
-                            # T0 varies for carnivores and herbivores
-                            for consumer in 1:p[:S]
-                                for resource in 1:p[:S]
-                                    if p[:A][consumer, resource] == 1
-                                        if p[:is_producer][resource]
-                                            T0_all[consumer, resource] = T_param.T0_herbivore
-                                        else
-                                            T0_all[consumer, resource] = T_param.T0_carnivore
-                                        end
-                                    end
-                                end
-                            end
+                                norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                activation_energy_all = T_param.activation_energy_producer .* p[:is_producer] .+ T_param.activation_energy_vertebrate .* p[:vertebrates] .+ T_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                T0_all = T_param.T0_producer .* p[:is_producer] .+ T_param.T0_vertebrate .* p[:vertebrates] .+ T_param.T0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+
                             return norm_constant_all .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
                         end
 end
@@ -383,9 +334,9 @@ growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deacti
 """
 
 function extended_BA_r(T_param)
-    k = 8.617e-5 # Boltzmann constant
-    Δenergy = T_param.deactivation_energy .- T_param.activation_energy
-    return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
+     k = 8.617e-5 # Boltzmann constant
+     Δenergy = T_param.deactivation_energy .- T_param.activation_energy
+     return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
 end
 
 
@@ -409,18 +360,18 @@ growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deacti
 
 """
 function extended_BA_x(T_param)
-    k = 8.617e-5 # Boltzmann constant
-    return(bodymass, T, p) -> for i in 1:1
-                                norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                activation_energy_all = T_param.activation_energy_producer .* p[:is_producer] .+ T_param.activation_energy_vertebrate .* p[:vertebrates] .+ T_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                deactivation_energy_all = T_param.deactivation_energy_producer .* p[:is_producer] .+ T_param.deactivation_energy_vertebrate .* p[:vertebrates] .+ T_param.deactivation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                T_opt_all = T_param.T_opt_producer .* p[:is_producer] .+ T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                Δenergy = deactivation_energy_all .- activation_energy_all
+     k = 8.617e-5 # Boltzmann constant
+     return(bodymass, T, p) -> for i in 1:1
+                                 norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                 activation_energy_all = T_param.activation_energy_producer .* p[:is_producer] .+ T_param.activation_energy_vertebrate .* p[:vertebrates] .+ T_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                 deactivation_energy_all = T_param.deactivation_energy_producer .* p[:is_producer] .+ T_param.deactivation_energy_vertebrate .* p[:vertebrates] .+ T_param.deactivation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                 T_opt_all = T_param.T_opt_producer .* p[:is_producer] .+ T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                 β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                 Δenergy = deactivation_energy_all .- activation_energy_all
 
-                                return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
+                                 return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
 
-                            end
+                             end
 end
 
 """
@@ -443,9 +394,19 @@ growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deacti
 
 """
 function extended_BA_attackr(T_param)
-    k = 8.617e-5 # Boltzmann constant
-    Δenergy = T_param.deactivation_energy .- T_param.activation_energy
-    return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
+     k = 8.617e-5 # Boltzmann constant
+     Δenergy = T_param.deactivation_energy .- T_param.activation_energy
+     return(bodymass, T, p) -> for i in 1:1
+                                norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                activation_energy_all = T_param.activation_energy_producer .* p[:is_producer] .+ T_param.activation_energy_vertebrate .* p[:vertebrates] .+ T_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                deactivation_energy_all = T_param.deactivation_energy_producer .* p[:is_producer] .+ T_param.deactivation_energy_vertebrate .* p[:vertebrates] .+ T_param.deactivation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                T_opt_all = T_param.T_opt_producer .* p[:is_producer] .+ T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                Δenergy = deactivation_energy_all .- activation_energy_all
+
+                                return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
+
+                             end
 end
 
 """
@@ -466,11 +427,7 @@ growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 
 
 """
 function gaussian_r(T_param)
-    if T_param.shape == :hump
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    elseif T_param.shape == :U
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    end
+#         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
 end
 
 """
@@ -491,11 +448,16 @@ growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 
 
 """
 function gaussian_x(T_param)
-    if T_param.shape == :hump
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    elseif T_param.shape == :U
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    end
+#
+#     return(bodymass, T, p) -> for i in 1:1
+#
+#                                 norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+#                                 T_opt_all = T_param.T0_producer .* p[:is_producer] .+ T_param.T0_vertebrate .* p[:vertebrates] .+ T_param.T0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+#                                 β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+#                                 range_all = T_param.range_producer .* p[:is_producer] .+ T_param.range_vertebrate .* p[:vertebrates] .+ T_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+#
+#                                 return bodymass.^β_all .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+#                               end
 end
 
 
@@ -518,11 +480,11 @@ growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 
 """
 
 function gaussian_handlingt(T_param)
-    if T_param.shape == :hump
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    elseif T_param.shape == :U
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    end
+#     if T_param.shape == :hump
+#         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+#     elseif T_param.shape == :U
+#         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+#     end
 end
 
 
@@ -545,11 +507,11 @@ growthrate=gaussian(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 
 """
 
 function gaussian_attackr(T_param)
-    if T_param.shape == :hump
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    elseif T_param.shape == :U
-        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
-    end
+#     if T_param.shape == :hump
+#         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+#     elseif T_param.shape == :U
+#         return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp((T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
+#     end
 end
 
 """
@@ -560,5 +522,5 @@ end
 """
 
 function handling_time_scaling(p, β_resource)
-    return p[:ht] = p[:ht] * (p[:bodymass]' .^ β_resource)
+#     return p[:ht] = p[:ht] * (p[:bodymass]' .^ β_resource)
 end
