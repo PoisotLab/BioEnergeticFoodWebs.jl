@@ -31,15 +31,13 @@ export trophic_rank,
   extended_eppley_x,
   exponential_BA_r,
   exponential_BA_x,
-  exponential_BA_attackr,
-  exponential_BA_handlingt,
+  exponential_BA_functionalr,
   extended_BA_r,
   extended_BA_x,
   extended_BA_attackr,
   gaussian_r,
   gaussian_x,
-  gaussian_attackr,
-  gaussian_handlingt,
+  gaussian_functionalr,
   temperature_size_rule
 
 
