@@ -536,14 +536,3 @@ function gaussian_functionalr(T_param)
                                 end
                             end
 end
-
-"""
-**TODO**
-- handling time
-- body masses
-- β_resource
-"""
-
-function handling_time_scaling(p, β_resource)
-#     return p[:ht] = p[:ht] * (p[:bodymass]' .^ β_resource)
-end
