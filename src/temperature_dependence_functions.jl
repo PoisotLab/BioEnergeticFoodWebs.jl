@@ -314,11 +314,11 @@ function exponential_BA_functionalr(T_param)
                                 for resource in 1:p[:S]
                                   if p[:A][consumer, resource] == 1
                                     if p[:is_producer][resource]
-                                        β_resource[consumer, resource] = β_producer
+                                        β_resource[consumer, resource] = T_param.β_producer
                                     elseif p[:vertebrates][resource]
-                                        β_resource[consumer, resource] = β_vertebrate
+                                        β_resource[consumer, resource] = T_param.β_vertebrate
                                     else
-                                        β_resource[consumer, resource] = β_invertebrate
+                                        β_resource[consumer, resource] = T_param.β_invertebrate
                                     end
                                  end
                                 end
@@ -424,17 +424,17 @@ function extended_BA_attackr(T_param)
                                 for resource in 1:p[:S]
                                   if p[:A][consumer, resource] == 1
                                     if p[:is_producer][resource]
-                                        β_resource[consumer, resource] = β_producer
+                                        β_resource[consumer, resource] = T_param.β_producer
                                     elseif p[:vertebrates][resource]
-                                        β_resource[consumer, resource] = β_vertebrate
+                                        β_resource[consumer, resource] = T_param.β_vertebrate
                                     else
-                                        β_resource[consumer, resource] = β_invertebrate
+                                        β_resource[consumer, resource] = T_param.β_invertebrate
                                     end
                                  end
                                 end
                                 end
 
-                                return  norm_constant_all .* bodymass .^(β_consumer) .* bodymass' .^(β_resource) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
+                                return  norm_constant_all .* bodymass .^(β_consumer) .* bodymass' .^(β_resource) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
 
                              end
 end
@@ -519,11 +519,11 @@ function gaussian_functionalr(T_param)
                                 for resource in 1:p[:S]
                                   if p[:A][consumer, resource] == 1
                                     if p[:is_producer][resource]
-                                        β_resource[consumer, resource] = β_producer
+                                        β_resource[consumer, resource] = T_param.β_producer
                                     elseif p[:vertebrates][resource]
-                                        β_resource[consumer, resource] = β_vertebrate
+                                        β_resource[consumer, resource] = T_param.β_vertebrate
                                     else
-                                        β_resource[consumer, resource] = β_invertebrate
+                                        β_resource[consumer, resource] = T_param.β_invertebrate
                                     end
                                  end
                                 end
