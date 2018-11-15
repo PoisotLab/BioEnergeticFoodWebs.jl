@@ -299,7 +299,6 @@ Example:
 metabolicrate=exponential_BA(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31))
 
 """
-
 function exponential_BA_functionalr(T_param)
     k=8.617e-5
 
@@ -307,9 +306,25 @@ function exponential_BA_functionalr(T_param)
                                 norm_constant_all = T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 activation_energy_all = T_param.activation_energy_vertebrate .* p[:vertebrates] .+ T_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 T0_all = T_param.T0_vertebrate .* p[:vertebrates] .+ T_param.T0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                β_all = T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                β_consumer = T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
 
-                            return norm_constant_all .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
+                                # Efficiency matrix
+                                β_resource = zeros(Float64,(p[:S], p[:S]))
+                                for consumer in 1:p[:S]
+                                for resource in 1:p[:S]
+                                  if p[:A][consumer, resource] == 1
+                                    if p[:is_producer][resource]
+                                        β_resource[consumer, resource] = β_producer
+                                    elseif p[:vertebrates][resource]
+                                        β_resource[consumer, resource] = β_vertebrate
+                                    else
+                                        β_resource[consumer, resource] = β_invertebrate
+                                    end
+                                 end
+                                end
+                                end
+
+                            return norm_constant_all .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
                         end
 end
 
@@ -396,14 +411,30 @@ growthrate=extended_BA(@NT(norm_constant = 3e8, activation_energy = 0.53, deacti
 function extended_BA_attackr(T_param)
      k = 8.617e-5 # Boltzmann constant
      return(bodymass, T, p) -> for i in 1:1
+                                # parameters vary if the consumer is a vertebrate/invertebrate
                                 norm_constant_all = T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 activation_energy_all = T_param.activation_energy_vertebrate .* p[:vertebrates] .+ T_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 deactivation_energy_all = T_param.deactivation_energy_vertebrate .* p[:vertebrates] .+ T_param.deactivation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 T_opt_all = T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                β_all = T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                β_consumer = T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 Δenergy = deactivation_energy_all .- activation_energy_all
+                                # β for resources
+                                β_resource = zeros(Float64,(p[:S], p[:S]))
+                                for consumer in 1:p[:S]
+                                for resource in 1:p[:S]
+                                  if p[:A][consumer, resource] == 1
+                                    if p[:is_producer][resource]
+                                        β_resource[consumer, resource] = β_producer
+                                    elseif p[:vertebrates][resource]
+                                        β_resource[consumer, resource] = β_vertebrate
+                                    else
+                                        β_resource[consumer, resource] = β_invertebrate
+                                    end
+                                 end
+                                end
+                                end
 
-                                return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
+                                return  norm_constant_all .* bodymass .^(β_consumer) .* bodymass' .^(β_resource) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
 
                              end
 end
@@ -480,12 +511,28 @@ function gaussian_functionalr(T_param)
     return(bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 T_opt_all = T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                β_all = T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                β_consumer = T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 range_all = T_param.range_vertebrate .* p[:vertebrates] .+ T_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                # β for resources
+                                β_resource = zeros(Float64,(p[:S], p[:S]))
+                                for consumer in 1:p[:S]
+                                for resource in 1:p[:S]
+                                  if p[:A][consumer, resource] == 1
+                                    if p[:is_producer][resource]
+                                        β_resource[consumer, resource] = β_producer
+                                    elseif p[:vertebrates][resource]
+                                        β_resource[consumer, resource] = β_vertebrate
+                                    else
+                                        β_resource[consumer, resource] = β_invertebrate
+                                    end
+                                 end
+                                end
+                                end
+
                                 if T_param.shape == :hump
-                                    return bodymass.^β_all .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    return bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 elseif T_param.shape == :U
-                                    return bodymass.^β_all .* norm_constant_all .* exp((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    return bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 end
                             end
 end
