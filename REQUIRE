@@ -4,3 +4,5 @@ OrdinaryDiffEq
 DiffEqCallbacks
 JSON
 JLD
+StatsBase
+NamedTuples
