@@ -314,9 +314,9 @@ This function can be called as an argument in `model_parameters` to define an ex
 
 
 Example:
-attackrate=exponential_BA_functionalr(@NT(norm_constant_producer = -16.54, norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
-                                          activation_energy_producer = -0.69, activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
-                                          T0_producer = 293.15 , T0_vertebrate = 293.15, T0_invertebrate = 293.15,
+attackrate=exponential_BA_functionalr(@NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
+                                          activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
+                                          T0_vertebrate = 293.15, T0_invertebrate = 293.15,
                                           β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
 
 """
