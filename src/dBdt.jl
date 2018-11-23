@@ -99,6 +99,11 @@ function fill_xyb_matrix!(xyb, biomass, x, y)
   for i in eachindex(biomass)
     @inbounds xyb[i] = x[i]*y[i]*biomass[i]
   end
+  for j in eachindex(xyb)
+    if xyb[j] == Inf
+      xyb[j] = 0
+    end
+  end
 end
 
 function update_F_matrix!(F, xyb)
