@@ -343,8 +343,9 @@ function exponential_BA_functionalr(T_param)
                                  end
                                 end
                                 end
-
-                            return norm_constant_all .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
+                                rate = norm_constant_all .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
+                                rate[isnan.(rate)] = 0
+                            return rate
                         end
 end
 
