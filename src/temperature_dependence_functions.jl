@@ -237,6 +237,8 @@ This function can be called as an argument in `model_parameters` to define an ex
 | activation_energy | activation energy                     | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
 | T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
 | β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
+| k                 | Boltzmann norm_constant               | 8.617e-5       |                                       |
+| T0K               | 0 degrees in Kelvin                   | 273.15         |                                       |
 
 Default values are given as an example for metabolic rate x.
 
@@ -246,8 +248,9 @@ growthrate=exponential_BA_r(@NT(norm_constant = -16.54, activation_energy = -0.6
 """
 
 function exponential_BA_r(T_param)
-    k=8.617e-5
-    return (bodymass, T, p) -> T_param.norm_constant .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T .- T_param.T0) ./ (k * T .* T_param.T0))
+    k = 8.617e-5
+    T0K = 273.15
+    return (bodymass, T, p) -> exp(T_param.norm_constant) .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T_param.T0 .- (T + T0K)) ./ (k * (T + T0K) .* T_param.T0))
 end
 
 """
@@ -281,6 +284,7 @@ metabolicrate=exponential_BA_x(@NT(norm_constant_producer = -16.54, norm_constan
 
 function exponential_BA_x(T_param)
     k=8.617e-5
+    T0K = 273.15
 
     return (bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -288,7 +292,7 @@ function exponential_BA_x(T_param)
                                 T0_all = T_param.T0_producer .* p[:is_producer] .+ T_param.T0_vertebrate .* p[:vertebrates] .+ T_param.T0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 β_all = T_param.β_producer .* p[:is_producer] .+ T_param.β_vertebrate .* p[:vertebrates] .+ T_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
 
-                                return norm_constant_all .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
+                                return exp.(norm_constant_all) .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
                             end
 end
 
@@ -322,6 +326,7 @@ attackrate=exponential_BA_functionalr(@NT(norm_constant_vertebrate = -16.54, nor
 """
 function exponential_BA_functionalr(T_param)
     k=8.617e-5
+    T0K = 273.15
 
     return (bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -343,7 +348,7 @@ function exponential_BA_functionalr(T_param)
                                  end
                                 end
                                 end
-                                rate = norm_constant_all .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T .- T0_all) ./ (k * T .* T0_all))
+                                rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
                                 rate[isnan.(rate)] = 0
                             return rate
                         end
