@@ -23,22 +23,26 @@ export trophic_rank,
   consumer_intake,
   metabolism,
   adbm_model,
-  no_effect_x,
-  no_effect_r,
-  no_effect_handlingt,
-  no_effect_attackr,
-  extended_eppley_r,
-  extended_eppley_x,
-  exponential_BA_r,
-  exponential_BA_x,
-  exponential_BA_functionalr,
-  extended_BA_r,
-  extended_BA_x,
-  extended_BA_attackr,
-  gaussian_r,
-  gaussian_x,
-  gaussian_functionalr,
-  temperature_size_rule
+  # no_effect_x,
+  # no_effect_r,
+  # no_effect_handlingt,
+  # no_effect_attackr,
+  # extended_eppley_r,
+  # extended_eppley_x,
+  # exponential_BA_r,
+  # exponential_BA_x,
+  # exponential_BA_functionalr,
+  # extended_BA_r,
+  # extended_BA_x,
+  # extended_BA_attackr,
+  # gaussian_r,
+  # gaussian_x,
+  # gaussian_functionalr,
+  temperature_size_rule,
+  NoEffectTemperature,
+  ExponentialBA,
+  ExtendedBA,
+  Gaussian
 
 
 # Includes
@@ -59,5 +63,6 @@ include(joinpath(".", "rewiring/parameters/updateParameters.jl"))
 
 include(joinpath(".", "temperature_dependence_functions.jl"))
 include(joinpath(".", "temperature_size_rule_function.jl"))
+include(joinpath(".", "biological_rates.jl"))
 
 end
