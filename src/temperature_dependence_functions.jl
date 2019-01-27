@@ -79,7 +79,7 @@ Internally the function takes 3 arguments:
 
 """
 
-function no_effect_x(T_param)
+function no_effect_x(;T_param = @NT(a_vertebrate = 0.88, a_invertebrate = 0.3141, a_producer = 0.138))
     return (bodymass, T, p) ->  (T_param.a_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.a_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]) + T_param.a_producer .* p[:is_producer]) .* (bodymass.^-0.25)
 end
 
@@ -101,7 +101,7 @@ Internally the function takes 3 arguments (unused in this case):
 
 """
 
-function no_effect_r(T_param)
+function no_effect_r(;T_param = @NT(r = 1))
     return (bodymass, T, p) -> repeat([T_param.r], size(p[:A], 1))
 end
 
@@ -125,7 +125,7 @@ Internally the function takes 3 arguments (unused in this case):
 
 """
 
-function no_effect_handlingt(T_param)
+function no_effect_handlingt(;T_param = @NT = y_vertebrate = 4.0, y_invertebrate = 8.0)
      return (bodymass, T, p) ->  1 ./ (T_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]))
 end
 
@@ -147,7 +147,7 @@ Internally the function takes 3 arguments (unused in this case):
 
 """
 
-function no_effect_attackr(T_param)
+function no_effect_attackr(;T_param = @NT(Γ = 0.5))
     return (bodymass, T, p) -> 1 ./ (T_param.Γ .* p[:ht])
 end
 
@@ -173,7 +173,7 @@ Example:
 growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25))
 """
 
-function extended_eppley_r(T_param)
+function extended_eppley_r(;T_param = @NT(maxrate_0 = 0.81, eppley_exponent = 0.0631, T_opt = 298.15, β = -0.25))
     topt = T_param.T_opt - 273.15
 
     return (bodymass, T, p) -> bodymass.^T_param.β .* T_param.maxrate_0 .* exp(T_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- topt) ./ (T_param.range./2)).^2)
@@ -211,7 +211,11 @@ metabolicrate = extended_eppley_x(@NT(maxrate_0_producer = 0.81, maxrate_0_inver
                                      β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
 
-function extended_eppley_x(T_param)
+function extended_eppley_x(;T_param = @NT(maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
+                                     eppley_exponent_producer = 0.0631, eppley_exponent_invertebrate = 0.0631, eppley_exponent_vertebrate = 0.0631,
+                                     T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
+                                     range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
+                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 
     return (bodymass, T, p) -> for i in 1:1
                                     maxrate_0_all = T_param.maxrate_0_producer .* p[:is_producer] .+ T_param.maxrate_0_vertebrate .* p[:vertebrates] .+ T_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -247,7 +251,7 @@ growthrate=exponential_BA_r(@NT(norm_constant = -16.54, activation_energy = -0.6
 
 """
 
-function exponential_BA_r(T_param)
+function exponential_BA_r(;T_param = @NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31))
     k = 8.617e-5
     T0K = 273.15
     return (bodymass, T, p) -> exp(T_param.norm_constant) .* (bodymass .^T_param.β) .* exp.(T_param.activation_energy .* (T_param.T0 .- (T + T0K)) ./ (k * (T + T0K) .* T_param.T0))
@@ -282,7 +286,10 @@ metabolicrate=exponential_BA_x(@NT(norm_constant_producer = -16.54, norm_constan
 
 """
 
-function exponential_BA_x(T_param)
+function exponential_BA_x(;T_param = @NT(norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
+                                   activation_energy_producer = -0.69, activation_energy_invertebrate = -0.69, activation_energy_vertebrate = -0.69,
+                                   T0_producer = 293.15, T0_invertebrate = 293.15, T0_vertebrate = 293.15,
+                                   β_producer = -0.31, β_invertebrate = -0.31, β_vertebrate = -0.31))
     k=8.617e-5
     T0K = 273.15
 
@@ -324,7 +331,10 @@ attackrate=exponential_BA_functionalr(@NT(norm_constant_vertebrate = -16.54, nor
                                           β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
 
 """
-function exponential_BA_functionalr(T_param)
+function exponential_BA_functionalr(;T_param = @NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
+                                          activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
+                                          T0_vertebrate = 293.15, T0_invertebrate = 293.15,
+                                          β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
     k=8.617e-5
     T0K = 273.15
 
@@ -372,7 +382,7 @@ growthrate=extended_BA_r(@NT(norm_constant = 3e8, activation_energy = 0.53, deac
 
 """
 
-function extended_BA_r(T_param)
+function extended_BA_r(;T_param = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
      k = 8.617e-5 # Boltzmann constant
      Δenergy = T_param.deactivation_energy .- T_param.activation_energy
      return(bodymass, T, p) -> T_param.norm_constant .* bodymass .^(T_param.β) .* exp.(.-T_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (T_param.deactivation_energy .- (T_param.deactivation_energy ./ T_param.T_opt .+ k .* log(T_param.activation_energy ./ Δenergy)).*T))))
@@ -411,7 +421,11 @@ metabolicrate=extended_BA_x(@NT(norm_constant_producer = 3e8, norm_constant_inve
 
 
 """
-function extended_BA_x(T_param)
+function extended_BA_x(;T_param = @NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+                                activation_energy_producer = 0.53, activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
+                                deactivation_energy_producer = 1.15, deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
+                                T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
+                                β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
      k = 8.617e-5 # Boltzmann constant
      return(bodymass, T, p) -> for i in 1:1
                                  norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -455,7 +469,11 @@ attackrate=extended_BA_attackr(@NT(norm_constant_invertebrate = 3e8, norm_consta
 
 
 """
-function extended_BA_attackr(T_param)
+function extended_BA_attackr(;T_param = @NT(norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+                                   activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
+                                   deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
+                                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
+                                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
      k = 8.617e-5 # Boltzmann constant
      return(bodymass, T, p) -> for i in 1:1
                                 # parameters vary if the consumer is a vertebrate/invertebrate
@@ -503,7 +521,7 @@ Example:
 growthrate=gaussian_r(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
 
 """
-function gaussian_r(T_param)
+function gaussian_r(;T_param = @NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
        return(bodymass, T, p) -> bodymass.^T_param.β .* T_param.norm_constant .* exp(.-(T .- T_param.T_opt).^2 ./ (2 .*T_param.range.^2))
 end
 
@@ -533,7 +551,10 @@ metabolicrate=gaussian_x(@NT(norm_constant_producer = 0.5, norm_constant_inverte
                              β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 
 """
-function gaussian_x(T_param)
+function gaussian_x(;T_param = @NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+                             range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
+                             T_opt_producer = 295, T_opt_invertebrate = 295, T_opt_vertebrate = 295,
+                             β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 
      return(bodymass, T, p) -> for i in 1:1
                                  norm_constant_all = T_param.norm_constant_producer .* p[:is_producer] .+ T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -572,7 +593,11 @@ attackrate=gaussian_functionalr(@NT(shape = :hump,
 
 """
 
-function gaussian_functionalr(T_param)
+function gaussian_functionalr(;T_param = @NT(shape = :hump,
+                                    norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+                                    range_invertebrate = 20, range_vertebrate = 20,
+                                    T_opt_invertebrate = 295, T_opt_vertebrate = 295,
+                                    β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
     return(bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = T_param.norm_constant_vertebrate .* p[:vertebrates] .+ T_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 T_opt_all = T_param.T_opt_vertebrate .* p[:vertebrates] .+ T_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
