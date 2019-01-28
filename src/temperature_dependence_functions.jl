@@ -108,6 +108,12 @@ Internally the function takes 3 arguments (unused in this case):
 """
 
 function no_effect_r(default_temp_parameters = @NT(r = 1), passed_temp_parameters...)
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
     return (bodymass, T, p) -> repeat([temperature_param.r], size(p[:A], 1))
 end
 
@@ -132,7 +138,13 @@ Internally the function takes 3 arguments (unused in this case):
 """
 
 function no_effect_handlingt(default_temp_parameters = @NT(y_vertebrate = 4.0, y_invertebrate = 8.0), passed_temp_parameters...)
-     return (bodymass, T, p) ->  1 ./ (temperature_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + temperature_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]))
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+    return (bodymass, T, p) ->  1 ./ (temperature_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + temperature_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]))
 end
 
 """
@@ -154,6 +166,12 @@ Internally the function takes 3 arguments (unused in this case):
 """
 
 function no_effect_attackr(default_temp_parameters = @NT(Γ = 0.5), passed_temp_parameters...)
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
     return (bodymass, T, p) -> 1 ./ (temperature_param.Γ .* p[:ht])
 end
 
@@ -180,6 +198,13 @@ growthrate=extended_eppley(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.
 """
 
 function extended_eppley_r(default_temp_parameters = @NT(maxrate_0 = 0.81, eppley_exponent = 0.0631, T_opt = 298.15, β = -0.25, range = 35), passed_temp_parameters...)
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+
     topt = temperature_param.T_opt - 273.15
 
     return (bodymass, T, p) -> bodymass.^temperature_param.β .* temperature_param.maxrate_0 .* exp(temperature_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- topt) ./ (temperature_param.range./2)).^2)
@@ -222,6 +247,12 @@ function extended_eppley_x(default_temp_parameters = @NT(maxrate_0_producer = 0.
                                      T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                                      range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
                                      β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25), passed_temp_parameters...)
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
 
     return (bodymass, T, p) -> for i in 1:1
                                     maxrate_0_all = temperature_param.maxrate_0_producer .* p[:is_producer] .+ temperature_param.maxrate_0_vertebrate .* p[:vertebrates] .+ temperature_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -260,6 +291,12 @@ growthrate=exponential_BA_r(@NT(norm_constant = -16.54, activation_energy = -0.6
 function exponential_BA_r(default_temp_parameters = @NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31), passed_temp_parameters...)
     k = 8.617e-5
     T0K = 273.15
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
     return (bodymass, T, p) -> exp(temperature_param.norm_constant) .* (bodymass .^temperature_param.β) .* exp.(temperature_param.activation_energy .* (temperature_param.T0 .- (T + T0K)) ./ (k * (T + T0K) .* temperature_param.T0))
 end
 
@@ -298,6 +335,12 @@ function exponential_BA_x(default_temp_parameters = @NT(norm_constant_producer =
                                    β_producer = -0.31, β_invertebrate = -0.31, β_vertebrate = -0.31), passed_temp_parameters...)
     k=8.617e-5
     T0K = 273.15
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
 
     return (bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = temperature_param.norm_constant_producer .* p[:is_producer] .+ temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -343,6 +386,12 @@ function exponential_BA_functionalr(default_temp_parameters = @NT(norm_constant_
                                           β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31), passed_temp_parameters...)
     k=8.617e-5
     T0K = 273.15
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
 
     return (bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -391,7 +440,14 @@ growthrate=extended_BA_r(@NT(norm_constant = 3e8, activation_energy = 0.53, deac
 function extended_BA_r(default_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25), passed_temp_parameters...)
      k = 8.617e-5 # Boltzmann constant
      Δenergy = temperature_param.deactivation_energy .- temperature_param.activation_energy
-     return(bodymass, T, p) -> temperature_param.norm_constant .* bodymass .^(temperature_param.β) .* exp.(.-temperature_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (temperature_param.deactivation_energy .- (temperature_param.deactivation_energy ./ temperature_param.T_opt .+ k .* log(temperature_param.activation_energy ./ Δenergy)).*T))))
+	 if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+
+    return(bodymass, T, p) -> temperature_param.norm_constant .* bodymass .^(temperature_param.β) .* exp.(.-temperature_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (temperature_param.deactivation_energy .- (temperature_param.deactivation_energy ./ temperature_param.T_opt .+ k .* log(temperature_param.activation_energy ./ Δenergy)).*T))))
 end
 
 
@@ -433,6 +489,13 @@ function extended_BA_x(default_temp_parameters = @NT(norm_constant_producer = 3e
                                 T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                                 β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25), passed_temp_parameters...)
      k = 8.617e-5 # Boltzmann constant
+	 if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+ 	else
+	  temperature_param = default_temp_parameters
+	end
+
      return(bodymass, T, p) -> for i in 1:1
                                  norm_constant_all = temperature_param.norm_constant_producer .* p[:is_producer] .+ temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                  activation_energy_all = temperature_param.activation_energy_producer .* p[:is_producer] .+ temperature_param.activation_energy_vertebrate .* p[:vertebrates] .+ temperature_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -481,6 +544,13 @@ function extended_BA_attackr(default_temp_parameters = @NT(norm_constant_inverte
                                    T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                                    β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25), passed_temp_parameters...)
      k = 8.617e-5 # Boltzmann constant
+	 if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+
      return(bodymass, T, p) -> for i in 1:1
                                 # parameters vary if the consumer is a vertebrate/invertebrate
                                 norm_constant_all = temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -528,7 +598,13 @@ growthrate=gaussian_r(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt 
 
 """
 function gaussian_r(default_temp_parameters = @NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25), passed_temp_parameters...)
-       return(bodymass, T, p) -> bodymass.^temperature_param.β .* temperature_param.norm_constant .* exp(.-(T .- temperature_param.T_opt).^2 ./ (2 .*temperature_param.range.^2))
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+    return(bodymass, T, p) -> bodymass.^temperature_param.β .* temperature_param.norm_constant .* exp(.-(T .- temperature_param.T_opt).^2 ./ (2 .*temperature_param.range.^2))
 end
 
 """
@@ -561,6 +637,12 @@ function gaussian_x(default_temp_parameters = @NT(norm_constant_producer = 0.5, 
                              range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
                              T_opt_producer = 295, T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                              β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25), passed_temp_parameters...)
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
 
      return(bodymass, T, p) -> for i in 1:1
                                  norm_constant_all = temperature_param.norm_constant_producer .* p[:is_producer] .+ temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
@@ -604,7 +686,14 @@ function gaussian_functionalr(default_temp_parameters = @NT(shape = :hump,
                                     range_invertebrate = 20, range_vertebrate = 20,
                                     T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25), passed_temp_parameters...)
-    return(bodymass, T, p) -> for i in 1:1
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+
+	return(bodymass, T, p) -> for i in 1:1
                                 norm_constant_all = temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 T_opt_all = temperature_param.T_opt_vertebrate .* p[:vertebrates] .+ temperature_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 β_consumer = temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
