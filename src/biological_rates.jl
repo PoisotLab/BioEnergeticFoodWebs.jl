@@ -13,17 +13,33 @@ function NoEffectTemperature(rate_affected::Symbol; parameters_tuple...)
         :handlingtime or :attackrate")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? no_effect_r(T_param = parameters_tuple) : no_effect_r()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            no_effect_r(passed_temp_parameters = parameters_tuple)
+        else
+            no_effect_r()
+        end
     elseif rate_affected ∈ [:metabolism, :x, :metabolicrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? no_effect_x(T_param = parameters_tuple) : no_effect_x()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            no_effect_x(passed_temp_parameters = parameters_tuple)
+        else
+            no_effect_x()
+        end
     elseif rate_affected == :handlingtime
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? no_effect_handlingt(T_param = parameters_tuple) : no_effect_handlingt()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            no_effect_handlingt(passed_temp_parameters = parameters_tuple)
+        else
+            no_effect_handlingt()
+        end
     elseif rate_affected == :attackrate
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? no_effect_attackr(T_param = parameters_tuple) : no_effect_attackr()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            no_effect_attackr(passed_temp_parameters = parameters_tuple)
+        else
+            no_effect_attackr()
+        end
     end
 end
 
@@ -35,12 +51,19 @@ TODO
 function ExtendedEppley(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x] ; error("rate_affected should be eighter :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
     if rate_affected ∈ [:growth, :r, :growthrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? check_temperature_parameters(string(extended_eppley_r), parameters_tuple) : extended_eppley_r()
-        length(parameters_tuple) != 0 ? extended_eppley_r(T_param = parameters_tuple) : extended_eppley_r()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            extended_eppley_r(passed_temp_parameters = parameters_tuple)
+        else
+            extended_eppley_r()
+        end
     elseif rate_affected ∈ [:metabolism, :x, :metabolicrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? extended_eppley_x(T_param = parameters_tuple) : extended_eppley_x()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            extended_eppley_x(passed_temp_parameters = parameters_tuple)
+        else
+            extended_eppley_x()
+        end
     end
 end
 
@@ -54,14 +77,26 @@ function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
         error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? exponential_BA_r(T_param = parameters_tuple) : exponential_BA_r()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            exponential_BA_r(passed_temp_parameters = parameters_tuple)
+        else
+            exponential_BA_r()
+        end
     elseif rate_affected ∈ [:metabolism, :x, :metabolicrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? exponential_BA_x(T_param = parameters_tuple) : exponential_BA_x()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            exponential_BA_x(passed_temp_parameters = parameters_tuple)
+        else
+            exponential_BA_x()
+        end
     elseif rate_affected == :functionalresponse
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? exponential_BA_functionalr(T_param = parameters_tuple) : exponential_BA_functionalr()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            exponential_BA_functionalr(passed_temp_parameters = parameters_tuple)
+        else
+            exponential_BA_functionalr()
+        end
     end
 end
 
@@ -75,14 +110,26 @@ function ExtendedBA(rate_affected::Symbol; parameters_tuple...)
         error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), or :attackrate")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? extended_BA_r(T_param = parameters_tuple) : extended_BA_r()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            extended_BA_r(passed_temp_parameters = parameters_tuple)
+        else
+            extended_BA_r()
+        end
     elseif rate_affected ∈ [:metabolism, :x, :metabolicrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? extended_BA_x(T_param = parameters_tuple) : extended_BA_x()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            extended_BA_x(passed_temp_parameters = parameters_tuple)
+        else
+            extended_BA_x()
+        end
     elseif rate_affected == :attackrate
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? extended_BA_attackr(T_param = parameters_tuple) : extended_BA_attackr()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            extended_BA_attackr(passed_temp_parameters = parameters_tuple)
+        else
+            extended_BA_attackr()
+        end
     end
 end
 
@@ -96,13 +143,25 @@ function Gaussian(rate_affected::Symbol; parameters_tuple...)
         error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? gaussian_r(T_param = parameters_tuple) : gaussian_r()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            gaussian_r(passed_temp_parameters = parameters_tuple)
+        else
+            gaussian_r()
+        end
     elseif rate_affected ∈ [:metabolism, :x, :metabolicrate]
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? gaussian_x(T_param = parameters_tuple) : gaussian_x()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            gaussian_x(passed_temp_parameters = parameters_tuple)
+        else
+            gaussian_x()
+        end
     elseif rate_affected == :functionalresponse
-        #TODO @assert ...
-        length(parameters_tuple) != 0 ? gaussian_functionalr(T_param = parameters_tuple) : gaussian_functionalr()
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            gaussian_functionalr(passed_temp_parameters = parameters_tuple)
+        else
+            gaussian_functionalr()
+        end
     end
 end
