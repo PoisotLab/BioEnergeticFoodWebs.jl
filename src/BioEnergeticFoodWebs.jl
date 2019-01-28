@@ -40,6 +40,7 @@ export trophic_rank,
   # gaussian_functionalr,
   temperature_size_rule,
   NoEffectTemperature,
+  ExtendedEppley, 
   ExponentialBA,
   ExtendedBA,
   Gaussian
