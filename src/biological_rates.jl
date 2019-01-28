@@ -36,6 +36,7 @@ function ExtendedEppley(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x] ; error("rate_affected should be eighter :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
     if rate_affected ∈ [:growth, :r, :growthrate]
         #TODO @assert ...
+        isdefined(:parameters_tuple) ? check_temperature_parameters(string(extended_eppley_r), parameters_tuple) : extended_eppley_r()
         isdefined(:parameters_tuple) ? extended_eppley_r(T_param = parameters_tuple) : extended_eppley_r()
     elseif rate_affected ∈ [:metabolism, :x, :metabolicrate]
         #TODO @assert ...

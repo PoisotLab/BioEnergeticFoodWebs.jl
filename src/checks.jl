@@ -66,51 +66,67 @@ end
 
 """
 TODO
+
 """
-function check_temperature_parameters(rate::Symbol, tp::NamedTuple)
+function check_temperature_parameters(fname::String, passed_temp_parameters::NamedTuple)
     #list the parameters required for each biological rate and for each temperature effect function
-    #GROWTH
-    growth_noeffect = [tp.r]
-    growth_eppley = [tp.maxrate_0, tp.eppley_exponent, tp.T_opt, tp.range, tp.β]
-    growth_expBA = [tp.norm_constant, tp.activation_energy, tp.T0, tp.β, tp.k, tp.T0K]
-    growth_extBA = [tp.norm_constant, tp.activation_energy, tp.T0, tp.β, tp.deactivation_energy]
-    growth_gauss = [tp.shape, tp.norm_constant, tp.range, tp.T_opt, tp.β]
-    #METABOLISM
-    metab_noeffect = [tp.a_vertebrate, tp.a_invertebrate, tp.a_producer]
-    metab_eppley = [tp.maxrate_0_producer, tp.maxrate_0_invertebrate, tp.maxrate_0_vertebrate,
-                    tp.eppley_exponent_producer, tp.eppley_exponent_invertebrate, eppley_exponent_vertebrate,
-                    tp.T_opt_producer, tp.T_opt_invertebrate, tp.T_opt_vertebrate,
-                    tp.range_producer, tp.range_invertebrate, tp.range_vertebrate,
-                    tp.β_producer, tp.β_invertebrate, β_vertebrate]
-    metab_expBA = [tp.norm_constant_producer, tp.norm_constant_invertebrate, tp.norm_constant_vertebrate,
-                   tp.activation_energy_producer, tp.activation_energy_invertebrate, tp.activation_energy_vertebrate,
-                   tp.T0_producer, tp.T0_invertebrate, tp.T0_vertebrate,
-                   tp.β_producer, tp.β_invertebrate, tp.β_vertebrate]
-    metab_extBA = [tp.norm_constant_producer, tp.norm_constant_invertebrate, tp.norm_constant_vertebrate,
-                   tp.activation_energy_producer, tp.activation_energy_invertebrate, tp.activation_energy_vertebrate,
-                   tp.deactivation_energy_producer, tp.deactivation_energy_invertebrate, tp.deactivation_energy_vertebrate,
-                   tp.T_opt_producer, tp.T_opt_invertebrate, tp.T_opt_vertebrate,
-                   tp.β_producer, tp.β_invertebrate, tp.β_vertebrate]
-    metab_gauss = [tp.norm_constant_producer, tp.norm_constant_invertebrate, tp.norm_constant_vertebrate,
-                   tp.T_opt_producer, tp.T_opt_invertebrate, tp.T_opt_vertebrate,
-                   tp.β_producer, tp.β_invertebrate, tp.β_vertebrate,
-                   tp.range_producer tp.range_invertebrate tp.range_vertebrate]
-    #ATTACK
-    attack_noeffect = [tp.Γ]
-    attack_extBA = [tp.norm_constant_invertebrate, tp.norm_constant_vertebrate,
-                   tp.activation_energy_invertebrate, tp.activation_energy_vertebrate,
-                   tp.deactivation_energy_invertebrate, tp.deactivation_energy_vertebrate,
-                   tp.T_opt_invertebrate, tp.T_opt_vertebrate,
-                   tp.β_producer, tp.β_invertebrate, tp.β_vertebrate]
-    #HANDLING TIME
-    handling_noeffect = [tp.y_vertebrate, tp.y_invertebrate]
-    #FUNCTIONAL RESPONSE
-    fr_expBA = [tp.norm_constant_invertebrate, tp.norm_constant_vertebrate,
-                tp.activation_energy_invertebrate, tp.activation_energy_vertebrate,
-                tp.T0_invertebrate, tp.T0_vertebrate,
-                tp.β_producer, tp.β_invertebrate, tp.β_vertebrate]
-    fr_gauss = [tp.shape,
-                tp.norm_constant_invertebrate, tp.norm_constant_vertebrate,
-                tp.T_opt_invertebrate, tp.T_opt_vertebrate,
-                tp.β_producer, tp.β_invertebrate, tp.β_vertebrate]
+    if fname == "no_effect_x"
+      required_parameters = [:a_vertebrate, :a_invertebrate, :a_producer]
+    elseif fname == "no_effect_r"
+      required_parameters = [:r]
+    elseif fname == "no_effect_handlingt"
+      required_parameters = [:y_vertebrate, :y_invertebrate]
+    elseif fname == "no_effect_attackr"
+      required_parameters = [:Γ]
+    elseif fname == "extended_eppley_r"
+      required_parameters = [:maxrate_0, :eppley_exponent, :T_opt, :range, :β]
+    elseif fname == "extended_eppley_x"
+      required_parameters = [:maxrate_0_producer, :maxrate_0_invertebrate, :maxrate_0_vertebrate,
+                      :eppley_exponent_producer, :eppley_exponent_invertebrate, :eppley_exponent_vertebrate,
+                      :T_opt_producer, :T_opt_invertebrate, :T_opt_vertebrate,
+                      :range_producer, :range_invertebrate, :range_vertebrate,
+                      :β_producer, :β_invertebrate, :β_vertebrate]
+    elseif fname == "exponential_BA_r"
+      required_parameters = [:norm_constant, :activation_energy, :T0, :β, :k, :T0K]
+    elseif fname == "exponential_BA_x"
+      required_parameters = [:norm_constant_producer, :norm_constant_invertebrate, :norm_constant_vertebrate,
+                     :activation_energy_producer, :activation_energy_invertebrate, :activation_energy_vertebrate,
+                     :T0_producer, :T0_invertebrate, :T0_vertebrate,
+                     :β_producer, :β_invertebrate, :β_vertebrate]
+    elseif fname == "exponential_BA_functionalr"
+      required_parameters = [:norm_constant_invertebrate, :norm_constant_vertebrate,
+                  :activation_energy_invertebrate, :activation_energy_vertebrate,
+                  :T0_invertebrate, :T0_vertebrate,
+                  :β_producer, :β_invertebrate, :β_vertebrate]
+    elseif fname == "extended_BA_r"
+      required_parameters = [:norm_constant, :activation_energy, :T0, :β, :deactivation_energy]
+    elseif fname == "extended_BA_x"
+      required_parameters = [:norm_constant_producer, :norm_constant_invertebrate, :norm_constant_vertebrate,
+                     :activation_energy_producer, :activation_energy_invertebrate, :activation_energy_vertebrate,
+                     :deactivation_energy_producer, :deactivation_energy_invertebrate, :deactivation_energy_vertebrate,
+                     :T_opt_producer, :T_opt_invertebrate, :T_opt_vertebrate,
+                     :β_producer, :β_invertebrate, :β_vertebrate]
+    elseif fname == "extended_BA_attackr"
+      required_parameters = [:norm_constant_invertebrate, :norm_constant_vertebrate,
+                     :activation_energy_invertebrate, :activation_energy_vertebrate,
+                     :deactivation_energy_invertebrate, :deactivation_energy_vertebrate,
+                     :T_opt_invertebrate, :T_opt_vertebrate,
+                     :β_producer, :β_invertebrate, :β_vertebrate]
+    elseif fname == "gaussian_r"
+      required_parameters = [:shape, :norm_constant, :range, :T_opt, :β]
+    elseif fname == "gaussian_x"
+      required_parameters = [:norm_constant_producer, :norm_constant_invertebrate, :norm_constant_vertebrate,
+                     :T_opt_producer, :T_opt_invertebrate, :T_opt_vertebrate,
+                     :β_producer, :β_invertebrate, :β_vertebrate,
+                     :range_producer, :range_invertebrate, :range_vertebrate]
+    elseif fname == "gaussian_functionalr"
+      required_parameters = [:shape,
+                  :norm_constant_invertebrate, :norm_constant_vertebrate,
+                  :T_opt_invertebrate, :T_opt_vertebrate,
+                  :β_producer, :β_invertebrate, :β_vertebrate]
+    end
+    # assert that there are no additional parameter
+    for temperature_parameter in collect(keys(passed_temp_parameters)) ; @assert temperature_parameter ∈ required_parameters ; end
+    # assert that each parameter has a value
+    for required_temp_parameters in required_parameters ; @assert get(passed_temp_parameters, required_temp_parameters, nothing) != nothing ; end
 end
