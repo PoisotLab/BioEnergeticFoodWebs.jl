@@ -125,7 +125,7 @@ Internally the function takes 3 arguments (unused in this case):
 
 """
 
-function no_effect_handlingt(;T_param = @NT = y_vertebrate = 4.0, y_invertebrate = 8.0)
+function no_effect_handlingt(;T_param = @NT(y_vertebrate = 4.0, y_invertebrate = 8.0))
      return (bodymass, T, p) ->  1 ./ (T_param.y_vertebrate .* (p[:vertebrates] .& .!p[:is_producer]) + T_param.y_invertebrate * (.!p[:vertebrates] .& .!p[:is_producer]))
 end
 
