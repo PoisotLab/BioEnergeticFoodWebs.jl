@@ -49,7 +49,7 @@ TODO
 """
 
 function ExtendedEppley(rate_affected::Symbol; parameters_tuple...)
-    if rate_affected ∉ [:growth, :r, :metabolism, :x] ; error("rate_affected should be eighter :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
+    if rate_affected ∉ [:growth, :r, :metabolism, :x] ; error("rate_affected should be either :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
     if rate_affected ∈ [:growth, :r, :growthrate]
         if length(parameters_tuple) != 0
             pt = parameters_tuple[:parameters_tuple]
