@@ -6,3 +6,4 @@ JSON
 JLD
 StatsBase
 NamedTuples
+LinearAlgebra
