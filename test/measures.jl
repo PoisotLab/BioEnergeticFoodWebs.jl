@@ -55,7 +55,7 @@ module TestSave
     using BioEnergeticFoodWebs
     using JLD
     using JSON
-    using LinearAlgebra
+    using Base.LinAlg
 
     A = [0 0 0 ; 0 0 0 ; 0 0 0]
     b = rand(3)
