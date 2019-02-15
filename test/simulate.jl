@@ -186,13 +186,16 @@ end
 #   using Base.Test
 #   using BioEnergeticFoodWebs
 #   using NamedTuples
+#
+#   A = [0 1 0 ; 0 0 0 ; 0 1 0]
+#   p = model_parameters(A,
+#       handlingtime = Gaussian(:handlingtime),
+#       attackrate = ExtendedBA(:attackrate),
+#       metabolicrate = ExponentialBA(:x),
+#       growthrate = ExtendedEppley(:r))
+#
+#       p = model_parameters(A, growthrate = ExtendedBA(:r))
 
-  # A = [0 1 0 ; 0 0 0 ; 0 1 0]
-  # p = model_parameters(A,
-  #     handlingtime = gaussian_functionalr(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)),
-  #     attackrate = extended_BA_attackr(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)),
-  #     metabolicrate = exponential_BA_x(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)),
-  #     growthrate = extended_eppley_r(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)))
   #
   # @test p[:ht][1] ≈ 0.275 atol=0.001
   # @test p[:ht][1] == p[:ht][2] == p[:ht][3]
