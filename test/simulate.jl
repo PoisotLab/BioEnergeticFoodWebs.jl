@@ -182,37 +182,23 @@ module TestSimulateNP
   @test s[:B][end,2] ≈ .0 atol=1e-6
 end
 
-module TestSimulateTemperatureEffect
-  using Base.Test
+# module TestSimulateTemperatureEffect
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
-
+#
   A = [0 1 0 ; 0 0 0 ; 0 1 0]
   p = model_parameters(A,
-      handlingtime = gaussian_functionalr(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)),
-      attackrate = extended_BA_attackr(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)),
-      metabolicrate = exponential_BA_x(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)),
-      growthrate = extended_eppley_r(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)))
-
+      handlingtime = Gaussian(:handlingtime),
+      attackrate = ExtendedBA(:attackrate),
+      metabolicrate = ExponentialBA(:x),
+      growthrate = ExtendedEppley(:r))
   @test p[:ht][1] ≈ 0.275 atol=0.001
-  @test p[:ht][1] == p[:ht][2] == p[:ht][3]
+  @test p[:ht][1] == p[:ht][3]
   @test p[:ar][1] ≈ 0.049 atol=0.001
-  @test p[:ar][1] == p[:ar][2] == p[:ar][3]
-  @test p[:x][1] ≈ -122.216 atol = 0.001
+  @test p[:ar][1] == p[:ar][3]
   @test p[:x][1] == p[:x][2] == p[:x][3]
   @test p[:r][1] ≈ -0.843 atol = 0.001
   @test p[:r][1] == p[:r][2] == p[:r][3]
-
-  s = simulate(p, rand(size(A,1)))
-
-  p = model_parameters(A,
-      handlingtime = gaussian_functionalr(@NT(shape = :U, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25)),
-      attackrate = extended_BA_attackr(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25)),
-      metabolicrate = exponential_BA_x(@NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31)),
-      growthrate = extended_eppley_r(@NT(maxrate_0=0.81, eppley_exponent=0.0631,T_opt=298.15, range = 35, β = -0.25)))
-  @test p[:ht][1] ≈ 0.908 atol = 0.001
-  @test p[:ht][1] == p[:ht][2] == p[:ht][3]
-
-  s = simulathe(p, rand(size(A,1)))
 
 end

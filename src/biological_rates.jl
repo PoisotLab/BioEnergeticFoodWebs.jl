@@ -156,7 +156,7 @@ function Gaussian(rate_affected::Symbol; parameters_tuple...)
         else
             gaussian_x()
         end
-    elseif rate_affected == :functionalresponse
+    elseif rate_affected ∈ [:handlingtime, :attackrate]
         if length(parameters_tuple) != 0
             pt = parameters_tuple[:parameters_tuple]
             gaussian_functionalr(passed_temp_parameters = pt)

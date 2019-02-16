@@ -290,6 +290,6 @@ module TestNIParameters
 
   # Producer metabolic rates
   parameters = model_parameters(A, productivity = :nutrients)
-  @test parameters[:x] == [0.314, 0.138, 0.138]
+  @test parameters[:x] == [0.3141, 0.138, 0.138]
 
 end

@@ -55,6 +55,7 @@ module TestSave
     using BioEnergeticFoodWebs
     using JLD
     using JSON
+    using Base.LinAlg
 
     A = [0 0 0 ; 0 0 0 ; 0 0 0]
     b = rand(3)
@@ -73,7 +74,10 @@ module TestSave
     @test isfile(def_fname)
     # Test if the content is the same
     sbis = load(def_fname, def_vname)
-    @test sbis == s
+    @test sbis[:p] == s[:p]
+    @test sbis[:B] == s[:B]
+    @test sbis[:t] == s[:t]
+
     rm(def_fname)
     # Test is it works with as = :JLD
     ext = :JLD

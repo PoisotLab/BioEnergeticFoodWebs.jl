@@ -439,7 +439,7 @@ growthrate=extended_BA_r(@NT(norm_constant = 3e8, activation_energy = 0.53, deac
 
 function extended_BA_r(default_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
      k = 8.617e-5 # Boltzmann constant
-     Δenergy = temperature_param.deactivation_energy .- temperature_param.activation_energy
+     Δenergy = default_temp_parameters.deactivation_energy .- default_temp_parameters.activation_energy
 	 if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -715,9 +715,9 @@ function gaussian_functionalr(default_temp_parameters = @NT(shape = :hump,
                                 end
 
                                 if temperature_param.shape == :hump
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 elseif temperature_param.shape == :U
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 end
                                 rate[isnan.(rate)] = 0
                                 return rate

@@ -9,14 +9,10 @@ matrix A. Specifically, the default values of the keyword parameters are:
 | K                 | 1.0           | carrying capacity of producers                                                              |
 | Z                 | 1.0           | consumer-resource body mass ratio                                                           |
 | r                 | 1.0           | growth rate of producers                                                                    |
-| a_invertebrate    | 0.314         | allometric constant for invertebrate consumers                                              |
-| a_producers       | 1.0           | allometric constant of producers                                                            |
-| a_vertebrate      | 0.88          | allometric constant for vertebrate consumers                                                |
 | c                 | 0             | quantifies the predator interference                                                        |
 | h                 | 1             | Hill coefficient                                                                            |
 | e_carnivore       | 0.85          | assimilation efficiency of carnivores                                                       |
 | e_herbivore       | 0.45          | assimilation efficiency of herbivores                                                       |
-| m_producers       | 1             | body-mass of producers                                                                      |
 | y_invertebrate    | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate         |
 | y_vertebrate      | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate           |
 | Γ                 | 0.5           | half-saturation density                                                                     |
@@ -76,25 +72,37 @@ See the online documentation and the original references for more details.
 
 """
 
-function model_parameters(A; K::Float64=1.0, Z::Float64=1.0,
-        #a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
-        #a_vertebrate::Float64=0.88,
-        c::Float64=0.0, h::Number=1.0,
-        e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
-        #m_producer::Float64=1.0,
+function model_parameters(A;
+        K::Float64=1.0,
+        Z::Float64=1.0,
+        c::Float64=0.0,
+        h::Number=1.0,
+        e_carnivore::Float64=0.85,
+        e_herbivore::Float64=0.45,
         α::Float64=1.0,
         productivity::Symbol=:species,
         bodymass::Array{Float64, 1}=[0.0],
-        vertebrates::Array{Bool, 1}=[false], rewire_method = :none,
-        e::Float64 = 1.0, a_adbm::Float64 = 0.0189, ai::Float64 = -0.491,
-        aj::Float64 = -0.465, b::Float64 = 0.401, h_adbm::Float64 = 1.0,
-        hi::Float64 = 1.0, hj::Float64 = 1.0, n::Float64 = 1.0,
-        ni::Float64= -0.75, Hmethod::Symbol = :ratio,
-        Nmethod::Symbol = :original, cost::Float64 = 0.0,
+        vertebrates::Array{Bool, 1}=[false],
+        rewire_method = :none,
+        e::Float64 = 1.0,
+        a_adbm::Float64 = 0.0189,
+        ai::Float64 = -0.491,
+        aj::Float64 = -0.465,
+        b::Float64 = 0.401,
+        h_adbm::Float64 = 1.0,
+        hi::Float64 = 1.0,
+        hj::Float64 = 1.0,
+        n::Float64 = 1.0,
+        ni::Float64= -0.75,
+        Hmethod::Symbol = :ratio,
+        Nmethod::Symbol = :original,
+        cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
         preferenceMethod::Symbol = :generalist,
-        D::Float64 = 0.25, supply::Array{Float64, 1} = [4.0],
-        υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
+        D::Float64 = 0.25,
+        supply::Array{Float64, 1} = [4.0],
+        υ::Array{Float64, 1} = [1.0, 0.5],
+        K1::Array{Float64, 1} = [0.15],
         K2::Array{Float64, 1} = [0.15],
         T::Float64 = 273.15,
         handlingtime::Function = NoEffectTemperature(:handlingtime),
