@@ -380,10 +380,10 @@ attackrate=exponential_BA_functionalr(@NT(norm_constant_vertebrate = -16.54, nor
                                           β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
 
 """
-function exponential_BA_functionalr(default_temp_parameters = @NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
-                                          activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
-                                          T0_vertebrate = 293.15, T0_invertebrate = 293.15,
-                                          β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31); passed_temp_parameters...)
+function exponential_BA_ar(default_temp_parameters = @NT(norm_constant_vertebrate = -13.1, norm_constant_invertebrate = -13.1,
+											  activation_energy_vertebrate = -0.38, activation_energy_invertebrate = -0.38,
+											  T0_vertebrate = 293.15, T0_invertebrate = 293.15,
+											  β_producer = 0.25, β_vertebrate = -0.8, β_invertebrate = -0.8); passed_temp_parameters...)
     k=8.617e-5
     T0K = 273.15
 	if length(passed_temp_parameters) != 0
@@ -420,6 +420,74 @@ function exponential_BA_functionalr(default_temp_parameters = @NT(norm_constant_
 end
 
 """
+**Option 2 : Exponential Boltzmann-Arrhenius function for functional response : attack rate and handling time**
+
+This function can be called as an argument in `model_parameters` to define an exponential Boltzmann-Arrhénius function (Gillooly et al. 2001, Brown et al. 2004) for one of:
+    - attack rate
+    - handling time
+
+
+| Parameter                      | Meaning                                         | Default values | Reference                             |
+|:-------------------------------|:------------------------------------------------|:---------------|:--------------------------------------|
+| norm_constant_invertebrate     | scaling coefficient for invertebrate            | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| norm_constant_vertebrate       | scaling coefficient for vertebrate              | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy_invertebrate | activation energy for invertebrates             | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy_vertebrate   | activation energy for vertebrates               | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| T0_invertebrate                | normalization temperature (K) for invertebrates | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
+| T0_vertebrate                  | normalization temperature (K) for vertebrates   | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
+| β_producer                     | allometric exponent for invertebrate            | -0.31          | Ehnes et al. 2011                     |
+| β_invertebrate                 | allometric exponent for invertebrate            | -0.31          | Ehnes et al. 2011                     |
+| β_vertebrate                   | allometric exponent for vertebrates             | -0.31          | Ehnes et al. 2011                     |
+
+
+Example:
+attackrate=exponential_BA_functionalr(@NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
+                                          activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
+                                          T0_vertebrate = 293.15, T0_invertebrate = 293.15,
+                                          β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
+
+"""
+function exponential_BA_ht(default_temp_parameters = @NT(norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
+											  activation_energy_vertebrate = 0.26, activation_energy_invertebrate = 0.26,
+											  T0_vertebrate = 293.15, T0_invertebrate = 293.15,
+											  β_producer = -0.45, β_vertebrate = 0.47, β_invertebrate = 0.47); passed_temp_parameters...)
+    k=8.617e-5
+    T0K = 273.15
+	if length(passed_temp_parameters) != 0
+	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
+	  temperature_param = merge(default_temp_parameters, tmpargs)
+	else
+	  temperature_param = default_temp_parameters
+	end
+
+    return (bodymass, T, p) -> for i in 1:1
+                                norm_constant_all = temperature_param.norm_constant_vertebrate .* p[:vertebrates] .+ temperature_param.norm_constant_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                activation_energy_all = temperature_param.activation_energy_vertebrate .* p[:vertebrates] .+ temperature_param.activation_energy_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                T0_all = temperature_param.T0_vertebrate .* p[:vertebrates] .+ temperature_param.T0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                β_consumer = temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+
+                                β_resource = zeros(Float64,(p[:S], p[:S]))
+                                for consumer in 1:p[:S]
+                                for resource in 1:p[:S]
+                                  if p[:A][consumer, resource] == 1
+                                    if p[:is_producer][resource]
+                                        β_resource[consumer, resource] = temperature_param.β_producer
+                                    elseif p[:vertebrates][resource]
+                                        β_resource[consumer, resource] = temperature_param.β_vertebrate
+                                    else
+                                        β_resource[consumer, resource] = temperature_param.β_invertebrate
+                                    end
+                                 end
+                                end
+                                end
+                                rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
+                                rate[isnan.(rate)] = 0
+                            return rate
+                        end
+end
+
+
+"""
 **Option 3 : Extended Boltzmann-Arrhenius function for growth rate**
 
 
@@ -439,7 +507,7 @@ growthrate=extended_BA_r(@NT(norm_constant = 3e8, activation_energy = 0.53, deac
 
 function extended_BA_r(default_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
      k = 8.617e-5 # Boltzmann constant
-     Δenergy = default_temp_parameters.deactivation_energy .- default_temp_parameters.activation_energy
+     Δenergy = temperature_param.deactivation_energy .- temperature_param.activation_energy
 	 if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -715,9 +783,9 @@ function gaussian_functionalr(default_temp_parameters = @NT(shape = :hump,
                                 end
 
                                 if temperature_param.shape == :hump
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 elseif temperature_param.shape == :U
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 end
                                 rate[isnan.(rate)] = 0
                                 return rate

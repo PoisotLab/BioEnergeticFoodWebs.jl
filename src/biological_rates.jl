@@ -74,7 +74,7 @@ TODO
 
 function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
-        error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
+        error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), :attackrate or :handlingtime")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
         if length(parameters_tuple) != 0
@@ -90,12 +90,19 @@ function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
         else
             exponential_BA_x()
         end
-    elseif rate_affected == :functionalresponse
+    elseif rate_affected == :attackrate
         if length(parameters_tuple) != 0
             pt = parameters_tuple[:parameters_tuple]
-            exponential_BA_functionalr(passed_temp_parameters = pt)
+            exponential_BA_ar(passed_temp_parameters = pt)
         else
-            exponential_BA_functionalr()
+            exponential_BA_ar()
+        end
+    elseif rate_affected == :handlingtime
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            exponential_BA_ht(passed_temp_parameters = pt)
+        else
+            exponential_BA_ht()
         end
     end
 end
