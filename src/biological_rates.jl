@@ -9,7 +9,7 @@ TODO
 
 function NoEffectTemperature(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
-        error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate),
+        error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate),
         :handlingtime or :attackrate")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
@@ -74,7 +74,7 @@ TODO
 
 function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
-        error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
+        error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
         if length(parameters_tuple) != 0
@@ -107,7 +107,7 @@ TODO
 
 function ExtendedBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :attackrate]
-        error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), or :attackrate")
+        error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), or :attackrate")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
         if length(parameters_tuple) != 0
@@ -140,7 +140,7 @@ TODO
 
 function Gaussian(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
-        error("rate_affected should be eighter :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
+        error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
         if length(parameters_tuple) != 0
