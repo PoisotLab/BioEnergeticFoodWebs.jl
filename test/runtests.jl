@@ -12,7 +12,8 @@ test_files = [
     "measures.jl",
     "rewiring/ADBM.jl",
     "rewiring/GilljamRewire.jl",
-    "rewiring/StaniczenkoRewire.jl"
+    "rewiring/StaniczenkoRewire.jl",
+    "consumption.jl"
 ]
 
 for current_test in test_files
