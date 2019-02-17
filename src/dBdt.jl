@@ -74,9 +74,9 @@ function nutrientuptake(parameters, biomass, nutrients, G)
   return dndt
 end
 
-function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}; rewire::Bool=false, costMat=nothing)
+function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}, h::Float64; rewire::Bool=false, costMat=nothing)
   for i in eachindex(biomass), j in eachindex(biomass)
-    @inbounds bm_matrix[i,j] = w[i,j] * biomass[j] * A[i,j]
+    @inbounds bm_matrix[i,j] = w[i,j] * (biomass[j] .^ h) * A[i,j]
     if rewire
       bm_matrix[i,j] *= costMat[i,j]
     end
@@ -87,7 +87,7 @@ function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
   food_available = vec(sum(bm_matrix, 2))
   f_den = zeros(eltype(biomass), length(biomass))
   for i in eachindex(biomass)
-    f_den[i] = Γh[i]*(1.0-c*biomass[i])+food_available[i]
+    f_den[i] = Γh[i]*(1.0+c*biomass[i])+food_available[i]
   end
   for i in eachindex(biomass), j in eachindex(biomass)
     F[i,j] = bm_matrix[i,j] / f_den[i]
@@ -124,7 +124,7 @@ function consumption(parameters, biomass)
   bm_matrix = zeros(eltype(biomass), (length(biomass), length(biomass)))
   rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
   costMat = rewire ? parameters[:costMat] : nothing
-  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A]; rewire=rewire, costMat=costMat)
+  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A], parameters[:h]; rewire=rewire, costMat=costMat)
 
   # Available food
   F = zeros(eltype(biomass), (length(biomass), length(biomass)))

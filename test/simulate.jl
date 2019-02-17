@@ -186,19 +186,14 @@ module TestSimulateTemperatureEffect
   using Base.Test
   using BioEnergeticFoodWebs
   using NamedTuples
-#
+
   A = [0 1 0 ; 0 0 0 ; 0 1 0]
   p = model_parameters(A,
       handlingtime = Gaussian(:handlingtime),
       attackrate = ExtendedBA(:attackrate),
       metabolicrate = ExponentialBA(:x),
-      growthrate = ExtendedEppley(:r))
-  @test p[:ht][1] ≈ 0.275 atol=0.001
-  @test p[:ht][1] == p[:ht][3]
-  @test p[:ar][1] ≈ 0.049 atol=0.001
-  @test p[:ar][1] == p[:ar][3]
-  @test p[:x][1] == p[:x][2] == p[:x][3]
-  @test p[:r][1] ≈ -0.843 atol = 0.001
-  @test p[:r][1] == p[:r][2] == p[:r][3]
+      growthrate = Gaussian(:r))
 
+   s = simulate(p, rand(3), stop = 1000)
+   @test sum(s[:B][end,:]) ≈ 1 atol=0.01
 end
