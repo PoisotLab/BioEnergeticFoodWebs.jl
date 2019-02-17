@@ -182,8 +182,8 @@ module TestSimulateNP
   @test s[:B][end,2] ≈ .0 atol=1e-6
 end
 
-# module TestSimulateTemperatureEffect
-  using Test
+module TestSimulateTemperatureEffect
+  using Base.Test
   using BioEnergeticFoodWebs
   using NamedTuples
 #
