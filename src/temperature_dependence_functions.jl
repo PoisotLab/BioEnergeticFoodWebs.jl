@@ -258,7 +258,7 @@ function extended_eppley_x(default_temp_parameters = @NT(maxrate_0_producer = 0.
                                     maxrate_0_all = temperature_param.maxrate_0_producer .* p[:is_producer] .+ temperature_param.maxrate_0_vertebrate .* p[:vertebrates] .+ temperature_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                     eppley_exponent_all = temperature_param.eppley_exponent_producer .* p[:is_producer] .+ temperature_param.eppley_exponent_vertebrate .* p[:vertebrates] .+ temperature_param.eppley_exponent_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                     T_opt_all = temperature_param.T_opt_producer .* p[:is_producer] .+ temperature_param.T_opt_vertebrate .* p[:vertebrates] .+ temperature_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                    T_opt_all = T_opt_all - 273.15
+                                    T_opt_all = T_opt_all .- 273.15
                                     range_all = temperature_param.range_producer .* p[:is_producer] .+ temperature_param.range_vertebrate .* p[:vertebrates] .+ temperature_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                     β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
 
