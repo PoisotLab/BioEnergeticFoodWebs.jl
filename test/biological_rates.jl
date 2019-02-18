@@ -178,7 +178,6 @@ module TestExponentialBA
   ar_d[isnan.(ar_d)] = 0
   @test p_ar_d[:ar] == ar_d
   #change temperature
-  temp2 = 250.0
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExponentialBA(:attackrate))
   ar_t = exp.([-13.1, -13.1, 0.0]) .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- (temp2 + T0K)) ./ (k * (temp2 + T0K) .* [293.15, 293.15, 0.0]))
   ar_t[isnan.(ar_t)] = 0
@@ -192,12 +191,30 @@ module TestExponentialBA
   ar_2 = exp.([-12, -14, 0.0]) .* (bmass .^[-0.9, -0.7, 0.0]) .* (bmass' .^[0 -0.7 0.2; 0 0 0.2 ; 0 0 0]) .* exp.([-0.3, -0.4, 0.0] .* ([290, 270, 0.0] .- (temp + T0K)) ./ (k * (temp + T0K) .* [290, 270, 0.0]))
   ar_2[isnan.(ar_2)] = 0
   @test p_ar_2[:ar] == ar_2
-  
+
   #HANDLING
   #defaults
+  p_ht_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime))
+  ht_d = exp.([9.66, 9.66, 0.0]) .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- (temp + T0K)) ./ (k * (temp + T0K) .* [293.15, 293.15, 0.0]))
+  ht_d[isnan.(ht_d)] .= 0
+  @test p_ht_d[:ht] == ht_d
   #change temperature
+  p_ht_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime))
+  ht_t = exp.([9.66, 9.66, 0.0]) .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- (temp2 + T0K)) ./ (k * (temp2 + T0K) .* [293.15, 293.15, 0.0]))
+  ht_t[isnan.(ht_t)] = 0
+  @test p_ht_t[:ht] == ht_t
   #passed arguments
+  pt_ht = @NT(norm_constant_vertebrate = 9, norm_constant_invertebrate = 10,
+  						activation_energy_vertebrate = 0.2, activation_energy_invertebrate = 0.3,
+  						T0_vertebrate = 290, T0_invertebrate = 270,
+  						β_producer = -0.4, β_vertebrate = 0.3, β_invertebrate = 0.5)
+  p_ht_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime, parameters_tuple = pt_ht))
+  ht_2 = exp.([9, 10, 0.0]) .* (bmass .^[0.3, 0.5, 0.0]) .* (bmass' .^[0.0 0.5 -0.4 ; 0 0 -0.4; 0 0 0]) .* exp.([0.2, 0.3, 0.0] .* ([290, 270, 0.0] .- (temp + T0K)) ./ (k * (temp + T0K) .* [290, 270, 0.0]))
+  ht_2[isnan.(ht_2)] = 0
+  @test p_ht_2[:ht] == ht_2
+
   #ERRORS
+  @test_throws Exception model_parameters(omnivory, metabolicrate = ExponentialBA(:y))
 
 end
 

@@ -14,7 +14,7 @@ test_files = [
     "rewiring/GilljamRewire.jl",
     "rewiring/StaniczenkoRewire.jl",
     "consumption.jl",
-    "metabolic_rates.jl"
+    "biological_rates.jl"
 ]
 
 for current_test in test_files
