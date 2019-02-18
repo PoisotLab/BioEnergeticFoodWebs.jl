@@ -225,13 +225,26 @@ module TestExtendedBA
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
-  bmass = [100.0, 10.0, 0.0]
+  bmass = [100.0, 10.0, 1.0]
   temp = 270.0
+  temp2 = 250.0
+  k = 8.617e-5 # Boltzmann constant
 
   #GROWTH
   #defaults
+  p_r_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r))
+  Δenergy = 1.15 .- 0.53
+  r_d = 3e8 .* bmass .^(-0.25) .* exp.(.-0.53 ./ (k * temp)) .* (1 ./ (1 + exp.(-1 / (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log(0.53 ./ Δenergy)).*temp))))
+  @test p_r_d[:r] == r_d
   #change temperature
+  p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r))
+  @test p_r_d[:r] != p_r_t[:r]
   #passed arguments
+  pt_r = @NT(norm_constant = 4000)
+  p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r, parameters_tuple = pt_r))
+  r_2 = (r_d ./ 3e8) .* 4000
+  @test p_r_2[:r] ≈ r_2 atol=1e-6
+
   #METABOLISM
   #defaults
   #change temperature
