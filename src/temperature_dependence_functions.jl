@@ -578,7 +578,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_x()
 Parameters can also be specified:
-	- extended_BA_x(@NT@NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+	- extended_BA_x(@NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
 	                                activation_energy_producer = 0.53, activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
 	                                deactivation_energy_producer = 1.15, deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
@@ -690,14 +690,13 @@ end
 **Option 4 : Gaussian function for growth rate**
 
 This function can be called with the keywords :growth, :growthrate or :r as an argument in `Gaussian`, itself called in `model_parameters`, to define a Gaussian function (Amarasekare et al 2015) for producers growth rate.
-Example : model_parameters(A, growthrate = ExtendedBA(:r))
+Example : model_parameters(A, growthrate = Gaussian(:r))
 
 | Parameter    | Meaning                                        | Default values | Reference            |
 |:-------------|:-----------------------------------------------|:---------------|:---------------------|
-| shape        | hump-shaped (:hump) or U-shaped (:U) curve     | :hump          | Amarasekare 2015     |
 | norm_constant| minimal/maximal trait value                    | 0.5            | NA                   |
 | range        | performance breath (width of function)         | 20             | Amarasekare 2015     |
-| T_opt        | temperature at which trait value is maximal    | 295            | Amarasekare 2015     |
+| T_opt        | temperature at which trait value is maximal    | 298.15         | Amarasekare 2015     |
 | β            | allometric exponent                            | -0.25          | Gillooly et al 2002  |
 
 Default values are given as an example.
@@ -705,13 +704,9 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_r()
 Parameters can also be specified:
-	- gaussian_r(gaussian_r(@NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25))
-
-Example:
-growthrate=
-
+	- gaussian_r(@NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25))
 """
-function gaussian_r(default_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25); passed_temp_parameters...)
+function gaussian_r(default_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -724,14 +719,17 @@ end
 """
 **Option 4 : Gaussian function for metabolic rate**
 
+This function can be called with the keywords :metabolism, :x or :metabolicrate as an argument in `Gaussian`, itself called in `model_parameters`, to define a Gaussian function (Amarasekare et al 2015) for metabolic rate.
+Example : model_parameters(A, growthrate = Gaussian(:r))
+
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
 | norm_constant_producer     | minimal/maximal trait value for producers                     | 0.5            | NA                   |
 | norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.5            | NA                   |
 | norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
-| T_opt_producer             | temperature at which trait value is maximal for producers     | 295            | Amarasekare 2015     |
-| T_opt_invertebrate         | temperature at which trait value is maximal for invertebrates | 295            | Amarasekare 2015     |
-| T_opt_vertebrate           | temperature at which trait value is maximal for vertebrates   | 295            | Amarasekare 2015     |
+| T_opt_producer             | temperature at which trait value is maximal for producers     | 298.15         | Amarasekare 2015     |
+| T_opt_invertebrate         | temperature at which trait value is maximal for invertebrates | 298.15         | Amarasekare 2015     |
+| T_opt_vertebrate           | temperature at which trait value is maximal for vertebrates   | 298.15         | Amarasekare 2015     |
 | β_producer                 | allometric exponent for producers                             | -0.25          | Gillooly et al 2002  |
 | β_invertebrate             | allometric exponent for invertebrates                         | -0.25          | Gillooly et al 2002  |
 | β_vertebrate               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002  |
@@ -739,17 +737,19 @@ end
 | range_invertebrate         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015     |
 | range_vertebrate           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015     |
 
+Default values are given as an example.
 
-Example:
-metabolicrate=gaussian_x(@NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
-                             range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
-                             T_opt_producer = 295, T_opt_invertebrate = 295, T_opt_vertebrate = 295,
-                             β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
-
+The function can be called with the default parameters:
+	- gaussian_x()
+Parameters can also be specified:
+	- gaussian_x(@NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	                             range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
+	                             T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
+	                             β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
 function gaussian_x(default_temp_parameters = @NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
                              range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
-                             T_opt_producer = 295, T_opt_invertebrate = 295, T_opt_vertebrate = 295,
+                             T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                              β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
@@ -771,28 +771,28 @@ end
 """
 **Option 4 : Gaussian function for attack rate**
 
+This function can be called with the keywords :attackrate as an argument in `Gaussian`, itself called in `model_parameters`, to define a Gaussian function (Amarasekare et al 2015) for attack rate.
+Example : model_parameters(A, attackrate = Gaussian(:attackrate))
+
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
-| shape                      | hump-shaped (:hump) or U-shaped (:U) curve                    | :hump          | Amarasekare 2015     |
 | norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.5            | NA                   |
 | norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
 | range_invertebrate         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015     |
 | range_vertebrate           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015     |
-| T_opt_invertebrate         | temperature at which trait value is maximal                   | 295            | Amarasekare 2015     |
-| T_opt_vertebrate           | temperature at which trait value is maximal for invertebrates | 295            | Amarasekare 2015     |
+| T_opt_invertebrate         | temperature at which trait value is maximal                   | 298.15         | Amarasekare 2015     |
+| T_opt_vertebrate           | temperature at which trait value is maximal for invertebrates | 298.15         | Amarasekare 2015     |
 | β_producer                 | allometric exponent for producers                             | -0.25          | Gillooly et al 2002  |
 | β_invertebrate             | allometric exponent for invertebrates                         | -0.25          | Gillooly et al 2002  |
 | β_vertebrate               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002  |
 
-Default values are given as an example for attack rate.
-
-Example:
-attackrate=gaussian_functionalr(@NT(shape = :hump,
-                                    norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
-                                    range_invertebrate = 20, range_vertebrate = 20,
-                                    T_opt_invertebrate = 295, T_opt_vertebrate = 295,
-                                    β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
-
+The function can be called with the default parameters:
+	- gaussian_attackr()
+Parameters can also be specified:
+	- gaussian_attackr(@NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	                   range_invertebrate = 20, range_vertebrate = 20,
+	                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
+	                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
 
 function gaussian_attackr(default_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
@@ -833,7 +833,10 @@ function gaussian_attackr(default_temp_parameters = @NT(norm_constant_invertebra
 end
 
 """
-**Option 4 : Gaussian function for functional response**
+**Option 4 : Gaussian function for handling time**
+
+This function can be called with the keywords :handlingtime as an argument in `Gaussian`, itself called in `model_parameters`, to define a Gaussian function (Amarasekare et al 2015) for handling time.
+Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
@@ -842,21 +845,19 @@ end
 | norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
 | range_invertebrate         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015     |
 | range_vertebrate           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015     |
-| T_opt_invertebrate         | temperature at which trait value is maximal                   | 295            | Amarasekare 2015     |
-| T_opt_vertebrate           | temperature at which trait value is maximal for invertebrates | 295            | Amarasekare 2015     |
+| T_opt_invertebrate         | temperature at which trait value is maximal                   | 298.15         | NA   				 |
+| T_opt_vertebrate           | temperature at which trait value is maximal for invertebrates | 298.15         | NA					 |
 | β_producer                 | allometric exponent for producers                             | -0.25          | Gillooly et al 2002  |
 | β_invertebrate             | allometric exponent for invertebrates                         | -0.25          | Gillooly et al 2002  |
 | β_vertebrate               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002  |
 
-Default values are given as an example for attack rate.
-
-Example:
-attackrate=gaussian_functionalr(@NT(shape = :hump,
-                                    norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
-                                    range_invertebrate = 20, range_vertebrate = 20,
-                                    T_opt_invertebrate = 295, T_opt_vertebrate = 295,
-                                    β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
-
+The function can be called with the default parameters:
+	- gaussian_attackr()
+Parameters can also be specified:
+	- gaussian_attackr(@NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+							range_invertebrate = 20, range_vertebrate = 20,
+							T_opt_invertebrate = 295, T_opt_vertebrate = 295,
+							β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
 
 function gaussian_handlingt(default_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
