@@ -506,14 +506,14 @@ growthrate=extended_BA_r(@NT(norm_constant = 3e8, activation_energy = 0.53, deac
 """
 
 function extended_BA_r(default_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
-     k = 8.617e-5 # Boltzmann constant
-     Δenergy = temperature_param.deactivation_energy .- temperature_param.activation_energy
-	 if length(passed_temp_parameters) != 0
+     if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
 	else
 	  temperature_param = default_temp_parameters
 	end
+	k = 8.617e-5 # Boltzmann constant
+	Δenergy = temperature_param.deactivation_energy .- temperature_param.activation_energy
 
     return(bodymass, T, p) -> temperature_param.norm_constant .* bodymass .^(temperature_param.β) .* exp.(.-temperature_param.activation_energy ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (temperature_param.deactivation_energy .- (temperature_param.deactivation_energy ./ temperature_param.T_opt .+ k .* log(temperature_param.activation_energy ./ Δenergy)).*T))))
 end
@@ -572,7 +572,7 @@ function extended_BA_x(default_temp_parameters = @NT(norm_constant_producer = 3e
                                  β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                  Δenergy = deactivation_energy_all .- activation_energy_all
 
-                                 return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log(activation_energy_all ./ Δenergy)).* T))))
+                                 return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
 
                              end
 end
