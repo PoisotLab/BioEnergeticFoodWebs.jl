@@ -783,9 +783,9 @@ function gaussian_attackr(default_temp_parameters = @NT(shape = :hump,
                                 end
 
                                 if temperature_param.shape == :hump
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 elseif temperature_param.shape == :U
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 end
                                 rate[isnan.(rate)] = 0
                                 return rate
@@ -853,9 +853,9 @@ function gaussian_handlingt(default_temp_parameters = @NT(shape = :U,
                                 end
 
                                 if temperature_param.shape == :hump
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 elseif temperature_param.shape == :U
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 end
                                 rate[isnan.(rate)] = 0
                                 return rate
