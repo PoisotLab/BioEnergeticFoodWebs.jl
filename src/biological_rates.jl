@@ -93,16 +93,16 @@ function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
     elseif rate_affected == :attackrate
         if length(parameters_tuple) != 0
             pt = parameters_tuple[:parameters_tuple]
-            exponential_BA_ar(passed_temp_parameters = pt)
+            exponential_BA_attackr(passed_temp_parameters = pt)
         else
-            exponential_BA_ar()
+            exponential_BA_attackr()
         end
     elseif rate_affected == :handlingtime
         if length(parameters_tuple) != 0
             pt = parameters_tuple[:parameters_tuple]
-            exponential_BA_ht(passed_temp_parameters = pt)
+            exponential_BA_handlingt(passed_temp_parameters = pt)
         else
-            exponential_BA_ht()
+            exponential_BA_handlingt()
         end
     end
 end
@@ -163,12 +163,19 @@ function Gaussian(rate_affected::Symbol; parameters_tuple...)
         else
             gaussian_x()
         end
-    elseif rate_affected ∈ [:handlingtime, :attackrate]
+    elseif rate_affected ∈ [:attackrate]
         if length(parameters_tuple) != 0
             pt = parameters_tuple[:parameters_tuple]
-            gaussian_functionalr(passed_temp_parameters = pt)
+            gaussian_attackr(passed_temp_parameters = pt)
         else
-            gaussian_functionalr()
+            gaussian_attackr()
+        end
+    elseif rate_affected ∈ [:handlingtime]
+        if length(parameters_tuple) != 0
+            pt = parameters_tuple[:parameters_tuple]
+            gaussian_handlingt(passed_temp_parameters = pt)
+        else
+            gaussian_handlingt()
         end
     end
 end
