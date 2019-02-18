@@ -21,7 +21,8 @@ When temperature is included, they are 4 different functions of temperature depe
 2) Exponential Boltzmann-Arrhenius function:
     - exponential_BA_r for growth rate
     - exponential_BA_x for metabolic rate
-    - exponential_BA_functionalr for parameters of the functional response (handling time and attack rate)
+    - exponential_BA_attackr for attack rate
+	- exponential_BA_handlingt for handling time
 3) Extended Boltzmann-Arrhenius function (Johnson-Lewin):
     - extended_BA_r for growth rate
     - extended_BA_x for metabolic rate
@@ -29,26 +30,33 @@ When temperature is included, they are 4 different functions of temperature depe
 4) Gaussian (inverted Gaussian) function
     - gaussian_r for growth rate
     - gaussian_x for metabolic rate
-    - gaussian_functionalr for parameters of the functional response (handling time and attack rate)
+    - gaussian_attackr for attack rate
+	- gaussian_handlingt for handling time
 
-The functions can be changed in the following way:
+These functions are called in biological_rates.jl, where there are wrapped in one function for each temperature dependence functions:
+ 	- NoEffectTemperature for the functions with no effect of temperature
+	- ExtendedEppley for the extended Eppley functions
+	- ExponentialBA for the exponential Boltzmann-Arrhenius functions
+	- ExtendedBA for the extended Boltzmann-Arrhenius functions
+	- Gaussian for gaussian (inverted Gaussian) functions
 
-A = [0 1 1 ; 0 0 0 ; 0 0 0]
-p = model_parameters(A, T = 295, bodymass = 1, metabolicrate = extended_BA_x(@NT(T_parameters))
-
-where:
-- T is the temperature in Kelvin,
-- bodymass is the species bodymass,
-- T_parameters are the parameters associated with the extended_BA_r function.
-
-(All rates scale with bodymass to an exponent β, and parameters of the functional response also scale with resource bodymass to an exponent β_resource.)
-
+Which are then used in model_parameters, as : growthrate = ExtendedEppley(:r), where the rate is specified as a key argument.
 This allows to directly specify the function to use for each rate and the set of parameters associated with this function within the parameters.
-Internally the metabolicrate function (whichever is chosen) takes 3 arguments:
+See the documentation of biological_rates.jl for more details.
+
+The functions of temperature dependence can be called with the default parameters provided :
+	- ex: extended_eppley_r()
+or with specified parameters :
+	- ex : extended_eppley_r(passed_temp_parameters = T_parameters)
+where T_parameters are the parameters associated with the extended_eppley_r function.
+
+Internally the function extended_eppley_r (or whichever is chosen) takes 3 arguments:
 
 - species body mass (standardized by the smaller producer species),
-- the temperature T,
+- the temperature T in Kelvin,
 - the set of parameters p.
+
+(All rates scale with bodymass to an exponent β, and parameters of the functional response also scale with resource bodymass to an exponent β_resource.)
 
 model_parameters still returns a Dict, containing:
 
