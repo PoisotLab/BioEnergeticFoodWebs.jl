@@ -711,7 +711,7 @@ Example:
 growthrate=
 
 """
-function gaussian_r(default_temp_parameters = @NT(shape = :hump, norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25); passed_temp_parameters...)
+function gaussian_r(default_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 295, β = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -795,8 +795,7 @@ attackrate=gaussian_functionalr(@NT(shape = :hump,
 
 """
 
-function gaussian_attackr(default_temp_parameters = @NT(shape = :hump,
-                                    norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_attackr(default_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
                                     range_invertebrate = 20, range_vertebrate = 20,
                                     T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -827,12 +826,7 @@ function gaussian_attackr(default_temp_parameters = @NT(shape = :hump,
                                  end
                                 end
                                 end
-
-                                if temperature_param.shape == :hump
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
-                                elseif temperature_param.shape == :U
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
-                                end
+                                rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 rate[isnan.(rate)] = 0
                                 return rate
                             end
@@ -865,8 +859,7 @@ attackrate=gaussian_functionalr(@NT(shape = :hump,
 
 """
 
-function gaussian_handlingt(default_temp_parameters = @NT(shape = :U,
-                                    norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_handlingt(default_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
                                     range_invertebrate = 20, range_vertebrate = 20,
                                     T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -897,12 +890,7 @@ function gaussian_handlingt(default_temp_parameters = @NT(shape = :U,
                                  end
                                 end
                                 end
-
-                                if temperature_param.shape == :hump
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
-                                elseif temperature_param.shape == :U
-                                    rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
-                                end
+                                rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.((T .- T_opt_all).^2 ./ (2 .*range_all.^2))
                                 rate[isnan.(rate)] = 0
                                 return rate
                             end
