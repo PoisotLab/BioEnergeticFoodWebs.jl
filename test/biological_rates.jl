@@ -337,12 +337,25 @@ module TestGaussian
   p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate, parameters_tuple = pt_ar))
   @test p_ar_2[:ar] != p_ar_d[:ar]
   ar_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.( .- (temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
+  ar_2[isnan.(ar_2)] .= 0
   @test p_ar_2[:ar] == ar_2
 
   #HANDLING
   #defaults
+  p_ht_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime))
+  ht_d = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.((temp .- [295,295,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
+  ht_d[isnan.(ht_d)] .= 0
+  @test p_ht_d[:ht] == ht_d
   #change temperature
+  p_ht_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime))
+  @test p_ht_t[:ht] != p_ht_d[:ht]
   #passed arguments
+  pt_ht = @NT(T_opt_invertebrate = 270)
+  p_ht_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime, parameters_tuple = pt_ht))
+  @test p_ht_2[:ht] != p_ht_d[:ht]
+  ht_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.((temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
+  ht_2[isnan.(ht_2)] .= 0
+  @test p_ht_2[:ht] == ht_2
   #ERRORS
 
 end
