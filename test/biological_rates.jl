@@ -275,8 +275,10 @@ module TestExtendedBA
   @test p_ar_2[:ar] != p_ar_d[:ar]
   ar_2 = [3e8, 3e7, 3e8] .* bmass .^([-0.25, -0.25, 0.0]) .* bmass' .^([0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0]) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 / (k * T) .* ([1.15, 1.15, 1.15] .- ([1.15, 1.15, 1.15] ./ [298.15, 298.15, 0.0] .+ k .* log.([0.53, 0.53, 0.53] ./ Δenergy)) .* temp))))
   @test p_ar_2[:ar] == ar_2
-  
+
   #ERRORS
+  @test_throws Exception model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:handlingtime))
+  @test_throws Exception model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:y))
 
 end
 
