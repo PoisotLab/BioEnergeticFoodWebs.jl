@@ -46,8 +46,10 @@ module TestEffectTempSize
     @test p_aqua_1[:bodymass] == expected_bm_aqua
     p_aqua_2 = model_parameters(EC, TSR_type = :mean_aquatic, dry_mass_293 = dm, T = temp2)
     @test p_aqua_2[:bodymass] > p_aqua_1[:bodymass]
-    
+
     # MEAN TERRESTRIAL
+    p_terr_1 = model_parameters(EC, TSR_type = :mean_terrestrial, dry_mass_293 = dm, T = temp)
+    pcm_terr_1 = -1.72 .+ 0.54 .* log10.(dm)
 
     # MAXIMUM
 
