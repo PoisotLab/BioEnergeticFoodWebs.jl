@@ -2,6 +2,7 @@ module TestNoEffectTempSize
     using BioEnergeticFoodWebs
     using Base.Test
 
+    # WET MASS (default)
     EC = [0 0 1 ; 0 0 1 ; 0 0 0]
     LFC = [0 1 0 ; 0 0 1 ; 0 0 0]
     bsize_ratio = 10.0 #consumers are 10 times larger than their resource
@@ -18,10 +19,21 @@ module TestNoEffectTempSize
     p_bm = model_parameters(EC, Z = bsize_ratio, bodymass = bm)
     @test p_bm[:bodymass] == bm
 
+    # DRY MASS
+    dm = [6.3, 5.2, 1.2]
+    p_dm = model_parameters(EC, TSR_type = :no_response_DM, dry_mass_293 = dm)
+    expected_mass_dm = dm .* 6.5
+    @test p_dm[:bodymass] == expected_mass_dm
 end
 
 # module TestEffectTempSize
 #     using BioEnergeticFoodWebs
 #     using Base.Test
+#
+#     # MEAN AQUATIC
+#
+#     # MEAN TERRESTRIAL
+#
+#     # MAXIMUM
 #
 # end
