@@ -28,9 +28,9 @@ It returns the body mass of the organisms at the given temperature according to 
 
 function temperature_size_rule(parameters)
 
-    temperature_C = parameters[:T] - 273.15
+    temperature_C = parameters[:T] - 273.15 #convert from kelvins to celsius
 
-    if parameters[:TSR_type] == :no_response_WM
+    if parameters[:TSR_type] == :no_response_WM #no effect of temperature on body sizes
         if length(parameters[:bodymass]) == 1
           M = parameters[:Z].^(parameters[:trophic_rank].-1)
           parameters[:bodymass] = M
