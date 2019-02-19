@@ -679,7 +679,7 @@ function extended_BA_attackr(default_temp_parameters = @NT(norm_constant_inverte
                                  end
                                 end
                                 end
-                                rate = norm_constant_all .* bodymass .^(β_consumer) .* bodymass' .^(β_resource) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
+                                rate = norm_constant_all .* bodymass .^(β_consumer) .* bodymass' .^(β_resource) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 .+ exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
                                 rate[isnan.(rate)] = 0
                                 return  rate
 
