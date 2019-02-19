@@ -826,8 +826,8 @@ function gaussian_attackr(default_temp_parameters = @NT(norm_constant_invertebra
                                  end
                                 end
                                 end
-                                rate = bodymass.^β_consumer .* bodymass'.^β_resource .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
-                                rate[isnan.(rate)] = 0
+                                rate = bodymass .^ β_consumer .* bodymass' .^ β_resource .* norm_constant_all .* exp.( .- (T .- T_opt_all) .^ 2 ./ (2 .* range_all .^ 2))
+                                rate[isnan.(rate)] .= 0
                                 return rate
                             end
 end

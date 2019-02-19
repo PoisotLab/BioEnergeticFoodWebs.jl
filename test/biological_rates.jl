@@ -318,15 +318,27 @@ module TestGaussian
   @test p_x_t[:x] != p_x_d[:x]
   #passed arguments
   pt_x = @NT(range_producer = 30)
-  p_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x, parameters_tuple = pt_x))
-  @test p_2[:x] != p_x_d[:x]
+  p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x, parameters_tuple = pt_x))
+  @test p_x_2[:x] != p_x_d[:x]
   x_2 = bmass .^ -0.25 .* 0.5 .* exp.( .- (temp .- 298.15) .^ 2 ./ (2 .* [20,20,30] .^ 2))
-  @test p_2[:x] == x_2
-  
+  @test p_x_2[:x] == x_2
+
   #ATTACK
   #defaults
+  p_ar_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate))
+  ar_d = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.( .- (temp .- [295,295,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
+  ar_d[isnan.(ar_d)] .= 0
+  @test p_ar_d[:ar] == ar_d
   #change temperature
+  p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate))
+  @test p_ar_t[:ar] != p_ar_d[:ar]
   #passed arguments
+  pt_ar = @NT(T_opt_invertebrate = 270)
+  p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate, parameters_tuple = pt_ar))
+  @test p_ar_2[:ar] != p_ar_d[:ar]
+  ar_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.( .- (temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
+  @test p_ar_2[:ar] == ar_2
+
   #HANDLING
   #defaults
   #change temperature
