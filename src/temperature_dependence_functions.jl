@@ -713,7 +713,7 @@ function gaussian_r(default_temp_parameters = @NT(norm_constant = 0.5, range = 2
 	else
 	  temperature_param = default_temp_parameters
 	end
-    return(bodymass, T, p) -> bodymass.^temperature_param.β .* temperature_param.norm_constant .* exp(.-(T .- temperature_param.T_opt).^2 ./ (2 .*temperature_param.range.^2))
+    return(bodymass, T, p) -> bodymass .^ temperature_param.β .* temperature_param.norm_constant .* exp(.-(T .- temperature_param.T_opt) .^ 2 ./ (2 .*temperature_param.range .^ 2))
 end
 
 """

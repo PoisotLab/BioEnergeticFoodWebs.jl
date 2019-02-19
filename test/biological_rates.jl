@@ -289,13 +289,25 @@ module TestGaussian
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
-  bmass = [100.0, 10.0, 0.0]
+  bmass = [100.0, 10.0, 1.0]
   temp = 270.0
+  temp2 = 250.0
 
   #GROWTH
   #defaults
+  p_r_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r))
+  r_d = bmass .^ -0.25 .* 0.5 .* exp( .- (temp .- 298.15) .^ 2 ./ (2 .* 20 .^ 2))
+  @test p_r_d[:r] == r_d
   #change temperature
+  p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r))
+  @test p_r_t[:r] != p_r_d[:r]
   #passed arguments
+  pt_r = @NT(norm_constant = 0.7)
+  p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r, parameters_tuple = pt_r))
+  @test p_r_2[:r] != p_r_d[:r]
+  r_2 = bmass .^ -0.25 .* 0.7 .* exp( .- (temp .- 298.15) .^ 2 ./ (2 .* 20 .^ 2))
+  @test p_r_2[:r] == r_2
+
   #METABOLISM
   #defaults
   #change temperature
