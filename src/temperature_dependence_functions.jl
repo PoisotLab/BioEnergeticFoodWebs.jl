@@ -763,7 +763,7 @@ function gaussian_x(default_temp_parameters = @NT(norm_constant_producer = 0.5, 
                                  T_opt_all = temperature_param.T_opt_producer .* p[:is_producer] .+ temperature_param.T_opt_vertebrate .* p[:vertebrates] .+ temperature_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                  β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                  range_all = temperature_param.range_producer .* p[:is_producer] .+ temperature_param.range_vertebrate .* p[:vertebrates] .+ temperature_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                 return bodymass.^β_all .* norm_constant_all .* exp.(.-(T .- T_opt_all).^2 ./ (2 .*range_all.^2))
+                                 return bodymass .^ β_all .* norm_constant_all .* exp.( .- (T .- T_opt_all) .^ 2 ./ (2 .* range_all .^ 2))
                                end
 end
 

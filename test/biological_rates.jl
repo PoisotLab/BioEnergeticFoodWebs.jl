@@ -310,8 +310,19 @@ module TestGaussian
 
   #METABOLISM
   #defaults
+  p_x_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x))
+  x_d = bmass .^ -0.25 .* 0.5 .* exp.( .- (temp .- 298.15) .^ 2 ./ (2 .* 20 .^ 2))
+  @test p_x_d[:x] == x_d
   #change temperature
+  p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x))
+  @test p_x_t[:x] != p_x_d[:x]
   #passed arguments
+  pt_x = @NT(range_producer = 30)
+  p_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x, parameters_tuple = pt_x))
+  @test p_2[:x] != p_x_d[:x]
+  x_2 = bmass .^ -0.25 .* 0.5 .* exp.( .- (temp .- 298.15) .^ 2 ./ (2 .* [20,20,30] .^ 2))
+  @test p_2[:x] == x_2
+  
   #ATTACK
   #defaults
   #change temperature
