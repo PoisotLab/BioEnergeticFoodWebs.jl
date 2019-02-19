@@ -30,6 +30,12 @@ function temperature_size_rule(parameters)
 
     temperature_C = parameters[:T] - 273.15 #convert from kelvins to celsius
 
+    if length(parameters[:bodymass]) > 1
+        mass = parameters[:bodymass]
+    elseif length(parameters[:dry_mass_293]) > 1
+        mass = 6.5 .* parameters[:dry_mass_293]
+    end
+
     if parameters[:TSR_type] == :no_response_WM #no effect of temperature on body sizes
         if length(parameters[:bodymass]) == 1
           M = parameters[:Z].^(parameters[:trophic_rank].-1)
@@ -38,10 +44,10 @@ function temperature_size_rule(parameters)
 
     else
         if parameters[:TSR_type] == :mean_aquatic
-            PCM = -3.90-0.53*log10.(parameters[:dry_mass_293])     # PCM = Percentage change in body-mass per degrés C
+            PCM = -3.90 .- 0.53 .* log10.(parameters[:dry_mass_293])     # PCM = Percentage change in body-mass per degrés C
 
         elseif parameters[:TSR_type] == :mean_terrestrial
-            PCM = -1.72+0.54*log10.(parameters[:dry_mass_293])
+            PCM = -1.72 .+ 0.54 .* log10.(parameters[:dry_mass_293])
 
         elseif parameters[:TSR_type] == :maximum
             PCM = -8
@@ -53,9 +59,8 @@ function temperature_size_rule(parameters)
             PCM = 0
 
         end
-        convert_dfmass = 6.5
-        TS_response = log.(PCM/100+1)               # Sign and magnitude of TS response
-        parameters[:bodymass] = convert_dfmass.*parameters[:dry_mass_293].*exp.(TS_response.*(temperature_C-20))  # dry mass converted to fresh mass
+        TS_response = log.(PCM/100+1) # Sign and magnitude of TS response
+        parameters[:bodymass] = mass .* exp.(TS_response .* (temperature_C-20))  # dry mass converted to fresh mass
 
     end
 
