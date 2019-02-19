@@ -128,46 +128,46 @@ function foodweb_evenness(parameters; last=1000)
     return mean(shan)
 end
 
-"""
-**Save the output of a simulation**
-
-Takes a simulation output as a mandatory argument. The two keyword arguments
-are `as` (can be `:json` or `:jld`), defining the file format, and `filename`
-(without an extension, defaults to `NaN`). If `:jld` is used, the variable
-is named `befwm_simul` unless a `varname` is given.
-
-Called with the defaults, this function will write `befwm_xxxxxxxx.json`
-with the current simulation output, where `xxxxxxxx` is a hash of the `p`
-output (ensuring that all output files are unique).
-
-This function is *not* exported, so it must be called with `BioEnergeticFoodWebs.save`.
-
-"""
-function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=nothing, varname=nothing)
-    if as == :JSON
-        as = :json
-    end
-    if as == :JLD
-        as = :jld
-    end
-    @assert as ∈ vec([:json :jld])
-    if filename == nothing
-        filename = "befwm_" * string(hash(parameters))
-    end
-    if varname == nothing
-        varname = "befwm_simul"
-    end
-    if as == :json
-        filename = filename * ".json"
-        f = open(filename, "w")
-        JSON.print(f, parameters)
-        close(f)
-    end
-    if as == :jld
-        filename = filename * ".jld"
-        JLD.save(filename, varname, parameters)
-    end
-end
+# """
+# **Save the output of a simulation**
+#
+# Takes a simulation output as a mandatory argument. The two keyword arguments
+# are `as` (can be `:json` or `:jld`), defining the file format, and `filename`
+# (without an extension, defaults to `NaN`). If `:jld` is used, the variable
+# is named `befwm_simul` unless a `varname` is given.
+#
+# Called with the defaults, this function will write `befwm_xxxxxxxx.json`
+# with the current simulation output, where `xxxxxxxx` is a hash of the `p`
+# output (ensuring that all output files are unique).
+#
+# This function is *not* exported, so it must be called with `BioEnergeticFoodWebs.save`.
+#
+# """
+# function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=nothing, varname=nothing)
+#     if as == :JSON
+#         as = :json
+#     end
+#     if as == :JLD
+#         as = :jld
+#     end
+#     @assert as ∈ vec([:json :jld])
+#     if filename == nothing
+#         filename = "befwm_" * string(hash(parameters))
+#     end
+#     if varname == nothing
+#         varname = "befwm_simul"
+#     end
+#     if as == :json
+#         filename = filename * ".json"
+#         f = open(filename, "w")
+#         JSON.print(f, parameters)
+#         close(f)
+#     end
+#     if as == :jld
+#         filename = filename * ".jld"
+#         JLD.save(filename, varname, parameters)
+#     end
+# end
 
 
 """
