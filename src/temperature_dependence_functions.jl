@@ -305,7 +305,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_r()
 Parameters can also be specified:
-	- exponential_BA_r(@NT(norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
+	- exponential_BA_r(passed_temp_parameters = @NT(norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
 """
 
 function exponential_BA_r(default_temp_parameters = @NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31); passed_temp_parameters...)
@@ -346,7 +346,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_x()
 Parameters can also be specified:
-	- exponential_BA_x(@NT(norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
+	- exponential_BA_x(passed_temp_parameters = @NT(norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
 	                                   activation_energy_producer = -0.69, activation_energy_invertebrate = -0.69, activation_energy_vertebrate = -0.69,
 	                                   T0_producer = 300.15, T0_invertebrate = 300.15, T0_vertebrate = 293.15,
 	                                   β_producer = -0.31, β_invertebrate = -0.31, β_vertebrate = -0.31))
@@ -398,7 +398,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_attackr()
 Parameters can also be specified:
-	- exponential_BA_attackr(@NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
+	- exponential_BA_attackr(passed_temp_parameters = @NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
 	                             activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
 	                             T0_vertebrate = 293.15, T0_invertebrate = 293.15,
 	                             β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
@@ -467,7 +467,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_handlingt()
 Parameters can also be specified:
-	- exponential_BA_handlingt(@NT(norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
+	- exponential_BA_handlingt(passed_temp_parameters = @NT(norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
                                               activation_energy_vertebrate = 0.26, activation_energy_invertebrate = 0.26,
                                               T0_vertebrate = 293.15, T0_invertebrate = 293.15,
                                               β_producer = -0.45, β_vertebrate = 0.47, β_invertebrate = 0.47))
@@ -531,7 +531,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_r()
 Parameters can also be specified:
-	- extended_BA_r(@NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
+	- extended_BA_r(passed_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
 """
 
 function extended_BA_r(default_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
@@ -578,7 +578,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_x()
 Parameters can also be specified:
-	- extended_BA_x(@NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+	- extended_BA_x(passed_temp_parameters = @NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
 	                                activation_energy_producer = 0.53, activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
 	                                deactivation_energy_producer = 1.15, deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
@@ -636,7 +636,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_attackr()
 Parameters can also be specified:
-	- extended_BA_attackr(@NT(norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+	- extended_BA_attackr(passed_temp_parameters = @NT(norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
 	                                   activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
 	                                   deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
@@ -704,7 +704,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_r()
 Parameters can also be specified:
-	- gaussian_r(@NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25))
+	- gaussian_r(passed_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25))
 """
 function gaussian_r(default_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
@@ -742,7 +742,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_x()
 Parameters can also be specified:
-	- gaussian_x(@NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_x(passed_temp_parameters = @NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 	                             range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
 	                             T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                             β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
@@ -789,7 +789,7 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 The function can be called with the default parameters:
 	- gaussian_attackr()
 Parameters can also be specified:
-	- gaussian_attackr(@NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_attackr(passed_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 	                   range_invertebrate = 20, range_vertebrate = 20,
 	                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
@@ -854,7 +854,7 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 The function can be called with the default parameters:
 	- gaussian_attackr()
 Parameters can also be specified:
-	- gaussian_attackr(@NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_attackr(passed_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 							range_invertebrate = 20, range_vertebrate = 20,
 							T_opt_invertebrate = 295, T_opt_vertebrate = 295,
 							β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
