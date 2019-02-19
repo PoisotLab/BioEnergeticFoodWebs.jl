@@ -356,6 +356,8 @@ module TestGaussian
   ht_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.((temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
   ht_2[isnan.(ht_2)] .= 0
   @test p_ht_2[:ht] == ht_2
+
   #ERRORS
+  @test_throws Exception model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:y))
 
 end
