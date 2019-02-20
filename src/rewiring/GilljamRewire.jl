@@ -23,7 +23,7 @@ function Gilljam(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64
     for i in newLinks #for each Sp that needs a new link
       similarities = parameters[:similarity][newLinks][1] #get the similarity ranks
       deleteat!(similarities,findall((in)(parameters[:extinctions]), similarities,)) # remove extinctions
-      spnoprey = LinearIndices(sum(preferenceMat dims = 2))[findall(x -> x == 0, sum(preferenceMat, dims = 2))]
+      spnoprey = LinearIndices(sum(preferenceMat, dims = 2))[findall(x -> x == 0, sum(preferenceMat, dims = 2))]
       deleteat!(similarities,findall((in)(spnoprey), similarities))#remove Sp without prey
       if !isempty(similarities) #TODO : find a cleaner way to do it
         newLink = sample(find(preferenceMat[similarities[end],:])) #choose link to make
