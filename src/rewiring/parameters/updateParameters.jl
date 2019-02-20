@@ -93,7 +93,7 @@ end
 function getW_preference(parameters::Dict{Symbol,Any})
   #used internally by model_parameters and update_parameters
   S = size(parameters[:A],1)
-  generality = float(vec(sum(parameters[:A], 2)))
+  generality = float(vec(sum(parameters[:A], dims = 2)))
 
   if (parameters[:rewire_method] ∈ [:none, :ADBM, :stan])
 

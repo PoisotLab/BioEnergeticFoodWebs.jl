@@ -1,5 +1,5 @@
 module TestDefault
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
 
@@ -66,7 +66,7 @@ module TestDefault
 end
 
 module TestEppley
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
 
@@ -124,7 +124,7 @@ module TestEppley
 end
 
 module TestExponentialBA
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
 
@@ -219,7 +219,7 @@ module TestExponentialBA
 end
 
 module TestExtendedBA
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
 
@@ -283,7 +283,7 @@ module TestExtendedBA
 end
 
 module TestGaussian
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
 

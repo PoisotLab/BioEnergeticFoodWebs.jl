@@ -22,7 +22,7 @@ function species_richness(parameters; threshold::Float64=eps(), last::Int64=1000
     if sum(measure_on) == 0
         return NaN
     end
-    richness = vec(sum(measure_on .> threshold, 2))
+    richness = vec(sum(measure_on .> threshold, dims = 2))
     return mean(richness)
 end
 
@@ -68,7 +68,7 @@ function total_biomass(parameters; last=1000)
     if sum(measure_on) == 0
         return NaN
     end
-    biomass = vec(sum(measure_on, 2))
+    biomass = vec(sum(measure_on, dims = 2))
     return mean(biomass)
 end
 

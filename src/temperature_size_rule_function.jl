@@ -1,4 +1,4 @@
-#=
+"""
 Functions for the Temperature Size Rule, following Forster et al 2012 & Sentis et al 2017
 
 The function takes 3 arguments :
@@ -24,8 +24,7 @@ TSR_t = :mean_aquatic # mean aquatic TS slope for instance
 temperature_size_rule(DM20, temperature, TSR_t)
 
 It returns the body mass of the organisms at the given temperature according to the given TS response slope.
-=#
-
+"""
 function temperature_size_rule(parameters)
 
     temperature_C = parameters[:T] - 273.15 #convert from kelvins to celsius

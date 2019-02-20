@@ -37,7 +37,7 @@ module TestMeasures
     @test species_persistence(s, last=1) == 0.1
 
     # Foodweb evenness
-    B = repmat([0 .5 0 .5], 5)
+    B = repeat([0 .5 0 .5], 5)
     s = Dict{Symbol, Any}(:B => B)
     @test foodweb_evenness(s, last = 2) == 1.00
 

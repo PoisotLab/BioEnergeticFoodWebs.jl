@@ -1,5 +1,5 @@
 module FunctionalResponse
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   foodchain = [0 1 0; 0 0 1; 0 0 0]
@@ -9,7 +9,7 @@ module FunctionalResponse
       for i in [1.0, 2.0]
           for j in [0.0, 1.0]
               p = model_parameters(a, h = i, c = j)
-              ω = a ./ sum(a, 2)
+              ω = a ./ sum(a, dims = 2)
               ω[isnan.(ω)] .= 0.0
               @test p[:w] == ω
               num = ω .* (init_biomass' .^ i)
@@ -19,7 +19,7 @@ module FunctionalResponse
               hsd = [0.5, 0.5, 0.0] .^ i
               @test p[:Γh] == hsd
               ip = j .* hsd .* init_biomass
-              fa = sum(num, 2)
+              fa = sum(num, dims = 2)
               den = hsd .+ ip .+ fa
               f_calc = num./den
               f_calc[isnan.(f_calc)] .= 0.0
@@ -37,8 +37,8 @@ module FunctionalResponse
               outflows[isnan.(outflows)] .= 0.0
 
               infl, outfl = BioEnergeticFoodWebs.consumption(p, init_biomass)
-              @test infl == vec(sum(inflows, 2))
-              @test outfl == vec(sum(outflows, 1))
+              @test infl == vec(sum(inflows, dims = 2))
+              @test outfl == vec(sum(outflows, dims = 1))
           end
       end
   end

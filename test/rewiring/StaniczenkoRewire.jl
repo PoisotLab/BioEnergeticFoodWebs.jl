@@ -1,6 +1,6 @@
 module TestStaniczenkoRewire
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Test
 
     A = [0 0 1 1 ; 0 0 0 1 ; 0 0 0 0 ; 0 0 0 0]
     expected_rg = [0 0 0 0 ; 0 0 0 0 ; 0 0 0 0 ; 0 0 1 0]

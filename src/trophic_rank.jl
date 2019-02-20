@@ -9,12 +9,12 @@ a primary consumer a value of 2, and so forth.
 function distance_to_producer(L::Array{Int64, 2})
 
     # We identify producers
-    is_producer = vec(sum(L, 2) .== 0)
+    is_producer = vec(sum(L, dims = 2) .== 0)
 
     # Producers have a distance of 1
     d = zeros(Int64, length(is_producer))
-    d[is_producer] = 1
-    
+    d[is_producer] .= 1
+
     # We work on a copy of the matrix with no self-loops
     K = copy(L)
     for i in eachindex(d)
@@ -25,7 +25,7 @@ function distance_to_producer(L::Array{Int64, 2})
     i = 1
     while (i < length(d))|(sum(d) == 0)
         connected_at_length = (K^i * is_producer) .> 0
-        d[(d .== 0) .* (connected_at_length)] = i+1
+        d[(d .== 0) .* (connected_at_length)] .= i+1
         i = i+1
     end
     return d
@@ -50,4 +50,3 @@ function trophic_rank(L::Array{Int64, 2})
     end
     return TL
 end
-

@@ -1,6 +1,6 @@
 module TestGilljamRewire
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Test
 
     srand(1)
     S = 3

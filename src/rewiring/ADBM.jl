@@ -3,7 +3,6 @@
 This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
-
 function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
   E = parameters[:e] .* parameters[:bodymass]
   if parameters[:Nmethod] == :original
@@ -43,14 +42,13 @@ end
 This function takes the terms calculated by getADBM_Terms() and uses them to determine the feeding
 links of species j. Used internally by ADBM().
 """
-
 function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
    H::Array{Float64},biomass::Vector{Float64},j)
 
   profit = E ./ H[j,:]
   # Setting profit of species with zero biomass  to -1.0
   # This prevents them being included in the profitSort
-  profit[biomass .== 0.0] = -1.0
+  profit[biomass .== 0.0] .= -1.0
 
   profs = sortperm(profit,rev = true)
 
@@ -61,10 +59,10 @@ function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
   λH = cumsum(λSort .* HSort)
   Eλ = cumsum(ESort .* λSort)
 
-  λH[isnan.(λH)] = Inf
-  Eλ[isnan.(Eλ)] = Inf
+  λH[isnan.(λH)] .= Inf
+  Eλ[isnan.(Eλ)] .= Inf
 
-  cumulativeProfit = Eλ ./ (1 + λH)
+  cumulativeProfit = Eλ ./ (1 .+ λH)
 
   if all(0 .== cumulativeProfit)
   feeding = []
@@ -84,8 +82,6 @@ This function returns the food web based on the ADBM model of Petchey et al. 200
 takes the paramteres created by rewire_parameters() and uses getADBM_Terms() and getFeedingLinks() to
 detemine the web structure. This function is called using the callback to include rewiring into biomass simulations.
 """
-
-
 function ADBM(S::Int64,parameters::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
   adbmTerms = get_adbm_terms(S,parameters,biomass)
@@ -96,7 +92,7 @@ function ADBM(S::Int64,parameters::Dict{Symbol,Any},biomass::Vector{Float64})
     if !parameters[:is_producer][j]
       if biomass[j] > 0.0
         feeding = get_feeding_links(S,E,λ,H,biomass,j)
-        adbmMAT[j,feeding] = 1
+        adbmMAT[j,feeding] .= 1
       end
     end
   end

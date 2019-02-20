@@ -1,5 +1,5 @@
 using BioEnergeticFoodWebs
-using Base.Test
+using Test
 
 anyerrors = false
 
@@ -25,7 +25,7 @@ for current_test in test_files
     catch e
         anyerrors = true
         println("\033[1m\033[31mFAILED\033[0m\t$(current_test)")
-        showerror(STDOUT, e, backtrace())
+        showerror(stdout, e, backtrace())
         println()
     end
 end

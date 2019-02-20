@@ -1,5 +1,5 @@
 module TestSimulate
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   food_chain = [0 0 0;0 0 1; 1 0 0]
@@ -11,7 +11,7 @@ module TestSimulate
 end
 
 module TestSimulateHandChecked
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   A = [0 1 0; 0 0 0; 0 1 0]
@@ -26,7 +26,7 @@ module TestSimulateHandChecked
 end
 
 module TestSimulateSanityCheck
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   # A producer with no predation reaches K
@@ -70,7 +70,7 @@ end
 
 
 module TestSimulateProductivity
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   A = zeros(Int64, (4, 4))
@@ -117,13 +117,13 @@ module TestSimulateProductivity
 end
 
 module TestSimulateRewiring
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
 
   #print info message when extinction occurs
   A = [0 0 0; 0 1 0; 0 0 0]
-  A_after = Int.(zeros(A))
+  A_after = Int.(zero(A))
   b = rand(3)
 
   # p = model_parameters(A, rewire_method = :Gilljam)
@@ -150,7 +150,7 @@ module TestSimulateRewiring
 end
 
 module TestSimulateNP
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   A = [0 1 ; 0 0]
@@ -183,7 +183,7 @@ module TestSimulateNP
 end
 
 module TestSimulateTemperatureEffect
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
   using NamedTuples
 

@@ -84,7 +84,7 @@ function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w
 end
 
 function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
-  food_available = vec(sum(bm_matrix, 2))
+  food_available = vec(sum(bm_matrix, dims = 2))
   f_den = zeros(eltype(biomass), length(biomass))
   for i in eachindex(biomass)
     f_den[i] = Γh[i]*(1.0+c*biomass[i])+food_available[i]
@@ -136,11 +136,11 @@ function consumption(parameters, biomass)
 
   update_F_matrix!(F, xyb)
 
-  gain = vec(sum(F, 2))
+  gain = vec(sum(F, dims = 2))
 
   get_trophic_loss!(F, parameters[:efficiency])
 
-  loss = vec(sum(F, 1))
+  loss = vec(sum(F, dims = 1))
 
   return gain, loss
 
