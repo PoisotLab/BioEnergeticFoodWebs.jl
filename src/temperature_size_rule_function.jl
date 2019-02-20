@@ -66,8 +66,6 @@ function temperature_size_rule(parameters)
 
     end
         TS_response = log.(PCM/100+1) # Sign and magnitude of TS response
-        parameters[:bodymass] = wmass .* exp.(TS_response .* (temperature_C-20))  
-
-    end
+        parameters[:bodymass] = wmass .* exp.(TS_response .* (temperature_C-20))
 
 end
