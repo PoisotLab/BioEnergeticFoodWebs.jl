@@ -34,6 +34,7 @@ function temperature_size_rule(parameters)
     if length(parameters[:bodymass]) > 1
         wmass = parameters[:bodymass]
         dmass = wmass ./ conversion_factor_mass
+        parameters[:dry_mass_293] = dmass
 
     elseif length(parameters[:dry_mass_293]) > 1
         wmass = conversion_factor_mass .* parameters[:dry_mass_293]
@@ -49,6 +50,7 @@ function temperature_size_rule(parameters)
         end
         wmass = M
         dmass = wmass ./ conversion_factor_mass
+        parameters[:dry_mass_293] = dmass
 
     end
 
@@ -66,7 +68,7 @@ function temperature_size_rule(parameters)
 
     elseif parameters[:TSR_type] == :no_response
         PCM = 0
-        
+
     end
         TS_response = log.(PCM/100+1) # Sign and magnitude of TS response
         parameters[:bodymass] = wmass .* exp.(TS_response .* (temperature_C-20))
