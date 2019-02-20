@@ -88,7 +88,7 @@ detemine the web structure. This function is called using the callback to includ
 
 function ADBM(S::Int64,parameters::Dict{Symbol,Any},biomass::Vector{Float64})
   adbmMAT = zeros(Int64,(S,S))
-  adbmTerms = get_adbm_terms(S,p,biomass)
+  adbmTerms = get_adbm_terms(S,parameters,biomass)
   E = adbmTerms[:E]
   λ = adbmTerms[:λ]
   H = adbmTerms[:H]

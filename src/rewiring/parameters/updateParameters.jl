@@ -3,12 +3,12 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
 
   if parameters[:rewire_method] == :ADBM
     #assign new array
-    parameters[:A] = ADBM(S,p,biomass)
+    parameters[:A] = ADBM(S,parameters,biomass)
 
     #update the parameters
-    get_herbivores(p) #
-    getW_preference(p) #
-    get_efficiency(p)
+    get_herbivores(parameters) #
+    getW_preference(parameters) #
+    get_efficiency(parameters)
 
   elseif parameters[:rewire_method] == :Gilljam
     #add extinction
@@ -18,18 +18,18 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
     sort!(parameters[:extinctions])
 
     #assign new array and update costs
-    parameters[:A] , p = Gilljam(S,p,biomass)
+    parameters[:A] , parameters = Gilljam(S,parameters,biomass)
 
     #update rewiring parameters
     if parameters[:preferenceMethod] == :specialist
-      p = BioEnergeticFoodWebs.update_specialist_preference(p,S)
+      parameters = BioEnergeticFoodWebs.update_specialist_preference(parameters,S)
     end
 
     #update parameters
-    get_herbivores(p)
-    getW_preference(p)
+    get_herbivores(parameters)
+    getW_preference(parameters)
     parameters[:w][find(parameters[:w] .== Inf)] = 1
-    get_efficiency(p)
+    get_efficiency(parameters)
 
   elseif parameters[:rewire_method] == :stan
     #add extinction
@@ -39,14 +39,14 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
     append!(parameters[:extinctions], id_Ɛ)
     sort!(parameters[:extinctions])
 
-    parameters[:A] = Staniczenko_rewire(p)
-    get_herbivores(p)
-    getW_preference(p)
-    get_efficiency(p)
+    parameters[:A] = Staniczenko_rewire(parameters)
+    get_herbivores(parameters)
+    getW_preference(parameters)
+    get_efficiency(parameters)
 
   end
 
-  return p
+  return parameters
 end
 
 function get_herbivores(parameters::Dict{Symbol,Any})

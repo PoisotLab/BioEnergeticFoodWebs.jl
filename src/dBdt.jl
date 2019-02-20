@@ -46,7 +46,7 @@ function get_growth(parameters, biomass; c = 0)
     for i in eachindex(biomass)
       if parameters[:is_producer][i]
         gr = growthrate(parameters, biomass, i, c = c)[1]
-        G[i] = (parameters[:r] * gr * biomass[i])
+        G[i] = (parameters[:r][i] * gr * biomass[i])
         if parameters[:productivity] == :nutrients #Nutrient intake
           growth[i] = G[i] - (parameters[:x][i] * biomass[i])
         else
@@ -65,7 +65,7 @@ end
 TODO
 """
 function nutrientuptake(parameters, biomass, nutrients, G)
-  gr_x_bm = sum(G .* biomass)
+  gr_x_bm = sum(G) #G here is already weighted by biomass (see get_growth)
   dndt = zeros(eltype(nutrients), length(nutrients))
   for i in eachindex(dndt)
     turnover = parameters[:D] * (parameters[:supply][i] - nutrients[i])
@@ -74,9 +74,9 @@ function nutrientuptake(parameters, biomass, nutrients, G)
   return dndt
 end
 
-function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}; rewire::Bool=false, costMat=nothing)
+function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}, h::Float64; rewire::Bool=false, costMat=nothing)
   for i in eachindex(biomass), j in eachindex(biomass)
-    @inbounds bm_matrix[i,j] = w[i,j] * biomass[j] * A[i,j]
+    @inbounds bm_matrix[i,j] = w[i,j] * (biomass[j] .^ h) * A[i,j]
     if rewire
       bm_matrix[i,j] *= costMat[i,j]
     end
@@ -87,16 +87,22 @@ function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
   food_available = vec(sum(bm_matrix, 2))
   f_den = zeros(eltype(biomass), length(biomass))
   for i in eachindex(biomass)
-    f_den[i] = Γh*(1.0-c*biomass[i])+food_available[i]
+    f_den[i] = Γh[i]*(1.0+c*biomass[i])+food_available[i]
   end
   for i in eachindex(biomass), j in eachindex(biomass)
     F[i,j] = bm_matrix[i,j] / f_den[i]
   end
+  F[isnan.(F)] = 0.0
 end
 
 function fill_xyb_matrix!(xyb, biomass, x, y)
   for i in eachindex(biomass)
     @inbounds xyb[i] = x[i]*y[i]*biomass[i]
+  end
+  for j in eachindex(xyb)
+    if xyb[j] == Inf
+      xyb[j] = 0
+    end
   end
 end
 
@@ -118,7 +124,7 @@ function consumption(parameters, biomass)
   bm_matrix = zeros(eltype(biomass), (length(biomass), length(biomass)))
   rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
   costMat = rewire ? parameters[:costMat] : nothing
-  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A]; rewire=rewire, costMat=costMat)
+  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A], parameters[:h]; rewire=rewire, costMat=costMat)
 
   # Available food
   F = zeros(eltype(biomass), (length(biomass), length(biomass)))

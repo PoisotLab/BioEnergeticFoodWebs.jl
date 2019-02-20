@@ -9,14 +9,10 @@ matrix A. Specifically, the default values of the keyword parameters are:
 | K                 | 1.0           | carrying capacity of producers                                                              |
 | Z                 | 1.0           | consumer-resource body mass ratio                                                           |
 | r                 | 1.0           | growth rate of producers                                                                    |
-| a_invertebrate    | 0.314         | allometric constant for invertebrate consumers                                              |
-| a_producers       | 1.0           | allometric constant of producers                                                            |
-| a_vertebrate      | 0.88          | allometric constant for vertebrate consumers                                                |
 | c                 | 0             | quantifies the predator interference                                                        |
 | h                 | 1             | Hill coefficient                                                                            |
 | e_carnivore       | 0.85          | assimilation efficiency of carnivores                                                       |
 | e_herbivore       | 0.45          | assimilation efficiency of herbivores                                                       |
-| m_producers       | 1             | body-mass of producers                                                                      |
 | y_invertebrate    | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate         |
 | y_vertebrate      | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate           |
 | Γ                 | 0.5           | half-saturation density                                                                     |
@@ -38,6 +34,7 @@ matrix A. Specifically, the default values of the keyword parameters are:
 | cost              | 0.0           | (Gilljam) Rewiring cost (a consumer decrease in efficiency when exploiting novel resource)  |
 | specialistPrefMag | 0.9           | (Gilljam) Strength of the consumer preference for 1 prey if `preferenceMethod = :specialist`|
 | preferenceMethod  | :generalist   | (Gilljam) Scenarios with respect to prey preferences of consumers                           |
+| D                 | 0.25          | global turnover rate                                                                        |
 
 All of these values are passed as optional keyword arguments to the function.
 
@@ -75,26 +72,45 @@ See the online documentation and the original references for more details.
 
 """
 
-function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
-        a_invertebrate::Float64=0.314, a_producer::Float64=0.138,
-        a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
-        e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
-        m_producer::Float64=1.0,
-        y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
-        Γ::Float64=0.5, α::Float64=1.0,
+function model_parameters(A;
+        K::Float64=1.0,
+        Z::Float64=1.0,
+        c::Float64=0.0,
+        h::Number=1.0,
+        e_carnivore::Float64=0.85,
+        e_herbivore::Float64=0.45,
+        α::Float64=1.0,
         productivity::Symbol=:species,
         bodymass::Array{Float64, 1}=[0.0],
-        vertebrates::Array{Bool, 1}=[false], rewire_method = :none,
-        e::Float64 = 1.0, a_adbm::Float64 = 0.0189, ai::Float64 = -0.491,
-        aj::Float64 = -0.465, b::Float64 = 0.401, h_adbm::Float64 = 1.0,
-        hi::Float64 = 1.0, hj::Float64 = 1.0, n::Float64 = 1.0,
-        ni::Float64= -0.75, Hmethod::Symbol = :ratio,
-        Nmethod::Symbol = :original, cost::Float64 = 0.0,
+        vertebrates::Array{Bool, 1}=[false],
+        rewire_method = :none,
+        e::Float64 = 1.0,
+        a_adbm::Float64 = 0.0189,
+        ai::Float64 = -0.491,
+        aj::Float64 = -0.465,
+        b::Float64 = 0.401,
+        h_adbm::Float64 = 1.0,
+        hi::Float64 = 1.0,
+        hj::Float64 = 1.0,
+        n::Float64 = 1.0,
+        ni::Float64= -0.75,
+        Hmethod::Symbol = :ratio,
+        Nmethod::Symbol = :original,
+        cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
         preferenceMethod::Symbol = :generalist,
-        D::Float64 = 0.25, supply::Array{Float64, 1} = [4.0],
-        υ::Array{Float64, 1} = [1.0, 0.5], K1::Array{Float64, 1} = [0.15],
-        K2::Array{Float64, 1} = [0.15])
+        D::Float64 = 0.25,
+        supply::Array{Float64, 1} = [4.0],
+        υ::Array{Float64, 1} = [1.0, 0.5],
+        K1::Array{Float64, 1} = [0.15],
+        K2::Array{Float64, 1} = [0.15],
+        T::Float64 = 273.15,
+        handlingtime::Function = NoEffectTemperature(:handlingtime),
+        attackrate::Function = NoEffectTemperature(:attackrate),
+        metabolicrate::Function = NoEffectTemperature(:metabolism),
+        growthrate::Function = NoEffectTemperature(:growth),
+        dry_mass_293::Array{Float64, 1}=[0.0],
+        TSR_type::Symbol = :no_response)
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -102,21 +118,23 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   parameters = Dict{Symbol,Any}(
   :K              => K,
   :Z              => Z,
-  :a_invertebrate => a_invertebrate,
-  :a_producer     => a_producer,
-  :a_vertebrate   => a_vertebrate,
+  #:a_invertebrate => a_invertebrate,
+  #:a_producer     => a_producer,
+  #:a_vertebrate   => a_vertebrate,
   :c              => c,
   :e_carnivore    => e_carnivore,
   :e_herbivore    => e_herbivore,
   :h              => h,
-  :m_producer     => m_producer,
-  :r              => r,
+  #:r              => r,
   :vertebrates    => falses(size(A)[1]),
-  :y_invertebrate => y_invertebrate,
-  :y_vertebrate   => y_vertebrate,
-  :Γ              => Γ,
+  #:y_invertebrate => y_invertebrate,
+  #:y_vertebrate   => y_vertebrate,
+  #:Γ              => Γ,
   :A              => A,
-  :α              => α
+  :α              => α,
+  :TSR_type       => TSR_type,
+  :dry_mass_293   => dry_mass_293,
+  :T              => T
   )
   BioEnergeticFoodWebs.check_initial_parameters(parameters)
 
@@ -129,7 +147,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     end
   end
 
-  # Step 3 -- body mass
+  # Step 3 -- body mass and dry mass at 293 K
   parameters[:bodymass] = bodymass
   if length(parameters[:bodymass]) > 1
     if length(parameters[:bodymass]) != size(A, 1)
@@ -137,11 +155,19 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
     end
   end
 
-  # Step 4 -- productivity type
-  if productivity ∈ [:species, :system, :competitive, :nutrients]
-    parameters[:productivity] = productivity
+  parameters[:dry_mass_293] = dry_mass_293
+  if length(parameters[:dry_mass_293]) > 1
+    parameters[:dry_mass_293] = dry_mass_293
+    if length(parameters[:dry_mass_293]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
+    end
+  end
+
+  # Step 4 -- TSR type
+  if TSR_type ∈ [:no_response, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response]
+    parameters[:TSR_type] = TSR_type
   else
-    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+    error("Invalid value for TSR_type -- must be :no_response, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response")
   end
 
   # Step 5 -- Identify producers
@@ -149,7 +175,14 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
   parameters[:is_producer] = is_producer
   producers_richness = sum(is_producer)
 
-  # step 6 -- productivity parameters for the NP model
+  # Step 6 -- productivity type
+  if productivity ∈ [:species, :system, :competitive, :nutrients]
+    parameters[:productivity] = productivity
+  else
+    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+  end
+
+  # step 7 -- productivity parameters for the NP model
   if parameters[:productivity] == :nutrients
     parameters[:D] = D
     parameters[:supply] = supply
@@ -184,7 +217,7 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
 
   end
 
-  # Step 7 -- rewire method
+  # Step 8 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     parameters[:rewire_method] = rewire_method
@@ -203,56 +236,78 @@ function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
 
   # Setup some objects
   S = size(A)[1]
+  parameters[:S] = S
   F = zeros(Float64, size(A))
   efficiency = zeros(Float64, size(A))
-  w = zeros(Float64, S)
   M = zeros(Float64, S)
-  a = zeros(Float64, S)
-  x = zeros(Float64, S)
-  y = zeros(Float64, S)
+  #a = zeros(Float64, S)
+  x = zeros(Float64, S) # metabolic rate
+  #y = zeros(Float64, S)
+  r = zeros(Float64, S) # producers growth rate
+  attack_r = zeros(Float64, S) # attack rates
+  handling_t = zeros(Float64, S) # handling times
+  Γ = zeros(Float64, S) #B0, half saturation density
   TR = trophic_rank(A)
   parameters[:trophic_rank] = TR
   is_herbivore = falses(S)
 
-  # Step 8 -- Identify herbivores (Herbivores consume producers)
+  # Step 9 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(parameters)
 
-  # Step 9 -- Measure generality and extract the vector of 1/n
+  # Step 10 -- Measure generality and extract the vector of 1/n
   getW_preference(parameters)
 
-  # Step 10 -- Get the body mass
-  if length(parameters[:bodymass]) == 1
-    M = parameters[:Z].^(TR.-1)
-    parameters[:bodymass] = M
-  end
+  # Step 11 -- Get the body mass
+  temperature_size_rule(parameters)
+  #if length(parameters[:bodymass]) == 1
+    #M = parameters[:Z].^(TR.-1)
+    #parameters[:bodymass] = M
+  #end
 
   # Step 11 -- Scaling constraints based on organism type
-  a[parameters[:vertebrates]] = parameters[:a_vertebrate]
-  a[.!parameters[:vertebrates]] = parameters[:a_invertebrate]
-  a[is_producer] = parameters[:a_producer]
+  # a[parameters[:vertebrates]] = parameters[:a_vertebrate]
+  # a[.!parameters[:vertebrates]] = parameters[:a_invertebrate]
+  # a[is_producer] = parameters[:a_producer]
 
   # Step 12 -- Metabolic rate
+  m_producer = minimum(parameters[:bodymass][is_producer])
+  parameters[:m_producer] = m_producer
   body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
-  body_size_scaled = body_size_relative.^-0.25
-  x = a .* body_size_scaled
+  # body_size_scaled = body_size_relative.^-0.25
+  x = metabolicrate(body_size_relative, T, parameters)
 
-  # Step 13 -- Assimilation efficiency
-  y = zeros(S)
-  y[parameters[:vertebrates]] = parameters[:y_vertebrate]
-  y[.!parameters[:vertebrates]] = parameters[:y_invertebrate]
+  # Step 13 -- Growth rate
+  r = growthrate(body_size_relative, T, parameters)
 
-  # Step 14 -- Efficiency matrix
+  # Step 14 -- Handling time
+  handling_t = handlingtime(body_size_relative, T, parameters)
+  parameters[:ht] = handling_t
+
+  # Step 16 -- Maximum relative consumption rate
+  y = 1 ./ handling_t
+
+  # Step 15 -- Attack rate
+  attack_r = attackrate(body_size_relative, T, parameters)
+
+  # Step 17 -- Half-saturation constant
+  Γ = 1 ./ (attack_r .* handling_t)
+  Γ[isnan.(Γ)] = 0.0
+  parameters[:Γ] = Γ
+
+  # Step 18 -- Efficiency matrix
   get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
-  #parameters[:w] = w
   #parameters[:efficiency] = efficiency
   parameters[:y] = y
   parameters[:x] = x
-  parameters[:a] = a
+  #parameters[:a] = a
   #parameters[:is_herbivore] = is_herbivore
-  parameters[:Γh] = parameters[:Γ]^parameters[:h]
+  parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
+  parameters[:ar] = attack_r
+  parameters[:r] = r
+
 
   BioEnergeticFoodWebs.check_parameters(parameters)
 
@@ -338,16 +393,16 @@ function gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMetho
   rewireP = preference_parameters(cost, specialistPrefMag, parameters[:A], preferenceMethod)
   #check preferenceMethod
   if preferenceMethod ∈ [:generalist, :specialist]
-    rewireparameters[:preferenceMethod] = preferenceMethod
-    rewireparameters[:specialistPref] = get_specialist_preferences(rewireP,parameters[:A])
+    rewireP[:preferenceMethod] = preferenceMethod
+    rewireP[:specialistPref] = get_specialist_preferences(rewireP,parameters[:A])
   else
     error("Invalid value for preferenceMethod -- must be :generalist or :specialist")
   end
-  parameters[:similarity] = rewireparameters[:similarity]
-  parameters[:specialistPrefMag] = rewireparameters[:specialistPrefMag]
-  parameters[:extinctions] = rewireparameters[:extinctions]
-  parameters[:preferenceMethod] = rewireparameters[:preferenceMethod]
-  parameters[:cost] = rewireparameters[:cost]
-  parameters[:costMat] = rewireparameters[:costMat]
-  parameters[:specialistPref] = rewireparameters[:specialistPref]
+  parameters[:similarity] = rewireP[:similarity]
+  parameters[:specialistPrefMag] = rewireP[:specialistPrefMag]
+  parameters[:extinctions] = rewireP[:extinctions]
+  parameters[:preferenceMethod] = rewireP[:preferenceMethod]
+  parameters[:cost] = rewireP[:cost]
+  parameters[:costMat] = rewireP[:costMat]
+  parameters[:specialistPref] = rewireP[:specialistPref]
 end

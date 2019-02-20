@@ -30,5 +30,5 @@ function Gilljam(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64
       end
     end
   end
-  return(preferenceMat,p)
+  return(preferenceMat,parameters)
 end
