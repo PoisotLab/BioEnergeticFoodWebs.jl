@@ -64,6 +64,9 @@ function temperature_size_rule(parameters)
     elseif parameters[:TSR_type] == :reverse
         PCM = 4
 
+    elseif parameters[:TSR_type] == :no_response
+        PCM = 0
+        
     end
         TS_response = log.(PCM/100+1) # Sign and magnitude of TS response
         parameters[:bodymass] = wmass .* exp.(TS_response .* (temperature_C-20))
