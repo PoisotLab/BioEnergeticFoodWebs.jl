@@ -110,7 +110,7 @@ function model_parameters(A;
         metabolicrate::Function = NoEffectTemperature(:metabolism),
         growthrate::Function = NoEffectTemperature(:growth),
         dry_mass_293::Array{Float64, 1}=[0.0],
-        TSR_type::Symbol = :no_response_WM)
+        TSR_type::Symbol = :no_response)
 
   BioEnergeticFoodWebs.check_food_web(A)
 
@@ -164,10 +164,10 @@ function model_parameters(A;
   end
 
   # Step 4 -- TSR type
-  if TSR_type ∈ [:no_response_WM, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response_DM]
+  if TSR_type ∈ [:no_response, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response]
     parameters[:TSR_type] = TSR_type
   else
-    error("Invalid value for TSR_type -- must be :no_response_WM, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response_DM")
+    error("Invalid value for TSR_type -- must be :no_response, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response")
   end
 
   # Step 5 -- Identify producers
