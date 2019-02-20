@@ -83,6 +83,26 @@ module TestEffectTempSize
     @test p_terr_z[:bodymass] == expected_bm_terr_z
 
     # MAXIMUM
+    # dry mass
+    p_max_1 = model_parameters(EC, TSR_type = :maximum, dry_mass_293 = dm, T = temp)
+    pcm_max_1 = -8
+    TSr_max_1 = log.(pcm_max_1 ./ 100 .+ 1)
+    expected_bm_max = (dm .* 6.5) .* exp.(TSr_max_1 .* (temp_c-20))
+    @test p_max_1[:bodymass] == expected_bm_max
+    p_max_2 = model_parameters(EC, TSR_type = :maximum, dry_mass_293 = dm, T = temp2)
+    @test p_max_2[:bodymass] > p_max_1[:bodymass]
+    # wet mass
+    p_maxwm = model_parameters(EC, TSR_type = :maximum, bodymass = wm, T = temp)
+    pcm_maxwm = -8
+    TSr_maxwm = log.(pcm_maxwm ./ 100 .+ 1)
+    expected_bm_maxwm = wm .* exp.(TSr_maxwm .* (temp_c-20))
+    @test p_maxwm[:bodymass] == expected_bm_max == expected_bm_maxwm
+    # Z
+    p_max_z = model_parameters(EC, TSR_type = :maximum, Z = 10.0, T = temp)
+    pcm_max_z = -8
+    TSr_max_z = log.(pcm_max_z ./ 100 .+ 1)
+    expected_bm_max_z = [10.0, 10.0, 1.0] .* exp.(TSr_max_z .* (temp_c-20))
+    @test p_max_z[:bodymass] == expected_bm_max_z
 
     # REVERSE
 
