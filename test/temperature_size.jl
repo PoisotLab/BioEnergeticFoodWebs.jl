@@ -61,7 +61,29 @@ module TestEffectTempSize
     @test p_aqua_z[:bodymass] == expected_bm_aqua_z
 
     # MEAN TERRESTRIAL
+    # dry mass
+    p_terr_1 = model_parameters(EC, TSR_type = :mean_terrestrial, dry_mass_293 = dm, T = temp)
+    pcm_terr_1 = -1.72 .+ 0.54 .* log10.(dm)
+    TSr_terr_1 = log.(pcm_terr_1 ./ 100 .+ 1)
+    expected_bm_terr = (dm .* 6.5) .* exp.(TSr_terr_1 .* (temp_c-20))
+    @test p_terr_1[:bodymass] == expected_bm_terr
+    p_terr_2 = model_parameters(EC, TSR_type = :mean_terrestrial, dry_mass_293 = dm, T = temp2)
+    @test p_terr_2[:bodymass] > p_terr_1[:bodymass]
+    # wet mass
+    p_terrwm = model_parameters(EC, TSR_type = :mean_terrestrial, bodymass = wm, T = temp)
+    pcm_terrwm = -1.72 .+ 0.54 .* log10.(dm)
+    TSr_terrwm = log.(pcm_terrwm ./ 100 .+ 1)
+    expected_bm_terrwm = wm .* exp.(TSr_terrwm .* (temp_c-20))
+    @test p_terrwm[:bodymass] == expected_bm_terr == expected_bm_terrwm
+    # Z
+    p_terr_z = model_parameters(EC, TSR_type = :mean_terrestrial, Z = 10.0, T = temp)
+    pcm_terr_z = -1.72 .+ 0.54 .* log10.([10.0, 10.0, 1.0] ./ 6.5)
+    TSr_terr_z = log.(pcm_terr_z ./ 100 .+ 1)
+    expected_bm_terr_z = [10.0, 10.0, 1.0] .* exp.(TSr_terr_z .* (temp_c-20))
+    @test p_terr_z[:bodymass] == expected_bm_terr_z
 
     # MAXIMUM
+
+    # REVERSE
 
 end
