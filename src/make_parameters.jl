@@ -111,7 +111,7 @@ function model_parameters(A;
         dry_mass_293::Array{Float64, 1}=[0.0],
         TSR_type::Symbol = :no_response)
 
-  BioEnergeticFoodWebs.check_food_web(A)
+  check_food_web(A)
 
   # Step 1 -- create a dictionnary to store the parameters
   parameters = Dict{Symbol,Any}(
@@ -135,7 +135,7 @@ function model_parameters(A;
   :dry_mass_293   => dry_mass_293,
   :T              => T
   )
-  BioEnergeticFoodWebs.check_initial_parameters(parameters)
+  check_initial_parameters(parameters)
 
   # Step 2 -- vertebrates ?
   if length(vertebrates) > 1
@@ -231,7 +231,7 @@ function model_parameters(A;
  elseif rewire_method == :stan
      parameters[:extinctions] = Array{Int,1}()
  end
- BioEnergeticFoodWebs.check_rewiring_parameters(parameters, parameters[:rewire_method])
+ check_rewiring_parameters(parameters, parameters[:rewire_method])
 
   # Setup some objects
   S = size(A)[1]
@@ -308,7 +308,7 @@ function model_parameters(A;
   parameters[:r] = r
 
 
-  BioEnergeticFoodWebs.check_parameters(parameters)
+  check_parameters(parameters)
 
   return parameters
 end
