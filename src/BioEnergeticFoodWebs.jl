@@ -5,7 +5,6 @@ using OrdinaryDiffEq, DiffEqCallbacks
 using JSON
 using JLD
 using StatsBase
-using NamedTuples
 using Statistics
 using LinearAlgebra
 

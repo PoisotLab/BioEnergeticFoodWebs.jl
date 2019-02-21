@@ -5,6 +5,5 @@ DiffEqCallbacks
 JSON
 JLD
 StatsBase
-NamedTuples
 Statistics
 LinearAlgebra
