@@ -11,7 +11,7 @@ Used internally by rewire().
 function rewiring_graph(parameters)
   S = size(parameters[:A], 1)
   R = convert(Array{Int64,2}, zeros(S, S)) #pre-allocate
-  Atmp = deepcopy(A)
+  Atmp = deepcopy(parameters[:A])
   links = findall(!iszero, Atmp)
   consumers = [links[x][1] for x = 1:length(links)]
   unique_consumers = unique(consumers)
