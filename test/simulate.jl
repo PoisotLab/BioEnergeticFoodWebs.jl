@@ -185,7 +185,6 @@ end
 module TestSimulateTemperatureEffect
   using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   A = [0 1 0 ; 0 0 0 ; 0 1 0]
   p = model_parameters(A,

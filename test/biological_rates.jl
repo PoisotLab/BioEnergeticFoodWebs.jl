@@ -1,7 +1,6 @@
 module TestDefault
   using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   food_chain = [0 1 0 ; 0 0 1; 0 0 0]
   metab_status = [true, false, false]
@@ -68,7 +67,6 @@ end
 module TestEppley
   using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -126,7 +124,6 @@ end
 module TestExponentialBA
   using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -221,7 +218,6 @@ end
 module TestExtendedBA
   using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -285,7 +281,6 @@ end
 module TestGaussian
   using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
