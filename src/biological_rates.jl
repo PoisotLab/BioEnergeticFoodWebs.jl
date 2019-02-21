@@ -1,5 +1,26 @@
 #=
-TODO
+Functions for temperature dependence of biological rates :
+
+- NoEffectTemperature : temperature is not included
+- ExtendedEppley : Extended (hump-shaped) Eppley function
+- ExponentialBA : Exponential Boltzmann-Arrhénius function
+- ExtendedBA : Extended (hump-shaped) Boltzmann-Arrhénius function
+- Gaussian : Gaussian, or inverse Gaussian, function
+
+These functions take as argument :
+- rate_affected : the type of biological rate (metabolic, growth, attack rate or handling time) specified with a key (symbol)
+- parameters_tuple : optionnal, a tuple with the parameters (default parameters are also provided)
+
+The functions are called in model parameters as, for instance :
+
+growthrate = NoEffectTemperature(:growthrate) -> no effect of temperature for growth rate
+metabolicrate = ExtendedEppley(:metabolicrate) -> Extended Eppley function for metabolic rate
+attackrate = ExponentialBA(:attackrate, parameters_tuple = parameters) -> Exponental BA function for attack rate, parameters are specified in the tuple 'parameter'
+
+According to the 'rate_affected' parameter, each function calls the specified temperature dependence function defined in temperature_dependence_functions.jl
+For instance : when metabolicrate = ExtendedEppley(:metabolicrate), the function extended_eppley_x from temperature_dependence_functions.jl is used to define the metabolic rate
+
+The functions return either a value, a vector or a matrix for the value of the biological rate, depending on which biological rate is chosen.
 =#
 
 """
