@@ -18,12 +18,12 @@ module TestMeasures
     i = ones(5)
     @test BioEnergeticFoodWebs.coefficient_of_variation(i) == 0.0
 
-    i = collect(linspace(0.0, 1.0, 3))
+    i = collect(range(0.0, stop = 1.0, length = 3))
     @test BioEnergeticFoodWebs.coefficient_of_variation(i) ≈ 1+1/(4*length(i))
 
     # Test the total biomass thing
-    B = eye(10)
-    A = eye(10)
+    B = Matrix{Float64}(I, 10, 10)
+    A = Matrix{Float64}(I, 10, 10)
     fake_params = Dict{Symbol, Any}(:A => A)
     s = Dict{Symbol, Any}(:B => B, :p => fake_params)
     @test total_biomass(s, last=10) == 1.0

@@ -62,9 +62,9 @@ module TestSimulateSanityCheck
   parameters = model_parameters(A)
   b = [.5, .5, .5]
   s_stiff = simulate(parameters, b, use = :stiff)
-  meanB_stiff = mean(s_stiff[:B], 1)
+  meanB_stiff = mean(s_stiff[:B], dims  1)
   s_nonstiff = simulate(parameters, b, use = :nonstiff)
-  meanB_nonstiff = mean(s_stiff[:B], 1)
+  meanB_nonstiff = mean(s_stiff[:B], dims = 1)
   @test meanB_stiff == meanB_nonstiff
 end
 

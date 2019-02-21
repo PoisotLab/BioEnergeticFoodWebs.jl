@@ -26,7 +26,7 @@ function Gilljam(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64
       spnoprey = LinearIndices(sum(preferenceMat, dims = 2))[findall(x -> x == 0, sum(preferenceMat, dims = 2))]
       deleteat!(similarities,findall((in)(spnoprey), similarities))#remove Sp without prey
       if !isempty(similarities) #TODO : find a cleaner way to do it
-        newLink = sample(find(preferenceMat[similarities[end],:])) #choose link to make
+        newLink = sample(findall(preferenceMat[similarities[end],:])) #choose link to make
         preferenceMat[i,newLink] = 1 #add  link to the new predation matrix
         parameters[:costMat][i,newLink] = parameters[:cost]
       end

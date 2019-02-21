@@ -1,4 +1,4 @@
-julia 0.6
+julia 0.7
 Distributions
 OrdinaryDiffEq
 DiffEqCallbacks
@@ -6,3 +6,5 @@ JSON
 JLD
 StatsBase
 NamedTuples
+Statistics
+LinearAlgebra

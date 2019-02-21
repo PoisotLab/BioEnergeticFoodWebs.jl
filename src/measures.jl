@@ -52,7 +52,7 @@ function population_stability(parameters; threshold::Float64=eps(), last=1000)
     if sum(measure_on) == 0
         return NaN
     end
-    stability = -mapslices(coefficient_of_variation, measure_on, 1)
+    stability = -mapslices(coefficient_of_variation, measure_on, dims = 1)
     return mean(stability)
 end
 
@@ -83,7 +83,7 @@ function population_biomass(parameters; last=1000)
     if sum(measure_on) == 0
         return NaN
     end
-    biomass = vec(mean(measure_on, 1))
+    biomass = vec(mean(measure_on, dims = 1))
     return biomass
 end
 
@@ -198,9 +198,9 @@ function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     if out_type == :all #return all growth rates (each producer at each time step)
         return growth
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
-        return mean(growth, 1)
+        return mean(growth, dims = 1)
     elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
-        return std(growth, 1)
+        return std(growth, dims = 1)
     else #if the keyword used is not one of :mean, :all or :std, print an error
         error("out_type should be one of :all, :mean or :std")
     end
@@ -230,9 +230,9 @@ function nutrient_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     if out_type == :all #return all growth rates (each producer at each time step)
         return intake
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
-        return mean(intake, 1)
+        return mean(intake, dims = 1)
     elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
-        return std(intake, 1)
+        return std(intake, dims = 1)
     else #if the keyword used is not one of :mean, :all or :std, print an error
         error("out_type should be one of :all, :mean or :std")
     end
@@ -261,9 +261,9 @@ function consumer_intake(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
     if out_type == :all #return all growth rates (each producer at each time step)
         return gains
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
-        return mean(gains, 1)
+        return mean(gains, dims = 1)
     elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
-        return std(gains, 1)
+        return std(gains, dims = 1)
     else #if the keyword used is not one of :mean, :all or :std, print an error
         error("out_type should be one of :all, :mean or :std")
     end
@@ -297,9 +297,9 @@ function metabolism(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol 
     if out_type == :all #return all growth rates (each producer at each time step)
         return metabolic_losses
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
-        return mean(metabolic_losses, 1)
+        return mean(metabolic_losses, dims = 1)
     elseif out_type == :std #return the growth rate standard deviation over the last `last` time steps (for each producer)
-        return std(metabolic_losses, 1)
+        return std(metabolic_losses, dims = 1)
     else #if the keyword used is not one of :mean, :all or :std, print an error
         error("out_type should be one of :all, :mean or :std")
     end

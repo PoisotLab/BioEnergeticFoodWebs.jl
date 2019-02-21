@@ -6,6 +6,8 @@ using JSON
 using JLD
 using StatsBase
 using NamedTuples
+using Statistics
+using LinearAlgebra
 
 export trophic_rank,
   model_parameters,

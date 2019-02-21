@@ -67,7 +67,7 @@ function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
   if all(0 .== cumulativeProfit)
   feeding = []
   else
-  feeding = profs[1:maximum(find(cumulativeProfit .== maximum(cumulativeProfit)))]
+  feeding = profs[1:maximum(findall(cumulativeProfit .== maximum(cumulativeProfit)))]
   end
 
   #cumulativeProfit[end] = NaN

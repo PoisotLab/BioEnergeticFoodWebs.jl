@@ -25,7 +25,7 @@ function growthrate(parameters, biomass, i; c = [0.0, 0.0])
     limit_n1 = c[1] ./ (parameters[:K1][i] .+ c[1])
     limit_n2 = c[2] ./ (parameters[:K2][i] .+ c[2])
     limiting_nutrient = hcat(limit_n1, limit_n2)
-    G = minimum(limiting_nutrient, 2)
+    G = minimum(limiting_nutrient, dims = 2)
   else
     G = 1.0 - compete_with / effective_K
   end
@@ -92,7 +92,7 @@ function fill_F_matrix!(F, bm_matrix, biomass, Γh, c)
   for i in eachindex(biomass), j in eachindex(biomass)
     F[i,j] = bm_matrix[i,j] / f_den[i]
   end
-  F[isnan.(F)] = 0.0
+  F[isnan.(F)] .= 0.0
 end
 
 function fill_xyb_matrix!(xyb, biomass, x, y)
@@ -159,7 +159,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   # producer growth if NP model
   if parameters[:productivity] == :nutrients
     nutrients = biomass[S+1:end] #nutrients concentration
-    nutrients[nutrients .< 0] = 0.0
+    nutrients[nutrients .< 0] .= 0.0
     biomass = biomass[1:S] #species biomasses
   else
     nutrients = [NaN, NaN]
