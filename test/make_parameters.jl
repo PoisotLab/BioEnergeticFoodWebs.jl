@@ -218,7 +218,7 @@ module TestUpdateParameters
   @test parameters[:extinctions] == [3]
   @test BioEnergeticFoodWebs.get_herbivores(parameters) == [true, true, false, false]
   @test parameters[:is_producer] == old_p[:is_producer] == [false, false, true, true]
-  eff = float.(zero(parameters[:A])
+  eff = float.(zero(parameters[:A]))
   eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
   @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
   pref = float.(parameters[:A])
