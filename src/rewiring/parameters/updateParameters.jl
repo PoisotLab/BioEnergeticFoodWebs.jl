@@ -157,7 +157,7 @@ function update_specialist_preference(parameters::Dict{Symbol,Any})
     if !parameters[:is_producer][i] && !in(i,parameters[:extinctions])
       if parameters[:A][i,parameters[:specialistPref][i]] == 0
         #assign new random species from diet
-        parameters[:specialistPref][i] = sample(find(parameters[:A][i,:]))
+        parameters[:specialistPref][i] = sample(findall(!iszero, parameters[:A][i,:]))
       end
     else
       parameters[:specialistPref][i] = 0
