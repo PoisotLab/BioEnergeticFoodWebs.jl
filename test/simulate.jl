@@ -28,6 +28,7 @@ end
 module TestSimulateSanityCheck
   using Test
   using BioEnergeticFoodWebs
+  using Statistics
 
   # A producer with no predation reaches K
   free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]

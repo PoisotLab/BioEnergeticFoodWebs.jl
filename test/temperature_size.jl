@@ -28,6 +28,7 @@ end
 
 module TestEffectTempSize
     using BioEnergeticFoodWebs
+    using Statistics
     using Test
 
     EC = [0 0 1 ; 0 0 1 ; 0 0 0]
