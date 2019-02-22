@@ -178,7 +178,7 @@ function no_effect_attackr(default_temp_parameters = (Γ = 0.5,); passed_temp_pa
 	else
 	  temperature_param = default_temp_parameters
 	end
-    return (bodymass, T, p) -> 1 ./ (temperature_param .* p[:ht])
+    return (bodymass, T, p) -> 1 ./ (temperature_param.Γ .* p[:ht])
 end
 
 
