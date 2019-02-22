@@ -14,7 +14,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
     #add extinction
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,parameters[:extinctions])
-    append!(parameters[:extinctions],findin(biomass,findmin(workingBiomass)[1]))
+    append!(parameters[:extinctions],findmin(workingBiomass)[2]))
     sort!(parameters[:extinctions])
 
     #assign new array and update costs
@@ -22,20 +22,20 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
 
     #update rewiring parameters
     if parameters[:preferenceMethod] == :specialist
-      parameters = BioEnergeticFoodWebs.update_specialist_preference(parameters,S)
+      parameters = update_specialist_preference(parameters,S)
     end
 
     #update parameters
     get_herbivores(parameters)
     getW_preference(parameters)
-    parameters[:w][find(parameters[:w] .== Inf)] = 1
+    parameters[:w][(LinearIndices(parameters[:w]))[findall(x -> x .== Inf, parameters[:w])]] .= 1
     get_efficiency(parameters)
 
   elseif parameters[:rewire_method] == :stan
     #add extinction
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,parameters[:extinctions])
-    id_Ɛ = findin(biomass,findmin(workingBiomass)[1])
+    id_Ɛ = findmin(workingBiomass)[2]
     append!(parameters[:extinctions], id_Ɛ)
     sort!(parameters[:extinctions])
 
