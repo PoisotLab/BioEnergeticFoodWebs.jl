@@ -245,7 +245,7 @@ module TestUpdateParameters
   pref = float.(parameters[:A])
   @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
   eff = float.(zero(parameters[:A]))
-  eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
+  eff[parameters[:A] .> 0] .= parameters[:e_herbivore]
   @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
 
 end
