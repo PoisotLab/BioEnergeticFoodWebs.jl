@@ -14,7 +14,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
     #add extinction
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,parameters[:extinctions])
-    append!(parameters[:extinctions],findmin(workingBiomass)[2]))
+    append!(parameters[:extinctions],findmin(workingBiomass)[2])
     sort!(parameters[:extinctions])
 
     #assign new array and update costs
