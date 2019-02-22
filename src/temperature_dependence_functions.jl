@@ -429,7 +429,7 @@ function exponential_BA_attackr(default_temp_parameters = (norm_constant_vertebr
                                 end
                                 end
                                 rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
-                                rate[isnan.(rate)] = 0
+                                rate[isnan.(rate)] .= 0
                             return rate
                         end
 end
@@ -497,7 +497,7 @@ function exponential_BA_handlingt(default_temp_parameters = (norm_constant_verte
                                 end
                                 end
                                 rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
-                                rate[isnan.(rate)] = 0
+                                rate[isnan.(rate)] .= 0
                             return rate
                         end
 end
