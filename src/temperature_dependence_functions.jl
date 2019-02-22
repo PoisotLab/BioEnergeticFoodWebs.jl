@@ -115,7 +115,7 @@ Internally the function takes 3 arguments (unused in this case):
 - the set of parameters p.
 
 """
-function no_effect_r(default_temp_parameters = (r = 1.0); passed_temp_parameters...)
+function no_effect_r(default_temp_parameters = (r = 1.0,); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -171,7 +171,7 @@ Internally the function takes 3 arguments (unused in this case):
 - the set of parameters p.
 
 """
-function no_effect_attackr(default_temp_parameters = (Γ = 0.5); passed_temp_parameters...)
+function no_effect_attackr(default_temp_parameters = (Γ = 0.5,); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)

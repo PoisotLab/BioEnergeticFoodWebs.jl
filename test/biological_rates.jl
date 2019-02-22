@@ -31,9 +31,9 @@ module TestDefault
   # PASSED ARG.
   p = model_parameters(food_chain, vertebrates = metab_status,
                        handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = (y_vertebrate = 3.0, y_invertebrate = 7.0)),
-                       attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8)),
+                       attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8,)),
                        metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = (a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
-                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0)))
+                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0,)))
   @test p[:r] == [2.0, 2.0, 2.0]
   # metabolic rates
   a_invertebrate = 0.3
@@ -236,7 +236,7 @@ module TestExtendedBA
   p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r))
   @test p_r_d[:r] != p_r_t[:r]
   #passed arguments
-  pt_r = (norm_constant = 4000)
+  pt_r = (norm_constant = 4000,)
   p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r, parameters_tuple = pt_r))
   r_2 = (r_d ./ 3e8) .* 4000
   @test p_r_2[:r] ≈ r_2 atol=1e-6
@@ -250,7 +250,7 @@ module TestExtendedBA
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x))
   @test p_x_t[:x] != p_x_d[:x]
   #passed arguments
-  pt_x = (β_vertebrate = -0.5)
+  pt_x = (β_vertebrate = -0.5,)
   p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x, parameters_tuple = pt_x))
   p_x_2[:x] != p_x_d[:x]
   x_2 = 3e8 .* bmass .^([-0.5, -0.25, -0.25]) .* exp.(.-0.53 ./ (k * temp)) .* (1 ./ (1 + exp.(-1 / (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log.(0.53 ./ Δenergy)).* temp))))
@@ -266,7 +266,7 @@ module TestExtendedBA
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate))
   @test p_ar_d[:ar] != p_ar_t[:ar]
   #passed arguments
-  pt_ar = (norm_constant_invertebrate = 3e7)
+  pt_ar = (norm_constant_invertebrate = 3e7,)
   p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate, parameters_tuple = pt_ar))
   @test p_ar_2[:ar] != p_ar_d[:ar]
   ar_2 = [3e8, 3e7, 3e8] .* bmass .^([-0.25, -0.25, 0.0]) .* bmass' .^([0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0]) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 / (k * temp) .* ([1.15, 1.15, 1.15] .- ([1.15, 1.15, 1.15] ./ [298.15, 298.15, 0.0] .+ k .* log.([0.53, 0.53, 0.53] ./ Δenergy)) .* temp))))
@@ -297,7 +297,7 @@ module TestGaussian
   p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r))
   @test p_r_t[:r] != p_r_d[:r]
   #passed arguments
-  pt_r = (norm_constant = 0.7)
+  pt_r = (norm_constant = 0.7,)
   p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r, parameters_tuple = pt_r))
   @test p_r_2[:r] != p_r_d[:r]
   r_2 = bmass .^ -0.25 .* 0.7 .* exp( .- (temp .- 298.15) .^ 2 ./ (2 .* 20 .^ 2))
@@ -312,7 +312,7 @@ module TestGaussian
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x))
   @test p_x_t[:x] != p_x_d[:x]
   #passed arguments
-  pt_x = (range_producer = 30)
+  pt_x = (range_producer = 30,)
   p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x, parameters_tuple = pt_x))
   @test p_x_2[:x] != p_x_d[:x]
   x_2 = bmass .^ -0.25 .* 0.5 .* exp.( .- (temp .- 298.15) .^ 2 ./ (2 .* [20,20,30] .^ 2))
@@ -328,7 +328,7 @@ module TestGaussian
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate))
   @test p_ar_t[:ar] != p_ar_d[:ar]
   #passed arguments
-  pt_ar = (T_opt_invertebrate = 270)
+  pt_ar = (T_opt_invertebrate = 270,)
   p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate, parameters_tuple = pt_ar))
   @test p_ar_2[:ar] != p_ar_d[:ar]
   ar_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.( .- (temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
@@ -345,7 +345,7 @@ module TestGaussian
   p_ht_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime))
   @test p_ht_t[:ht] != p_ht_d[:ht]
   #passed arguments
-  pt_ht = (T_opt_invertebrate = 270)
+  pt_ht = (T_opt_invertebrate = 270,)
   p_ht_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime, parameters_tuple = pt_ht))
   @test p_ht_2[:ht] != p_ht_d[:ht]
   ht_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.((temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
