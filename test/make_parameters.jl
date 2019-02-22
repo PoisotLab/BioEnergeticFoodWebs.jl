@@ -144,7 +144,7 @@ module TestMakeParameters
   pm = :generalist
   pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, pm)
   right_pref = zeros(Int64, S)
-  pref = get_specialist_preferences(pr, correct_network)
+  pref = BioEnergeticFoodWebs.get_specialist_preferences(pr, correct_network)
   @test right_pref == pref
 
       # Test that the preferences returned are correct when test_preferenceMethod = :specialist

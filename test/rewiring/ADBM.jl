@@ -9,7 +9,7 @@ module TestADBM
          0 1 1 ]
     biomass = [0.0,1.0,1.0]
     p = model_parameters(A, rewire_method = :ADBM , Z = 10.0) #change Z to change bodymass
-    ADBMterms = get_adbm_terms(S,p,biomass)
+    ADBMterms = BioEnergeticFoodWebs.get_adbm_terms(S,p,biomass)
 
     #test keys
     @test collect(keys(ADBMterms)) == [:H,:λ,:E]

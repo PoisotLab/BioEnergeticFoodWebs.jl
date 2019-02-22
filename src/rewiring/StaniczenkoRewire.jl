@@ -46,23 +46,24 @@ function potential_newlinks(A, R, parameters)
   sp = convert(BitArray{1}, [overlap_species[x] != Int64[] for x in 1:size(overlap_species,1)])
   #identify overlap species consumers
   potential_predators = map(x -> A[:,x], overlap_species)[sp]
-  id_predators = map(x -> unique(findn(x .== 1)[1]), potential_predators)
+  is_link = map(x -> unique(findall(!iszero, x)), potential_predators)
+  id_predators = map(x -> (i->i[1]).(x), is_link)
   #identify species consumers
-  predators = map(x -> unique(find(x .== 1)), [A[:, i] for i in 1:S])[sp]
+  predators = map(x -> unique(findall(!iszero, x)), [A[:, i] for i in 1:S])[sp]
   #new consumers are those who consume the overlap species but not the species under focus
   new_pred = map((x,y) -> filter(x -> x ∉ y, x), id_predators, predators)
   #pre-allocate empty array
   P = convert(Array{Int64,2}, zeros(S, S))
   #return the identified new potential consumers
-  map((x,y) -> P[x,y] = 1, new_pred, find(sp .== true))
+  map((x,y) -> P[x,y] .= 1, new_pred, findall(sp))
   TR = parameters[:trophic_rank]
-  idx = findn(P .== 1)
+  idx = findall(!iszero, P)
+  idx_c = (i->i[1]).(idx)
+  idx_r = (i->i[2]).(idx)
   map((x,y) -> if TR[x] <= TR[y]
                  P[x,y]=0
-               else
-                 P[x,y]=P[x,y]
                end,
-       idx[1], idx[2]
+       idx_c, idx_r
   )
   return P
 end
