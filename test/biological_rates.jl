@@ -260,7 +260,7 @@ module TestExtendedBA
   #defaults
   p_ar_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate))
   ar_d = [3e8, 3e8, 3e8] .* bmass .^([-0.25, -0.25, 0.0]) .* bmass' .^([0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0]) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 / (k * temp) .* ([1.15, 1.15, 1.15] .- ([1.15, 1.15, 1.15] ./ [298.15, 298.15, 0.0] .+ k .* log.([0.53, 0.53, 0.53] ./ Δenergy)) .* temp))))
-  ar_d[isnan.(ar_d)] = 0
+  ar_d[isnan.(ar_d)] .= 0
   @test p_ar_d[:ar] == ar_d
   #change temperature
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate))
