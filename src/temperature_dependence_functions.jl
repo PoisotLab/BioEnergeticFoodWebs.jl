@@ -122,7 +122,7 @@ function no_effect_r(default_temp_parameters = (r = 1.0,); passed_temp_parameter
 	else
 	  temperature_param = default_temp_parameters
 	end
-    return (bodymass, T, p) -> repeat([temperature_param], size(p[:A], 1))
+    return (bodymass, T, p) -> repeat([temperature_param.r], size(p[:A], 1))
 end
 
 """
