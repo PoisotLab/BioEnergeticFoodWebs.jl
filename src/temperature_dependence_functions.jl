@@ -595,7 +595,7 @@ function extended_BA_x(default_temp_parameters = (norm_constant_producer = 3e8, 
                                  β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                  Δenergy = deactivation_energy_all .- activation_energy_all
 
-                                 return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
+                                 return  norm_constant_all .* bodymass .^ (β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 .+ exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)) .* T))))
 
                              end
 end
