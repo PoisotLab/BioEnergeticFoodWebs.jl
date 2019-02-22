@@ -85,16 +85,18 @@ function Staniczenko_rewire(parameters)
   R = rewiring_graph(parameters)
   P = potential_newlinks(A, R, parameters)
   #keep those that contain one of the released preys
-  released_preys = unique(findn(A[Ɛ,:])[2])
+  released_links = findall(!iszero, A[Ɛ,:])
+  released_preys = unique((i->i[2]).(released_links))
   [filter!(x -> x .!= i, released_preys) for i in Ɛ]
-  all_possible_predators = map(x -> find(x .== 1), [P[:,i] for i in released_preys])
-  trm = find(x -> x != Int64[], all_possible_predators)
+  all_possible_predators = map(x -> findall(!iszero, x), [P[:,i] for i in released_preys])
+  trm = findall(x -> x != Int64[], all_possible_predators)
   filter!(x -> x != Int64[], all_possible_predators)
   released_preys = released_preys[trm]
   #draw a new predator for each released preys
   new_predator = map(sample, all_possible_predators)
   A_rewired = deepcopy(A)
-  A_rewired[Ɛ, :] = A_rewired[:, Ɛ] = 0
+  A_rewired[Ɛ, :] .= 0
+  A_rewired[:, Ɛ] .= 0
   map((x,y) -> A_rewired[x,y] = 1, new_predator, released_preys)
   return A_rewired
 end
