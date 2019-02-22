@@ -150,7 +150,7 @@ module TestMakeParameters
       # Test that the preferences returned are correct when test_preferenceMethod = :specialist
   pm = :specialist
   pr = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, correct_network, pm)
-  pref = get_specialist_preferences(pr, correct_network)
+  pref = BioEnergeticFoodWebs.get_specialist_preferences(pr, correct_network)
   right_pref_1 = [2,4,0,0]
   right_pref_2 = [2,3,0,0]
   @test (pref == right_pref_1) | (pref == right_pref_2)
@@ -193,17 +193,17 @@ module TestUpdateParameters
   @test parameters[:A] == Int.(zero(A))
   #check that the parameters have been updated
   #species 1 was an herbivore ...
-  @test get_herbivores(old_p) == [true, false, false]
+  @test BioEnergeticFoodWebs.get_herbivores(old_p) == [true, false, false]
   #...but not anymore
-  @test get_herbivores(parameters) == [false, false, false]
+  @test BioEnergeticFoodWebs.get_herbivores(parameters) == [false, false, false]
   # it is still a consumer though
   @test parameters[:is_producer] == old_p[:is_producer] == [false, true, true]
   #preferences have been updated
   @test BioEnergeticFoodWebs.getW_preference(old_p) == float.([0 0 1 ; 0 0 0 ; 0 0 0])
   @test BioEnergeticFoodWebs.getW_preference(parameters) == zero(A)
   #efficiency have been updated
-  @test get_efficiency(old_p) == float.([0 0 old_p[:e_herbivore] ; 0 0 0 ; 0 0 0])
-  @test get_efficiency(parameters) == zero(A)
+  @test BioEnergeticFoodWebs.get_efficiency(old_p) == float.([0 0 old_p[:e_herbivore] ; 0 0 0 ; 0 0 0])
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == zero(A)
 
   # Test with Gilljam rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
@@ -216,11 +216,11 @@ module TestUpdateParameters
   #check that all links from and to 3 are gone
   @test parameters[:A][:,3] ==  parameters[:A][3,:] == zeros(4)
   @test parameters[:extinctions] == [3]
-  @test get_herbivores(parameters) == [true, true, false, false]
+  @test BioEnergeticFoodWebs.get_herbivores(parameters) == [true, true, false, false]
   @test parameters[:is_producer] == old_p[:is_producer] == [false, false, true, true]
   eff = float.(zero(parameters[:A]))
   eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
-  @test get_efficiency(parameters) == eff
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
   pref = float.(parameters[:A])
   @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
 
@@ -241,12 +241,12 @@ module TestUpdateParameters
   #no released prey => no new link
   @test parameters[:A][:,3] ==  parameters[:A][3,:] == zeros(4)
   # 1 is not an herbivore anymore (no resource)
-  @test get_herbivores(parameters) == [false, true, false, false]
+  @test BioEnergeticFoodWebs.get_herbivores(parameters) == [false, true, false, false]
   pref = float.(parameters[:A])
   @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
   eff = float.(zero(parameters[:A]))
   eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
-  @test get_efficiency(parameters) == eff
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
 
 end
 
