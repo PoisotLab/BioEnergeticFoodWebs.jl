@@ -1,5 +1,5 @@
 using BioEnergeticFoodWebs
-using Base.Test
+using Test
 
 anyerrors = false
 
@@ -18,16 +18,21 @@ test_files = [
     "temperature_size.jl"
 ]
 
+test_n = 1
+anyerrors = false
+
 for current_test in test_files
     try
         include(current_test)
         println("\033[1m\033[32mPASSED\033[0m\t$(current_test)")
     catch e
-        anyerrors = true
+        global anyerrors = true
         println("\033[1m\033[31mFAILED\033[0m\t$(current_test)")
-        showerror(STDOUT, e, backtrace())
+        showerror(stdout, e, backtrace())
         println()
+        throw("TEST FAILED")
     end
+    global test_n += 1
 end
 
 

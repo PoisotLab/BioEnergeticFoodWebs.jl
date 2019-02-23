@@ -1,6 +1,6 @@
 module TestMakeParameters
   using BioEnergeticFoodWebs
-  using Base.Test
+  using Test
 
   # Test the keyword interface
   correct_network = [0 1 0 0; 0 0 1 1; 0 0 0 0; 0 0 0 0]
@@ -178,7 +178,7 @@ end
 
 module TestUpdateParameters
   using BioEnergeticFoodWebs
-  using Base.Test
+  using Test
 
   A = [0 0 1 ; 0 0 0 ; 0 0 0] #species 1 (herbivore) feed on 3 (producer)
   b = [0.2, 0.3, 0.0] #extinction of species 3
@@ -190,7 +190,7 @@ module TestUpdateParameters
   BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
 
   #check that all links from and to 3 are gone
-  @test parameters[:A] == Int.(zeros(A))
+  @test parameters[:A] == Int.(zero(A))
   #check that the parameters have been updated
   #species 1 was an herbivore ...
   @test BioEnergeticFoodWebs.get_herbivores(old_p) == [true, false, false]
@@ -200,10 +200,10 @@ module TestUpdateParameters
   @test parameters[:is_producer] == old_p[:is_producer] == [false, true, true]
   #preferences have been updated
   @test BioEnergeticFoodWebs.getW_preference(old_p) == float.([0 0 1 ; 0 0 0 ; 0 0 0])
-  @test BioEnergeticFoodWebs.getW_preference(parameters) == zeros(A)
+  @test BioEnergeticFoodWebs.getW_preference(parameters) == zero(A)
   #efficiency have been updated
   @test BioEnergeticFoodWebs.get_efficiency(old_p) == float.([0 0 old_p[:e_herbivore] ; 0 0 0 ; 0 0 0])
-  @test BioEnergeticFoodWebs.get_efficiency(parameters) == zeros(A)
+  @test BioEnergeticFoodWebs.get_efficiency(parameters) == zero(A)
 
   # Test with Gilljam rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
@@ -218,8 +218,8 @@ module TestUpdateParameters
   @test parameters[:extinctions] == [3]
   @test BioEnergeticFoodWebs.get_herbivores(parameters) == [true, true, false, false]
   @test parameters[:is_producer] == old_p[:is_producer] == [false, false, true, true]
-  eff = float.(zeros(parameters[:A]))
-  eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
+  eff = float.(zero(parameters[:A]))
+  eff[parameters[:A] .> 0] .= parameters[:e_herbivore]
   @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
   pref = float.(parameters[:A])
   @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
@@ -244,8 +244,8 @@ module TestUpdateParameters
   @test BioEnergeticFoodWebs.get_herbivores(parameters) == [false, true, false, false]
   pref = float.(parameters[:A])
   @test BioEnergeticFoodWebs.getW_preference(parameters) == pref
-  eff = float.(zeros(parameters[:A]))
-  eff[find(parameters[:A] .> 0)] = parameters[:e_herbivore]
+  eff = float.(zero(parameters[:A]))
+  eff[parameters[:A] .> 0] .= parameters[:e_herbivore]
   @test BioEnergeticFoodWebs.get_efficiency(parameters) == eff
 
 end
@@ -254,7 +254,7 @@ end
 
 module TestNIParameters
   using BioEnergeticFoodWebs
-  using Base.Test
+  using Test
 
   # Test that the parameters can be passed
   A = [0 1 1 ; 0 0 0 ; 0 0 0]

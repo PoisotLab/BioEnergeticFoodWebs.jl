@@ -6,7 +6,6 @@ TODO
 No effect of temperature
 TODO
 """
-
 function NoEffectTemperature(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate),
@@ -47,7 +46,6 @@ end
 Extended Eppley
 TODO
 """
-
 function ExtendedEppley(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :growthrate, :r, :metabolism, :x, :metabolicrate] ; error("rate_affected should be either :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
     if rate_affected ∈ [:growth, :r, :growthrate]
@@ -71,7 +69,6 @@ end
 Exponential Boltzmann-Arrhenius
 TODO
 """
-
 function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), :attackrate or :handlingtime")
@@ -111,7 +108,6 @@ end
 Extended Boltzmann-Arrhenius
 TODO
 """
-
 function ExtendedBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), or :attackrate")
@@ -144,7 +140,6 @@ end
 Gaussian
 TODO
 """
-
 function Gaussian(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")

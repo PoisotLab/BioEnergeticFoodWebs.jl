@@ -49,8 +49,8 @@ function nichemodel(S::Int64, L::Int64)
     end
 
     # The smallest species has a body size and range of 0
-    n[n.==minimum(n)] = 0.0
-    r[n.==minimum(n)] = 0.0
+    n[n.==minimum(n)] .= 0.0
+    r[n.==minimum(n)] .= 0.0
 
     for consumer in 1:S
         for resource in 1:S
