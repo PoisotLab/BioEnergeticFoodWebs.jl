@@ -1,5 +1,5 @@
 module TestTrophicRank
-    using Base.Test
+    using Test
     using BioEnergeticFoodWebs
 
     food_chain = [0 0 0;0 0 1; 1 0 0]

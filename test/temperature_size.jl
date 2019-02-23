@@ -1,6 +1,6 @@
 module TestNoEffectTempSize
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Test
 
     # WET MASS (default)
     EC = [0 0 1 ; 0 0 1 ; 0 0 0]
@@ -28,7 +28,8 @@ end
 
 module TestEffectTempSize
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Statistics
+    using Test
 
     EC = [0 0 1 ; 0 0 1 ; 0 0 0]
     dm = [1.0, 0.8, 0.2]

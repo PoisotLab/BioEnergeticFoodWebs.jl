@@ -47,7 +47,6 @@ Example :
 p = model_parameters(A, metabolicrate = NoEffectTemperature(:x))
 
 """
-
 function NoEffectTemperature(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate),
@@ -112,7 +111,6 @@ p = model_parameters(A, metabolicrate = ExtendedEppley(:x, parameters_tuple = @N
 
 
 """
-
 function ExtendedEppley(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :growthrate, :r, :metabolism, :x, :metabolicrate] ; error("rate_affected should be either :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
     if rate_affected ∈ [:growth, :r, :growthrate]
@@ -157,7 +155,6 @@ Parameters can be specified as follows :
 p = model_parameters(A, growthrate = ExponentialBA(:r, parameters_tuple = @NT(norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
 
 """
-
 function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), :attackrate or :handlingtime")
@@ -217,8 +214,6 @@ Parameters can be specified as follows :
 p = model_parameters(A, growthrate = ExtendedBA(:r, parameters_tuple = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
 
 """
-
-
 function ExtendedBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), or :attackrate")
@@ -275,8 +270,6 @@ p = model_parameters(A, handlingtime = Gaussian(:handlingtime, parameters_tuple 
                         β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 
 """
-
-
 function Gaussian(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")

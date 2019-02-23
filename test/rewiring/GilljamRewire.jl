@@ -1,8 +1,9 @@
 module TestGilljamRewire
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Test
+    using Random
 
-    srand(1)
+    Random.seed!(1)
     S = 3
     A = [0 0 0 ;
          1 0 0 ;

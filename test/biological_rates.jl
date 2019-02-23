@@ -1,7 +1,6 @@
 module TestDefault
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   food_chain = [0 1 0 ; 0 0 1; 0 0 0]
   metab_status = [true, false, false]
@@ -31,10 +30,10 @@ module TestDefault
 
   # PASSED ARG.
   p = model_parameters(food_chain, vertebrates = metab_status,
-                       handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = @NT(y_vertebrate = 3.0, y_invertebrate = 7.0)),
-                       attackrate = NoEffectTemperature(:attackrate, parameters_tuple = @NT(Γ = 0.8)),
-                       metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = @NT(a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
-                       growthrate = NoEffectTemperature(:growth, parameters_tuple = @NT(r = 2.0)))
+                       handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = (y_vertebrate = 3.0, y_invertebrate = 7.0)),
+                       attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8,)),
+                       metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = (a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
+                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0,)))
   @test p[:r] == [2.0, 2.0, 2.0]
   # metabolic rates
   a_invertebrate = 0.3
@@ -66,9 +65,8 @@ module TestDefault
 end
 
 module TestEppley
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -87,7 +85,7 @@ module TestEppley
   @test p_g_temp[:r] == r_g_temp
 
   # GROWTH - passed
-  pt = @NT(maxrate_0 = 0.6, eppley_exponent = 0.1, T_opt = 215, β = -0.2, range = 20)
+  pt = (maxrate_0 = 0.6, eppley_exponent = 0.1, T_opt = 215, β = -0.2, range = 20)
   p_g = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedEppley(:r, parameters_tuple = pt))
   r_g = bmass .^ -0.2 .* 0.6 .* exp(0.1 .* (temp.-273.15)) * (1 .- (((temp.-273.15) .- (215-273.15)) ./ (20/2)).^2)
   @test p_g[:r] == r_g
@@ -101,7 +99,7 @@ module TestEppley
   @test p_x_temp[:x] == p_g_temp[:r]
 
   # METABOLISM - passed arguments
-  pt_x = @NT(maxrate_0_producer = 0.8, maxrate_0_invertebrate = 0.6, maxrate_0_vertebrate = 5,
+  pt_x = (maxrate_0_producer = 0.8, maxrate_0_invertebrate = 0.6, maxrate_0_vertebrate = 5,
       eppley_exponent_producer = 0.1, eppley_exponent_invertebrate = 0.06, eppley_exponent_vertebrate = 0.09,
       T_opt_producer = 298, T_opt_invertebrate = 250, T_opt_vertebrate = 270,
       range_producer = 30, range_invertebrate = 32, range_vertebrate = 33,
@@ -124,9 +122,8 @@ module TestEppley
 end
 
 module TestExponentialBA
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -146,7 +143,7 @@ module TestExponentialBA
   r_t = exp(-16.54) .* (bmass .^-0.31) .* exp.(-0.69 .* (293.15 .- (temp2 + T0K)) ./ (k * (temp2 + T0K) .* 293.15))
   @test p_r_t[:r] == r_t
   #passed arguments
-  pt_r = @NT(norm_constant = -18, activation_energy = -0.8, T0 = 290, β = -0.25)
+  pt_r = (norm_constant = -18, activation_energy = -0.8, T0 = 290, β = -0.25)
   p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExponentialBA(:r, parameters_tuple = pt_r))
   r_2 = exp(-18) .* (bmass .^-0.25) .* exp.(-0.8 .* (290 .- (temp + T0K)) ./ (k * (temp + T0K) .* 290))
   @test p_r_2[:r] == r_2
@@ -159,7 +156,7 @@ module TestExponentialBA
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExponentialBA(:x))
   @test p_x_t[:x] == r_t
   #passed arguments
-  pt_x = @NT(norm_constant_producer = -16, norm_constant_invertebrate = -17, norm_constant_vertebrate = -18,
+  pt_x = (norm_constant_producer = -16, norm_constant_invertebrate = -17, norm_constant_vertebrate = -18,
              activation_energy_producer = -0.6, activation_energy_invertebrate = -0.7, activation_energy_vertebrate = -0.8,
              T0_producer = 270, T0_invertebrate = 280, T0_vertebrate = 290,
              β_producer = -0.2, β_invertebrate = -0.3, β_vertebrate = -0.4)
@@ -175,21 +172,21 @@ module TestExponentialBA
   #defaults
   p_ar_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExponentialBA(:attackrate))
   ar_d = exp.([-13.1, -13.1, 0.0]) .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- (temp + T0K)) ./ (k * (temp + T0K) .* [293.15, 293.15, 0.0]))
-  ar_d[isnan.(ar_d)] = 0
+  ar_d[isnan.(ar_d)] .= 0
   @test p_ar_d[:ar] == ar_d
   #change temperature
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExponentialBA(:attackrate))
   ar_t = exp.([-13.1, -13.1, 0.0]) .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- (temp2 + T0K)) ./ (k * (temp2 + T0K) .* [293.15, 293.15, 0.0]))
-  ar_t[isnan.(ar_t)] = 0
+  ar_t[isnan.(ar_t)] .= 0
   @test p_ar_t[:ar] == ar_t
   #passed arguments
-  pt_ar = @NT(norm_constant_vertebrate = -12, norm_constant_invertebrate = -14,
+  pt_ar = (norm_constant_vertebrate = -12, norm_constant_invertebrate = -14,
   						activation_energy_vertebrate = -0.3, activation_energy_invertebrate = -0.4,
   						T0_vertebrate = 290, T0_invertebrate = 270,
   						β_producer = 0.2, β_vertebrate = -0.9, β_invertebrate = -0.7)
   p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExponentialBA(:attackrate, parameters_tuple = pt_ar))
   ar_2 = exp.([-12, -14, 0.0]) .* (bmass .^[-0.9, -0.7, 0.0]) .* (bmass' .^[0 -0.7 0.2; 0 0 0.2 ; 0 0 0]) .* exp.([-0.3, -0.4, 0.0] .* ([290, 270, 0.0] .- (temp + T0K)) ./ (k * (temp + T0K) .* [290, 270, 0.0]))
-  ar_2[isnan.(ar_2)] = 0
+  ar_2[isnan.(ar_2)] .= 0
   @test p_ar_2[:ar] == ar_2
 
   #HANDLING
@@ -201,16 +198,16 @@ module TestExponentialBA
   #change temperature
   p_ht_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime))
   ht_t = exp.([9.66, 9.66, 0.0]) .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- (temp2 + T0K)) ./ (k * (temp2 + T0K) .* [293.15, 293.15, 0.0]))
-  ht_t[isnan.(ht_t)] = 0
+  ht_t[isnan.(ht_t)] .= 0
   @test p_ht_t[:ht] == ht_t
   #passed arguments
-  pt_ht = @NT(norm_constant_vertebrate = 9, norm_constant_invertebrate = 10,
+  pt_ht = (norm_constant_vertebrate = 9, norm_constant_invertebrate = 10,
   						activation_energy_vertebrate = 0.2, activation_energy_invertebrate = 0.3,
   						T0_vertebrate = 290, T0_invertebrate = 270,
   						β_producer = -0.4, β_vertebrate = 0.3, β_invertebrate = 0.5)
   p_ht_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime, parameters_tuple = pt_ht))
   ht_2 = exp.([9, 10, 0.0]) .* (bmass .^[0.3, 0.5, 0.0]) .* (bmass' .^[0.0 0.5 -0.4 ; 0 0 -0.4; 0 0 0]) .* exp.([0.2, 0.3, 0.0] .* ([290, 270, 0.0] .- (temp + T0K)) ./ (k * (temp + T0K) .* [290, 270, 0.0]))
-  ht_2[isnan.(ht_2)] = 0
+  ht_2[isnan.(ht_2)] .= 0
   @test p_ht_2[:ht] == ht_2
 
   #ERRORS
@@ -219,9 +216,8 @@ module TestExponentialBA
 end
 
 module TestExtendedBA
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -240,7 +236,7 @@ module TestExtendedBA
   p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r))
   @test p_r_d[:r] != p_r_t[:r]
   #passed arguments
-  pt_r = @NT(norm_constant = 4000)
+  pt_r = (norm_constant = 4000,)
   p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExtendedBA(:r, parameters_tuple = pt_r))
   r_2 = (r_d ./ 3e8) .* 4000
   @test p_r_2[:r] ≈ r_2 atol=1e-6
@@ -254,7 +250,7 @@ module TestExtendedBA
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x))
   @test p_x_t[:x] != p_x_d[:x]
   #passed arguments
-  pt_x = @NT(β_vertebrate = -0.5)
+  pt_x = (β_vertebrate = -0.5,)
   p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x, parameters_tuple = pt_x))
   p_x_2[:x] != p_x_d[:x]
   x_2 = 3e8 .* bmass .^([-0.5, -0.25, -0.25]) .* exp.(.-0.53 ./ (k * temp)) .* (1 ./ (1 + exp.(-1 / (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log.(0.53 ./ Δenergy)).* temp))))
@@ -264,13 +260,13 @@ module TestExtendedBA
   #defaults
   p_ar_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate))
   ar_d = [3e8, 3e8, 3e8] .* bmass .^([-0.25, -0.25, 0.0]) .* bmass' .^([0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0]) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 / (k * temp) .* ([1.15, 1.15, 1.15] .- ([1.15, 1.15, 1.15] ./ [298.15, 298.15, 0.0] .+ k .* log.([0.53, 0.53, 0.53] ./ Δenergy)) .* temp))))
-  ar_d[isnan.(ar_d)] = 0
+  ar_d[isnan.(ar_d)] .= 0
   @test p_ar_d[:ar] == ar_d
   #change temperature
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate))
   @test p_ar_d[:ar] != p_ar_t[:ar]
   #passed arguments
-  pt_ar = @NT(norm_constant_invertebrate = 3e7)
+  pt_ar = (norm_constant_invertebrate = 3e7,)
   p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExtendedBA(:attackrate, parameters_tuple = pt_ar))
   @test p_ar_2[:ar] != p_ar_d[:ar]
   ar_2 = [3e8, 3e7, 3e8] .* bmass .^([-0.25, -0.25, 0.0]) .* bmass' .^([0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0]) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 / (k * temp) .* ([1.15, 1.15, 1.15] .- ([1.15, 1.15, 1.15] ./ [298.15, 298.15, 0.0] .+ k .* log.([0.53, 0.53, 0.53] ./ Δenergy)) .* temp))))
@@ -283,9 +279,8 @@ module TestExtendedBA
 end
 
 module TestGaussian
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   omnivory = [0 1 1 ; 0 0 1 ; 0 0 0]
   metabolic_status = [:true, :false, :false]
@@ -302,7 +297,7 @@ module TestGaussian
   p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r))
   @test p_r_t[:r] != p_r_d[:r]
   #passed arguments
-  pt_r = @NT(norm_constant = 0.7)
+  pt_r = (norm_constant = 0.7,)
   p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = Gaussian(:r, parameters_tuple = pt_r))
   @test p_r_2[:r] != p_r_d[:r]
   r_2 = bmass .^ -0.25 .* 0.7 .* exp( .- (temp .- 298.15) .^ 2 ./ (2 .* 20 .^ 2))
@@ -317,7 +312,7 @@ module TestGaussian
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x))
   @test p_x_t[:x] != p_x_d[:x]
   #passed arguments
-  pt_x = @NT(range_producer = 30)
+  pt_x = (range_producer = 30,)
   p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = Gaussian(:x, parameters_tuple = pt_x))
   @test p_x_2[:x] != p_x_d[:x]
   x_2 = bmass .^ -0.25 .* 0.5 .* exp.( .- (temp .- 298.15) .^ 2 ./ (2 .* [20,20,30] .^ 2))
@@ -333,7 +328,7 @@ module TestGaussian
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate))
   @test p_ar_t[:ar] != p_ar_d[:ar]
   #passed arguments
-  pt_ar = @NT(T_opt_invertebrate = 270)
+  pt_ar = (T_opt_invertebrate = 270,)
   p_ar_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = Gaussian(:attackrate, parameters_tuple = pt_ar))
   @test p_ar_2[:ar] != p_ar_d[:ar]
   ar_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.( .- (temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))
@@ -350,7 +345,7 @@ module TestGaussian
   p_ht_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime))
   @test p_ht_t[:ht] != p_ht_d[:ht]
   #passed arguments
-  pt_ht = @NT(T_opt_invertebrate = 270)
+  pt_ht = (T_opt_invertebrate = 270,)
   p_ht_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = Gaussian(:handlingtime, parameters_tuple = pt_ht))
   @test p_ht_2[:ht] != p_ht_d[:ht]
   ht_2 = bmass .^ [-0.25,-0.25,0.0] .* bmass' .^ [0.0 -0.25 -0.25 ; 0.0 0.0 -0.25 ; 0.0 0.0 0.0] .* [0.5, 0.5, 0.0] .* exp.((temp .- [295,270,0]) .^ 2 ./ (2 .* [20,20,0] .^ 2))

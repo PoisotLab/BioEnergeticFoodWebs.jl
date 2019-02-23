@@ -3,7 +3,6 @@
 
 This function will check that all the required rewiring parameters are present
 """
-
 function check_rewiring_parameters(rewireP,rewireMethod)
   if rewireMethod == :ADBM
     required_keys = [

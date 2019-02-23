@@ -1,5 +1,5 @@
 module TestSimulate
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   food_chain = [0 0 0;0 0 1; 1 0 0]
@@ -11,7 +11,7 @@ module TestSimulate
 end
 
 module TestSimulateHandChecked
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   A = [0 1 0; 0 0 0; 0 1 0]
@@ -26,8 +26,9 @@ module TestSimulateHandChecked
 end
 
 module TestSimulateSanityCheck
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
+  using Statistics
 
   # A producer with no predation reaches K
   free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]
@@ -62,15 +63,15 @@ module TestSimulateSanityCheck
   parameters = model_parameters(A)
   b = [.5, .5, .5]
   s_stiff = simulate(parameters, b, use = :stiff)
-  meanB_stiff = mean(s_stiff[:B], 1)
+  meanB_stiff = mean(s_stiff[:B], dims = 1)
   s_nonstiff = simulate(parameters, b, use = :nonstiff)
-  meanB_nonstiff = mean(s_stiff[:B], 1)
+  meanB_nonstiff = mean(s_stiff[:B], dims = 1)
   @test meanB_stiff == meanB_nonstiff
 end
 
 
 module TestSimulateProductivity
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   A = zeros(Int64, (4, 4))
@@ -117,13 +118,13 @@ module TestSimulateProductivity
 end
 
 module TestSimulateRewiring
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
 
   #print info message when extinction occurs
   A = [0 0 0; 0 1 0; 0 0 0]
-  A_after = Int.(zeros(A))
+  A_after = Int.(zero(A))
   b = rand(3)
 
   # p = model_parameters(A, rewire_method = :Gilljam)
@@ -150,7 +151,7 @@ module TestSimulateRewiring
 end
 
 module TestSimulateNP
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
 
   A = [0 1 ; 0 0]
@@ -183,9 +184,8 @@ module TestSimulateNP
 end
 
 module TestSimulateTemperatureEffect
-  using Base.Test
+  using Test
   using BioEnergeticFoodWebs
-  using NamedTuples
 
   A = [0 1 0 ; 0 0 0 ; 0 1 0]
   p = model_parameters(A,

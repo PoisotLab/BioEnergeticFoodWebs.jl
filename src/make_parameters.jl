@@ -71,7 +71,6 @@ If `rewire_method`is `:ADBM` or `:Gilljam`, additional keywords can be passed.
 See the online documentation and the original references for more details.
 
 """
-
 function model_parameters(A;
         K::Float64=1.0,
         Z::Float64=1.0,
@@ -112,7 +111,7 @@ function model_parameters(A;
         dry_mass_293::Array{Float64, 1}=[0.0],
         TSR_type::Symbol = :no_response)
 
-  BioEnergeticFoodWebs.check_food_web(A)
+  check_food_web(A)
 
   # Step 1 -- create a dictionnary to store the parameters
   parameters = Dict{Symbol,Any}(
@@ -136,7 +135,7 @@ function model_parameters(A;
   :dry_mass_293   => dry_mass_293,
   :T              => T
   )
-  BioEnergeticFoodWebs.check_initial_parameters(parameters)
+  check_initial_parameters(parameters)
 
   # Step 2 -- vertebrates ?
   if length(vertebrates) > 1
@@ -171,7 +170,7 @@ function model_parameters(A;
   end
 
   # Step 5 -- Identify producers
-  is_producer = vec(sum(A, 2) .== 0)
+  is_producer = vec(sum(A, dims = 2) .== 0)
   parameters[:is_producer] = is_producer
   producers_richness = sum(is_producer)
 
@@ -191,7 +190,7 @@ function model_parameters(A;
         error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
       end
     else
-      parameters[:supply] = repmat(supply, 2)
+      parameters[:supply] = repeat(supply, 2)
     end
     parameters[:υ] = υ
     if length(parameters[:υ]) != 2
@@ -212,7 +211,7 @@ function model_parameters(A;
         error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as species")
       end
     else
-      parameters[:K2] = is_producer .* repmat(K2, size(A, 1))
+      parameters[:K2] = is_producer .* repeat(K2, size(A, 1))
     end
 
   end
@@ -232,7 +231,7 @@ function model_parameters(A;
  elseif rewire_method == :stan
      parameters[:extinctions] = Array{Int,1}()
  end
- BioEnergeticFoodWebs.check_rewiring_parameters(parameters, parameters[:rewire_method])
+ check_rewiring_parameters(parameters, parameters[:rewire_method])
 
   # Setup some objects
   S = size(A)[1]
@@ -291,7 +290,7 @@ function model_parameters(A;
 
   # Step 17 -- Half-saturation constant
   Γ = 1 ./ (attack_r .* handling_t)
-  Γ[isnan.(Γ)] = 0.0
+  Γ[isnan.(Γ)] .= 0.0
   parameters[:Γ] = Γ
 
   # Step 18 -- Efficiency matrix
@@ -309,7 +308,7 @@ function model_parameters(A;
   parameters[:r] = r
 
 
-  BioEnergeticFoodWebs.check_parameters(parameters)
+  check_parameters(parameters)
 
   return parameters
 end
@@ -346,7 +345,7 @@ function get_specialist_preferences(pr, A)
   specials = zeros(Int64,size(A,1))
   if pr[:preferenceMethod] == :specialist
     for pred = 1:size(A,2)
-        prey = find(A[pred,:])
+        prey = findall(x -> x!= 0, A[pred,:])
         if length(prey) > 0
           specials[pred] = sample(prey,1)[1]
         end
@@ -363,8 +362,8 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
     if i == j
     similarity[i,j] = 0
     else
-      X = find(A[i,:])
-      Y = find(A[j,:])
+      X = findall(x -> x != 0, A[i,:])
+      Y = findall(x -> x != 0, A[j,:])
       if length(X) == 0 && length(Y) == 0
         similarity[i,j] = 0
       else
@@ -373,7 +372,7 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
     end
   end
 
-  similarity_indexes = Vector{Vector{Int}}(S)
+  similarity_indexes = Vector{Vector{Int}}(undef, S)
   #convert to indexes
   for i = 1:S
     similarity_indexes[i] = sortperm(similarity[i,:])

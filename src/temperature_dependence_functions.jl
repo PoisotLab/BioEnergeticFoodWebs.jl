@@ -88,8 +88,7 @@ Internally the function takes 3 arguments:
 - the set of parameters p.
 
 """
-
-function no_effect_x(default_temp_parameters = @NT(a_vertebrate = 0.88, a_invertebrate = 0.3141, a_producer = 0.138); passed_temp_parameters...)
+function no_effect_x(default_temp_parameters = (a_vertebrate = 0.88, a_invertebrate = 0.3141, a_producer = 0.138); passed_temp_parameters...)
     if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -116,8 +115,7 @@ Internally the function takes 3 arguments (unused in this case):
 - the set of parameters p.
 
 """
-
-function no_effect_r(default_temp_parameters = @NT(r = 1); passed_temp_parameters...)
+function no_effect_r(default_temp_parameters = (r = 1.0,); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -146,8 +144,7 @@ Internally the function takes 3 arguments (unused in this case):
 - the set of parameters p.
 
 """
-
-function no_effect_handlingt(default_temp_parameters = @NT(y_vertebrate = 4.0, y_invertebrate = 8.0); passed_temp_parameters...)
+function no_effect_handlingt(default_temp_parameters = (y_vertebrate = 4.0, y_invertebrate = 8.0); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -174,8 +171,7 @@ Internally the function takes 3 arguments (unused in this case):
 - the set of parameters p.
 
 """
-
-function no_effect_attackr(default_temp_parameters = @NT(Γ = 0.5); passed_temp_parameters...)
+function no_effect_attackr(default_temp_parameters = (Γ = 0.5,); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -206,10 +202,9 @@ Default values are given as an example.
 The function can be called with the default parameters provided as an example:
 	- extended_eppley_r()
 Parameters can also be specified:
-	- extended_eppley_r(passed_temp_parameters = @NT(:maxrate_0 = 0.5, :eppley_exponent = 0.0631, :T_opt = 315.0, :β = -0.25, :range = 35))
+	- extended_eppley_r(passed_temp_parameters = (:maxrate_0 = 0.5, :eppley_exponent = 0.0631, :T_opt = 315.0, :β = -0.25, :range = 35))
 """
-
-function extended_eppley_r(default_temp_parameters = @NT(maxrate_0 = 0.81, eppley_exponent = 0.0631, T_opt = 298.15, β = -0.25, range = 35); passed_temp_parameters...)
+function extended_eppley_r(default_temp_parameters = (maxrate_0 = 0.81, eppley_exponent = 0.0631, T_opt = 298.15, β = -0.25, range = 35); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -252,15 +247,14 @@ Default values are given as an example.
 The function can be called with the default parameters provided as an example:
 	- extended_eppley_x()
 Parameters can also be specified (for producers, invertebrates and vertebrates):
-	- extended_eppley_x(passed_temp_parameters = @NT(maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
+	- extended_eppley_x(passed_temp_parameters = (maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
 	                                     eppley_exponent_producer = 0.0631, eppley_exponent_invertebrate = 0.0631, eppley_exponent_vertebrate = 0.0631,
 	                                     T_opt_producer = 310.15, T_opt_invertebrate = 310.15, T_opt_vertebrate = 298.15,
 	                                     range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
 	                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 
 """
-
-function extended_eppley_x(default_temp_parameters = @NT(maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
+function extended_eppley_x(default_temp_parameters = (maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
                                      eppley_exponent_producer = 0.0631, eppley_exponent_invertebrate = 0.0631, eppley_exponent_vertebrate = 0.0631,
                                      T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                                      range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
@@ -305,10 +299,9 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_r()
 Parameters can also be specified:
-	- exponential_BA_r(passed_temp_parameters = @NT(norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
+	- exponential_BA_r(passed_temp_parameters = (norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
 """
-
-function exponential_BA_r(default_temp_parameters = @NT(norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31); passed_temp_parameters...)
+function exponential_BA_r(default_temp_parameters = (norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31); passed_temp_parameters...)
     k = 8.617e-5
     T0K = 273.15
 	if length(passed_temp_parameters) != 0
@@ -346,13 +339,12 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_x()
 Parameters can also be specified:
-	- exponential_BA_x(passed_temp_parameters = @NT(norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
+	- exponential_BA_x(passed_temp_parameters = (norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
 	                                   activation_energy_producer = -0.69, activation_energy_invertebrate = -0.69, activation_energy_vertebrate = -0.69,
 	                                   T0_producer = 300.15, T0_invertebrate = 300.15, T0_vertebrate = 293.15,
 	                                   β_producer = -0.31, β_invertebrate = -0.31, β_vertebrate = -0.31))
 """
-
-function exponential_BA_x(default_temp_parameters = @NT(norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
+function exponential_BA_x(default_temp_parameters = (norm_constant_producer = -16.54, norm_constant_invertebrate = -16.54, norm_constant_vertebrate = -16.54,
                                    activation_energy_producer = -0.69, activation_energy_invertebrate = -0.69, activation_energy_vertebrate = -0.69,
                                    T0_producer = 293.15, T0_invertebrate = 293.15, T0_vertebrate = 293.15,
                                    β_producer = -0.31, β_invertebrate = -0.31, β_vertebrate = -0.31); passed_temp_parameters...)
@@ -398,13 +390,12 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_attackr()
 Parameters can also be specified:
-	- exponential_BA_attackr(passed_temp_parameters = @NT(norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
+	- exponential_BA_attackr(passed_temp_parameters = (norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
 	                             activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
 	                             T0_vertebrate = 293.15, T0_invertebrate = 293.15,
 	                             β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
 """
-
-function exponential_BA_attackr(default_temp_parameters = @NT(norm_constant_vertebrate = -13.1, norm_constant_invertebrate = -13.1,
+function exponential_BA_attackr(default_temp_parameters = (norm_constant_vertebrate = -13.1, norm_constant_invertebrate = -13.1,
 											  activation_energy_vertebrate = -0.38, activation_energy_invertebrate = -0.38,
 											  T0_vertebrate = 293.15, T0_invertebrate = 293.15,
 											  β_producer = 0.25, β_vertebrate = -0.8, β_invertebrate = -0.8); passed_temp_parameters...)
@@ -438,7 +429,7 @@ function exponential_BA_attackr(default_temp_parameters = @NT(norm_constant_vert
                                 end
                                 end
                                 rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
-                                rate[isnan.(rate)] = 0
+                                rate[isnan.(rate)] .= 0
                             return rate
                         end
 end
@@ -467,12 +458,12 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_handlingt()
 Parameters can also be specified:
-	- exponential_BA_handlingt(passed_temp_parameters = @NT(norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
+	- exponential_BA_handlingt(passed_temp_parameters = (norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
                                               activation_energy_vertebrate = 0.26, activation_energy_invertebrate = 0.26,
                                               T0_vertebrate = 293.15, T0_invertebrate = 293.15,
                                               β_producer = -0.45, β_vertebrate = 0.47, β_invertebrate = 0.47))
 """
-function exponential_BA_handlingt(default_temp_parameters = @NT(norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
+function exponential_BA_handlingt(default_temp_parameters = (norm_constant_vertebrate = 9.66, norm_constant_invertebrate = 9.66,
 											  activation_energy_vertebrate = 0.26, activation_energy_invertebrate = 0.26,
 											  T0_vertebrate = 293.15, T0_invertebrate = 293.15,
 											  β_producer = -0.45, β_vertebrate = 0.47, β_invertebrate = 0.47); passed_temp_parameters...)
@@ -506,7 +497,7 @@ function exponential_BA_handlingt(default_temp_parameters = @NT(norm_constant_ve
                                 end
                                 end
                                 rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
-                                rate[isnan.(rate)] = 0
+                                rate[isnan.(rate)] .= 0
                             return rate
                         end
 end
@@ -531,10 +522,9 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_r()
 Parameters can also be specified:
-	- extended_BA_r(passed_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
+	- extended_BA_r(passed_temp_parameters = (norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
 """
-
-function extended_BA_r(default_temp_parameters = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
+function extended_BA_r(default_temp_parameters = (norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
      if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -578,14 +568,13 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_x()
 Parameters can also be specified:
-	- extended_BA_x(passed_temp_parameters = @NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+	- extended_BA_x(passed_temp_parameters = (norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
 	                                activation_energy_producer = 0.53, activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
 	                                deactivation_energy_producer = 1.15, deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                                β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-
-function extended_BA_x(default_temp_parameters = @NT(norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+function extended_BA_x(default_temp_parameters = (norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
                                 activation_energy_producer = 0.53, activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
                                 deactivation_energy_producer = 1.15, deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
                                 T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
@@ -606,7 +595,7 @@ function extended_BA_x(default_temp_parameters = @NT(norm_constant_producer = 3e
                                  β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                  Δenergy = deactivation_energy_all .- activation_energy_all
 
-                                 return  norm_constant_all .* bodymass .^(β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 + exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
+                                 return  norm_constant_all .* bodymass .^ (β_all) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 .+ exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)) .* T))))
 
                              end
 end
@@ -636,14 +625,13 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_attackr()
 Parameters can also be specified:
-	- extended_BA_attackr(passed_temp_parameters = @NT(norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+	- extended_BA_attackr(passed_temp_parameters = (norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
 	                                   activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
 	                                   deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-
-function extended_BA_attackr(default_temp_parameters = @NT(norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+function extended_BA_attackr(default_temp_parameters = (norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
                                    activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
                                    deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
                                    T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
@@ -680,7 +668,7 @@ function extended_BA_attackr(default_temp_parameters = @NT(norm_constant_inverte
                                 end
                                 end
                                 rate = norm_constant_all .* bodymass .^(β_consumer) .* bodymass' .^(β_resource) .* exp.(.-activation_energy_all ./ (k * T)) .* (1 ./ (1 .+ exp.(-1 / (k * T) .* (deactivation_energy_all .- (deactivation_energy_all ./ T_opt_all .+ k .* log.(activation_energy_all ./ Δenergy)).* T))))
-                                rate[isnan.(rate)] = 0
+                                rate[isnan.(rate)] .= 0
                                 return  rate
 
                              end
@@ -704,9 +692,9 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_r()
 Parameters can also be specified:
-	- gaussian_r(passed_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25))
+	- gaussian_r(passed_temp_parameters = (norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25))
 """
-function gaussian_r(default_temp_parameters = @NT(norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
+function gaussian_r(default_temp_parameters = (norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -742,12 +730,12 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_x()
 Parameters can also be specified:
-	- gaussian_x(passed_temp_parameters = @NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_x(passed_temp_parameters = (norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 	                             range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
 	                             T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                             β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-function gaussian_x(default_temp_parameters = @NT(norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_x(default_temp_parameters = (norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
                              range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
                              T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                              β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -789,13 +777,12 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 The function can be called with the default parameters:
 	- gaussian_attackr()
 Parameters can also be specified:
-	- gaussian_attackr(passed_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_attackr(passed_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 	                   range_invertebrate = 20, range_vertebrate = 20,
 	                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-
-function gaussian_attackr(default_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_attackr(default_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
                                     range_invertebrate = 20, range_vertebrate = 20,
                                     T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -854,13 +841,12 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 The function can be called with the default parameters:
 	- gaussian_attackr()
 Parameters can also be specified:
-	- gaussian_attackr(passed_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_attackr(passed_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 							range_invertebrate = 20, range_vertebrate = 20,
 							T_opt_invertebrate = 295, T_opt_vertebrate = 295,
 							β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-
-function gaussian_handlingt(default_temp_parameters = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_handlingt(default_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
                                     range_invertebrate = 20, range_vertebrate = 20,
                                     T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -892,7 +878,7 @@ function gaussian_handlingt(default_temp_parameters = @NT(norm_constant_inverteb
                                 end
                                 end
                                 rate = bodymass .^ β_consumer .* bodymass' .^ β_resource .* norm_constant_all .* exp.((T .- T_opt_all) .^ 2 ./ (2 .* range_all .^ 2))
-                                rate[isnan.(rate)] = 0
+                                rate[isnan.(rate)] .= 0
                                 return rate
                             end
 end

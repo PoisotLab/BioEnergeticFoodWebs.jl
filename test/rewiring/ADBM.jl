@@ -1,6 +1,6 @@
 module TestADBM
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Test
 
     #testing get_adbm_terms
     S = 3
