@@ -29,23 +29,27 @@ The functions return either a value, a vector or a matrix for the value of the b
 
 """
 **No effect of temperature on biological rates**
-This function is called by default in model_parameters to define temperature independent biological rates.
-It takes as argument:
-- rate_affected : may be :growth, :r, :metabolism, :x, :handlingtime, :attackrate
-- parameters_tuple : to specify parameters but default parameters are provided (see temperature_dependence_functions.jl)
 
-It calls the functions defined in temperature_dependence_functions.jl, according to which affected rate is specified
-    - if :growth, :r -> no_effect_r
-    - if :metabolism, :x -> no_effect_x
-    - if :attackrate -> no_effect_attackr
-    - if :handlingtime -> no_effect_handlingt
+    NoEffectTemperature(::Symbol; parameters_tuple...)
 
-It returns the default values of biological rates when there is no effect of temperature (see Delmas et al 2017).
+Calculate biological rates independantly of temperature.
 
-Example :
+Called by default in `model_parameters` to define temperature independent biological rates. Default
+parameters values are provided, but can be overwritten through the keyword argument `parameters_tupe`
+(see example). See the complete documentation for the default values and more details.
 
-p = model_parameters(A, metabolicrate = NoEffectTemperature(:x))
+Arguments:
 
+- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
+
+# Example :
+```julia-repl
+# Metabolic rate with default parameters (this is the default behavior of model_parameters)
+julia> p = model_parameters(A, metabolicrate = NoEffectTemperature(:x))
+# Growth rate, changing the default parameters
+julia> p = model_parameters(A, growthrate = NoEffectTemperature(:r, parameters_tuple = (r = 1.5,)))
+```
 """
 function NoEffectTemperature(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
@@ -86,30 +90,29 @@ end
 """
 **Extended Eppley**
 
-This function can be called in model_parameters to define a temperature dependent biological rate that follows an Eppley function.
-It takes as argument:
-- rate_affected : may be :growth, :r, :metabolism, :x
-- parameters_tuple : to specify parameters, default parameters are provided (see temperature_dependence_functions.jl)
+    ExtendedEppley(::Symbol, parameters_tuple...)
 
-It calls the functions defined in temperature_dependence_functions.jl, according to which affected rate is specified
-    - if :growth, :r -> extended_eppley_r
-    - if :metabolism, :x -> extended_eppley_x
+Calculates biological rates using an Extended Eppley function.
 
-It returns the values of biological rates as defined by the Eppley function.
+Can be called in `model_parameters` (see example) to define temperature dependent biological rates. The Extended Eppley
+function is only compatible with metabolic and growth rate and cannot be used to calculate hanling time or attack rate.
+Default parameters values are provided, but can be overwritten through the keyword argument `parameters_tupe`. See the
+complete documentation for the default values, their sources and more details.
 
-Example : to define a metabolic rate following an Eppley function
+Arguments:
+- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
+# Example
+```julia-repl
+# Metabolic rate with default parameters values
 p = model_parameters(A, metabolicrate = ExtendedEppley(:x))
+# Metabolic rate, changing some of the default parameters values
+p = model_parameters(A, metabolicrate = ExtendedEppley(:x,
+                                                       parameters_tuple = (maxrate_0_producer = 0.7,
+                                                                           maxrate_0_vertebrate = 0.9))
 
-Parameters can be specified as follows :
-
-p = model_parameters(A, metabolicrate = ExtendedEppley(:x, parameters_tuple = @NT(maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
-                                     eppley_exponent_producer = 0.0631, eppley_exponent_invertebrate = 0.0631, eppley_exponent_vertebrate = 0.0631,
-                                     T_opt_producer = 310.15, T_opt_invertebrate = 310.15, T_opt_vertebrate = 298.15,
-                                     range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
-                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
-
-
+```
 """
 function ExtendedEppley(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :growthrate, :r, :metabolism, :x, :metabolicrate] ; error("rate_affected should be either :growth (alternatively :r or :growthrate) or :metabolism (alternatively :x or :metabolicrate)") ; end
@@ -133,27 +136,25 @@ end
 """
 **Exponential Boltzmann-Arrhenius**
 
-This function can be called in model_parameters to define a temperature dependent biological rate that follows an exponential Boltzmann-Arrhenius function.
-It takes as argument:
-- rate_affected : may be :growth, :r, :metabolism, :x, :handlingtime, :attackrate
-- parameters_tuple : to specify parameters, default parameters are provided (see temperature_dependence_functions.jl)
+    ExponentialBA(::Symbol, parameters_tuple...)
 
-It calls the functions defined in temperature_dependence_functions.jl, according to which affected rate is specified
-    - if :growth, :r -> exponential_BA_r
-    - if :metabolism, :x -> exponential_BA_x
-    - if :attackrate -> exponential_BA_attackr
-    - if :handlingtime -> exponential_BA_handlingt
+Calculates biological rates using an Exponential Boltzmann Arrhenius function.
 
-It returns the values of biological rates as defined by the exponential BA function.
+Can be called in `model_parameters` (see example) to define temperature dependent biological rates. Default
+parameters values are provided, but can be overwritten through the keyword argument `parameters_tupe`. See
+the complete documentation for the default values, their sources and more details.
 
-Example : to define a growth rate following an exponential BA function
+Arguments:
+- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
-p = model_parameters(A, growthrate = ExponentialBA(:r))
-
-Parameters can be specified as follows :
-
-p = model_parameters(A, growthrate = ExponentialBA(:r, parameters_tuple = @NT(norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
-
+# Example
+```julia-repl
+# Handling time with default parameters values
+p = model_parameters(A, handlingtime = ExponentialBA(:handlingtime))
+# Metabolic rate, changing some of the default parameters values
+p = model_parameters(A, metabolicrate = ExponentialBA(:x, parameters_tuple = (T0 = 300.0,))
+```
 """
 function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
@@ -193,26 +194,25 @@ end
 """
 **Extended  Boltzmann-Arrhenius**
 
-This function can be called in model_parameters to define a temperature dependent biological rate that follows an extended (hump-shaped) Boltzmann-Arrhenius function.
-It takes as argument:
-- rate_affected : may be :growth, :r, :metabolism, :x, :attackrate
-- parameters_tuple : to specify parameters, default parameters are provided (see temperature_dependence_functions.jl)
+    ExtendedBA(::Symbol, parameters_tuple...)
 
-It calls the functions defined in temperature_dependence_functions.jl, according to which affected rate is specified
-    - if :growth, :r -> extended_BA_r
-    - if :metabolism, :x -> extended_BA_x
-    - if :attackrate -> extended_BA_attackr
+Calculates biological rates using an Extended Boltzmann Arrhenius function.
 
-It returns the values of biological rates as defined by the extended BA function.
+Can be called in `model_parameters` (see example) to define temperature dependent biological rates. Only compatible
+with metabolic, growth and attack rates. Default parameters values are provided, but can be overwritten through the
+keyword argument `parameters_tupe`. See the complete documentation for the default values, their sources and more details.
 
-Example : to define a growth rate following an exponential BA function
+Arguments:
+- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
-p = model_parameters(A, growthrate = ExtendedBA(:r))
-
-Parameters can be specified as follows :
-
-p = model_parameters(A, growthrate = ExtendedBA(:r, parameters_tuple = @NT(norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
-
+# Example
+```julia-repl
+# Attack rate with default parameters values
+p = model_parameters(A, attackrate = ExtendedBA(:attackrate))
+# Metabolic rate, changing some of the default parameters values
+p = model_parameters(A, metabolicrate = ExtendedBA(:x, parameters_tuple = (T_opt = 290.0, activation_energy = 0.47))
+```
 """
 function ExtendedBA(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :attackrate]
@@ -245,30 +245,25 @@ end
 """
 **Gaussian**
 
-This function can be called in model_parameters to define a temperature dependent biological rate that follows a Gaussian function.
-It takes as argument:
-- rate_affected : may be :growth, :r, :metabolism, :x, :handlingtime, :attackrate
-- parameters_tuple : to specify parameters, default parameters are provided (see temperature_dependence_functions.jl)
+    Gaussian(::Symbol, parameters_tuple...)
 
-It calls the functions defined in temperature_dependence_functions.jl, according to which affected rate is specified
-    - if :growth, :r -> gaussian_r
-    - if :metabolism, :x -> gaussian_x
-    - if :attackrate -> gaussian_attackr
-    - if :handlingtime -> gaussian_handlingt
+Calculates biological rates using an Gaussian function.
 
-It returns the values of biological rates as defined by the Gaussian function.
+Can be called in `model_parameters` (see example) to define temperature dependent biological rates. Default parameters
+values are provided, but can be overwritten through the keyword argument `parameters_tupe`. See the complete documentation
+for the default values, their sources and more details.
 
-Example : to define a handling time following a Gaussian function
+Arguments:
+- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
-p = model_parameters(A, handlingtime = Gaussian(:handlingtime))
-
-Parameters can be specified as follows :
-
-p = model_parameters(A, handlingtime = Gaussian(:handlingtime, parameters_tuple = @NT(norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
-                        range_invertebrate = 20, range_vertebrate = 20,
-                        T_opt_invertebrate = 295, T_opt_vertebrate = 295,
-                        β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
-
+# Example
+```julia-repl
+# Growth rate with default parameters values
+p = model_parameters(A, growthrate = Gaussian(:growthrate))
+# Metabolic rate, changing some of the default parameters values
+p = model_parameters(A, metabolicrate = ExtendedBA(:x, parameters_tuple = (range_invertebrate = 25.0, ))
+```
 """
 function Gaussian(rate_affected::Symbol; parameters_tuple...)
     if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
