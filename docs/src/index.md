@@ -6,7 +6,8 @@ Pages = [
   "man/random.md",
   "man/first_simulation.md",
   "man/contributing.md",
-  "man/extinctions.md"
+  "man/extinctions.md",
+  "man/temperature.md"
 ]
 Depth = 2
 ```
