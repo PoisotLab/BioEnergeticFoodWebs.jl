@@ -4,7 +4,7 @@
 
 # Bio-energetic food web model
 
-[![RTD](https://img.shields.io/badge/doc-latest-blue.svg)](http://poisotlab.io/BioEnergeticFoodWebs.jl/latest/)
+[![RTD](https://img.shields.io/badge/doc-stable-blue.svg)](https://poisotlab.github.io/BioEnergeticFoodWebs.jl/stable/)
 [![GitHub tag](https://img.shields.io/github/tag/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/releases)
 [![DOI](https://zenodo.org/badge/70102258.svg)](https://zenodo.org/badge/latestdoi/70102258)
 [![Gitter](https://img.shields.io/gitter/room/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://gitter.im/PoisotLab/BioEnergeticFoodWebs.jl)
@@ -26,6 +26,7 @@ of bio-energetic systems in food webs.
 
 ## In development
 
+[![RTD](https://img.shields.io/badge/doc-latest-blue.svg)](https://poisotlab.github.io/BioEnergeticFoodWebs.jl/latest/)
 [![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)](https://travis-ci.org/PoisotLab/BioEnergeticFoodWebs.jl)
 [![Coveralls branch](https://img.shields.io/coveralls/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)](https://coveralls.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=next)
 
