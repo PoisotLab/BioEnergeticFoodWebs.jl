@@ -10,11 +10,11 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
   elseif parameters[:Nmethod] == :biomass
     N = biomass
   end
-  A = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
+  A_adbm = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
   for i = 1:S #for each prey
-    A[:,i] = A[:,i] .* N[i]
+    A_adbm[:,i] = A_adbm[:,i] .* N[i]
   end
-  λ = A
+  λ = A_adbm
   if parameters[:Hmethod] == :ratio
     H = zeros(Float64,(S,S))
     ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
