@@ -292,7 +292,6 @@ Example : model_parameters(A, growthrate = ExponentialBA(:r))
 | T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
 | β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
 | k                 | Boltzmann norm_constant               | 8.617e-5       |                                       |
-| T0K               | 0 degrees in Kelvin                   | 273.15         |                                       |
 
 Default values are given as an example.
 
@@ -303,14 +302,13 @@ Parameters can also be specified:
 """
 function exponential_BA_r(default_temp_parameters = (norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31); passed_temp_parameters...)
     k = 8.617e-5
-    T0K = 273.15
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
 	else
 	  temperature_param = default_temp_parameters
 	end
-    return (bodymass, T, p) -> exp(temperature_param.norm_constant) .* (bodymass .^temperature_param.β) .* exp.(temperature_param.activation_energy .* (temperature_param.T0 .- (T + T0K)) ./ (k * (T + T0K) .* temperature_param.T0))
+    return (bodymass, T, p) -> exp(temperature_param.norm_constant) .* (bodymass .^temperature_param.β) .* exp.(temperature_param.activation_energy .* (temperature_param.T0 .- T) ./ (k .* T .* temperature_param.T0))
 end
 
 """
@@ -349,7 +347,6 @@ function exponential_BA_x(default_temp_parameters = (norm_constant_producer = -1
                                    T0_producer = 293.15, T0_invertebrate = 293.15, T0_vertebrate = 293.15,
                                    β_producer = -0.31, β_invertebrate = -0.31, β_vertebrate = -0.31); passed_temp_parameters...)
     k=8.617e-5
-    T0K = 273.15
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -363,7 +360,7 @@ function exponential_BA_x(default_temp_parameters = (norm_constant_producer = -1
                                 T0_all = temperature_param.T0_producer .* p[:is_producer] .+ temperature_param.T0_vertebrate .* p[:vertebrates] .+ temperature_param.T0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                 β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
 
-                                return exp.(norm_constant_all) .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
+                                return exp.(norm_constant_all) .* (bodymass .^β_all) .* exp.(activation_energy_all .* (T0_all .- T ) ./ (k .* T .* T0_all))
                             end
 end
 
@@ -400,7 +397,6 @@ function exponential_BA_attackr(default_temp_parameters = (norm_constant_vertebr
 											  T0_vertebrate = 293.15, T0_invertebrate = 293.15,
 											  β_producer = 0.25, β_vertebrate = -0.8, β_invertebrate = -0.8); passed_temp_parameters...)
     k=8.617e-5
-    T0K = 273.15
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -428,7 +424,7 @@ function exponential_BA_attackr(default_temp_parameters = (norm_constant_vertebr
                                  end
                                 end
                                 end
-                                rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
+                                rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- T) ./ (k .* T .* T0_all))
                                 rate[isnan.(rate)] .= 0
                             return rate
                         end
@@ -468,7 +464,6 @@ function exponential_BA_handlingt(default_temp_parameters = (norm_constant_verte
 											  T0_vertebrate = 293.15, T0_invertebrate = 293.15,
 											  β_producer = -0.45, β_vertebrate = 0.47, β_invertebrate = 0.47); passed_temp_parameters...)
     k=8.617e-5
-    T0K = 273.15
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -496,7 +491,7 @@ function exponential_BA_handlingt(default_temp_parameters = (norm_constant_verte
                                  end
                                 end
                                 end
-                                rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- (T + T0K)) ./ (k * (T + T0K) .* T0_all))
+                                rate = exp.(norm_constant_all) .* (bodymass .^β_consumer) .* (bodymass' .^β_resource) .* exp.(activation_energy_all .* (T0_all .- T) ./ (k .* T .* T0_all))
                                 rate[isnan.(rate)] .= 0
                             return rate
                         end
