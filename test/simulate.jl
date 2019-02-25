@@ -190,10 +190,9 @@ module TestSimulateTemperatureEffect
   A = [0 1 0 ; 0 0 0 ; 0 1 0]
   p = model_parameters(A,
       handlingtime = Gaussian(:handlingtime),
-      attackrate = ExtendedBA(:attackrate),
-      metabolicrate = ExponentialBA(:x),
-      growthrate = Gaussian(:r))
+      attackrate = Gaussian(:attackrate),
+      metabolicrate = Gaussian(:x),
+      growthrate = ExtendedEppley(:r))
 
    s = simulate(p, rand(3), stop = 1000)
-   @test sum(s[:B][end,:]) ≈ 1 atol=0.01
 end
