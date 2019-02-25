@@ -242,13 +242,74 @@ p_newvalues = model_parameters(A, attackrate = ExtendedBA(:attackrate, parameter
 
 ### Gaussian
 
+A simple gaussian function (or inverted gaussian function depending on the rate) has also been used in studies to model the scaling of biological rates with temperature. This can be formalized by the following equation:
+
+$$
+q_i(T) = M_i^\beta * q_{opt} * exp[\pm (\frac{(T - T_{opt})^2}{2s_q^2})]
+$$
+
 #### Growth rate
+
+For the organisms growth, the default parameters values are:
+
+| Parameter | Keyword         | Meaning                                     | Default values | References          |
+| --------- | --------------- | ------------------------------------------- | -------------- | ------------------- |
+| $q_{opt}$ | 'norm_constant' | minimal/maximal trait value (at $T_{opt}$)  | 0.5            | NA                  |
+| $T_{opt}$ | 'T_opt'         | temperature at which trait value is maximal | 298.15         | Amarasekare 2015    |
+| $s_q$     | 'range'         | performance breath (width of function)      | 20             | Amarasekare 2015    |
+| $\beta$   | 'β'             | allometric exponent                         | -0.25          | Gillooly et al 2002 |
+
+To use this function initialize `model_parameters()` with `Gaussian(:growthrate)` for the keyword `growthrate`:
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, growthrate = Gaussian(:growthrate), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, growthrate = Gaussian(:growthrate, parameters_tuple = (T_opt = 300.15, )), T = 290.0)
+```
 
 #### Metabolic rate
 
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be change independently (see example below).
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, metabolicrate = Gaussian(:metabolicrate), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, metabolicrate = Gaussian(:metabolicrate, parameters_tuple = (T_opt_producer = 293.15, β_invertebrate = -0.3)), T = 290.0)
+```
+
 #### Attack rate
 
+The attack rate is defined not for each species but for each interacting pair. As such, the body-mass scaling depends on the masses of both the consumer and its resource and the allometric exponent can be different for producers, vertebrates and invertebrates. However, the temperature scaling affects only the consumers, thus, the parameters involved can be defined differently only for vertebrates and invertebrates.
+
+Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
+
+To use this function initialize `model_parameters()` with `Gaussian(:attackrate)` for the keyword `attackrate`:
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, attackrate = Gaussian(:attackrate), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, attackrate = Gaussian(:attackrate, parameters_tuple = (range_vertebrate = 25, range_invertebrate = 30)), T = 290.0)
+```
+
 #### Handling time
+
+The handling time is defined not for each species but for each interacting pair. As such, the body-mass scaling depends on the masses of both the consumer and its resource and the allometric exponent can be different for producers, vertebrates and invertebrates. However, the temperature scaling affects only the consumers, thus, the parameters involved can be defined differently only for vertebrates and invertebrates. For more details, see the table below.
+
+*Nota 1*: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
+
+*Nota 2*: The handling time is the only rate for which an inverted gaussian is used (the handling time becomes more optimal by decreasing).
+
+To use this function initialize `model_parameters()` with `ExponentialBA(:handlingtime)` for the keyword `handlingtime`:
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, handlingtime = Gaussian(:handlingtime), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, handlingtime = Gaussian(:handlingtime, parameters_tuple = (T0_vertebrate = 300.15, β_producer = -0.25)), T = 290.0)
+```
 
 ## Temperature dependence for body sizes
 

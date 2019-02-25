@@ -822,7 +822,6 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
-| shape                      | hump-shaped (:hump) or U-shaped (:U) curve                    | :hump          | Amarasekare 2015     |
 | norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.5            | NA                   |
 | norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
 | range_invertebrate         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015     |
