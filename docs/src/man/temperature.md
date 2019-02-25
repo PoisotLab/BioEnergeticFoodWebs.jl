@@ -4,7 +4,7 @@ Both organisms biological rates and body sizes can be set to be temperature depe
 
 ## Temperature dependence for biological rates
 
-The defaut behavior of the model will always be to assume that none of the biological rates are affected by temperature -- see (TODO) for details on how to control the parameters values in this case. If you wish to implement temperature dependence however, you can use one of the following functions:
+The default behavior of the model will always be to assume that none of the biological rates are affected by temperature -- see (TODO) for details on how to control the parameters values in this case. If you wish to implement temperature dependence however, you can use one of the following functions:
 - extended Eppley function
 - exponential Boltzmann Arrhenius function
 - extended Boltzmann Arrhenius function
@@ -57,13 +57,13 @@ p_newvalues = model_parameters(A, growthrate = ExtendedEppley(:growthrate, param
 
 #### Metabolic rate
 
-We use the same function as above for the metabolic rate, with the added possibility to have different parameters values for producers, vertebrates and invertebrates. The defaults are initially set to the same for all metabolic types (se table above), but can be change independently (see example below).
+We use the same function as above for the metabolic rate, with the added possibility to have different parameters values for producers, vertebrates and invertebrates. The defaults are initially set to the same for all metabolic types (see table above), but can be change independently (see example below).
 
 ```julia-repl
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
 p = model_parameters(A, metabolicrate = ExtendedEppley(:metabolicrate), T = 290.0) #default parameters values
 # change the parameters values for the allometric exponent using a named tuple
-p_newvalues = model_parameters(A, metabolicrate = ExtendedEppley(:metabolicrate, parameters_tuple = (range_producer = 30, range invertebrate = 40, range_verebrate = 25)), T = 290.0)
+p_newvalues = model_parameters(A, metabolicrate = ExtendedEppley(:metabolicrate, parameters_tuple = (range_producer = 30, range_invertebrate = 40, range_verebrate = 25)), T = 290.0)
 ```
 
 ### Exponential Boltzmann Arrhenius
