@@ -115,7 +115,7 @@ p_newvalues = model_parameters(A, metabolicrate = ExponentialBA(:metabolicrate, 
 
 The attack rate is defined not for each species but for each interacting pair. As such, the body-mass scaling depends on the masses of both the consumer and its resource and the allometric exponent can be different for producers, vertebrates and invertebrates. However, the temperature scaling affects only the consumers, thus, the parameters involved can be defined differently only for vertebrates and invertebrates. For more details, see the table below.
 
-Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_j^{\beta} * M_k^{\beta}$ where $j$ is the consumer and $k$ its resource.
+Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
 
 | Parameter | Keyword                          | Meaning                              | Default values | References                             |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
@@ -129,18 +129,20 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 | $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
 | $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
 
+To use this function initialize `model_parameters()` with `ExponentialBA(:attackrate)` for the keyword `attackrate`:
+
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
-p = model_parameters(A, metabolicrate = ExponentialBA(:attackrate), T = 290.0) #default parameters values
+p = model_parameters(A, attackrate = ExponentialBA(:attackrate), T = 290.0) #default parameters values
 # change the parameters values for the allometric exponent using a named tuple
-p_newvalues = model_parameters(A, metabolicrate = ExponentialBA(:attackrate, parameters_tuple = (T0_invertebrate = 300.15, T0_vertebrate = 300.15)), T = 290.0)
+p_newvalues = model_parameters(A, attackrate = ExponentialBA(:attackrate, parameters_tuple = (T0_invertebrate = 300.15, T0_vertebrate = 300.15)), T = 290.0)
 ```
 
 #### Handling time
 
 The handling time is defined not for each species but for each interacting pair. As such, the body-mass scaling depends on the masses of both the consumer and its resource and the allometric exponent can be different for producers, vertebrates and invertebrates. However, the temperature scaling affects only the consumers, thus, the parameters involved can be defined differently only for vertebrates and invertebrates. For more details, see the table below.
 
-Note: The body-mass allometric scaling (originally defined as $M_i^β$) becomes $M_j^\beta_j * M_k^\beta_k$ where $j$ is the consumer and $k$ its resource.
+Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
 
 | Parameter | Keyword                          | Meaning                              | Default values | References                             |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
@@ -154,21 +156,89 @@ Note: The body-mass allometric scaling (originally defined as $M_i^β$) becomes 
 | $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
 | $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
 
+To use this function initialize `model_parameters()` with `ExponentialBA(:handlingtime)` for the keyword `handlingtime`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
-p = model_parameters(A, metabolicrate = ExponentialBA(:handlingtime), T = 290.0) #default parameters values
+p = model_parameters(A, handlingtime = ExponentialBA(:handlingtime), T = 290.0) #default parameters values
 # change the parameters values for the allometric exponent using a named tuple
-p_newvalues = model_parameters(A, metabolicrate = ExponentialBA(:handlingtime, parameters_tuple = (T0_vertebrate = 300.15, β_producer = -0.25)), T = 290.0)
+p_newvalues = model_parameters(A, handlingtime = ExponentialBA(:handlingtime, parameters_tuple = (T0_vertebrate = 300.15, β_producer = -0.25)), T = 290.0)
 ```
 
 ### Extended Boltzmann Arrhenius
 
+To describe a more classical unimodel relationship of biological rates with temperature, one can also use the **extended** Boltzmann Arrhenius function. This is an extension based on the Johnson and Lewin model to describe the decrease in biological rates at higher temperatures (and is still based on chemical reaction kinetics).
+
+$$
+q_i(T) = exp(q_0) * M^\beta_i * exp(\frac{E}{kT * l(T)})
+$$
+
+Where $l(T)$ is :
+
+$$
+l(T) = \frac{1}{1 + exp[\frac{-1}{kT} + (\frac{E_D}{T_{opt}} + k * ln(\frac{E}{E_D - E}))]}
+$$
+
 #### Growth rate
+
+For the growth rate, the parameters values are set to:
+
+| Parameter | Keyword               | Meaning                                               | Default values | References           |
+| --------- | --------------------- | ----------------------------------------------------- | -------------- | -------------------- |
+| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $3.10^8$       | NA                   |
+| $\beta_i$ | `β`                   | allometric exponent                                   | -0.25          | Gillooly et al. 2002 |
+| $E$       | `activation_energy`   | activation energy                                     | 0.53           | Dell et al 2011      |
+| $T_opt$   | `T_opt`               | temperature at which trait value is maximal (Kelvins) | 298.15         | NA                   |
+| $E_D$     | `deactivation_energy` | deactivation energy                                   | 1.15           | Dell et al 2011      |
+
+To use this function initialize `model_parameters()` with `ExtendedBA(:growthrate)` for the keyword `growthrate`:
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, growthrate = ExtendedBA(:growthrate), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, growthrate = ExtendedBA(:growthrate, parameters_tuple = (T_opt = 300.15, )), T = 290.0)
+```
 
 #### Metabolic rate
 
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be change independently (see example below).
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, metabolicrate = ExtendedBA(:metabolicrate), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, metabolicrate = ExtendedBA(:metabolicrate, parameters_tuple = (deactivation_energy_vertebrate = 1.02, T_opt_invertebrate = 293.15)), T = 290.0)
+```
+
 #### Attack rate
+
+The attack rate is defined not for each species but for each interacting pair. As such, the body-mass scaling depends on the masses of both the consumer and its resource and the allometric exponent can be different for producers, vertebrates and invertebrates. However, the temperature scaling affects only the consumers, thus, the parameters involved can be defined differently only for vertebrates and invertebrates. For more details, see the table below.
+
+Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
+
+| Parameter | Keyword                            | Meaning                              | Default values | References            |
+| --------- | ---------------------------------- | ------------------------------------ | -------------- | --------------------- |
+| $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient | $3.10^8$       | NA                    |
+| $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient | $3.10^8$       | NA                    |
+| $\beta_i$ | `β_producer`                       | allometric exponent                  | -0.25          | Gillooly et al., 2002 |
+| $\beta_i$ | `β_invertebrate`                   | allometric exponent                  | -0.25          | Gillooly et al., 2002 |
+| $\beta_i$ | `β_vertebrate`                     | allometric exponent                  | -0.25          | Gillooly et al., 2002 |
+| $E$       | `activation_energy_invertebrate`   | activation energy                    | 0.53           | Dell et al 2011       |
+| $E$       | `activation_energy_vertebrate`     | activation energy                    | 0.53           | Dell et al 2011       |
+| $E_D$     | `deactivation_energy_invertebrate` | deactivation energy                  | 1.15           | Dell et al 2011       |
+| $E_D$     | `deactivation_energy_vertebrate`   | deactivation energy                  | 1.15           | Dell et al 2011       |
+| $T_opt$   | `T_opt_invertebrate`               | normalization temperature (Kelvins)  | 298.15         | NA                    |
+| $T_opt$   | `T_opt_vertebrate`                 | normalization temperature (Kelvins)  | 298.15         | NA                    |
+
+To use this function initialize `model_parameters()` with `ExtendedBA(:attackrate)` for the keyword `attackrate`:
+
+```julia
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+p = model_parameters(A, attackrate = ExtendedBA(:attackrate), T = 290.0) #default parameters values
+# change the parameters values for the allometric exponent using a named tuple
+p_newvalues = model_parameters(A, attackrate = ExtendedBA(:attackrate, parameters_tuple = (deactivation_energy_vertebrate = 1.02, T_opt_invertebrate = 293.15))), T = 290.0)
+```
 
 ### Gaussian
 
