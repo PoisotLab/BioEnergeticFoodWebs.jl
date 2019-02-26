@@ -182,17 +182,3 @@ module TestSimulateNP
   @test s[:B][end,1] ≈ .0 atol=1e-6
   @test s[:B][end,2] ≈ .0 atol=1e-6
 end
-
-module TestSimulateTemperatureEffect
-  using Test
-  using BioEnergeticFoodWebs
-
-  A = [0 1 0 ; 0 0 0 ; 0 1 0]
-  p = model_parameters(A,
-      handlingtime = Gaussian(:handlingtime),
-      attackrate = Gaussian(:attackrate),
-      metabolicrate = Gaussian(:x),
-      growthrate = ExtendedEppley(:r))
-
-   s = simulate(p, rand(3), stop = 1000)
-end
