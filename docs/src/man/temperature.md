@@ -37,6 +37,7 @@ $$
 
 Where $M_i$ is the body mass of species $i$ and T is the temperature in degrees Kelvin. The default parameters values are described for each rate below.
 
+Note that this function has originially been documented for phytoplankton growth rate in Eppley 1972. Although its shape is general and may be used for other organisms, parameters should be changed accordingly.
 
 #### Growth rate
 
@@ -50,7 +51,7 @@ For the growth rate, the parameters values are set to:
 | $T_{\text{opt}}$ | `T_opt`           | location of the maximum of the quadratic portion of the function (Kelvins) | 298.15         | NA                   |
 | $\text{range}$   | `range`           | thermal breadth (range within which the rate is positive)                  | 35             | NA                   |
 
-To use this function initialize `model_parameters()` with `ExtendedEppley(:growthrate)` for the keyword `growthrate`:
+To use this function, initialize `model_parameters()` with `ExtendedEppley(:growthrate)` for the keyword `growthrate`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -61,7 +62,7 @@ p_newvalues = model_parameters(A, growthrate = ExtendedEppley(:growthrate, param
 
 #### Metabolic rate
 
-We use the same function as above for the metabolic rate, with the added possibility to have different parameters values for producers, vertebrates and invertebrates. The defaults are initially set to the same for all metabolic types (see table above), but can be change independently (see example below).
+We use the same function as above for the metabolic rate, with the added possibility to have different parameters values for producers, vertebrates and invertebrates. The defaults are initially set to the same values for all metabolic types (see table above), but can be changed independently (see example below).
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -84,14 +85,14 @@ Where $q_0$ is the organisms state-dependent scaling coefficient, calculated for
 
 For the growth rate, the parameters values are set to:
 
-| Parameter | Keyword             | Meaning                              | Default values | References                             |
-| --------- | ------------------- | ------------------------------------ | -------------- | -------------------------------------- |
-| $r_0$     | `norm_constant`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
-| $\beta_i$ | `β`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $E$       | `activation_energy` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $T_0$     | `T0`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
+| Parameter | Keyword             | Meaning                              | Default values | References                    |
+| --------- | ------------------- | ------------------------------------ | -------------- | ---------------------------------------- |
+| $r_0$     | `norm_constant`     | growth dependent scaling coefficient | -15.68         | Savage et al. 2004, Binzer et al. 2012  |
+| $\beta_i$ | `β`                 | allometric exponent                  | -0.25          | Savage et al. 2004, Binzer et al. 2012  |
+| $E$       | `activation_energy` | activation energy                    | -0.84          | Savage et al. 2004, Binzer et al. 2012  |
+| $T_0$     | `T0`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                      |
 
-To use this function initialize `model_parameters()` with `ExponentialBA(:growthrate)` for the keyword `growthrate`:
+To use this function, initialize `model_parameters()` with `ExponentialBA(:growthrate)` for the keyword `growthrate`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -102,7 +103,21 @@ p_newvalues = model_parameters(A, growthrate = ExponentialBA(:growthrate, parame
 
 #### Metabolic rate
 
-For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be change independently (see example below).
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table below), but can be changed independently (see example below).
+
+For the metabolic rate, the parameters values are set to:
+
+
+| Parameter | Keyword             | Meaning                              | Default values | References                             |
+| --------- | ------------------- | ------------------------------------ | -------------- | -------------------------------------- |
+| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
+|  $r_0$     | `norm_constant_vertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
+| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
+| $\beta_i$ | `β_vertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
+| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
+| $E$       | `activation_energy_vertebrate` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012 |
+| $T_0$     | `T0_vertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012 |
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -119,17 +134,17 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 
 | Parameter | Keyword                          | Meaning                              | Default values | References                             |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
-| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
-| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
-| $\beta_i$ | `β_producer`                     | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.38          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.38          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
-| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
+| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2015  |
+| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2015  |
+| $\beta_i$ | `β_producer`                     | allometric exponent                  | 0.25           | Rall et al. 2012, Binzer et al. 2015  |
+| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2015  |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2015  |
+| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2015  |
+| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2015  |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015 |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015 |
 
-To use this function initialize `model_parameters()` with `ExponentialBA(:attackrate)` for the keyword `attackrate`:
+To use this function, initialize `model_parameters()` with `ExponentialBA(:attackrate)` for the keyword `attackrate`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -146,17 +161,17 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 
 | Parameter | Keyword                          | Meaning                              | Default values | References                             |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
-| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | 9.66           | Ehnes et al. 2011, Binzer et al. 2012  |
-| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | 9.66           | Ehnes et al. 2011, Binzer et al. 2012  |
-| $\beta_i$ | `β_producer`                     | allometric exponent                  | -0.45          | Ehnes et al. 2011                      |
-| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | 0.47           | Ehnes et al. 2011                      |
-| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.47          | Ehnes et al. 2011                      |
-| $E$       | `activation_energy_invertebrate` | activation energy                    | 0.26           | Ehnes et al. 2011, Binzer et al. 2012  |
-| $E$       | `activation_energy_vertebrate`   | activation energy                    | 0.26           | Ehnes et al. 2011, Binzer et al. 2012  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
-| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012, Binzer et al. 2012 |
+| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2015  |
+| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2015  |
+| $\beta_i$ | `β_producer`                     | allometric exponent                  | -0.45          | Rall et al. 2012, Binzer et al. 2015  |
+| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | 0.47           | Rall et al. 2012, Binzer et al. 2015  |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | 0.47          | Rall et al. 2012, Binzer et al. 2015  |
+| $E$       | `activation_energy_invertebrate` | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2015  |
+| $E$       | `activation_energy_vertebrate`   | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2015  |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
 
-To use this function initialize `model_parameters()` with `ExponentialBA(:handlingtime)` for the keyword `handlingtime`:
+To use this function, initialize `model_parameters()` with `ExponentialBA(:handlingtime)` for the keyword `handlingtime`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -167,7 +182,7 @@ p_newvalues = model_parameters(A, handlingtime = ExponentialBA(:handlingtime, pa
 
 ### Extended Boltzmann Arrhenius
 
-To describe a more classical unimodel relationship of biological rates with temperature, one can also use the **extended** Boltzmann Arrhenius function. This is an extension based on the Johnson and Lewin model to describe the decrease in biological rates at higher temperatures (and is still based on chemical reaction kinetics).
+To describe a more classical unimodal relationship of biological rates with temperature, one can also use the **extended** Boltzmann Arrhenius function. This is an extension based on the Johnson and Lewin model to describe the decrease in biological rates at higher temperatures (and is still based on chemical reaction kinetics).
 
 $$
 q_i(T) = exp(q_0) * M^\beta_i * exp(\frac{E}{kT * l(T)})
@@ -185,13 +200,13 @@ For the growth rate, the parameters values are set to:
 
 | Parameter | Keyword               | Meaning                                               | Default values | References           |
 | --------- | --------------------- | ----------------------------------------------------- | -------------- | -------------------- |
-| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $3.10^8$       | NA                   |
+| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $3.10^8$       | Bideaul et al 2019 |
 | $\beta_i$ | `β`                   | allometric exponent                                   | -0.25          | Gillooly et al. 2002 |
 | $E$       | `activation_energy`   | activation energy                                     | 0.53           | Dell et al 2011      |
 | $T_opt$   | `T_opt`               | temperature at which trait value is maximal (Kelvins) | 298.15         | NA                   |
 | $E_D$     | `deactivation_energy` | deactivation energy                                   | 1.15           | Dell et al 2011      |
 
-To use this function initialize `model_parameters()` with `ExtendedBA(:growthrate)` for the keyword `growthrate`:
+To use this function, initialize `model_parameters()` with `ExtendedBA(:growthrate)` for the keyword `growthrate`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -202,7 +217,7 @@ p_newvalues = model_parameters(A, growthrate = ExtendedBA(:growthrate, parameter
 
 #### Metabolic rate
 
-For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be change independently (see example below).
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be changed independently (see example below).
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -219,19 +234,19 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 
 | Parameter | Keyword                            | Meaning                              | Default values | References            |
 | --------- | ---------------------------------- | ------------------------------------ | -------------- | --------------------- |
-| $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient | $3.10^8$       | NA                    |
-| $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient | $3.10^8$       | NA                    |
-| $\beta_i$ | `β_producer`                       | allometric exponent                  | -0.25          | Gillooly et al., 2002 |
-| $\beta_i$ | `β_invertebrate`                   | allometric exponent                  | -0.25          | Gillooly et al., 2002 |
-| $\beta_i$ | `β_vertebrate`                     | allometric exponent                  | -0.25          | Gillooly et al., 2002 |
-| $E$       | `activation_energy_invertebrate`   | activation energy                    | 0.53           | Dell et al 2011       |
-| $E$       | `activation_energy_vertebrate`     | activation energy                    | 0.53           | Dell et al 2011       |
+| $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient | $5.10^13$       | Bideault et al 2019   |
+| $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient | $5.10^13$       | Bideault et al 2019   |
+| $\beta_i$ | `β_producer`                       | allometric exponent                  | 0.25          | Gillooly et al., 2002 |
+| $\beta_i$ | `β_invertebrate`                   | allometric exponent                  | 0.25          | Gillooly et al., 2002 |
+| $\beta_i$ | `β_vertebrate`                     | allometric exponent                  | 0.25          | Gillooly et al., 2002 |
+| $E$       | `activation_energy_invertebrate`   | activation energy                    | 0.8            | Dell et al 2011       |
+| $E$       | `activation_energy_vertebrate`     | activation energy                    | 0.8            | Dell et al 2011       |
 | $E_D$     | `deactivation_energy_invertebrate` | deactivation energy                  | 1.15           | Dell et al 2011       |
 | $E_D$     | `deactivation_energy_vertebrate`   | deactivation energy                  | 1.15           | Dell et al 2011       |
 | $T_opt$   | `T_opt_invertebrate`               | normalization temperature (Kelvins)  | 298.15         | NA                    |
 | $T_opt$   | `T_opt_vertebrate`                 | normalization temperature (Kelvins)  | 298.15         | NA                    |
 
-To use this function initialize `model_parameters()` with `ExtendedBA(:attackrate)` for the keyword `attackrate`:
+To use this function, initialize `model_parameters()` with `ExtendedBA(:attackrate)` for the keyword `attackrate`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
