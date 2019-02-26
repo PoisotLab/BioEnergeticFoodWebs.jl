@@ -242,7 +242,7 @@ Example : model_parameters(A, metabolicrate = ExtendedEppley(:x))
 | β_invertebrate                | Allometric exponent for invertebrates                                             | -0.25         | Gillooly et al. 2002 |
 | β_vertebrate                  | Allometric exponent for vertebrates                                               | -0.25         | Gillooly et al. 2002 |
 
-Default values are given as an example.
+Default values are given as an example (note that they are initially provided for phytoplankton growth rate in Eppley 1972)
 
 The function can be called with the default parameters provided as an example:
 	- extended_eppley_x()
@@ -287,10 +287,10 @@ Example : model_parameters(A, growthrate = ExponentialBA(:r))
 
 | Parameter         | Meaning                               | Default values | Reference                             |
 |:------------------|:--------------------------------------|:---------------|:--------------------------------------|
-| norm_constant     | scaling coefficient                   | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
-| activation_energy | activation energy                     | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| norm_constant     | scaling coefficient                   | -15.68         | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy | activation energy                     | -0.84          | Ehnes et al. 2011, Binzer et al. 2012 |
 | T0                | normalization temperature (K)         | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
-| β                 | allometric exponent                   | -0.31          | Ehnes et al. 2011                     |
+| β                 | allometric exponent                   | -0.25          | Ehnes et al. 2011                     |
 | k                 | Boltzmann norm_constant               | 8.617e-5       |                                       |
 
 Default values are given as an example.
@@ -298,7 +298,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- exponential_BA_r()
 Parameters can also be specified:
-	- exponential_BA_r(passed_temp_parameters = (norm_constant = -16.54, activation_energy = -0.55, T0 = 293.15, β = -0.31))
+	- exponential_BA_r(passed_temp_parameters = (norm_constant = -15.68, activation_energy = -0.72, T0 = 293.15, β = -0.25))
 """
 function exponential_BA_r(default_temp_parameters = (norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31); passed_temp_parameters...)
     k = 8.617e-5
