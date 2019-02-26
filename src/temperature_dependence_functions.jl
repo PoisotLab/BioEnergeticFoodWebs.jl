@@ -300,7 +300,7 @@ The function can be called with the default parameters:
 Parameters can also be specified:
 	- exponential_BA_r(passed_temp_parameters = (norm_constant = -15.68, activation_energy = -0.72, T0 = 293.15, β = -0.25))
 """
-function exponential_BA_r(default_temp_parameters = (norm_constant = -16.54, activation_energy = -0.69, T0 = 293.15, β = -0.31); passed_temp_parameters...)
+function exponential_BA_r(default_temp_parameters = (norm_constant = -15.68, activation_energy = -0.84, T0 = 293.15, β = -0.25); passed_temp_parameters...)
     k = 8.617e-5
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
@@ -372,25 +372,25 @@ Example : model_parameters(A, attackrate = ExponentialBA(:attackrate))
 
 | Parameter                      | Meaning                                         | Default values | Reference                             |
 |:-------------------------------|:------------------------------------------------|:---------------|:--------------------------------------|
-| norm_constant_invertebrate     | scaling coefficient for invertebrate            | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
-| norm_constant_vertebrate       | scaling coefficient for vertebrate              | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
-| activation_energy_invertebrate | activation energy for invertebrates             | -0.38          | Ehnes et al. 2011, Binzer et al. 2015 |
-| activation_energy_vertebrate   | activation energy for vertebrates               | -0.38          | Ehnes et al. 2011, Binzer et al. 2015 |
-| T0_invertebrate                | normalization temperature (K) for invertebrates | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
-| T0_vertebrate                  | normalization temperature (K) for vertebrates   | 293.15         | Binzer et al. 2012, Binzer et al. 2012|
-| β_producer                     | allometric exponent for invertebrate            | -0.31          | Ehnes et al. 2011                     |
-| β_invertebrate                 | allometric exponent for invertebrate            | -0.31          | Ehnes et al. 2011                     |
-| β_vertebrate                   | allometric exponent for vertebrates             | -0.31          | Ehnes et al. 2011                     |
+| norm_constant_invertebrate     | scaling coefficient for invertebrate            | -13.1          | Rall et al. 2012, Binzer et al. 2015  |
+| norm_constant_vertebrate       | scaling coefficient for vertebrate              | -13.1          | Rall et al. 2012, Binzer et al. 2015  |
+| activation_energy_invertebrate | activation energy for invertebrates             | -0.38          | Rall et al. 2012, Binzer et al. 2015  |
+| activation_energy_vertebrate   | activation energy for vertebrates               | -0.38          | Rall et al. 2012, Binzer et al. 2015  |
+| T0_invertebrate                | normalization temperature (K) for invertebrates | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
+| T0_vertebrate                  | normalization temperature (K) for vertebrates   | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
+| β_producer                     | allometric exponent for invertebrate            | 0.25           | Rall et al. 2012, Binzer et al. 2015  |
+| β_invertebrate                 | allometric exponent for invertebrate            | -0.8           | Rall et al. 2012, Binzer et al. 2015  |
+| β_vertebrate                   | allometric exponent for vertebrates             | -0.8           | Rall et al. 2012, Binzer et al. 2015  |
 
 Default values are given as an example.
 
 The function can be called with the default parameters:
 	- exponential_BA_attackr()
 Parameters can also be specified:
-	- exponential_BA_attackr(passed_temp_parameters = (norm_constant_vertebrate = -16.54, norm_constant_invertebrate = -16.54,
-	                             activation_energy_vertebrate = -0.69, activation_energy_invertebrate = -0.69,
+	- exponential_BA_attackr(passed_temp_parameters = (norm_constant_vertebrate = -13.1, norm_constant_invertebrate = -13.1,
+	                             activation_energy_vertebrate = -0.38, activation_energy_invertebrate = -0.38,
 	                             T0_vertebrate = 293.15, T0_invertebrate = 293.15,
-	                             β_producer = -0.31, β_vertebrate = -0.31, β_invertebrate = 0.31))
+	                             β_producer = 0.25, β_vertebrate = -0.8, β_invertebrate = 0.8))
 """
 function exponential_BA_attackr(default_temp_parameters = (norm_constant_vertebrate = -13.1, norm_constant_invertebrate = -13.1,
 											  activation_energy_vertebrate = -0.38, activation_energy_invertebrate = -0.38,
@@ -438,15 +438,15 @@ Example : model_parameters(A, handlingtime = ExponentialBA(:handlingtime))
 
 | Parameter                      | Meaning                                         | Default values | Reference                             |
 |:-------------------------------|:------------------------------------------------|:---------------|:--------------------------------------|
-| norm_constant_invertebrate     | scaling coefficient for invertebrate            | 9.66 	        | Ehnes et al. 2011, Binzer et al. 2012 |
-| norm_constant_vertebrate       | scaling coefficient for vertebrate              | 9.66  	        | Ehnes et al. 2011, Binzer et al. 2012 |
-| activation_energy_invertebrate | activation energy for invertebrates             | 0.26  	        | Ehnes et al. 2011, Binzer et al. 2012 |
-| activation_energy_vertebrate   | activation energy for vertebrates               | 0.26           | Ehnes et al. 2011, Binzer et al. 2012 |
-| T0_invertebrate                | normalization temperature (K) for invertebrates | 293.15         | Binzer et al. 2012					|
-| T0_vertebrate                  | normalization temperature (K) for vertebrates   | 293.15         | Binzer et al. 2012					|
-| β_producer                     | allometric exponent for invertebrate            | -0.45          | Binzer et al. 2015                    |
-| β_invertebrate                 | allometric exponent for invertebrate            | 0.47           | Ehnes et al 2011                      |
-| β_vertebrate                   | allometric exponent for vertebrates             | -0.47          | Ehnes et al 2011                      |
+| norm_constant_invertebrate     | scaling coefficient for invertebrate            | 9.66 	        | Rall et al. 2012, Binzer et al. 2015  |
+| norm_constant_vertebrate       | scaling coefficient for vertebrate              | 9.66  	        | Rall et al. 2012, Binzer et al. 2015  |
+| activation_energy_invertebrate | activation energy for invertebrates             | 0.26  	        | Rall et al. 2012, Binzer et al. 2015  |
+| activation_energy_vertebrate   | activation energy for vertebrates               | 0.26           | Rall et al. 2012, Binzer et al. 2015  |
+| T0_invertebrate                | normalization temperature (K) for invertebrates | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
+| T0_vertebrate                  | normalization temperature (K) for vertebrates   | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
+| β_producer                     | allometric exponent for producer                | -0.45          | Rall et al. 2012, Binzer et al. 2015  |
+| β_invertebrate                 | allometric exponent for invertebrate            | 0.47           | Rall et al. 2012, Binzer et al. 2015  |
+| β_vertebrate                   | allometric exponent for vertebrates             | 0.47           | Rall et al. 2012, Binzer et al. 2015  |
 
 
 Default values are given as an example.
@@ -506,7 +506,7 @@ Example : model_parameters(A, growthrate = ExtendedBA(:r))
 
 | Parameter          | Meaning                                               | Default values | Reference            |
 |:-------------------|:------------------------------------------------------|:---------------|----------------------|
-| norm_constant      | scaling coefficient                                   | 3e8            | NA                   |
+| norm_constant      | scaling coefficient                                   | 3e8            | Bideault et al 2019  |
 | activation_energy  | activation energy                                     | 0.53           | Dell et al 2011      |
 | deactivation_energy| deactivation energy                                   | 1.15           | Dell et al 2011      |
 | T_opt              | temperature at which trait value is maximal           | 298.15         | NA                   |
@@ -603,34 +603,34 @@ Example : model_parameters(A, attackrate = ExtendedBA(:attackrate))
 
 | Parameter                       | Meaning                                                       | Default values | Reference            |
 |:--------------------------------|:--------------------------------------------------------------|:---------------|----------------------|
-| norm_constant_invertebrate      | scaling coefficient for invertebrates                         | 3e8            | NA                   |
-| norm_constant_invertebrate      | scaling coefficient for vertebrates                           | 3e8            | NA                   |
-| activation_energy_invertebrate  | activation energy for invertebrates                           | 0.53           | Dell et al 2011      |
-| activation_energy_vertebrate    | activation energy for vertebrates                             | 0.53           | Dell et al 2011      |
+| norm_constant_invertebrate      | scaling coefficient for invertebrates                         | 5e13           | Bideault et al 2019  |
+| norm_constant_vertebrate        | scaling coefficient for vertebrates                           | 5e13           | Bideault et al 2019  |
+| activation_energy_invertebrate  | activation energy for invertebrates                           | 0.8            | Dell et al 2011      |
+| activation_energy_vertebrate    | activation energy for vertebrates                             | 0.8            | Dell et al 2011      |
 | deactivation_energy_invertebrate| deactivation energy for invertebrates                         | 1.15           | Dell et al 2011      |
 | deactivation_energy_vertebrate  | deactivation energy for vertebrates                           | 1.15           | Dell et al 2011      |
 | T_opt_invertebrate              | temperature at which trait value is maximal for invertebrates | 298.15         | NA                   |
 | T_opt_vertebrate                | temperature at which trait value is maximal for vertebrates   | 298.15         | NA                   |
-| β_producer                      | allometric exponent for producers                             | -0.25          | Gillooly et al. 2002 |
-| β_invertebrate                  | allometric exponent for invertebrates                         | -0.25          | Gillooly et al. 2002 |
-| β_vertebrate                    | allometric exponent for vertebrates                           | -0.25          | Gillooly et al. 2002 |
+| β_producer                      | allometric exponent for producers                             | 0.25           | Rall et al. 2012     |
+| β_invertebrate                  | allometric exponent for invertebrates                         | 0.25           | Rall et al. 2012     |
+| β_vertebrate                    | allometric exponent for vertebrates                           | 0.25           | Rall et al. 2012     |
 
 Default values are given as an example.
 
 The function can be called with the default parameters:
 	- extended_BA_attackr()
 Parameters can also be specified:
-	- extended_BA_attackr(passed_temp_parameters = (norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
-	                                   activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
+	- extended_BA_attackr(passed_temp_parameters = (norm_constant_invertebrate = 5e13, norm_constant_vertebrate = 5e13,
+	                                   activation_energy_invertebrate = 0.8, activation_energy_vertebrate = 0.8,
 	                                   deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
-	                                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
+	                                   β_producer = 0.25, β_invertebrate = 0.25, β_vertebrate = 0.25))
 """
-function extended_BA_attackr(default_temp_parameters = (norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
-                                   activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
+function extended_BA_attackr(default_temp_parameters = (norm_constant_invertebrate = 5e13, norm_constant_vertebrate = 5e13,
+                                   activation_energy_invertebrate = 0.8, activation_energy_vertebrate = 0.8,
                                    deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
                                    T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
-                                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
+                                   β_producer = 0.25, β_invertebrate = 0.25, β_vertebrate = 0.25); passed_temp_parameters...)
      k = 8.617e-5 # Boltzmann constant
 	 if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
