@@ -4,7 +4,7 @@ Both organisms biological rates and body sizes can be set to be temperature depe
 
 ## Temperature dependence for biological rates
 
-The default behavior of the model will always be to assume that none of the biological rates are affected by temperature -- see (TODO) for details on how to control the parameters values in this case. If you wish to implement temperature dependence however, you can use one of the following functions:
+The default behavior of the model will always be to assume that none of the biological rates are affected by temperature. If you wish to implement temperature dependence however, you can use one of the following functions:
 - extended Eppley function
 - exponential Boltzmann Arrhenius function
 - extended Boltzmann Arrhenius function
