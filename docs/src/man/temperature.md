@@ -1,6 +1,6 @@
 # Temperature dependence
 
-Both organisms biological rates and body sizes can be set to be temperature dependent, using repectively different temperature dependence functions for biological rates and different temperature size rules for body sizes. This effect of temperature can be integrated in the bioenergetic model using one of the functions described below. However, note **that these functions should only be used when the user has a good understanding of the system modelled** as some functions, under certain conditions, can lead to an erratic behavior of the bioenergetic model (instability, negative rates, etc.).
+Both organisms biological rates and body sizes can be set to be temperature dependent, using respectively different temperature dependence functions for biological rates and different temperature size rules for body sizes. This effect of temperature can be integrated in the bioenergetic model using one of the functions described below. However, note **that these functions should only be used when the user has a good understanding of the system modelled** as some functions, under certain conditions, can lead to an erratic behavior of the bioenergetic model (instability, negative rates, etc.).
 
 ## Temperature dependence for biological rates
 
@@ -12,7 +12,7 @@ The default behavior of the model will always be to assume that none of the biol
 
 These functions determine the shape of the thermal curves used to scale the biological rates with temperature.
 
-*Nota* The exponential Boltzmann Arrhenius function is the most documented in the litterature, hence parameters have been measured for the different biological rates (conversely to other functions that are less used, or more specific to a type of organism). We thus encourage to choose this function if one uses the default parameters provided in the package, as parameters are better supported in the litterature.
+*Nota* The exponential Boltzmann Arrhenius function is the most documented in the litterature, hence parameters have been measured for the different biological rates (conversely to other functions that are less used, or more specific to a type of organism). We thus encourage to choose the Boltzmann Arrhenius function when using the default parameters provided in the package, as parameters are better supported in the litterature.
 
 ### General example
 
@@ -45,13 +45,13 @@ Note that this function has originially been documented for phytoplankton growth
 
 For the growth rate, the parameters values are set to:
 
-| Parameter        | Keyword           | Meaning                                                                    | Default values | References           |
-| ---------------- | ----------------- | -------------------------------------------------------------------------- | -------------- | -------------------- |
-| $β$              | `β`               | allometric exponent                                                        | -0.25          | Gillooly et al. 2002 |
-| $m0$             | `maxrate_0`       | maximum growth rate observed at 273.15 K                                   | 0.81           | Eppley 1972          |
-| $b$              | `eppley_exponent` | exponential rate of increase                                               | 0.0631         | Eppley 1972          |
-| $T_{\text{opt}}$ | `T_opt`           | location of the maximum of the quadratic portion of the function (Kelvins) | 298.15         | NA                   |
-| $\text{range}$   | `range`           | thermal breadth (range within which the rate is positive)                  | 35             | NA                   |
+| Parameter        | Keyword           | Meaning                                                   | Default values | References           |
+| ---------------- | ----------------- | ----------------------------------------------------------| ------------------- | -------------------- |
+| $β$              | `β`               | allometric exponent                                       | -0.25           | Gillooly et al. 2002 |
+| $m0$             | `maxrate_0`       | maximum growth rate observed at 273.15 K                  | 0.81           | Eppley 1972          |
+| $b$              | `eppley_exponent` | exponential rate of increase                              | 0.0631         | Eppley 1972          |
+| $T_{\text{opt}}$ | `T_opt`           | temperature at which rate is maximum (Kelvins)            | 298.15         | NA                   |
+| $\text{range}$   | `range`           | thermal breadth (range within which the rate is positive) | 35             | NA                   |
 
 To use this function, initialize `model_parameters()` with `ExtendedEppley(:growthrate)` for the keyword `growthrate`:
 
@@ -87,8 +87,8 @@ Where $q_0$ is the organisms state-dependent scaling coefficient, calculated for
 
 For the growth rate, the parameters values are set to:
 
-| Parameter | Keyword             | Meaning                              | Default values | References                    |
-| --------- | ------------------- | ------------------------------------ | -------------- | ---------------------------------------- |
+| Parameter | Keyword             | Meaning                              | Default values | References                |
+| --------- | ------------------- | ------------------------------------ | -------------- | --------------------------------------- |
 | $r_0$     | `norm_constant`     | growth dependent scaling coefficient | -15.68         | Savage et al. 2004, Binzer et al. 2012  |
 | $\beta_i$ | `β`                 | allometric exponent                  | -0.25          | Savage et al. 2004, Binzer et al. 2012  |
 | $E$       | `activation_energy` | activation energy                    | -0.84          | Savage et al. 2004, Binzer et al. 2012  |
@@ -110,16 +110,16 @@ For the metabolic rate, the parameters values can be different for each metaboli
 For the metabolic rate, the parameters values are set to:
 
 
-| Parameter | Keyword             | Meaning                              | Default values | References                             |
-| --------- | ------------------- | ------------------------------------ | -------------- | -------------------------------------- |
+| Parameter | Keyword                          | Meaning                              | Default values | References                             |
+| --------- | ------------------- | ------------------------------------ | -------------- | ---------------------------------------------------- |
 | $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
-|  $r_0$     | `norm_constant_vertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
+|  $r_0$    | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
 | $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $\beta_i$ | `β_vertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
 | $E$       | `activation_energy_invertebrate` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $E$       | `activation_energy_vertebrate` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012 |
-| $T_0$     | `T0_vertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012 |
+| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                     |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                     |
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -134,7 +134,7 @@ The attack rate is defined not for each species but for each interacting pair. A
 
 Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
 
-| Parameter | Keyword                          | Meaning                              | Default values | References                             |
+| Parameter | Keyword                          | Meaning                              | Default values | References                            |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
 | $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2016  |
 | $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2016  |
@@ -143,8 +143,8 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 | $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2016  |
 | $E$       | `activation_energy_invertebrate` | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2016  |
 | $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2016  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016 |
-| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016 |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016  |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016  |
 
 To use this function, initialize `model_parameters()` with `ExponentialBA(:attackrate)` for the keyword `attackrate`:
 
@@ -161,13 +161,13 @@ The handling time is defined not for each species but for each interacting pair.
 
 Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
 
-| Parameter | Keyword                          | Meaning                              | Default values | References                             |
+| Parameter | Keyword                          | Meaning                              | Default values | References                            |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
 | $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2016  |
 | $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2016  |
 | $\beta_i$ | `β_producer`                     | allometric exponent                  | -0.45          | Rall et al. 2012, Binzer et al. 2016  |
 | $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | 0.47           | Rall et al. 2012, Binzer et al. 2016  |
-| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | 0.47          | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | 0.47           | Rall et al. 2012, Binzer et al. 2016  |
 | $E$       | `activation_energy_invertebrate` | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2016  |
 | $E$       | `activation_energy_vertebrate`   | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2016  |
 | $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016  |
@@ -200,13 +200,13 @@ $$
 
 For the growth rate, the parameters values are set to:
 
-| Parameter | Keyword               | Meaning                                               | Default values | References           |
-| --------- | --------------------- | ----------------------------------------------------- | -------------- | -------------------- |
-| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $3.10^8$       | Bideaul et al 2019 |
-| $\beta_i$ | `β`                   | allometric exponent                                   | -0.25          | Gillooly et al. 2002 |
-| $E$       | `activation_energy`   | activation energy                                     | 0.53           | Dell et al 2011      |
-| $T_opt$   | `T_opt`               | temperature at which trait value is maximal (Kelvins) | 298.15         | NA                   |
-| $E_D$     | `deactivation_energy` | deactivation energy                                   | 1.15           | Dell et al 2011      |
+| Parameter | Keyword               | Meaning                                               | Default values       | References           |
+| --------- | --------------------- | ----------------------------------------------------- | ------------------------ | -------------------- |
+| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $3.10^8$     | Bideault et al 2019  |
+| $\beta_i$ | `β`                   | allometric exponent                                   | -0.25         | Gillooly et al. 2002 |
+| $E$       | `activation_energy`   | activation energy                                     | 0.53         | Dell et al 2011      |
+| $T_opt$   | `T_opt`               | temperature at which trait value is maximal (Kelvins) | 298.15       | NA                   |
+| $E_D$     | `deactivation_energy` | deactivation energy                                   | 1.15         | Dell et al 2011      |
 
 To use this function, initialize `model_parameters()` with `ExtendedBA(:growthrate)` for the keyword `growthrate`:
 
@@ -238,9 +238,9 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 | --------- | ---------------------------------- | ------------------------------------ | -------------- | --------------------- |
 | $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient | $5.10^13$       | Bideault et al 2019   |
 | $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient | $5.10^13$       | Bideault et al 2019   |
-| $\beta_i$ | `β_producer`                       | allometric exponent                  | 0.25          | Gillooly et al., 2002 |
-| $\beta_i$ | `β_invertebrate`                   | allometric exponent                  | 0.25          | Gillooly et al., 2002 |
-| $\beta_i$ | `β_vertebrate`                     | allometric exponent                  | 0.25          | Gillooly et al., 2002 |
+| $\beta_i$ | `β_producer`                       | allometric exponent                  | 0.25           | Gillooly et al., 2002 |
+| $\beta_i$ | `β_invertebrate`                   | allometric exponent                  | 0.25           | Gillooly et al., 2002 |
+| $\beta_i$ | `β_vertebrate`                     | allometric exponent                  | 0.25           | Gillooly et al., 2002 |
 | $E$       | `activation_energy_invertebrate`   | activation energy                    | 0.8            | Dell et al 2011       |
 | $E$       | `activation_energy_vertebrate`     | activation energy                    | 0.8            | Dell et al 2011       |
 | $E_D$     | `deactivation_energy_invertebrate` | deactivation energy                  | 1.15           | Dell et al 2011       |
@@ -269,12 +269,12 @@ $$
 
 For the organisms growth, the default parameters values are:
 
-| Parameter | Keyword         | Meaning                                     | Default values | References          |
-| --------- | --------------- | ------------------------------------------- | -------------- | ------------------- |
-| $q_{opt}$ | 'norm_constant' | minimal/maximal trait value (at $T_{opt}$)  | 0.5            | NA                  |
-| $T_{opt}$ | 'T_opt'         | temperature at which trait value is maximal | 298.15         | Amarasekare 2015    |
-| $s_q$     | 'range'         | performance breath (width of function)      | 20             | Amarasekare 2015    |
-| $\beta$   | 'β'             | allometric exponent                         | -0.25          | Gillooly et al 2002 |
+| Parameter | Keyword         | Meaning                                     | Default values | References        |
+| --------- | --------------- | ------------------------------------------- | -------------- | ---------------------------- |
+| $q_{opt}$ | 'norm_constant' | minimal/maximal trait value (at $T_{opt}$)  | 0.5            | NA                |
+| $T_{opt}$ | 'T_opt'         | temperature at which trait value is maximal | 298.15         | Amarasekare 2015  |
+| $s_q$     | 'range'         | performance breath (width of function)      | 20             | Amarasekare 2015  |
+| $\beta$   | 'β'             | allometric exponent                         | -0.25          | Gillooly et al 2002        |
 
 To use this function initialize `model_parameters()` with `Gaussian(:growthrate)` for the keyword `growthrate`:
 
