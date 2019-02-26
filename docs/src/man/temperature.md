@@ -285,7 +285,7 @@ p_newvalues = model_parameters(A, growthrate = Gaussian(:growthrate, parameters_
 
 #### Metabolic rate
 
-For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be change independently (see example below).
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be changed independently (see example below).
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -328,20 +328,20 @@ p_newvalues = model_parameters(A, handlingtime = Gaussian(:handlingtime, paramet
 
 ## Temperature dependence for body sizes
 
-The default behavior of the model is to assume, as it does for biological rates, that typical adults body sizes are not affected by temperature. In this case, the bodymass vector can eighter:
+The default behavior of the model is to assume, as it does for biological rates, that typical adults body sizes are not affected by temperature. In this case, the bodymass vector can either:
 - be provided to `model_parameters` through the keyword `bodymass`: `model_parameters(A, bodymass = [...])`
-- be calculated bu `model_parameters` as $Mi= Z^(TR_i-1)$ where $TR_i$ is the trophic level of species $i$ and $Z$ is the typical consumer-resource body mass ratio in the system. $Z$ can be passed to `model_parameters` by using the `Z` keyword: `model_parameters(A, Z = 10.0)`
-- be calculated a vector of dry masses (at 293.15 Kelvins) provided by the user: `model_parameters(A, dry_mass_293 = [...])`
+- be calculated by `model_parameters` as $Mi= Z^(TR_i-1)$ where $TR_i$ is the trophic level of species $i$ and $Z$ is the typical consumer-resource body mass ratio in the system. $Z$ can be passed to `model_parameters` by using the `Z` keyword: `model_parameters(A, Z = 10.0)`
+- be a vector of dry masses (at 293.15 Kelvins) provided by the user: `model_parameters(A, dry_mass_293 = [...])`
 
 If multiple keywords are provided, the model will use this order of priority: body masses, dry masses, Z.
 
-To simulate the effect of temperature on body masses, the model uses the following general formula:
+To simulate the effect of temperature on body masses, the model uses the following general formula, following Forster and Hirst 2012:
 
 $$
 M_i(T) = m_i * exp(log_{10}(PCM / 100 + 1) * T - 293.15)
 $$
 
-Where $M_i$ is the body mass of species $i$, $T$ is the temperature (in Kelvins), $m_i$ is the mody mass when there is no effect of temperature (provided by the user through `Z`, `bodymass` or `dry_mass_293`) and $PCM$ is the Percentage change in body-mass per degree Celsius. This percentage is calculated differently depending on the type of system or the type of response wanted:
+Where $M_i$ is the body mass of species $i$, $T$ is the temperature (in Kelvins), $m_i$ is the body mass when there is no effect of temperature (provided by the user through `Z`, `bodymass` or `dry_mass_293`) and $PCM$ is the Percentage change in body-mass per degree Celsius. This percentage is calculated differently depending on the type of system or the type of response wanted (Forster and Hirst 2012, Sentis et al 2017):
 
 - Mean Aquatic: $PCM = -3.90 - 0.53 * log_{10}(dm)$ where $dm$ is the dry mass (calculated in the model from Z or wet mass if not provided). Body size decreases with temperature.
 - Mean Terrestrial: $PCM = -1.72 + 0.54 * log_{10}(dm)$ where $dm$ is the dry mass (calculated in the model from Z or wet mass if not provided). Body size decreases with temperature.
@@ -355,7 +355,7 @@ A = [0 1 1 ; 0 0 1 ; 0 0 0] #omnivory motif
 p_aqua = model_parameters(A, T = 290.0, TSR = :mean_aquatic) #mean aquatic, wet and dry masses calculated from Z and trophic levels (Z default value is 1.0)
 p_terr = model_parameters(A, T = 290.0, TSR = :mean_terrestrial, bodymass = [26.3, 15.2, 4.3]) #mean terrestrial, typical wet masses (at 20 degrees C) are provided and will we used to estimate dry masses and wet masses at T degrees K.
 p_max = model_parameters(A, T = 290.0, TSR = :maximum, dry_mass_293 = [1.8, 0.7, 0.2]) #maximum, dry masses are provided and will be used by the temperature size rule to calculate wet masses at T degrees K.
-p_rev =  model_parameters(A, T = 290.0, TSR = :maximum, Z = 10.0) #reverse - masses increse with T, wet and dry masses calculated from Z and trophic levels.
+p_rev =  model_parameters(A, T = 290.0, TSR = :maximum, Z = 10.0) #reverse - masses increase with T, wet and dry masses calculated from Z and trophic levels.
 ```
 
 # References
