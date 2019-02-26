@@ -165,7 +165,6 @@ module TestExponentialBA
   temp2 = 250.0
   p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExponentialBA(:r))
   r_t = exp(-15.68) .* (bmass .^-0.25) .* exp.(-0.84 .* (293.15 .- temp2) ./ (k .* temp2 .* 293.15))
-  exp(temperature_param.norm_constant) .* (bodymass .^temperature_param.β) .* exp.(temperature_param.activation_energy .* (temperature_param.T0 .- T) ./ (k .* T .* temperature_param.T0))
   @test p_r_t[:r] == r_t
   #passed arguments
   pt_r = (norm_constant = -18, activation_energy = -0.8, T0 = 290, β = -0.31)
