@@ -164,7 +164,7 @@ module TestExponentialBA
   T0_all = [290, 280, 270]
   β_all = [-0.4, -0.3, -0.2]
   p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExponentialBA(:x, parameters_tuple = pt_x))
-  x_2=orm_constant_all) .* (b.mass .β_all).(activation_energy_all .* (T0_all .- temp) ./ (k .* temp .* T0_all))
+  x_2 = exp.(norm_constant_all) .* (bmass .^β_all) .* exp.(activation_energy_all .* (T0_all .- temp) ./ (k .* temp .* T0_all))
   @test p_x_2[:x] == x_2
 
   #ATTACK
