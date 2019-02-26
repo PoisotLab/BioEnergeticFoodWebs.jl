@@ -134,15 +134,15 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 
 | Parameter | Keyword                          | Meaning                              | Default values | References                             |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
-| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2015  |
-| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2015  |
-| $\beta_i$ | `β_producer`                     | allometric exponent                  | 0.25           | Rall et al. 2012, Binzer et al. 2015  |
-| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2015  |
-| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2015  |
-| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2015  |
-| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2015  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015 |
-| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015 |
+| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2016  |
+| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -13.1          | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_producer`                     | allometric exponent                  | 0.25           | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.8           | Rall et al. 2012, Binzer et al. 2016  |
+| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2016  |
+| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.38          | Rall et al. 2012, Binzer et al. 2016  |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016 |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016 |
 
 To use this function, initialize `model_parameters()` with `ExponentialBA(:attackrate)` for the keyword `attackrate`:
 
@@ -161,15 +161,15 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 
 | Parameter | Keyword                          | Meaning                              | Default values | References                             |
 | --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
-| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2015  |
-| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2015  |
-| $\beta_i$ | `β_producer`                     | allometric exponent                  | -0.45          | Rall et al. 2012, Binzer et al. 2015  |
-| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | 0.47           | Rall et al. 2012, Binzer et al. 2015  |
-| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | 0.47          | Rall et al. 2012, Binzer et al. 2015  |
-| $E$       | `activation_energy_invertebrate` | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2015  |
-| $E$       | `activation_energy_vertebrate`   | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2015  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
-| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2015  |
+| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2016  |
+| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | 9.66           | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_producer`                     | allometric exponent                  | -0.45          | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | 0.47           | Rall et al. 2012, Binzer et al. 2016  |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | 0.47          | Rall et al. 2012, Binzer et al. 2016  |
+| $E$       | `activation_energy_invertebrate` | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2016  |
+| $E$       | `activation_energy_vertebrate`   | activation energy                    | 0.26           | Rall et al. 2012, Binzer et al. 2016  |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016  |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Rall et al. 2012, Binzer et al. 2016  |
 
 To use this function, initialize `model_parameters()` with `ExponentialBA(:handlingtime)` for the keyword `handlingtime`:
 
@@ -362,6 +362,8 @@ p_rev =  model_parameters(A, T = 290.0, TSR = :maximum, Z = 10.0) #reverse - mas
 
 Amarasekare, P. (2015). Effects of temperature on consumer–resource interactions. Journal of Animal Ecology, 84(3), 665-679.
 
+Bideault, A., Loreau, M., & Gravel, D. (2019). Temperature modifies consumer-resource interaction strength through its effects on biological rates and body mass. Frontiers in Ecology and Evolution, 7, 45.
+
 Bernhardt, J. R., Sunday, J. M., Thompson, P. L., & O'Connor, M. I. (2018). Nonlinear averaging of thermal experience predicts population growth rates in a thermally variable environment. Proceedings of the Royal Society B: Biological Sciences, 285(1886), 20181076.
 
 Binzer, A., Guill, C., Brose, U., & Rall, B. C. (2012). The dynamics of food chains under climate change and nutrient enrichment. Philosophical Transactions of the Royal Society B: Biological Sciences, 367(1605), 2935-2944.
@@ -374,4 +376,10 @@ Englund, G., Öhlund, G., Hein, C. L., & Diehl, S. (2011). Temperature dependenc
 
 Eppley, R. W. (1972). Temperature and phytoplankton growth in the sea. Fish. bull, 70(4), 1063-1085.
 
+Forster, J., & Hirst, A. G. (2012). The temperature‐size rule emerges from ontogenetic differences between growth and development rates. Functional Ecology, 26(2), 483-492.
+
 Kremer, C. T., Thomas, M. K., & Litchman, E. (2017). Temperature‐and size‐scaling of phytoplankton population growth rates: Reconciling the Eppley curve and the metabolic theory of ecology. Limnology and Oceanography, 62(4), 1658-1670.
+
+Rall, B. C., Brose, U., Hartvig, M., Kalinkat, G., Schwarzmüller, F., Vucic-Pestic, O., & Petchey, O. L. (2012). Universal temperature and body-mass scaling of feeding rates. Philosophical Transactions of the Royal Society B: Biological Sciences, 367(1605), 2923-2934.
+
+Sentis, A., Binzer, A., & Boukal, D. S. (2017). Temperature‐size responses alter food chain persistence across environmental gradients. Ecology letters, 20(7), 852-862.
