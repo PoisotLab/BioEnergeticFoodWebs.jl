@@ -677,7 +677,7 @@ Example : model_parameters(A, growthrate = Gaussian(:r))
 
 | Parameter    | Meaning                                        | Default values | Reference            |
 |:-------------|:-----------------------------------------------|:---------------|:---------------------|
-| norm_constant| minimal/maximal trait value                    | 0.5            | NA                   |
+| norm_constant| minimal/maximal trait value                    | 1              | NA                   |
 | range        | performance breath (width of function)         | 20             | Amarasekare 2015     |
 | T_opt        | temperature at which trait value is maximal    | 298.15         | Amarasekare 2015     |
 | β            | allometric exponent                            | -0.25          | Gillooly et al 2002  |
@@ -687,9 +687,9 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_r()
 Parameters can also be specified:
-	- gaussian_r(passed_temp_parameters = (norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25))
+	- gaussian_r(passed_temp_parameters = (norm_constant = 1, range = 20, T_opt = 298.15, β = -0.25))
 """
-function gaussian_r(default_temp_parameters = (norm_constant = 0.5, range = 20, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
+function gaussian_r(default_temp_parameters = (norm_constant = 1, range = 20, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
