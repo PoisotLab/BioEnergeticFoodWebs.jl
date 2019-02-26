@@ -12,6 +12,8 @@ The default behavior of the model will always be to assume that none of the biol
 
 These functions determine the shape of the thermal curves used to scale the biological rates with temperature.
 
+*Nota* The exponential Boltzmann Arrhenius function is the most documented in the litterature, hence parameters have been measured for the different biological rates (conversely to other functions that are less used, or more specific to a type of organism). We thus encourage to choose this function if one uses the default parameters provided in the package, as parameters are better supported in the litterature.
+
 ### General example
 
 Each of the biological rates (growth, metabolism, attack rate and handling time) is defined as a keyword in `model_parameters`. Simply specify the function you want to use as the corresponding value (and the temperature of the system in degrees Kelvin):
