@@ -32,16 +32,16 @@ The functions return either a value, a vector or a matrix for the value of the b
 
     NoEffectTemperature(::Symbol; parameters_tuple...)
 
-Calculate biological rates independantly of temperature.
+Calculates biological rates independently of temperature.
 
 Called by default in `model_parameters` to define temperature independent biological rates. Default
-parameters values are provided, but can be overwritten through the keyword argument `parameters_tupe`
+parameters values are provided, but can be overwritten through the keyword argument `parameters_tuple`
 (see example). See the complete documentation for the default values and more details.
 
 Arguments:
 
-- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
-- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
+- rate_affected : the biological rate that the function should calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that if you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
 # Example :
 ```julia-repl
@@ -95,13 +95,13 @@ end
 Calculates biological rates using an Extended Eppley function.
 
 Can be called in `model_parameters` (see example) to define temperature dependent biological rates. The Extended Eppley
-function is only compatible with metabolic and growth rate and cannot be used to calculate hanling time or attack rate.
-Default parameters values are provided, but can be overwritten through the keyword argument `parameters_tupe`. See the
+function is only compatible with metabolic and growth rate and cannot be used to calculate handling time or attack rate.
+Default parameters values are provided, but can be overwritten through the keyword argument `parameters_tuple`. See the
 complete documentation for the default values, their sources and more details.
 
 Arguments:
-- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
-- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
+- rate_affected : the biological rate that the function should calculate. May be :growth, :metabolism
+- parameters_tuple : a named tuple specifying parameters values. Note that if you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
 # Example
 ```julia-repl
@@ -141,12 +141,12 @@ end
 Calculates biological rates using an Exponential Boltzmann Arrhenius function.
 
 Can be called in `model_parameters` (see example) to define temperature dependent biological rates. Default
-parameters values are provided, but can be overwritten through the keyword argument `parameters_tupe`. See
+parameters values are provided, but can be overwritten through the keyword argument `parameters_tuple`. See
 the complete documentation for the default values, their sources and more details.
 
 Arguments:
-- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
-- parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
+- rate_affected : the biological rate that the function should calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- parameters_tuple : a named tuple specifying parameters values. Note that if you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
 # Example
 ```julia-repl
@@ -200,10 +200,10 @@ Calculates biological rates using an Extended Boltzmann Arrhenius function.
 
 Can be called in `model_parameters` (see example) to define temperature dependent biological rates. Only compatible
 with metabolic, growth and attack rates. Default parameters values are provided, but can be overwritten through the
-keyword argument `parameters_tupe`. See the complete documentation for the default values, their sources and more details.
+keyword argument `parameters_tuple`. See the complete documentation for the default values, their sources and more details.
 
 Arguments:
-- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- rate_affected : the biological rate that the function should calculate. May be :growth, :metabolism, :attackrate
 - parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
 # Example
@@ -247,14 +247,14 @@ end
 
     Gaussian(::Symbol, parameters_tuple...)
 
-Calculates biological rates using an Gaussian function.
+Calculates biological rates using a Gaussian function.
 
 Can be called in `model_parameters` (see example) to define temperature dependent biological rates. Default parameters
-values are provided, but can be overwritten through the keyword argument `parameters_tupe`. See the complete documentation
+values are provided, but can be overwritten through the keyword argument `parameters_tuple`. See the complete documentation
 for the default values, their sources and more details.
 
 Arguments:
-- rate_affected : the biological rate that the function chould calculate. May be :growth, :metabolism, :handlingtime, :attackrate
+- rate_affected : the biological rate that the function should calculate. May be :growth, :metabolism, :handlingtime, :attackrate
 - parameters_tuple : a named tuple specifying parameters values. Note that is you provide a one-element tuple, it should end with a comma to avoid being treated as a vector.
 
 # Example
