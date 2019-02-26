@@ -506,7 +506,7 @@ Example : model_parameters(A, growthrate = ExtendedBA(:r))
 
 | Parameter          | Meaning                                               | Default values | Reference            |
 |:-------------------|:------------------------------------------------------|:---------------|----------------------|
-| norm_constant      | scaling coefficient                                   | 3e8            | Bideault et al 2019  |
+| norm_constant      | scaling coefficient                                   | 1.8e9          | Bideault et al 2019  |
 | activation_energy  | activation energy                                     | 0.53           | Dell et al 2011      |
 | deactivation_energy| deactivation energy                                   | 1.15           | Dell et al 2011      |
 | T_opt              | temperature at which trait value is maximal           | 298.15         | NA                   |
@@ -517,9 +517,9 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_r()
 Parameters can also be specified:
-	- extended_BA_r(passed_temp_parameters = (norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
+	- extended_BA_r(passed_temp_parameters = (norm_constant = 1.8e9, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25))
 """
-function extended_BA_r(default_temp_parameters = (norm_constant = 3e8, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
+function extended_BA_r(default_temp_parameters = (norm_constant = 1.8e9, activation_energy = 0.53, deactivation_energy = 1.15, T_opt = 298.15, β = -0.25); passed_temp_parameters...)
      if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
