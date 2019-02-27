@@ -189,22 +189,22 @@ TODO
 This function can be called with the keywords :growth, :growthrate or :r as an argument in `ExtendedEppley`, itself called in `model_parameters`, to define an extended Eppley function (Eppley 1972, Thomas et al. 2012) for producers growth rate.
 Example : model_parameters(A, growthrate = ExtendedEppley(:r))
 
-| Parameter       | Meaning                                                           | Default values| Reference            |
-|:----------------|:------------------------------------------------------------------|:--------------|:---------------------|
-| maxrate_0       | Maximum rate at 273.15 degrees Kelvin                             | 0.81          | Eppley 1972          |
-| eppley_exponent | Exponential rate of increase                                      | 0.0631        | Eppley 1972          |
-| T_opt           | location of the maximum of the quadratic portion of the function  | 298.15        | NA                   |
-| range           | thermal breadth                                                   | 35            | NA                   |
-| β               | allometric exponent                                               | -0.25         | Gillooly et al. 2002 |
+| Parameter       | Meaning                                          | Default values| Reference            |
+|:----------------|:-------------------------------------------------|:--------------|:---------------------|
+| maxrate_0       | Maximum rate at 273.15 degrees Kelvin            | 0.81          | Eppley 1972          |
+| eppley_exponent | Exponential rate of increase                     | 0.0631        | Eppley 1972          |
+| z		          | location of the inflexion point of the function  | 298.15        | NA                   |
+| range           | thermal breadth                                  | 35            | NA                   |
+| β               | allometric exponent                              | -0.25         | Gillooly et al. 2002 |
 
 Default values are given as an example.
 
 The function can be called with the default parameters provided as an example:
 	- extended_eppley_r()
 Parameters can also be specified:
-	- extended_eppley_r(passed_temp_parameters = (:maxrate_0 = 0.5, :eppley_exponent = 0.0631, :T_opt = 315.0, :β = -0.25, :range = 35))
+	- extended_eppley_r(passed_temp_parameters = (maxrate_0 = 0.5, eppley_exponent = 0.0631, z = 315.0, β = -0.25, range = 35))
 """
-function extended_eppley_r(default_temp_parameters = (maxrate_0 = 0.81, eppley_exponent = 0.0631, T_opt = 298.15, β = -0.25, range = 35); passed_temp_parameters...)
+function extended_eppley_r(default_temp_parameters = (maxrate_0 = 0.81, eppley_exponent = 0.0631, z = 298.15, β = -0.25, range = 35); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
@@ -212,9 +212,9 @@ function extended_eppley_r(default_temp_parameters = (maxrate_0 = 0.81, eppley_e
 	  temperature_param = default_temp_parameters
 	end
 
-    topt = temperature_param.T_opt - 273.15
+    z = temperature_param.z - 273.15
 
-    return (bodymass, T, p) -> bodymass.^temperature_param.β .* temperature_param.maxrate_0 .* exp(temperature_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- topt) ./ (temperature_param.range./2)).^2)
+    return (bodymass, T, p) -> bodymass.^temperature_param.β .* temperature_param.maxrate_0 .* exp(temperature_param.eppley_exponent .* (T.-273.15)) * (1 .- (((T.-273.15) .- z) ./ (temperature_param.range./2)).^2)
 end
 
 """
@@ -232,9 +232,9 @@ Example : model_parameters(A, metabolicrate = ExtendedEppley(:x))
 | eppley_exponent_producer      | Exponential rate of increase for producers                            | 0.0631        | Eppley 1972          |
 | eppley_exponent_invertebrate  | Exponential rate of increase for invertebrates                        | 0.0631        | Eppley 1972          |
 | eppley_exponent_vertebrate    | Exponential rate of increase for vertebrates                          | 0.0631        | Eppley 1972          |
-| T_opt_producer                | Location of the inflexion point of the function for producers    		| 298.15        | NA                   |
-| T_opt_invertebrate            | Location of the inflexion point of the function for invertebrates		| 298.15        | NA                   |
-| T_opt_producer_vertebrate     | Location of the inflexion point of the function for vertebrates  		| 298.15        | NA                   |
+| z_producer  		            | Location of the inflexion point of the function for producers    		| 298.15        | NA                   |
+| z_invertebrate                | Location of the inflexion point of the function for invertebrates		| 298.15        | NA                   |
+| z_producer_vertebrate         | Location of the inflexion point of the function for vertebrates  		| 298.15        | NA                   |
 | range_producer                | Thermal breadth for producers                                         | 35            | NA                   |
 | range_invertebrate            | Thermal breadth for invertebrates                                     | 35            | NA                   |
 | range_vertebrate              | Thermal breadth for vertebrates                                       | 35            | NA                   |
@@ -250,14 +250,14 @@ The function can be called with the default parameters provided as an example:
 Parameters can also be specified (for producers, invertebrates and vertebrates):
 	- extended_eppley_x(passed_temp_parameters = (maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
 	                                     eppley_exponent_producer = 0.0631, eppley_exponent_invertebrate = 0.0631, eppley_exponent_vertebrate = 0.0631,
-	                                     T_opt_producer = 310.15, T_opt_invertebrate = 310.15, T_opt_vertebrate = 298.15,
+	                                     z_producer = 310.15, z_invertebrate = 310.15, z_vertebrate = 298.15,
 	                                     range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
 	                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 
 """
 function extended_eppley_x(default_temp_parameters = (maxrate_0_producer = 0.81, maxrate_0_invertebrate = 0.81, maxrate_0_vertebrate = 0.81,
                                      eppley_exponent_producer = 0.0631, eppley_exponent_invertebrate = 0.0631, eppley_exponent_vertebrate = 0.0631,
-                                     T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
+                                     z_producer = 298.15, z_invertebrate = 298.15, z_vertebrate = 298.15,
                                      range_producer = 35, range_invertebrate = 35, range_vertebrate = 35,
                                      β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
@@ -270,12 +270,12 @@ function extended_eppley_x(default_temp_parameters = (maxrate_0_producer = 0.81,
     return (bodymass, T, p) -> for i in 1:1
                                     maxrate_0_all = temperature_param.maxrate_0_producer .* p[:is_producer] .+ temperature_param.maxrate_0_vertebrate .* p[:vertebrates] .+ temperature_param.maxrate_0_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                     eppley_exponent_all = temperature_param.eppley_exponent_producer .* p[:is_producer] .+ temperature_param.eppley_exponent_vertebrate .* p[:vertebrates] .+ temperature_param.eppley_exponent_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                    T_opt_all = temperature_param.T_opt_producer .* p[:is_producer] .+ temperature_param.T_opt_vertebrate .* p[:vertebrates] .+ temperature_param.T_opt_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
-                                    T_opt_all = T_opt_all .- 273.15
+                                    z_all = temperature_param.z_producer .* p[:is_producer] .+ temperature_param.z_vertebrate .* p[:vertebrates] .+ temperature_param.z_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
+                                    z_all = z_all .- 273.15
                                     range_all = temperature_param.range_producer .* p[:is_producer] .+ temperature_param.range_vertebrate .* p[:vertebrates] .+ temperature_param.range_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
                                     β_all = temperature_param.β_producer .* p[:is_producer] .+ temperature_param.β_vertebrate .* p[:vertebrates] .+ temperature_param.β_invertebrate .* (.!p[:vertebrates] .& .!p[:is_producer])
 
-                                    return bodymass.^β_all .* maxrate_0_all .* exp.(eppley_exponent_all .* (T.-273.15)) .* (1 .- (((T.-273.15) .- T_opt_all) ./ (range_all./2)).^2)
+                                    return bodymass.^β_all .* maxrate_0_all .* exp.(eppley_exponent_all .* (T.-273.15)) .* (1 .- (((T.-273.15) .- z_all) ./ (range_all./2)).^2)
                                 end
 end
 
