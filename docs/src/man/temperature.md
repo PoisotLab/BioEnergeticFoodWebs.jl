@@ -45,13 +45,13 @@ Note that this function has originially been documented for phytoplankton growth
 
 For the growth rate, the parameters values are set to:
 
-| Parameter        | Keyword           | Meaning                                                   | Default values | References           |
-| ---------------- | ----------------- | ----------------------------------------------------------| ------------------- | -------------------- |
-| $β$              | `β`               | allometric exponent                                       | -0.25           | Gillooly et al. 2002 |
-| $m0$             | `maxrate_0`       | maximum growth rate observed at 273.15 K                  | 0.81           | Eppley 1972          |
-| $b$              | `eppley_exponent` | exponential rate of increase                              | 0.0631         | Eppley 1972          |
-| $T_{\text{opt}}$ | `T_opt`           | temperature at which rate is maximum (Kelvins)            | 298.15         | NA                   |
-| $\text{range}$   | `range`           | thermal breadth (range within which the rate is positive) | 35             | NA                   |
+| Parameter      | Keyword           | Meaning                                                   | Default values | References           |
+| -------------- | ----------------- | --------------------------------------------------------- | -------------- | -------------------- |
+| $β$            | `β`               | allometric exponent                                       | -0.25          | Gillooly et al. 2002 |
+| $m0$           | `maxrate_0`       | maximum growth rate observed at 273.15 K                  | 0.81           | Eppley 1972          |
+| $b$            | `eppley_exponent` | exponential rate of increase                              | 0.0631         | Eppley 1972          |
+| $z$            | `z`               | location of the inflexion point of the function           | 298.15         | NA                   |
+| $\text{range}$ | `range`           | thermal breadth (range within which the rate is positive) | 35             | NA                   |
 
 To use this function, initialize `model_parameters()` with `ExtendedEppley(:growthrate)` for the keyword `growthrate`:
 
@@ -87,12 +87,12 @@ Where $q_0$ is the organisms state-dependent scaling coefficient, calculated for
 
 For the growth rate, the parameters values are set to:
 
-| Parameter | Keyword             | Meaning                              | Default values | References                |
-| --------- | ------------------- | ------------------------------------ | -------------- | --------------------------------------- |
-| $r_0$     | `norm_constant`     | growth dependent scaling coefficient | -15.68         | Savage et al. 2004, Binzer et al. 2012  |
-| $\beta_i$ | `β`                 | allometric exponent                  | -0.25          | Savage et al. 2004, Binzer et al. 2012  |
-| $E$       | `activation_energy` | activation energy                    | -0.84          | Savage et al. 2004, Binzer et al. 2012  |
-| $T_0$     | `T0`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                      |
+| Parameter | Keyword             | Meaning                              | Default values | References                             |
+| --------- | ------------------- | ------------------------------------ | -------------- | -------------------------------------- |
+| $r_0$     | `norm_constant`     | growth dependent scaling coefficient | -15.68         | Savage et al. 2004, Binzer et al. 2012 |
+| $\beta_i$ | `β`                 | allometric exponent                  | -0.25          | Savage et al. 2004, Binzer et al. 2012 |
+| $E$       | `activation_energy` | activation energy                    | -0.84          | Savage et al. 2004, Binzer et al. 2012 |
+| $T_0$     | `T0`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                     |
 
 To use this function, initialize `model_parameters()` with `ExponentialBA(:growthrate)` for the keyword `growthrate`:
 

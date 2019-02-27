@@ -193,9 +193,9 @@ Example : model_parameters(A, growthrate = ExtendedEppley(:r))
 |:----------------|:-------------------------------------------------|:--------------|:---------------------|
 | maxrate_0       | Maximum rate at 273.15 degrees Kelvin            | 0.81          | Eppley 1972          |
 | eppley_exponent | Exponential rate of increase                     | 0.0631        | Eppley 1972          |
-| z		          | location of the inflexion point of the function  | 298.15        | NA                   |
-| range           | thermal breadth                                  | 35            | NA                   |
-| β               | allometric exponent                              | -0.25         | Gillooly et al. 2002 |
+| z		          | Location of the inflexion point of the function  | 298.15        | NA                   |
+| range           | Thermal breadth                                  | 35            | NA                   |
+| β               | Allometric exponent                              | -0.25         | Gillooly et al. 2002 |
 
 Default values are given as an example.
 
