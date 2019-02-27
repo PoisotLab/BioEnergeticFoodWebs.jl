@@ -542,9 +542,9 @@ Example : model_parameters(A, metabolicrate = ExtendedBA(:x))
 
 | Parameter                       | Meaning                                                       | Default values | Reference            |
 |:--------------------------------|:--------------------------------------------------------------|:---------------|----------------------|
-| norm_constant_producer          | scaling coefficient for invertebrates                         | 3e8            | NA                   |
-| norm_constant_invertebrate      | scaling coefficient for invertebrates                         | 3e8            | NA                   |
-| norm_constant_invertebrate      | scaling coefficient for vertebrates                           | 3e8            | NA                   |
+| norm_constant_producer          | scaling coefficient for invertebrates                         | 1.5e9          | NA                   |
+| norm_constant_invertebrate      | scaling coefficient for invertebrates                         | 1.5e9          | NA                   |
+| norm_constant_invertebrate      | scaling coefficient for vertebrates                           | 1.5e9          | NA                   |
 | activation_energy_producer      | activation energy for invertebrates                           | 0.53           | Dell et al 2011      |
 | activation_energy_invertebrate  | activation energy for invertebrates                           | 0.53           | Dell et al 2011      |
 | activation_energy_vertebrate    | activation energy for vertebrates                             | 0.53           | Dell et al 2011      |
@@ -563,7 +563,7 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- extended_BA_x()
 Parameters can also be specified:
-	- extended_BA_x(passed_temp_parameters = (norm_constant_producer = 3e8, norm_constant_invertebrate = 3e8, norm_constant_vertebrate = 3e8,
+	- extended_BA_x(passed_temp_parameters = (norm_constant_producer = 1.5e9, norm_constant_invertebrate = 1.5e9, norm_constant_vertebrate = 1.5e9,
 	                                activation_energy_producer = 0.53, activation_energy_invertebrate = 0.53, activation_energy_vertebrate = 0.53,
 	                                deactivation_energy_producer = 1.15, deactivation_energy_invertebrate = 1.15, deactivation_energy_vertebrate = 1.15,
 	                                T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
