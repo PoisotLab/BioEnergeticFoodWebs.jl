@@ -66,6 +66,7 @@ p_newvalues = model_parameters(A, growthrate = ExtendedEppley(:growthrate, param
 
 We use the same function as above for the metabolic rate, with the added possibility to have different parameters values for producers, vertebrates and invertebrates. The defaults are initially set to the same values for all metabolic types (see table above), but can be changed independently (see example below).
 
+
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
 p = model_parameters(A, metabolicrate = ExtendedEppley(:metabolicrate), T = 290.0) #default parameters values
@@ -110,16 +111,16 @@ For the metabolic rate, the parameters values can be different for each metaboli
 For the metabolic rate, the parameters values are set to:
 
 
-| Parameter | Keyword                          | Meaning                              | Default values | References                             |
-| --------- | ------------------- | ------------------------------------ | -------------- | ---------------------------------------------------- |
-| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
-|  $r_0$    | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012  |
-| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.31          | Ehnes et al. 2011                      |
-| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012  |
-| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                     |
-| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                     |
+| Parameter | Keyword                          | Meaning                              | Default values | References                            |
+| --------- | -------------------------------- | ------------------------------------ | -------------- | -------------------------------------- |
+| $r_0$     | `norm_constant_invertebrate`     | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| $r_0$     | `norm_constant_vertebrate`       | growth dependent scaling coefficient | -16.54         | Ehnes et al. 2011, Binzer et al. 2012 |
+| $\beta_i$ | `β_invertebrate`                 | allometric exponent                  | -0.31          | Ehnes et al. 2011                     |
+| $\beta_i$ | `β_vertebrate`                   | allometric exponent                  | -0.31          | Ehnes et al. 2011                     |
+| $E$       | `activation_energy_invertebrate` | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| $E$       | `activation_energy_vertebrate`   | activation energy                    | -0.69          | Ehnes et al. 2011, Binzer et al. 2012 |
+| $T_0$     | `T0_invertebrate`                | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                    |
+| $T_0$     | `T0_vertebrate`                  | normalization temperature (Kelvins)  | 293.15         | Binzer et al. 2012                    |
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -219,7 +220,27 @@ p_newvalues = model_parameters(A, growthrate = ExtendedBA(:growthrate, parameter
 
 #### Metabolic rate
 
-For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be changed independently (see example below).
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types, but can be changed independently (see example below).
+
+For the metabolic rate, the parameters values are set to:
+
+| Parameter | Keyword                            | Meaning                                                           | Default values | References           |
+| --------- | ---------------------------------- | ----------------------------------------------------------------- | -------------- | -------------------- |
+| $r_0$     | `norm_constant_producer`           | growth dependent scaling coefficient for producers                | $1.5*10^9$     | NA                   |
+| $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient for invertebrates            | $1.5*10^9$     | NA                   |
+| $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient for vertebrates              | $1.5*10^9$     | NA                   |
+| $\beta_i$ | `β_producer`                       | allometric exponent for producers                                 | -0.25          | Gillooly et al. 2002 |
+| $\beta_i$ | `β_invertebrate`                   | allometric exponent for invertebrates                             | -0.25          | Gillooly et al. 2002 |
+| $\beta_i$ | `β_vertebrate`                     | allometric exponent for vertebrates                               | -0.25          | Gillooly et al. 2002 |
+| $E$       | `activation_energy_producer`       | activation energy for producers                                   | 0.53           | Dell et al 2011      |
+| $E$       | `activation_energy_invertebrate`   | activation energy for invertebrates                               | 0.53           | Dell et al 2011      |
+| $E$       | `activation_energy_vertebrates`    | activation energy for vertebrates                                 | 0.53           | Dell et al 2011      |
+| $T_opt$   | `T_opt_producer`                   | temperature at which trait value is maximal (K) for producers     | 298.15         | NA                   |
+| $T_opt$   | `T_opt_invertebrate`               | temperature at which trait value is maximal (K) for invertebrates | 298.15         | NA                   |
+| $T_opt$   | `T_opt_vertebrate`                 | temperature at which trait value is maximal (K) for vertebrates   | 298.15         | NA                   |
+| $E_D$     | `deactivation_energy_producer`     | deactivation energy for producers                                 | 1.15           | Dell et al 2011      |
+| $E_D$     | `deactivation_energy_invertebrate` | deactivation energy for invertebrates                             | 1.15           | Dell et al 2011      |
+| $E_D$     | `deactivation_energy_vertebrate`   | deactivation energy for invertebrates                             | 1.15           | Dell et al 2011      |
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -269,12 +290,12 @@ $$
 
 For the organisms growth, the default parameters values are:
 
-| Parameter | Keyword         | Meaning                                     | Default values | References        |
-| --------- | --------------- | ------------------------------------------- | -------------- | ---------------------------- |
-| $q_{opt}$ | 'norm_constant' | minimal/maximal trait value (at $T_{opt}$)  | 1.0            | NA                |
-| $T_{opt}$ | 'T_opt'         | temperature at which trait value is maximal | 298.15         | Amarasekare 2015  |
-| $s_q$     | 'range'         | performance breath (width of function)      | 20             | Amarasekare 2015  |
-| $\beta$   | 'β'             | allometric exponent                         | -0.25          | Gillooly et al 2002        |
+| Parameter | Keyword         | Meaning                                     | Default values | References          |
+| --------- | --------------- | ------------------------------------------- | -------------- | ------------------- |
+| $q_{opt}$ | 'norm_constant' | maximal trait value (at $T_{opt}$)          | 1.0            | NA                  |
+| $T_{opt}$ | 'T_opt'         | temperature at which trait value is maximal | 298.15         | Amarasekare 2015    |
+| $s_q$     | 'range'         | performance breath (width of function)      | 20             | Amarasekare 2015    |
+| $\beta$   | 'β'             | allometric exponent                         | -0.25          | Gillooly et al 2002 |
 
 To use this function initialize `model_parameters()` with `Gaussian(:growthrate)` for the keyword `growthrate`:
 
@@ -287,8 +308,26 @@ p_newvalues = model_parameters(A, growthrate = Gaussian(:growthrate, parameters_
 
 #### Metabolic rate
 
-For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be changed independently (see example below).
+For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types, but can be changed independently (see example below).
 
+For the metabolic rate, the default parameters values are:
+
+| Parameter | Keyword                      | Meaning                                                       | Default values | References          |
+| --------- | ---------------------------- | ------------------------------------------------------------- | -------------- | ------------------- |
+| $q_{opt}$ | 'norm_constant_producer'     | maximal trait value (at $T_{opt}$) for producers              | 0.2            | NA                  |
+| $q_{opt}$ | 'norm_constant_invertebrate' | maximal trait value (at $T_{opt}$) for invertebrates          | 0.35           | NA                  |
+| $q_{opt}$ | 'norm_constant_vertebrate'   | maximal trait value (at $T_{opt}$) for vertebrates            | 0.9            | NA                  |
+| $T_{opt}$ | 'T_opt_producer'             | temperature at which trait value is maximal for producers     | 298.15         | Amarasekare 2015    |
+| $T_{opt}$ | 'T_opt_invertebrate'         | temperature at which trait value is maximal for invertebrates | 298.15         | Amarasekare 2015    |
+| $T_{opt}$ | 'T_opt_vertebrate'           | temperature at which trait value is maximal for vertebrates   | 298.15         | Amarasekare 2015    |
+| $s_q$     | 'range_producer'             | performance breath (width of function) for producers          | 20             | Amarasekare 2015    |
+| $s_q$     | 'range_invertebrate'         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015    |
+| $s_q$     | 'range_vertebrate'           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015    |
+| $\beta$   | 'β_producer'                 | allometric exponent for producers                             | -0.25          | Gillooly et al 2002 |
+| $\beta$   | 'β_invertebrate'             | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002 |
+| $\beta$   | 'β_vertebrate'               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002 |
+
+To use this function initialize `model_parameters()` with `Gaussian(:metabolicrate)` for the keyword `metabolicrate`:
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
@@ -302,6 +341,21 @@ p_newvalues = model_parameters(A, metabolicrate = Gaussian(:metabolicrate, param
 The attack rate is defined not for each species but for each interacting pair. As such, the body-mass scaling depends on the masses of both the consumer and its resource and the allometric exponent can be different for producers, vertebrates and invertebrates. However, the temperature scaling affects only the consumers, thus, the parameters involved can be defined differently only for vertebrates and invertebrates.
 
 Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
+
+For the attack rate, the default parameters values are:
+
+| Parameter | Keyword                      | Meaning                                                       | Default values | References          |
+| --------- | ---------------------------- | ------------------------------------------------------------- | -------------- | ------------------- |
+| $q_{opt}$ | 'norm_constant_invertebrate' | maximal trait value (at $T_{opt}$) for invertebrates          | 16           | NA                  |
+| $q_{opt}$ | 'norm_constant_vertebrate'   | maximal trait value (at $T_{opt}$) for vertebrates            | 16            | NA                  |
+| $T_{opt}$ | 'T_opt_invertebrate'         | temperature at which trait value is maximal for invertebrates | 298.15         | Amarasekare 2015    |
+| $T_{opt}$ | 'T_opt_vertebrate'           | temperature at which trait value is maximal for vertebrates   | 298.15         | Amarasekare 2015    |
+| $s_q$     | 'range_invertebrate'         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015    |
+| $s_q$     | 'range_vertebrate'           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015    |
+| $\beta$   | 'β_producer'                 | allometric exponent for producers                             | -0.25          | Gillooly et al 2002 |
+| $\beta$   | 'β_invertebrate'             | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002 |
+| $\beta$   | 'β_vertebrate'               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002 |
+
 
 To use this function initialize `model_parameters()` with `Gaussian(:attackrate)` for the keyword `attackrate`:
 
@@ -319,6 +373,20 @@ The handling time is defined not for each species but for each interacting pair.
 *Nota 1*: The body-mass allometric scaling (originally defined as $M_i^\beta$) becomes $M_{j}^{\beta_{j}} * M_{k}^{\beta_{k}}$ where $j$ is the consumer and $k$ its resource.
 
 *Nota 2*: The handling time is the only rate for which an inverted gaussian is used (the handling time becomes more optimal by decreasing).
+
+For the handing time, the default parameters values are:
+
+| Parameter | Keyword                      | Meaning                                                       | Default values | References          |
+| --------- | ---------------------------- | ------------------------------------------------------------- | -------------- | ------------------- |
+| $q_{opt}$ | 'norm_constant_invertebrate' | maximal trait value (at $T_{opt}$) for invertebrates          | 0.125          | NA                  |
+| $q_{opt}$ | 'norm_constant_vertebrate'   | maximal trait value (at $T_{opt}$) for vertebrates            | 0.125          | NA                  |
+| $T_{opt}$ | 'T_opt_invertebrate'         | temperature at which trait value is maximal for invertebrates | 298.15         | Amarasekare 2015    |
+| $T_{opt}$ | 'T_opt_vertebrate'           | temperature at which trait value is maximal for vertebrates   | 298.15         | Amarasekare 2015    |
+| $s_q$     | 'range_invertebrate'         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015    |
+| $s_q$     | 'range_vertebrate'           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015    |
+| $\beta$   | 'β_producer'                 | allometric exponent for producers                             | -0.25          | Gillooly et al 2002 |
+| $\beta$   | 'β_invertebrate'             | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002 |
+| $\beta$   | 'β_vertebrate'               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002 |
 
 To use this function initialize `model_parameters()` with `ExponentialBA(:handlingtime)` for the keyword `handlingtime`:
 
