@@ -85,7 +85,7 @@ $$
 
 Where $q_0$ is the organisms state-dependent scaling coefficient, calculated for 1g at 20 degrees Celsius (273.15 degrees Kelvin), β is the rate specific allometric scaling exponent, $E$ is the activation energy in $eV$ (electronvolts) of the response, $T_0$ is the normalization temperature and $k$ is the Boltzmann constant ($8.617 10^{-5} eV.K^{-1}$). As for all other equations, $T$ is the temperature and $M_i$ is the typical adult body mass of species $i$.
 
-*Nota* In many studies, it is the logarithm of the normalisation constant $q_0$ that is provided, in that case you should give exp($q_0$) in the parameters.
+*Nota* In many papers, the **logarithm** of the scaling constant $q_0$ is provided. When using those parameters, you should then give the **exponential** of $q_0$ (exp($q_0$)) in the parameters.
 
 #### Growth rate
 
