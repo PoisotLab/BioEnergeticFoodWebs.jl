@@ -5,7 +5,8 @@ Both organisms biological rates and body sizes can be set to be temperature depe
 ## Temperature dependence for biological rates
 
 The default behavior of the model will always be to assume that none of the biological rates are affected by temperature. If you wish to implement temperature dependence however, you can use one of the following functions:
-- extended Eppley function
+
+- extended Eppley function (Bernhardt et al., 2018)
 - exponential Boltzmann Arrhenius function
 - extended Boltzmann Arrhenius function
 - Gaussian function
@@ -400,6 +401,7 @@ p_newvalues = model_parameters(A, handlingtime = Gaussian(:handlingtime, paramet
 ## Temperature dependence for body sizes
 
 The default behavior of the model is to assume, as it does for biological rates, that typical adults body sizes are not affected by temperature. In this case, the bodymass vector can either:
+
 - be provided to `model_parameters` through the keyword `bodymass`: `model_parameters(A, bodymass = [...])`
 - be calculated by `model_parameters` as $Mi= Z^(TR_i-1)$ where $TR_i$ is the trophic level of species $i$ and $Z$ is the typical consumer-resource body mass ratio in the system. $Z$ can be passed to `model_parameters` by using the `Z` keyword: `model_parameters(A, Z = 10.0)`
 - be a vector of dry masses (at 293.15 Kelvins) provided by the user: `model_parameters(A, dry_mass_293 = [...])`
@@ -414,10 +416,10 @@ $$
 
 Where $M_i$ is the body mass of species $i$, $T$ is the temperature (in Kelvins), $m_i$ is the body mass when there is no effect of temperature (provided by the user through `Z`, `bodymass` or `dry_mass_293`) and $PCM$ is the Percentage change in body-mass per degree Celsius. This percentage is calculated differently depending on the type of system or the type of response wanted (Forster and Hirst 2012, Sentis et al 2017):
 
-- Mean Aquatic: $PCM = -3.90 - 0.53 * log_{10}(dm)$ where $dm$ is the dry mass (calculated in the model from Z or wet mass if not provided). Body size decreases with temperature.
-- Mean Terrestrial: $PCM = -1.72 + 0.54 * log_{10}(dm)$ where $dm$ is the dry mass (calculated in the model from Z or wet mass if not provided). Body size decreases with temperature.
-- Maximum: $PCM = -8$. Body size decreases with temperature.
-- Reverse: $PCM = 4$. Body size **increases** with temperature.
+- Mean Aquatic Response: $PCM = -3.90 - 0.53 * log_{10}(dm)$ where $dm$ is the dry mass (calculated in the model from Z or wet mass if not provided). Body size decreases with temperature.
+- Mean Terrestrial Response: $PCM = -1.72 + 0.54 * log_{10}(dm)$ where $dm$ is the dry mass (calculated in the model from Z or wet mass if not provided). Body size decreases with temperature.
+- Maximum Response: $PCM = -8$. Body size decreases with temperature.
+- Reverse Response: $PCM = 4$. Body size **increases** with temperature.
 
 To set the temperature size rule, use the `TSR` keyword in `model_parameters`:
 
