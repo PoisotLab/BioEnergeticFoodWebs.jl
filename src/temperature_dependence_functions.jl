@@ -226,21 +226,22 @@ Example : model_parameters(A, metabolicrate = ExtendedEppley(:x))
 
 | Parameter                     | Meaning                                                                           | Default values| Reference            |
 |:------------------------------|:----------------------------------------------------------------------------------|:--------------|:---------------------|
-| maxrate_0_producer            | Maximum rate at 273.15 degrees Kelvin for producers                               | 0.81          | Eppley 1972          |
-| maxrate_0_invertebrate        | Maximum rate at 273.15 degrees Kelvin for invertebrates                           | 0.81          | Eppley 1972          |
-| maxrate_0_vertebrate          | Maximum rate at 273.15 degrees Kelvin for vertebrates                             | 0.81          | Eppley 1972          |
-| eppley_exponent_producer      | Exponential rate of increase for producers                                        | 0.0631        | Eppley 1972          |
-| eppley_exponent_invertebrate  | Exponential rate of increase for invertebrates                                    | 0.0631        | Eppley 1972          |
-| eppley_exponent_vertebrate    | Exponential rate of increase for vertebrates                                      | 0.0631        | Eppley 1972          |
-| T_opt_producer                | Location of the maximum of the quadratic portion of the function for producers    | 298.15        | NA                   |
-| T_opt_invertebrate            | Location of the maximum of the quadratic portion of the function for invertebrates| 298.15        | NA                   |
-| T_opt_producer_vertebrate     | Location of the maximum of the quadratic portion of the function for vertebrates  | 298.15        | NA                   |
-| range_producer                | Thermal breadth for producers                                                     | 35            | NA                   |
-| range_invertebrate            | Thermal breadth for invertebrates                                                 | 35            | NA                   |
-| range_vertebrate              | Thermal breadth for vertebrates                                                   | 35            | NA                   |
-| β_producer                    | Allometric exponent for producers                                                 | -0.25         | Gillooly et al. 2002 |
-| β_invertebrate                | Allometric exponent for invertebrates                                             | -0.25         | Gillooly et al. 2002 |
-| β_vertebrate                  | Allometric exponent for vertebrates                                               | -0.25         | Gillooly et al. 2002 |
+| maxrate_0_producer            | Maximum rate at 273.15 degrees Kelvin for producers                   | 0.81          | Eppley 1972          |
+| maxrate_0_invertebrate        | Maximum rate at 273.15 degrees Kelvin for invertebrates               | 0.81          | Eppley 1972          |
+| maxrate_0_vertebrate          | Maximum rate at 273.15 degrees Kelvin for vertebrates                 | 0.81          | Eppley 1972          |
+| eppley_exponent_producer      | Exponential rate of increase for producers                            | 0.0631        | Eppley 1972          |
+| eppley_exponent_invertebrate  | Exponential rate of increase for invertebrates                        | 0.0631        | Eppley 1972          |
+| eppley_exponent_vertebrate    | Exponential rate of increase for vertebrates                          | 0.0631        | Eppley 1972          |
+| T_opt_producer                | Location of the inflexion point of the function for producers    		| 298.15        | NA                   |
+| T_opt_invertebrate            | Location of the inflexion point of the function for invertebrates		| 298.15        | NA                   |
+| T_opt_producer_vertebrate     | Location of the inflexion point of the function for vertebrates  		| 298.15        | NA                   |
+| range_producer                | Thermal breadth for producers                                         | 35            | NA                   |
+| range_invertebrate            | Thermal breadth for invertebrates                                     | 35            | NA                   |
+| range_vertebrate              | Thermal breadth for vertebrates                                       | 35            | NA                   |
+| β_producer                    | Allometric exponent for producers                                     | -0.25         | Gillooly et al. 2002 |
+| β_invertebrate                | Allometric exponent for invertebrates                                 | -0.25         | Gillooly et al. 2002 |
+| β_vertebrate                  | Allometric exponent for vertebrates                                   | -0.25         | Gillooly et al. 2002 |
+
 
 Default values are given as an example (note that they are initially provided for phytoplankton growth rate in Eppley 1972)
 
