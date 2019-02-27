@@ -157,7 +157,7 @@ p = model_parameters(A, metabolicrate = ExponentialBA(:x, parameters_tuple = (T0
 ```
 """
 function ExponentialBA(rate_affected::Symbol; parameters_tuple...)
-    if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
+    if rate_affected ∉ [:growth, :r, :growthrate, :metabolism, :x, :metabolicrate, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), :attackrate or :handlingtime")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
@@ -215,7 +215,7 @@ p = model_parameters(A, metabolicrate = ExtendedBA(:x, parameters_tuple = (T_opt
 ```
 """
 function ExtendedBA(rate_affected::Symbol; parameters_tuple...)
-    if rate_affected ∉ [:growth, :r, :metabolism, :x, :attackrate]
+    if rate_affected ∉ [:growth, :r, :growthrate, :metabolism, :x, :metabolicrate, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate), or :attackrate")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
@@ -266,7 +266,7 @@ p = model_parameters(A, metabolicrate = ExtendedBA(:x, parameters_tuple = (range
 ```
 """
 function Gaussian(rate_affected::Symbol; parameters_tuple...)
-    if rate_affected ∉ [:growth, :r, :metabolism, :x, :handlingtime, :attackrate]
+    if rate_affected ∉ [:growth, :r, :growthrate, :metabolism, :x, :metabolicrate, :handlingtime, :attackrate]
         error("rate_affected should be either :growth (alternatively :r or :growthrate), :metabolism (alternatively :x or :metabolicrate) or :functionalresponse")
     end
     if rate_affected ∈ [:growth, :r, :growthrate]
