@@ -543,16 +543,16 @@ Example : model_parameters(A, metabolicrate = ExtendedBA(:x))
 
 | Parameter                       | Meaning                                                       | Default values | Reference            |
 |:--------------------------------|:--------------------------------------------------------------|:---------------|----------------------|
-| norm_constant_producer          | scaling coefficient for invertebrates                         | 1.5e9          | NA                   |
+| norm_constant_producer          | scaling coefficient for producers		                      | 1.5e9          | NA                   |
 | norm_constant_invertebrate      | scaling coefficient for invertebrates                         | 1.5e9          | NA                   |
 | norm_constant_invertebrate      | scaling coefficient for vertebrates                           | 1.5e9          | NA                   |
-| activation_energy_producer      | activation energy for invertebrates                           | 0.53           | Dell et al 2011      |
+| activation_energy_producer      | activation energy for producers                               | 0.53           | Dell et al 2011      |
 | activation_energy_invertebrate  | activation energy for invertebrates                           | 0.53           | Dell et al 2011      |
 | activation_energy_vertebrate    | activation energy for vertebrates                             | 0.53           | Dell et al 2011      |
-| deactivation_energy_producer    | deactivation energy for invertebrates                         | 1.15           | Dell et al 2011      |
+| deactivation_energy_producer    | deactivation energy for producers                             | 1.15           | Dell et al 2011      |
 | deactivation_energy_invertebrate| deactivation energy for invertebrates                         | 1.15           | Dell et al 2011      |
 | deactivation_energy_vertebrate  | deactivation energy for vertebrates                           | 1.15           | Dell et al 2011      |
-| T_opt_producer                  | temperature at which trait value is maximal for invertebrates | 298.15         | NA                   |
+| T_opt_producer                  | temperature at which trait value is maximal for producers	  | 298.15         | NA                   |
 | T_opt_invertebrate              | temperature at which trait value is maximal for invertebrates | 298.15         | NA                   |
 | T_opt_vertebrate                | temperature at which trait value is maximal for vertebrates   | 298.15         | NA                   |
 | β_producer                      | allometric exponent for producers                             | -0.25          | Gillooly et al. 2002 |
