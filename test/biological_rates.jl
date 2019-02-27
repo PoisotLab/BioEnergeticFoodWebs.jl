@@ -297,7 +297,7 @@ module TestExtendedBA
   #METABOLISM
   #defaults
   p_x_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x))
-  x_d = 1.5e9 .* bmass .^(-0.25) .* exp.(.-0.53 ./ (k * temp)) .* (1 ./ (1 + exp.(-1 / (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log.(0.53 ./ Δenergy)).* temp))))
+  x_d = 3e8 .* bmass .^(-0.25) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 ./ (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log.(0.53 ./ Δenergy)).* temp))))
   @test p_x_d[:x] == x_d
   #change temperature
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x))
@@ -306,7 +306,7 @@ module TestExtendedBA
   pt_x = (β_vertebrate = -0.5,)
   p_x_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x, parameters_tuple = pt_x))
   p_x_2[:x] != p_x_d[:x]
-  x_2 = 1.5e9 .* bmass .^([-0.5, -0.25, -0.25]) .* exp.(.-0.53 ./ (k * temp)) .* (1 ./ (1 + exp.(-1 / (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log.(0.53 ./ Δenergy)).* temp))))
+  x_2 = 3e8 .* bmass .^([-0.5, -0.25, -0.25]) .* exp.(.-[0.53, 0.53, 0.53] ./ (k * temp)) .* (1 ./ (1 .+ exp.(-1 ./ (k * temp) .* (1.15 .- (1.15 ./ 298.15 .+ k .* log.(0.53 ./ Δenergy)).* temp))))
   @test p_x_2[:x] == x_2
   #max rate at Topt
   p_x_inf = model_parameters(omnivory, T = 297.0, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExtendedBA(:x))
