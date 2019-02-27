@@ -202,7 +202,7 @@ For the growth rate, the parameters values are set to:
 
 | Parameter | Keyword               | Meaning                                               | Default values       | References           |
 | --------- | --------------------- | ----------------------------------------------------- | ------------------------ | -------------------- |
-| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $3.10^8$     | Bideault et al 2019  |
+| $r_0$     | `norm_constant`       | growth dependent scaling coefficient                  | $1.8*10^9$     | NA     |
 | $\beta_i$ | `β`                   | allometric exponent                                   | -0.25         | Gillooly et al. 2002 |
 | $E$       | `activation_energy`   | activation energy                                     | 0.53         | Dell et al 2011      |
 | $T_opt$   | `T_opt`               | temperature at which trait value is maximal (Kelvins) | 298.15       | NA                   |
@@ -271,7 +271,7 @@ For the organisms growth, the default parameters values are:
 
 | Parameter | Keyword         | Meaning                                     | Default values | References        |
 | --------- | --------------- | ------------------------------------------- | -------------- | ---------------------------- |
-| $q_{opt}$ | 'norm_constant' | minimal/maximal trait value (at $T_{opt}$)  | 0.5            | NA                |
+| $q_{opt}$ | 'norm_constant' | minimal/maximal trait value (at $T_{opt}$)  | 1.0            | NA                |
 | $T_{opt}$ | 'T_opt'         | temperature at which trait value is maximal | 298.15         | Amarasekare 2015  |
 | $s_q$     | 'range'         | performance breath (width of function)      | 20             | Amarasekare 2015  |
 | $\beta$   | 'β'             | allometric exponent                         | -0.25          | Gillooly et al 2002        |
@@ -288,6 +288,7 @@ p_newvalues = model_parameters(A, growthrate = Gaussian(:growthrate, parameters_
 #### Metabolic rate
 
 For the metabolic rate, the parameters values can be different for each metabolic types (producers, invertebrates and vertebrates). The defaults are initially set to the same value for all metabolic types (see table above), but can be changed independently (see example below).
+
 
 ```julia
 A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain

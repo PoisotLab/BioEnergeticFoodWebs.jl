@@ -506,7 +506,7 @@ Example : model_parameters(A, growthrate = ExtendedBA(:r))
 
 | Parameter          | Meaning                                               | Default values | Reference            |
 |:-------------------|:------------------------------------------------------|:---------------|----------------------|
-| norm_constant      | scaling coefficient                                   | 1.8e9          | Bideault et al 2019  |
+| norm_constant      | scaling coefficient                                   | 1.8e9          | NA					 |
 | activation_energy  | activation energy                                     | 0.53           | Dell et al 2011      |
 | deactivation_energy| deactivation energy                                   | 1.15           | Dell et al 2011      |
 | T_opt              | temperature at which trait value is maximal           | 298.15         | NA                   |
@@ -707,9 +707,9 @@ Example : model_parameters(A, growthrate = Gaussian(:r))
 
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
-| norm_constant_producer     | minimal/maximal trait value for producers                     | 0.5            | NA                   |
-| norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.5            | NA                   |
-| norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
+| norm_constant_producer     | maximal trait value for producers    	                     | 0.2            | NA                   |
+| norm_constant_invertebrate | maximal trait value for invertebrates  			             | 0.35           | NA                   |
+| norm_constant_vertebrate   | maximal trait value for vertebrates     			             | 0.9            | NA                   |
 | T_opt_producer             | temperature at which trait value is maximal for producers     | 298.15         | Amarasekare 2015     |
 | T_opt_invertebrate         | temperature at which trait value is maximal for invertebrates | 298.15         | Amarasekare 2015     |
 | T_opt_vertebrate           | temperature at which trait value is maximal for vertebrates   | 298.15         | Amarasekare 2015     |
@@ -725,12 +725,12 @@ Default values are given as an example.
 The function can be called with the default parameters:
 	- gaussian_x()
 Parameters can also be specified:
-	- gaussian_x(passed_temp_parameters = (norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_x(passed_temp_parameters = (norm_constant_producer = 0.2, norm_constant_invertebrate = 0.35, norm_constant_vertebrate = 0.9,
 	                             range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
 	                             T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                             β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-function gaussian_x(default_temp_parameters = (norm_constant_producer = 0.5, norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_x(default_temp_parameters = (norm_constant_producer = 0.2, norm_constant_invertebrate = 0.35, norm_constant_vertebrate = 0.9,
                              range_producer = 20, range_invertebrate = 20, range_vertebrate = 20,
                              T_opt_producer = 298.15, T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
                              β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -759,8 +759,8 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
-| norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.5            | NA                   |
-| norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
+| norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 16             | NA                   |
+| norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 16             | NA                   |
 | range_invertebrate         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015     |
 | range_vertebrate           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015     |
 | T_opt_invertebrate         | temperature at which trait value is maximal                   | 298.15         | Amarasekare 2015     |
@@ -772,12 +772,12 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 The function can be called with the default parameters:
 	- gaussian_attackr()
 Parameters can also be specified:
-	- gaussian_attackr(passed_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_attackr(passed_temp_parameters = (norm_constant_invertebrate = 16, norm_constant_vertebrate = 16,
 	                   range_invertebrate = 20, range_vertebrate = 20,
 	                   T_opt_invertebrate = 298.15, T_opt_vertebrate = 298.15,
 	                   β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
 """
-function gaussian_attackr(default_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+function gaussian_attackr(default_temp_parameters = (norm_constant_invertebrate = 16, norm_constant_vertebrate = 16,
                                     range_invertebrate = 20, range_vertebrate = 20,
                                     T_opt_invertebrate = 295, T_opt_vertebrate = 295,
                                     β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25); passed_temp_parameters...)
@@ -822,8 +822,8 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
-| norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.5            | NA                   |
-| norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.5            | NA                   |
+| norm_constant_invertebrate | minimal/maximal trait value for invertebrates                 | 0.125          | NA                   |
+| norm_constant_vertebrate   | minimal/maximal trait value for vertebrates                   | 0.125          | NA                   |
 | range_invertebrate         | performance breath (width of function) for invertebrates      | 20             | Amarasekare 2015     |
 | range_vertebrate           | performance breath (width of function) for vertebrates        | 20             | Amarasekare 2015     |
 | T_opt_invertebrate         | temperature at which trait value is maximal                   | 298.15         | NA   				 |
