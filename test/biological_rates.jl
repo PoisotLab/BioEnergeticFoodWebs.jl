@@ -182,7 +182,7 @@ module TestExponentialBA
   #rate increases with temperature
   @test !any(p_r_t[:r] .> p_r_d[:r])
   #passed arguments
-  pt_r = (norm_constant = -18, activation_energy = -0.8, T0 = 290, β = -0.31)
+  pt_r = (norm_constant = exp(-18), activation_energy = -0.8, T0 = 290, β = -0.31)
   p_r_2 = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExponentialBA(:r, parameters_tuple = pt_r))
   r_2 = exp(-18) .* (bmass .^-0.31) .* exp.(-0.8 .* (290 .- temp) ./ (k .* temp .* 290))
   @test p_r_2[:r] == r_2
@@ -199,7 +199,7 @@ module TestExponentialBA
   #rate increases with temperature
   @test !any(p_x_t[:x] .> p_x_d[:x])
   #passed arguments
-  pt_x = (norm_constant_producer = -16, norm_constant_invertebrate = -17, norm_constant_vertebrate = -18,
+  pt_x = (norm_constant_producer = exp(-16), norm_constant_invertebrate = exp(-17), norm_constant_vertebrate = exp(-18),
              activation_energy_producer = -0.6, activation_energy_invertebrate = -0.7, activation_energy_vertebrate = -0.8,
              T0_producer = 270, T0_invertebrate = 280, T0_vertebrate = 290,
              β_producer = -0.2, β_invertebrate = -0.3, β_vertebrate = -0.4)
@@ -225,7 +225,7 @@ module TestExponentialBA
   #rate increases with temperature
   @test !any(p_ar_t[:ar] .> p_ar_d[:ar])
   #passed arguments
-  pt_ar = (norm_constant_vertebrate = -12, norm_constant_invertebrate = -14,
+  pt_ar = (norm_constant_vertebrate = exp(-12), norm_constant_invertebrate = exp(-14),
   						activation_energy_vertebrate = -0.3, activation_energy_invertebrate = -0.4,
   						T0_vertebrate = 290, T0_invertebrate = 270,
   						β_producer = 0.2, β_vertebrate = -0.9, β_invertebrate = -0.7)
@@ -248,7 +248,7 @@ module TestExponentialBA
   #rate decreases with temperature
   @test !any(p_ht_t[:ht] .< p_ht_d[:ht])
   #passed arguments
-  pt_ht = (norm_constant_vertebrate = 9, norm_constant_invertebrate = 10,
+  pt_ht = (norm_constant_vertebrate = exp(9), norm_constant_invertebrate = exp(10),
   						activation_energy_vertebrate = 0.2, activation_energy_invertebrate = 0.3,
   						T0_vertebrate = 290, T0_invertebrate = 270,
   						β_producer = -0.4, β_vertebrate = 0.3, β_invertebrate = 0.5)
