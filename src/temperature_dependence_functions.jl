@@ -818,8 +818,8 @@ end
 """
 **Option 4 : Gaussian function for handling time**
 
-This function can be called with the keywords :handlingtime as an argument in `Gaussian`, itself called in `model_parameters`, to define a Gaussian function (Amarasekare et al 2015) for handling time.
-Example : model_parameters(A, attackrate = Gaussian(:attackrate))
+This function can be called with the keyword :handlingtime as an argument in `Gaussian`, itself called in `model_parameters`, to define a Gaussian function (Amarasekare et al 2015) for handling time.
+Example : model_parameters(A, handlingtime = Gaussian(:handlingtime))
 
 | Parameter                  | Meaning                                                       | Default values | Reference            |
 |:---------------------------|:--------------------------------------------------------------|:---------------|:---------------------|
@@ -834,9 +834,9 @@ Example : model_parameters(A, attackrate = Gaussian(:attackrate))
 | β_vertebrate               | allometric exponent for vertebrates                           | -0.25          | Gillooly et al 2002  |
 
 The function can be called with the default parameters:
-	- gaussian_attackr()
+	- gaussian_handlingt()
 Parameters can also be specified:
-	- gaussian_attackr(passed_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
+	- gaussian_handlingt(passed_temp_parameters = (norm_constant_invertebrate = 0.5, norm_constant_vertebrate = 0.5,
 							range_invertebrate = 20, range_vertebrate = 20,
 							T_opt_invertebrate = 295, T_opt_vertebrate = 295,
 							β_producer = -0.25, β_invertebrate = -0.25, β_vertebrate = -0.25))
