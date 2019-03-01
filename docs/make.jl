@@ -12,7 +12,7 @@ makedocs(
         )
 
 deploydocs(
-           deps = Deps.pip("pygments", "mkdocs", "mkdocs-material", "python-markdown-math"),
-           julia = "1.0",
+           deps = Deps.pip("pygments", "mkdocs==0.17.5", "mkdocs-material==2.9.4", "python-markdown-math"),
+           julia = "0.7",
            repo = "github.com/PoisotLab/BioEnergeticFoodWebs.jl.git"
           )
