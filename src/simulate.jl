@@ -1,7 +1,7 @@
 """
 **Main simulation loop**
 
-    simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
+    simulate(parameters, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:stiff)
 
 This function takes two mandatory arguments:
 
@@ -31,65 +31,61 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(p, biomass; start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
+function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
   @assert stop > start
-  @assert length(biomass) == size(p[:A],1)
-  @assert use ∈ vec([:stiff :nonstiff])
+  @assert length(biomass) == size(parameters[:A],1)
+  @assert length(concentration) == 2
+  if parameters[:productivity] == :nutrients
+      biomass = vcat(biomass, concentration)
+  end
 
-  S = size(p[:A],1)
+  @assert use ∈ vec([:stiff :nonstiff])
+  alg = use == :stiff ? Rodas4(autodiff=false) : Tsit5()
+
+  S = size(parameters[:A], 1)
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
-  t_keep = collect(start:1.0:stop)
+  t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt, biomass, tspan, p)
+  prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
-  if use == :stiff
-      alg = Rodas4(autodiff=false)
-  else
-      alg = Tsit5()
+  function species_under_extinction_threshold(u, t, integrator)
+    return minimum(integrator.u) < (100.0*eps())
   end
 
-  if p[:rewire_method] == :none
-      sol = solve(prob, alg, saveat=t_keep, dense=false, save_timeseries=false)
-  else
-      extspecies = Int[]
-      #isext = falses(S)
-
-      function condition(u,t,integrator)
-        # if t == Int(round(t))
-        #   println(minimum(y[.!isext]))
-        # end
-        isext = u .== 0.0
-        !all(isext) ? minimum(u[.!isext]) : one(eltype(u))
-      end
-
-      function affect!(integrator)
-
-        p = update_rewiring_parameters(p,integrator.u)
-        #id extinct species
-        isext = integrator.u .== 0.0
-        minb = minimum(integrator.u[.!isext])
-        sp_min = findin(integrator.u, minb)[1]
-        #push id to extspecies
-        push!(extspecies, sp_min)
-        #isext[extspecies] = true
-        #set biomass to 0 to avoid ghost species
-        info(string("extinction of species ", sp_min))
-        integrator.u[sp_min] = 0.0
-
-      end
-
-      cb = ContinuousCallback(condition,affect!,abstol = 1e-10)
-      sol = solve(prob, alg, callback = cb, saveat=t_keep, dense=false, save_timeseries=false)
+  function remove_species!(integrator)
+    for i in eachindex(integrator.u)
+      integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
+    end
   end
 
-  output = Dict{Symbol,Any}(
-  :p => p,
-  :t => sol.t,
-  :B => hcat(sol.u...)'
-  )
+  function remove_species_and_rewire!(integrator)
+    remove_species!(integrator)
+    parameters = update_rewiring_parameters(parameters, integrator.u)
+  end
+
+  affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
+  extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function; save_positions=(false,false))
+
+  sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
+
+  B = hcat(sol.u...)'
+
+  if parameters[:productivity] == :nutrients
+      output = Dict{Symbol,Any}(
+      :p => parameters,
+      :t => sol.t,
+      :B => B[:,1:S],
+      :C => B[:,S+1:end]
+      )
+  else
+      output = Dict{Symbol,Any}(
+      :p => parameters,
+      :t => sol.t,
+      :B => B)
+  end
 
   return output
 

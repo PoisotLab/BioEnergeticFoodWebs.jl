@@ -1,6 +1,6 @@
 module TestCheckFoodWeb
     using BioEnergeticFoodWebs
-    using Base.Test
+    using Test
 
     # A correct network will return nothing
     correct_network = [0 0 1 1; 1 1 0 0; 0 1 0 1; 1 1 0 0]

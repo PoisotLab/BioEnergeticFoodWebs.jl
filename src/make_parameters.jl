@@ -9,14 +9,10 @@ matrix A. Specifically, the default values of the keyword parameters are:
 | K                 | 1.0           | carrying capacity of producers                                                              |
 | Z                 | 1.0           | consumer-resource body mass ratio                                                           |
 | r                 | 1.0           | growth rate of producers                                                                    |
-| a_invertebrate    | 0.314         | allometric constant for invertebrate consumers                                              |
-| a_producers       | 1.0           | allometric constant of producers                                                            |
-| a_vertebrate      | 0.88          | allometric constant for vertebrate consumers                                                |
 | c                 | 0             | quantifies the predator interference                                                        |
 | h                 | 1             | Hill coefficient                                                                            |
 | e_carnivore       | 0.85          | assimilation efficiency of carnivores                                                       |
 | e_herbivore       | 0.45          | assimilation efficiency of herbivores                                                       |
-| m_producers       | 1             | body-mass of producers                                                                      |
 | y_invertebrate    | 8             | maximum consumption rate of invertebrate predators relative to their metabolic rate         |
 | y_vertebrate      | 4             | maximum consumption rate of vertebrate predators relative to their metabolic rate           |
 | Γ                 | 0.5           | half-saturation density                                                                     |
@@ -38,6 +34,7 @@ matrix A. Specifically, the default values of the keyword parameters are:
 | cost              | 0.0           | (Gilljam) Rewiring cost (a consumer decrease in efficiency when exploiting novel resource)  |
 | specialistPrefMag | 0.9           | (Gilljam) Strength of the consumer preference for 1 prey if `preferenceMethod = :specialist`|
 | preferenceMethod  | :generalist   | (Gilljam) Scenarios with respect to prey preferences of consumers                           |
+| D                 | 0.25          | global turnover rate                                                                        |
 
 All of these values are passed as optional keyword arguments to the function.
 
@@ -74,186 +71,281 @@ If `rewire_method`is `:ADBM` or `:Gilljam`, additional keywords can be passed.
 See the online documentation and the original references for more details.
 
 """
-
-function model_parameters(A; K::Float64=1.0, Z::Float64=1.0, r::Float64=1.0,
-        a_invertebrate::Float64=0.314, a_producer::Float64=1.0,
-        a_vertebrate::Float64=0.88, c::Float64=0.0, h::Number=1.0,
-        e_carnivore::Float64=0.85, e_herbivore::Float64=0.45,
-        m_producer::Float64=1.0,
-        y_invertebrate::Float64=8.0, y_vertebrate::Float64=4.0,
-        Γ::Float64=0.5, α::Float64=1.0,
+function model_parameters(A;
+        K::Float64=1.0,
+        Z::Float64=1.0,
+        c::Float64=0.0,
+        h::Number=1.0,
+        e_carnivore::Float64=0.85,
+        e_herbivore::Float64=0.45,
+        α::Float64=1.0,
         productivity::Symbol=:species,
         bodymass::Array{Float64, 1}=[0.0],
-        vertebrates::Array{Bool, 1}=[false], rewire_method = :none,
-        e::Float64 = 1.0, a_adbm::Float64 = 0.0189, ai::Float64 = -0.491,
-        aj::Float64 = -0.465, b::Float64 = 0.401, h_adbm::Float64 = 1.0,
-        hi::Float64 = 1.0, hj::Float64 = 1.0, n::Float64 = 1.0,
-        ni::Float64= -0.75, Hmethod::Symbol = :ratio,
-        Nmethod::Symbol = :original, cost::Float64 = 0.0,
+        vertebrates::Array{Bool, 1}=[false],
+        rewire_method = :none,
+        e::Float64 = 1.0,
+        a_adbm::Float64 = 0.0189,
+        ai::Float64 = -0.491,
+        aj::Float64 = -0.465,
+        b::Float64 = 0.401,
+        h_adbm::Float64 = 1.0,
+        hi::Float64 = 1.0,
+        hj::Float64 = 1.0,
+        n::Float64 = 1.0,
+        ni::Float64= -0.75,
+        Hmethod::Symbol = :ratio,
+        Nmethod::Symbol = :original,
+        cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
-        preferenceMethod::Symbol = :generalist)
+        preferenceMethod::Symbol = :generalist,
+        D::Float64 = 0.25,
+        supply::Array{Float64, 1} = [4.0],
+        υ::Array{Float64, 1} = [1.0, 0.5],
+        K1::Array{Float64, 1} = [0.15],
+        K2::Array{Float64, 1} = [0.15],
+        T::Float64 = 273.15,
+        handlingtime::Function = NoEffectTemperature(:handlingtime),
+        attackrate::Function = NoEffectTemperature(:attackrate),
+        metabolicrate::Function = NoEffectTemperature(:metabolism),
+        growthrate::Function = NoEffectTemperature(:growth),
+        dry_mass_293::Array{Float64, 1}=[0.0],
+        TSR_type::Symbol = :no_response)
 
-  BioEnergeticFoodWebs.check_food_web(A)
+  check_food_web(A)
 
   # Step 1 -- create a dictionnary to store the parameters
-  p = Dict{Symbol,Any}(
+  parameters = Dict{Symbol,Any}(
   :K              => K,
   :Z              => Z,
-  :a_invertebrate => a_invertebrate,
-  :a_producer     => a_producer,
-  :a_vertebrate   => a_vertebrate,
+  #:a_invertebrate => a_invertebrate,
+  #:a_producer     => a_producer,
+  #:a_vertebrate   => a_vertebrate,
   :c              => c,
   :e_carnivore    => e_carnivore,
   :e_herbivore    => e_herbivore,
   :h              => h,
-  :m_producer     => m_producer,
-  :r              => r,
+  #:r              => r,
   :vertebrates    => falses(size(A)[1]),
-  :y_invertebrate => y_invertebrate,
-  :y_vertebrate   => y_vertebrate,
-  :Γ              => Γ,
+  #:y_invertebrate => y_invertebrate,
+  #:y_vertebrate   => y_vertebrate,
+  #:Γ              => Γ,
   :A              => A,
-  :α              => α
+  :α              => α,
+  :TSR_type       => TSR_type,
+  :dry_mass_293   => dry_mass_293,
+  :T              => T
   )
-  BioEnergeticFoodWebs.check_initial_parameters(p)
+  check_initial_parameters(parameters)
 
   # Step 2 -- vertebrates ?
   if length(vertebrates) > 1
     if length(vertebrates) == size(A, 1)
-      p[:vertebrates] = vertebrates
+      parameters[:vertebrates] = vertebrates
     else
       error("when calling `model_parameters` with an array of values for `vertebrates`, there must be as many elements as rows/columns in the matrix")
     end
   end
 
-  # Step 3 -- body mass
-  p[:bodymass] = bodymass
-  if length(p[:bodymass]) > 1
-    if length(p[:bodymass]) != size(A, 1)
+  # Step 3 -- body mass and dry mass at 293 K
+  parameters[:bodymass] = bodymass
+  if length(parameters[:bodymass]) > 1
+    if length(parameters[:bodymass]) != size(A, 1)
       error("when calling `model_parameters` with an array of values for `bodymass`, there must be as many elements as rows/columns in the matrix")
     end
   end
 
-  # Step 4 -- productivity type
-  if productivity ∈ [:species, :system, :competitive]
-    p[:productivity] = productivity
-  else
-    error("Invalid value for productivity -- must be :system, :species, or :competitive")
+  parameters[:dry_mass_293] = dry_mass_293
+  if length(parameters[:dry_mass_293]) > 1
+    parameters[:dry_mass_293] = dry_mass_293
+    if length(parameters[:dry_mass_293]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `dry_mass_293`, there must be as many elements as rows/columns in the matrix")
+    end
   end
 
-  # Step 5 -- rewire method
+  # Step 4 -- TSR type
+  if TSR_type ∈ [:no_response, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response]
+    parameters[:TSR_type] = TSR_type
+  else
+    error("Invalid value for TSR_type -- must be :no_response, :mean_aquatic, :mean_terrestrial, :maximum, :reverse, :no_response")
+  end
+
+  # Step 5 -- Identify producers
+  is_producer = vec(sum(A, dims = 2) .== 0)
+  parameters[:is_producer] = is_producer
+  producers_richness = sum(is_producer)
+
+  # Step 6 -- productivity type
+  if productivity ∈ [:species, :system, :competitive, :nutrients]
+    parameters[:productivity] = productivity
+  else
+    error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+  end
+
+  # step 7 -- productivity parameters for the NP model
+  if parameters[:productivity] == :nutrients
+    parameters[:D] = D
+    parameters[:supply] = supply
+    if length(parameters[:supply]) > 1
+      if length(parameters[:supply]) != 2
+        error("when calling `model_parameters` with an array of values for `S` (nutrient supply), there must be as many elements as nutrients (2)")
+      end
+    else
+      parameters[:supply] = repeat(supply, 2)
+    end
+    parameters[:υ] = υ
+    if length(parameters[:υ]) != 2
+        error("when calling `model_parameters` with an array of values for `υ` (conversion rates), there must be as many elements as nutrients (2)")
+    end
+
+    parameters[:K1] = K1
+    parameters[:K2] = K2
+    if length(parameters[:K1]) > 1
+      if length(parameters[:K1]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K1` (species half-saturation densities for nutrient 1), there must be as many elements as species")
+      end
+    else
+      parameters[:K1] = is_producer .* K1
+    end
+    if length(parameters[:K2]) > 1
+      if length(parameters[:K2]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K2` (species half-saturation densities for nutrient 2), there must be as many elements as species")
+      end
+    else
+      parameters[:K2] = is_producer .* repeat(K2, size(A, 1))
+    end
+
+  end
+
+  # Step 8 -- rewire method
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
-    p[:rewire_method] = rewire_method
+    parameters[:rewire_method] = rewire_method
  else
     error("Invalid method for rewiring -- must be :stan, :ADBM, :Gilljam or :none")
  end
 
  if rewire_method == :ADBM
-     adbm_parameters(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+     adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
  elseif rewire_method == :Gilljam
-     gilljam_parameters(p, cost, specialistPrefMag, preferenceMethod)
+     gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
  elseif rewire_method == :stan
-     p[:extinctions] = Array{Int,1}()
+     parameters[:extinctions] = Array{Int,1}()
  end
- check_rewiring_parameters(p, p[:rewire_method])
+ check_rewiring_parameters(parameters, parameters[:rewire_method])
 
   # Setup some objects
   S = size(A)[1]
+  parameters[:S] = S
   F = zeros(Float64, size(A))
   efficiency = zeros(Float64, size(A))
-  w = zeros(Float64, S)
   M = zeros(Float64, S)
-  a = zeros(Float64, S)
-  x = zeros(Float64, S)
-  y = zeros(Float64, S)
+  #a = zeros(Float64, S)
+  x = zeros(Float64, S) # metabolic rate
+  #y = zeros(Float64, S)
+  r = zeros(Float64, S) # producers growth rate
+  attack_r = zeros(Float64, S) # attack rates
+  handling_t = zeros(Float64, S) # handling times
+  Γ = zeros(Float64, S) #B0, half saturation density
   TR = trophic_rank(A)
-  p[:trophic_rank] = TR
-
-  # Step 6 -- Identify producers
-  is_producer = vec(sum(A, 2) .== 0)
-  p[:is_producer] = is_producer
-  producers_richness = sum(is_producer)
+  parameters[:trophic_rank] = TR
   is_herbivore = falses(S)
 
-  # Step 7 -- Identify herbivores (Herbivores consume producers)
-  get_herbivores(p)
+  # Step 9 -- Identify herbivores (Herbivores consume producers)
+  get_herbivores(parameters)
 
-  # Step 8 -- Measure generality and extract the vector of 1/n
-  getW_preference(p)
+  # Step 10 -- Measure generality and extract the vector of 1/n
+  getW_preference(parameters)
 
-  # Step 9 -- Get the body mass
-  if length(p[:bodymass]) == 1
-    M = p[:Z].^(TR.-1)
-    p[:bodymass] = M
-  end
+  # Step 11 -- Get the body mass
+  temperature_size_rule(parameters)
+  #if length(parameters[:bodymass]) == 1
+    #M = parameters[:Z].^(TR.-1)
+    #parameters[:bodymass] = M
+  #end
 
-  # Step 10 -- Scaling constraints based on organism type
-  a[p[:vertebrates]] = p[:a_vertebrate]
-  a[.!p[:vertebrates]] = p[:a_invertebrate]
-  a[is_producer] = p[:a_producer]
+  # Step 11 -- Scaling constraints based on organism type
+  # a[parameters[:vertebrates]] = parameters[:a_vertebrate]
+  # a[.!parameters[:vertebrates]] = parameters[:a_invertebrate]
+  # a[is_producer] = parameters[:a_producer]
 
-  # Step 11 -- Metabolic rate
-  body_size_relative = p[:bodymass] ./ p[:m_producer]
-  body_size_scaled = body_size_relative.^-0.25
-  x = (a ./ p[:a_producer]) .* body_size_scaled
+  # Step 12 -- Metabolic rate
+  m_producer = minimum(parameters[:bodymass][is_producer])
+  parameters[:m_producer] = m_producer
+  body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
+  # body_size_scaled = body_size_relative.^-0.25
+  x = metabolicrate(body_size_relative, T, parameters)
 
-  # Step 12 -- Assimilation efficiency
-  y = zeros(S)
-  y[p[:vertebrates]] = p[:y_vertebrate]
-  y[.!p[:vertebrates]] = p[:y_invertebrate]
+  # Step 13 -- Growth rate
+  r = growthrate(body_size_relative, T, parameters)
 
-  # Step 13 -- Efficiency matrix
-  get_efficiency(p)
+  # Step 14 -- Handling time
+  handling_t = handlingtime(body_size_relative, T, parameters)
+  parameters[:ht] = handling_t
+
+  # Step 16 -- Maximum relative consumption rate
+  y = 1 ./ handling_t
+
+  # Step 15 -- Attack rate
+  attack_r = attackrate(body_size_relative, T, parameters)
+
+  # Step 17 -- Half-saturation constant
+  Γ = 1 ./ (attack_r .* handling_t)
+  Γ[isnan.(Γ)] .= 0.0
+  parameters[:Γ] = Γ
+
+  # Step 18 -- Efficiency matrix
+  get_efficiency(parameters)
 
   # Final Step -- store the parameters in the dict. p
-  #p[:w] = w
-  #p[:efficiency] = efficiency
-  p[:y] = y
-  p[:x] = x
-  p[:a] = a
-  #p[:is_herbivore] = is_herbivore
-  p[:Γh] = p[:Γ]^p[:h]
-  p[:np] = sum(p[:is_producer])
+  #parameters[:efficiency] = efficiency
+  parameters[:y] = y
+  parameters[:x] = x
+  #parameters[:a] = a
+  #parameters[:is_herbivore] = is_herbivore
+  parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
+  parameters[:np] = sum(parameters[:is_producer])
+  parameters[:ar] = attack_r
+  parameters[:r] = r
 
-  BioEnergeticFoodWebs.check_parameters(p)
 
-  return p
+  check_parameters(parameters)
+
+  return parameters
 end
 
-function adbm_parameters(p, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
-    p[:e] = e
-    p[:a_adbm] = a_adbm
-    p[:ai] = ai
-    p[:aj] = aj
-    p[:b] = b
-    p[:h_adbm] = h_adbm
-    p[:hi] = hi
-    p[:hj] = hj
-    p[:n] = n
-    p[:ni] = ni
+function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+    parameters[:e] = e
+    parameters[:a_adbm] = a_adbm
+    parameters[:ai] = ai
+    parameters[:aj] = aj
+    parameters[:b] = b
+    parameters[:h_adbm] = h_adbm
+    parameters[:hi] = hi
+    parameters[:hj] = hj
+    parameters[:n] = n
+    parameters[:ni] = ni
     #check Hmethod
     if Hmethod ∈ [:ratio, :power]
-      p[:Hmethod] = Hmethod
+      parameters[:Hmethod] = Hmethod
     else
       error("Invalid value for Hmethod -- must be :ratio or :power")
     end
     # check Nmethod
     if Nmethod ∈ [:original, :biomass]
-      p[:Nmethod] = Nmethod
+      parameters[:Nmethod] = Nmethod
     else
       error("Invalid value for Nmethod -- must be :original or :biomass")
     end
     # add empty cost matrix
-    S = size(p[:A],2)
-    p[:costMat] = ones(Float64,(S,S))
+    S = size(parameters[:A],2)
+    parameters[:costMat] = ones(Float64,(S,S))
 end
 
 function get_specialist_preferences(pr, A)
   specials = zeros(Int64,size(A,1))
   if pr[:preferenceMethod] == :specialist
     for pred = 1:size(A,2)
-        prey = find(A[pred,:])
+        prey = findall(x -> x!= 0, A[pred,:])
         if length(prey) > 0
           specials[pred] = sample(prey,1)[1]
         end
@@ -270,8 +362,8 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
     if i == j
     similarity[i,j] = 0
     else
-      X = find(A[i,:])
-      Y = find(A[j,:])
+      X = findall(x -> x != 0, A[i,:])
+      Y = findall(x -> x != 0, A[j,:])
       if length(X) == 0 && length(Y) == 0
         similarity[i,j] = 0
       else
@@ -280,36 +372,36 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
     end
   end
 
-  similarityIndexes = Vector{Vector{Int}}(S)
+  similarity_indexes = Vector{Vector{Int}}(undef, S)
   #convert to indexes
   for i = 1:S
-    similarityIndexes[i] = sortperm(similarity[i,:])
+    similarity_indexes[i] = sortperm(similarity[i,:])
   end
 
-  preferenceParameters = Dict{Symbol,Any}(:similarity => similarityIndexes,
+  preference_parameters = Dict{Symbol,Any}(:similarity => similarity_indexes,
                                           :cost       => cost,
                                           :specialistPrefMag => specialistPrefMag,
                                           :extinctions => Array{Int,1}(),
                                           :costMat => ones(Float64,(S,S)),
                                           :preferenceMethod => preferenceMethod)
-  return(preferenceParameters)
+  return(preference_parameters)
 end
 
-function gilljam_parameters(p, cost, specialistPrefMag, preferenceMethod)
+function gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
   #preference parameters
-  rewireP = preference_parameters(cost, specialistPrefMag, p[:A], preferenceMethod)
+  rewireP = preference_parameters(cost, specialistPrefMag, parameters[:A], preferenceMethod)
   #check preferenceMethod
   if preferenceMethod ∈ [:generalist, :specialist]
     rewireP[:preferenceMethod] = preferenceMethod
-    rewireP[:specialistPref] = get_specialist_preferences(rewireP,p[:A])
+    rewireP[:specialistPref] = get_specialist_preferences(rewireP,parameters[:A])
   else
     error("Invalid value for preferenceMethod -- must be :generalist or :specialist")
   end
-  p[:similarity] = rewireP[:similarity]
-  p[:specialistPrefMag] = rewireP[:specialistPrefMag]
-  p[:extinctions] = rewireP[:extinctions]
-  p[:preferenceMethod] = rewireP[:preferenceMethod]
-  p[:cost] = rewireP[:cost]
-  p[:costMat] = rewireP[:costMat]
-  p[:specialistPref] = rewireP[:specialistPref]
+  parameters[:similarity] = rewireP[:similarity]
+  parameters[:specialistPrefMag] = rewireP[:specialistPrefMag]
+  parameters[:extinctions] = rewireP[:extinctions]
+  parameters[:preferenceMethod] = rewireP[:preferenceMethod]
+  parameters[:cost] = rewireP[:cost]
+  parameters[:costMat] = rewireP[:costMat]
+  parameters[:specialistPref] = rewireP[:specialistPref]
 end
