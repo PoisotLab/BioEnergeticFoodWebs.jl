@@ -1,5 +1,9 @@
+using Pkg
 using Documenter
+
 push!(LOAD_PATH, "../src/")
+
+Pkg.activate(".")
 using BioEnergeticFoodWebs
 
 makedocs(
@@ -8,6 +12,6 @@ makedocs(
 
 deploydocs(
            deps   = Deps.pip("pygments", "mkdocs", "mkdocs-material", "python-markdown-math"),
-           julia = "0.6", 
+           julia = "1.0",
            repo = "github.com/PoisotLab/BioEnergeticFoodWebs.jl.git"
           )
