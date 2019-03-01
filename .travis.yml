@@ -19,8 +19,9 @@ before_script:
       Pkg.add([PackageSpec(name="BinaryBuilder", rev="master"), PackageSpec(name="BinaryProvider")])'
 after_success:
   - julia -e 'import Pkg; cd(Pkg.dir("BioEnergeticFoodWebs")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder()); Codecov.submit(Codecov.process_folder())'
-  - julia -e 'import Pkg; Pkg.add("Documenter")'
-  - julia -e 'import Pkg; cd(Pkg.dir("BioEnergeticFoodWebs")); include(joinpath("docs", "make.jl"))'
+  #- julia -e 'import Pkg; Pkg.add("Documenter")'
+  - julia -e 'using Pkg; ps=Pkg.PackageSpec(name="Documenter", version="0.19"); Pkg.add(ps); Pkg.pin(ps); include(joinpath("docs", "make.jl"))'
+  #- julia -e 'import Pkg; cd(Pkg.dir("BioEnergeticFoodWebs")); include(joinpath("docs", "make.jl"))'
 notifications:
   webhooks:
     urls:
