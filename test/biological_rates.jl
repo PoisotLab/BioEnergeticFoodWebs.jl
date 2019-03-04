@@ -172,12 +172,12 @@ module TestExponentialBA
   #defaults
   p_r_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExponentialBA(:r))
   k = 8.617e-5
-  r_d = exp(-15.68) .* (bmass .^-0.25) .* exp.(-0.84 .* (293.15 .- temp) ./ (k .* temp .* 293.15))
+  r_d = exp(-15.68) .* 4e6 .* (bmass .^-0.25) .* exp.(-0.84 .* (293.15 .- temp) ./ (k .* temp .* 293.15))
   @test p_r_d[:r] == r_d
   #change temperature
   temp2 = 250.0
   p_r_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, growthrate = ExponentialBA(:r))
-  r_t = exp(-15.68) .* (bmass .^-0.25) .* exp.(-0.84 .* (293.15 .- temp2) ./ (k .* temp2 .* 293.15))
+  r_t = exp(-15.68) .* 4e6 .* (bmass .^-0.25) .* exp.(-0.84 .* (293.15 .- temp2) ./ (k .* temp2 .* 293.15))
   @test p_r_t[:r] == r_t
   #rate increases with temperature
   @test !any(p_r_t[:r] .> p_r_d[:r])
@@ -190,11 +190,11 @@ module TestExponentialBA
   #METABOLISM
   #defaults
   p_x_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExponentialBA(:x))
-  x_d = exp(-16.54) .* (bmass .^-0.31) .* exp.(-0.69 .* (293.15 .- temp) ./ (k .* temp .* 293.15))
+  x_d = exp(-16.54) .* 4e6 .* (bmass .^-0.31) .* exp.(-0.69 .* (293.15 .- temp) ./ (k .* temp .* 293.15))
   @test p_x_d[:x] == x_d
   #change temperature
   p_x_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, metabolicrate = ExponentialBA(:x))
-  x_t = exp(-16.54) .* (bmass .^-0.31) .* exp.(-0.69 .* (293.15 .- temp2) ./ (k .* temp2 .* 293.15))
+  x_t = exp(-16.54) .* 4e6 .* (bmass .^-0.31) .* exp.(-0.69 .* (293.15 .- temp2) ./ (k .* temp2 .* 293.15))
   @test p_x_t[:x] == x_t
   #rate increases with temperature
   @test !any(p_x_t[:x] .> p_x_d[:x])
@@ -214,12 +214,12 @@ module TestExponentialBA
   #ATTACK
   #defaults
   p_ar_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExponentialBA(:attackrate))
-  ar_d = exp.([-13.1, -13.1, 0.0]) .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- temp) ./ (k .* temp .* [293.15, 293.15, 0.0]))
+  ar_d = exp.([-13.1, -13.1, 0.0]) .* 4e6 .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- temp) ./ (k .* temp .* [293.15, 293.15, 0.0]))
   ar_d[isnan.(ar_d)] .= 0
   @test p_ar_d[:ar] == ar_d
   #change temperature
   p_ar_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, attackrate = ExponentialBA(:attackrate))
-  ar_t = exp.([-13.1, -13.1, 0.0]) .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- temp2) ./ (k .* temp2 .* [293.15, 293.15, 0.0]))
+  ar_t = exp.([-13.1, -13.1, 0.0]) .* 4e6 .* (bmass .^[-0.8, -0.8, 0.0]) .* (bmass' .^[0 -0.8 0.25; 0 0 0.25 ; 0 0 0]) .* exp.([-0.38, -0.38, 0.0] .* ([293.15, 293.15, 0.0] .- temp2) ./ (k .* temp2 .* [293.15, 293.15, 0.0]))
   ar_t[isnan.(ar_t)] .= 0
   @test p_ar_t[:ar] == ar_t
   #rate increases with temperature
@@ -237,12 +237,12 @@ module TestExponentialBA
   #HANDLING
   #defaults
   p_ht_d = model_parameters(omnivory, T = temp, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime))
-  ht_d = exp.([9.66, 9.66, 0.0]) .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- temp) ./ (k .* temp .* [293.15, 293.15, 0.0]))
+  ht_d = exp.([9.66, 9.66, 0.0]) .* 4e6 .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- temp) ./ (k .* temp .* [293.15, 293.15, 0.0]))
   ht_d[isnan.(ht_d)] .= 0
   @test p_ht_d[:ht] == ht_d
   #change temperature
   p_ht_t = model_parameters(omnivory, T = temp2, bodymass = bmass, vertebrates = metabolic_status, handlingtime = ExponentialBA(:handlingtime))
-  ht_t = exp.([9.66, 9.66, 0.0]) .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- temp2) ./ (k .* temp2 .* [293.15, 293.15, 0.0]))
+  ht_t = exp.([9.66, 9.66, 0.0]) .* 4e6 .* (bmass .^[0.47, 0.47, 0.0]) .* (bmass' .^[0.0 0.47 -0.45 ; 0 0 -0.45; 0 0 0]) .* exp.([0.26, 0.26, 0.0] .* ([293.15, 293.15, 0.0] .- temp2) ./ (k .* temp2 .* [293.15, 293.15, 0.0]))
   ht_t[isnan.(ht_t)] .= 0
   @test p_ht_t[:ht] == ht_t
   #rate decreases with temperature
