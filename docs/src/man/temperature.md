@@ -34,9 +34,7 @@ Note that rates can be negative (outside of the thermal range) when using the ex
 
 Bernhardt et al. (2018) proposed an extension of the original model of Eppley (1972). Following this extension the thermal performance curve of rate $q_i$ of species $i$ is defined by the equation:
 
-$$
-q_i(T) = M_i^\beta * m0 * exp(b * T) * (1 - (\frac{T - T_{\text{opt}}}{\text{range}/2})^2)
-$$
+$q_i(T) = M_i^\beta * m0 * exp(b * T) * (1 - (\frac{T - T_{\text{opt}}}{\text{range}/2})^2)$
 
 Where $M_i$ is the body mass of species $i$ and T is the temperature in degrees Kelvin. The default parameters values are described for each rate below.
 
@@ -79,9 +77,7 @@ p_newvalues = model_parameters(A, metabolicrate = ExtendedEppley(:metabolicrate,
 
 The Boltzmann Arrhenius model, following the Metabolic Theory in Ecology, describes the scaling of a biological rate ($q$) with temperature by:
 
-$$
-q_i(T) = q_0 * M^\beta_i * exp(E-\frac{T_0 - T}{kT_0T})
-$$
+$q_i(T) = q_0 * M^\beta_i * exp(E-\frac{T_0 - T}{kT_0T})$
 
 Where $q_0$ is the organisms state-dependent scaling coefficient, calculated for 1g at 20 degrees Celsius (273.15 degrees Kelvin), β is the rate specific allometric scaling exponent, $E$ is the activation energy in $eV$ (electronvolts) of the response, $T_0$ is the normalization temperature and $k$ is the Boltzmann constant ($8.617 10^{-5} eV.K^{-1}$). As for all other equations, $T$ is the temperature and $M_i$ is the typical adult body mass of species $i$.
 
@@ -190,15 +186,11 @@ p_newvalues = model_parameters(A, handlingtime = ExponentialBA(:handlingtime, pa
 
 To describe a more classical unimodal relationship of biological rates with temperature, one can also use the **extended** Boltzmann Arrhenius function. This is an extension based on the Johnson and Lewin model to describe the decrease in biological rates at higher temperatures (and is still based on chemical reaction kinetics).
 
-$$
-q_i(T) = exp(q_0) * M^\beta_i * exp(\frac{E}{kT * l(T)})
-$$
+$q_i(T) = exp(q_0) * M^\beta_i * exp(\frac{E}{kT * l(T)})$
 
 Where $l(T)$ is :
 
-$$
-l(T) = \frac{1}{1 + exp[\frac{-1}{kT} + (\frac{E_D}{T_{opt}} + k * ln(\frac{E}{E_D - E}))]}
-$$
+$l(T) = \frac{1}{1 + exp[\frac{-1}{kT} + (\frac{E_D}{T_{opt}} + k * ln(\frac{E}{E_D - E}))]}$
 
 #### Growth rate
 
@@ -260,8 +252,8 @@ Note: The body-mass allometric scaling (originally defined as $M_i^\beta$) becom
 
 | Parameter | Keyword                            | Meaning                              | Default values | References            |
 | --------- | ---------------------------------- | ------------------------------------ | -------------- | --------------------- |
-| $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient | $5.10^13$       | Bideault et al 2019   |
-| $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient | $5.10^13$       | Bideault et al 2019   |
+| $r_0$     | `norm_constant_invertebrate`       | growth dependent scaling coefficient | $5.10^{13}$       | Bideault et al 2019   |
+| $r_0$     | `norm_constant_vertebrate`         | growth dependent scaling coefficient | $5.10^{13}$       | Bideault et al 2019   |
 | $\beta_i$ | `β_producer`                       | allometric exponent                  | 0.25           | Gillooly et al., 2002 |
 | $\beta_i$ | `β_invertebrate`                   | allometric exponent                  | 0.25           | Gillooly et al., 2002 |
 | $\beta_i$ | `β_vertebrate`                     | allometric exponent                  | 0.25           | Gillooly et al., 2002 |
@@ -285,9 +277,7 @@ p_newvalues = model_parameters(A, attackrate = ExtendedBA(:attackrate, parameter
 
 A simple gaussian function (or inverted gaussian function depending on the rate) has also been used in studies to model the scaling of biological rates with temperature. This can be formalized by the following equation:
 
-$$
-q_i(T) = M_i^\beta * q_{opt} * exp[\pm (\frac{(T - T_{opt})^2}{2s_q^2})]
-$$
+$q_i(T) = M_i^\beta * q_{opt} * exp[\pm (\frac{(T - T_{opt})^2}{2s_q^2})]$
 
 #### Growth rate
 
@@ -412,9 +402,7 @@ If multiple keywords are provided, the model will use this order of priority: bo
 
 To simulate the effect of temperature on body masses, the model uses the following general formula, following Forster and Hirst 2012:
 
-$$
-M_i(T) = m_i * exp(log_{10}(PCM / 100 + 1) * T - 293.15)
-$$
+$M_i(T) = m_i * exp(log_{10}(PCM / 100 + 1) * T - 293.15)$
 
 Where $M_i$ is the body mass of species $i$, $T$ is the temperature (in Kelvins), $m_i$ is the body mass when there is no effect of temperature (provided by the user through `Z`, `bodymass` or `dry_mass_293`) and $PCM$ is the Percentage change in body-mass per degree Celsius. This percentage is calculated differently depending on the type of system or the type of response wanted (Forster and Hirst 2012, Sentis et al 2017):
 
