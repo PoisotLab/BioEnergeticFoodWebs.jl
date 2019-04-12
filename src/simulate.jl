@@ -55,9 +55,10 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     return minimum(integrator.u) < (100.0*eps())
   end
 
-  function remove_species!(integrator)
+  function remove_species!(integrator, parameters)
     for i in eachindex(integrator.u)
       integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
+      (integrator.u[i] < 100.0*eps()) .& (i ∉ parameters[:ε]) ? append!(parameters[:ε], i) : nothing
     end
   end
 
