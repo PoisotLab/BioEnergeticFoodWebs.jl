@@ -1,6 +1,5 @@
 function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
   S = size(parameters[:A], 1)
-  append!(parameters[:tmpA], [parameters[:A]])
 
   if parameters[:rewire_method] == :ADBM
     extinct = findall(biomass .< 100*eps())
@@ -8,6 +7,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
       if i ∉ parameters[:extinctions]
         append!(parameters[:extinctions], i) ;
         append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
       end
     end
     sort!(parameters[:extinctions])
@@ -27,6 +27,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
       if i ∉ parameters[:extinctions]
         append!(parameters[:extinctions], i) ;
         append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
       end
     end
     sort!(parameters[:extinctions])
@@ -52,6 +53,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
       if i ∉ parameters[:extinctions]
         append!(parameters[:extinctions], i) ;
         append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
       end
     end
     sort!(parameters[:extinctions])
