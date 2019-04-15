@@ -3,11 +3,13 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
   append!(parameters[:tmpA], [parameters[:A]])
 
   if parameters[:rewire_method] == :ADBM
-    #add extinction
-    workingBiomass = deepcopy(biomass)
-    deleteat!(workingBiomass,parameters[:extinctions])
-    append!(parameters[:extinctions],findmin(workingBiomass)[2])
-    append!(parameters[:extinctionstime], (t, findmin(workingBiomass)[2]))
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+      end
+    end
     sort!(parameters[:extinctions])
 
     #assign new array
@@ -20,10 +22,13 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
 
   elseif parameters[:rewire_method] == :Gilljam
     #add extinction
-    workingBiomass = deepcopy(biomass)
-    deleteat!(workingBiomass,parameters[:extinctions])
-    append!(parameters[:extinctions],findmin(workingBiomass)[2])
-    append!(parameters[:extinctionstime], (t, findmin(workingBiomass)[2]))
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+      end
+    end
     sort!(parameters[:extinctions])
 
     #assign new array and update costs
@@ -42,10 +47,13 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
 
   elseif parameters[:rewire_method] == :stan
     #add extinction
-    workingBiomass = deepcopy(biomass)
-    deleteat!(workingBiomass,parameters[:extinctions])
-    id_Ɛ = findmin(workingBiomass)[2]
-    append!(parameters[:extinctions], id_Ɛ)
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+      end
+    end
     sort!(parameters[:extinctions])
 
     parameters[:A] = Staniczenko_rewire(parameters)
