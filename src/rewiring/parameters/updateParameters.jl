@@ -1,7 +1,15 @@
-function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
+function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
   S = size(parameters[:A], 1)
+  append!(parameters[:tmpA], [parameters[:A]])
 
   if parameters[:rewire_method] == :ADBM
+    #add extinction
+    workingBiomass = deepcopy(biomass)
+    deleteat!(workingBiomass,parameters[:extinctions])
+    append!(parameters[:extinctions],findmin(workingBiomass)[2])
+    append!(parameters[:extinctionstime], (t, findmin(workingBiomass)[2]))
+    sort!(parameters[:extinctions])
+
     #assign new array
     parameters[:A] = ADBM(S,parameters,biomass)
 
@@ -15,6 +23,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
     workingBiomass = deepcopy(biomass)
     deleteat!(workingBiomass,parameters[:extinctions])
     append!(parameters[:extinctions],findmin(workingBiomass)[2])
+    append!(parameters[:extinctionstime], (t, findmin(workingBiomass)[2]))
     sort!(parameters[:extinctions])
 
     #assign new array and update costs

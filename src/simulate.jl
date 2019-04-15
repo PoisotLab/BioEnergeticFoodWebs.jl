@@ -55,16 +55,15 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     return minimum(integrator.u) < (100.0*eps())
   end
 
-  function remove_species!(integrator, parameters)
+  function remove_species!(integrator)
     for i in eachindex(integrator.u)
       integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
-      (integrator.u[i] < 100.0*eps()) .& (i ∉ parameters[:ε]) ? append!(parameters[:ε], i) : nothing
     end
   end
 
   function remove_species_and_rewire!(integrator)
     remove_species!(integrator)
-    parameters = update_rewiring_parameters(parameters, integrator.u)
+    parameters = update_rewiring_parameters(parameters, integrator.u, integrator.t)
   end
 
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!

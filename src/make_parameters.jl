@@ -220,6 +220,9 @@ function model_parameters(A;
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     parameters[:rewire_method] = rewire_method
+    parameters[:extinctions] = []
+    parameters[:extinctionstime] = []
+    parameters[:tmpA] = []
  else
     error("Invalid method for rewiring -- must be :stan, :ADBM, :Gilljam or :none")
  end
