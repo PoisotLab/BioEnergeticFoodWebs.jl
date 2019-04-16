@@ -66,7 +66,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     end
   end
 
-  function remove_species_and_rewire!(integrator, parameters)
+  function remove_species_and_rewire!(integrator)
     remove_species!(integrator)
     if parameters[:productivity] == :nutrients
       working_biomass = integrator.u[1:end-2]
