@@ -48,7 +48,7 @@ function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
   profit = E ./ H[j,:]
   # Setting profit of species with zero biomass  to -1.0
   # This prevents them being included in the profitSort
-  profit[biomass .== 0.0] .= -1.0
+  profit[vec(biomass .== 0.0)] .= -1.0
 
   profs = sortperm(profit,rev = true)
 

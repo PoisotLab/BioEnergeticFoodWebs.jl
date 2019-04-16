@@ -1,7 +1,17 @@
-function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
+function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
   S = size(parameters[:A], 1)
 
   if parameters[:rewire_method] == :ADBM
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
+      end
+    end
+    sort!(parameters[:extinctions])
+
     #assign new array
     parameters[:A] = ADBM(S,parameters,biomass)
 
@@ -12,9 +22,14 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
 
   elseif parameters[:rewire_method] == :Gilljam
     #add extinction
-    workingBiomass = deepcopy(biomass)
-    deleteat!(workingBiomass,parameters[:extinctions])
-    append!(parameters[:extinctions],findmin(workingBiomass)[2])
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
+      end
+    end
     sort!(parameters[:extinctions])
 
     #assign new array and update costs
@@ -33,10 +48,14 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass)
 
   elseif parameters[:rewire_method] == :stan
     #add extinction
-    workingBiomass = deepcopy(biomass)
-    deleteat!(workingBiomass,parameters[:extinctions])
-    id_Ɛ = findmin(workingBiomass)[2]
-    append!(parameters[:extinctions], id_Ɛ)
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
+      end
+    end
     sort!(parameters[:extinctions])
 
     parameters[:A] = Staniczenko_rewire(parameters)

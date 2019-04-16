@@ -63,7 +63,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   function remove_species_and_rewire!(integrator)
     remove_species!(integrator)
-    parameters = update_rewiring_parameters(parameters, integrator.u)
+    parameters = update_rewiring_parameters(parameters, integrator.u, integrator.t)
   end
 
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!

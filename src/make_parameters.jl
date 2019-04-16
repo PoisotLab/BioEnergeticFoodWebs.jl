@@ -220,6 +220,9 @@ function model_parameters(A;
 
  if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
     parameters[:rewire_method] = rewire_method
+    parameters[:extinctions] = []
+    parameters[:extinctionstime] = []
+    parameters[:tmpA] = []
  else
     error("Invalid method for rewiring -- must be :stan, :ADBM, :Gilljam or :none")
  end
@@ -228,8 +231,8 @@ function model_parameters(A;
      adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
  elseif rewire_method == :Gilljam
      gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
- elseif rewire_method == :stan
-     parameters[:extinctions] = Array{Int,1}()
+ #elseif rewire_method == :stan
+     #parameters[:extinctions] = Array{Int,1}()
  end
  check_rewiring_parameters(parameters, parameters[:rewire_method])
 
@@ -381,7 +384,7 @@ function preference_parameters(cost, specialistPrefMag, A, preferenceMethod)
   preference_parameters = Dict{Symbol,Any}(:similarity => similarity_indexes,
                                           :cost       => cost,
                                           :specialistPrefMag => specialistPrefMag,
-                                          :extinctions => Array{Int,1}(),
+                                          #:extinctions => Array{Int,1}(),
                                           :costMat => ones(Float64,(S,S)),
                                           :preferenceMethod => preferenceMethod)
   return(preference_parameters)
@@ -399,7 +402,7 @@ function gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMetho
   end
   parameters[:similarity] = rewireP[:similarity]
   parameters[:specialistPrefMag] = rewireP[:specialistPrefMag]
-  parameters[:extinctions] = rewireP[:extinctions]
+  #parameters[:extinctions] = rewireP[:extinctions]
   parameters[:preferenceMethod] = rewireP[:preferenceMethod]
   parameters[:cost] = rewireP[:cost]
   parameters[:costMat] = rewireP[:costMat]
