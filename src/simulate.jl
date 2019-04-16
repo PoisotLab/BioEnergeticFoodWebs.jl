@@ -52,7 +52,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
   function species_under_extinction_threshold(u, t, integrator, parameters)
-    if parameters[:productivity] = :nutrients
+    if parameters[:productivity] == :nutrients
       working_biomass = integrator.u[1:end-2]
     else
       working_biomass = integrator.u
@@ -68,7 +68,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   function remove_species_and_rewire!(integrator, parameters)
     remove_species!(integrator)
-    if parameters[:productivity] = :nutrients
+    if parameters[:productivity] == :nutrients
       working_biomass = integrator.u[1:end-2]
     else
       working_biomass = integrator.u
