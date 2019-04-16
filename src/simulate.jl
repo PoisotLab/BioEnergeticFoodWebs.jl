@@ -51,13 +51,13 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
-  function species_under_extinction_threshold(u, t, integrator, parameters)
-    if parameters[:productivity] == :nutrients
-      working_biomass = integrator.u[1:end-2]
-    else
-      working_biomass = integrator.u
-    end
+  function species_under_extinction_threshold_nutrients(u, t, integrator)
+    working_biomass = integrator.u[1:end-2]
     return minimum(working_biomass) < (100.0*eps())
+  end
+
+  function species_under_extinction_threshold(u, t, integrator)
+    return minimum(integrator.u) < (100.0*eps())
   end
 
   function remove_species!(integrator)
@@ -76,8 +76,9 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     parameters = update_rewiring_parameters(parameters, working_biomass, integrator.t)
   end
 
+  cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  extinction_callback = DiscreteCallback(species_under_extinction_threshold, affect_function; save_positions=(false,false))
+  extinction_callback = DiscreteCallback(cb, affect_function; save_positions=(false,false))
 
   sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
 
