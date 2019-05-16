@@ -60,14 +60,19 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     return minimum(integrator.u) < (100.0*eps())
   end
 
+  const t_rewiring = parameters[:rewire_method] == :ADBM_interval ? float.(start:parameters[:adbm_rewiring_frequency]:stop) : nothing
+
+  function fixed_interval_rewiring(u, t, integrator)
+    return integrator.t in t_rewiring
+  end
+
   function remove_species!(integrator)
     for i in eachindex(integrator.u)
       integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
     end
   end
 
-  function remove_species_and_rewire!(integrator)
-    remove_species!(integrator)
+  function rewire!(integrator)
     if parameters[:productivity] == :nutrients
       working_biomass = integrator.u[1:end-2]
     else
@@ -76,11 +81,22 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     parameters = update_rewiring_parameters(parameters, working_biomass, integrator.t)
   end
 
-  cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
-  affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  extinction_callback = DiscreteCallback(cb, affect_function; save_positions=(false,false))
+  function remove_species_and_rewire!(integrator)
+    remove_species!(integrator)
+    rewire!(integrator)
+  end
 
-  sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
+  if parameters[:rewire_method] == :ADBM_interval
+    cond = fixed_interval_rewiring
+    affect_function = rewire!
+  else
+    cond = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
+    affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
+  end
+
+  extinction_callback = DiscreteCallback(cond, affect_function; save_positions=(false,false))
+
+  sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true, tstops = t_rewiring)
 
   B = hcat(sol.u...)'
 
