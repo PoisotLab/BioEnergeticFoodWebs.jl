@@ -104,11 +104,6 @@ function fill_xyb_matrix!(xyb, biomass, x, y)
       xyb[j] = 0
     end
   end
-    for j in eachindex(xyb)
-      if xyb[j] == NaN
-        xyb[j] = 0
-      end
-  end
 end
 
 function update_F_matrix!(F, xyb)
