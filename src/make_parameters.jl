@@ -110,8 +110,8 @@ function model_parameters(A;
         growthrate::Function = NoEffectTemperature(:growth),
         dry_mass_293::Array{Float64, 1}=[0.0],
         TSR_type::Symbol = :no_response,
-        forceNaNto0::Bool = false,
-        is_unstable::Bool = false)
+        forceNaNto0::Bool = false
+        )
 
   check_food_web(A)
 
@@ -311,6 +311,8 @@ function model_parameters(A;
   parameters[:np] = sum(parameters[:is_producer])
   parameters[:ar] = attack_r
   parameters[:r] = r
+  parameters[:forceNaNto0] = forceNaNto0
+  parameters[:is_unstable] = false
 
 
   check_parameters(parameters)
