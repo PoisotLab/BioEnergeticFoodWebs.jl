@@ -153,7 +153,7 @@ This function is the one wrapped by the various integration routines. Based on a
 timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
-function dBdt2(derivative, biomass, parameters::Dict{Symbol,Any}, t)
+function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   S = size(parameters[:A], 1)
 
   # producer growth if NP model
@@ -166,21 +166,26 @@ function dBdt2(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   end
 
   # Consumption
-  gain, loss = BioEnergeticFoodWebs.consumption(parameters, biomass)
+  gain, loss = consumption(parameters, biomass)
 
   # Growth
-  growth, G = BioEnergeticFoodWebs.get_growth(parameters, biomass; c = nutrients)
+  growth, G = get_growth(parameters, biomass; c = nutrients)
 
   # Balance
   dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
     balance = growth[i] + gain[i] - loss[i]
-    dbdt[i] = !isnan(balance) ? balance : 0.0
+    if p[:forceNaNto0]
+      dbdt[i] = !isnan(balance) ? balance : 0.0
+      p[:is_unstable] = isnan(balance) ? true : false
+    else
+      dbdt[i] = balance
+    end
   end
 
-  parameters[:productivity] == :nutrients && append!(dbdt, BioEnergeticFoodWebs.nutrientuptake(parameters, biomass, nutrients, G))
+  parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
-    derivative[i] = !isnan(dbdt[i]) ? dbdt[i] : 0.0
+    derivative[i] = dbdt[i]
   end
   return dbdt
 end

@@ -109,7 +109,9 @@ function model_parameters(A;
         metabolicrate::Function = NoEffectTemperature(:metabolism),
         growthrate::Function = NoEffectTemperature(:growth),
         dry_mass_293::Array{Float64, 1}=[0.0],
-        TSR_type::Symbol = :no_response)
+        TSR_type::Symbol = :no_response,
+        forceNaNto0::Bool = false,
+        is_unstable::Bool = false)
 
   check_food_web(A)
 
