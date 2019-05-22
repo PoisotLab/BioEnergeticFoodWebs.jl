@@ -175,9 +175,9 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
     balance = growth[i] + gain[i] - loss[i]
-    if p[:forceNaNto0]
+    if parameters[:forceNaNto0]
       dbdt[i] = !isnan(balance) ? balance : 0.0
-      p[:is_unstable] = isnan(balance) ? true : false
+      parameters[:is_unstable] = isnan(balance) ? true : false
     else
       dbdt[i] = balance
     end
