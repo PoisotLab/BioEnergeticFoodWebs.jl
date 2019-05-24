@@ -49,21 +49,35 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt, biomass, tspan, parameters)
+  prob = ODEProblem(BioEnergeticFoodWebs.dBdt, biomass, tspan, parameters)
+
+  ϵ = []
 
   function species_under_extinction_threshold_nutrients(u, t, integrator)
     working_biomass = integrator.u[1:end-2]
-    return minimum(working_biomass) < (100.0*eps())
+    return minimum(working_biomass)
   end
 
   function species_under_extinction_threshold(u, t, integrator)
-    return minimum(integrator.u) < (100.0*eps())
+    workingbm = deepcopy(u)
+    deleteat!(workingbm, ϵ)
+    #println(minimum(workingbm))
+    cond = any(x -> x < 100*eps(), workingbm) ? 0.0 : 1.0
+    return cond
   end
 
   function remove_species!(integrator)
-    for i in eachindex(integrator.u)
-      integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
-    end
+    println(integrator.t)
+    u = integrator.u
+    workingbm = deepcopy(u)
+    deleteat!(workingbm, ϵ)
+    idϵ = findall(x -> x < 100*eps(), workingbm)
+    append!(ϵ,idϵ)
+    u[idϵ] .= 0.0
+    # for i in eachindex(u)
+    #   u[i] = u[i] < 1e-10 ? 0.0 : u[i]
+    # end
+    nothing
   end
 
   function remove_species_and_rewire!(integrator)
@@ -78,9 +92,9 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  extinction_callback = DiscreteCallback(cb, affect_function; save_positions=(false,false))
+  extinction_callback = ContinuousCallback(species_under_extinction_threshold, remove_species!, abstol = eps())
 
-  sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
+  sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
 
   B = hcat(sol.u...)'
 
