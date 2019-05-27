@@ -83,6 +83,7 @@ function model_parameters(A;
         bodymass::Array{Float64, 1}=[0.0],
         vertebrates::Array{Bool, 1}=[false],
         rewire_method = :none,
+        adbm_rewiring_frequency::Int64 = 100,
         e::Float64 = 1.0,
         a_adbm::Float64 = 0.0189,
         ai::Float64 = -0.491,
@@ -218,7 +219,7 @@ function model_parameters(A;
 
   # Step 8 -- rewire method
 
- if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
+ if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam, :ADBM_interval]
     parameters[:rewire_method] = rewire_method
     parameters[:extinctions] = []
     parameters[:extinctionstime] = []
