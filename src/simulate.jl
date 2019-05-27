@@ -60,12 +60,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     return minimum(integrator.u) < (100.0*eps())
   end
 
-  const t_rewiring = parameters[:rewire_method] == :ADBM_interval ? float.(start:parameters[:adbm_rewiring_frequency]:stop) : nothing
-
-  function fixed_interval_rewiring(u, t, integrator)
-    return integrator.t in t_rewiring
-  end
-
   function remove_species!(integrator)
     for i in eachindex(integrator.u)
       integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
