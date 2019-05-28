@@ -77,7 +77,7 @@ end
 function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}, h::Float64; rewire::Bool=false, costMat=nothing)
   for i in eachindex(biomass), j in eachindex(biomass)
     workingbm = isapprox(biomass[j], 0, atol = 1e-5) ? 0.0 : deepcopy(biomass[j])
-    @inbounds bm_matrix[i,j] = w[i,j] * (workingbm[j] .^ h) * A[i,j]
+    @inbounds bm_matrix[i,j] = w[i,j] * (workingbm .^ h) * A[i,j]
     if rewire
       bm_matrix[i,j] *= costMat[i,j]
     end
