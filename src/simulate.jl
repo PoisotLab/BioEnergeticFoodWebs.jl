@@ -31,7 +31,7 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff)
+function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff, cb_interp_points::Int64=100, extinction_threshold::Float64=1e-6)
   @assert stop > start
   @assert length(biomass) == size(parameters[:A],1)
   @assert length(concentration) == 2
@@ -49,38 +49,54 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt, biomass, tspan, parameters)
+  prob = ODEProblem(BioEnergeticFoodWebs.dBdt, biomass, tspan, parameters)
+
+  ϵ = []
 
   function species_under_extinction_threshold_nutrients(u, t, integrator)
-    working_biomass = integrator.u[1:end-2]
-    return minimum(working_biomass) < (100.0*eps())
+    workingbm = deepcopy(integrator.u[1:end-2])
+    sort!(ϵ)
+    deleteat!(workingbm, unique(ϵ))
+    cond = any(x -> x < extinction_threshold, workingbm) ? 0.0 : 1.0
+    return cond
   end
 
   function species_under_extinction_threshold(u, t, integrator)
-    return minimum(integrator.u) < (100.0*eps())
+    workingbm = deepcopy(u)
+    sort!(ϵ)
+    deleteat!(workingbm, unique(ϵ))
+    cond = any(x -> x < extinction_threshold, workingbm) ? -0.0 : 1.0
+    return cond
   end
 
   function remove_species!(integrator)
-    for i in eachindex(integrator.u)
-      integrator.u[i] = integrator.u[i] < 100.0*eps() ? 0.0 : integrator.u[i]
+    u = integrator.u
+    idϵ = findall(x -> x < extinction_threshold, u)
+    for e in idϵ
+        if !(e ∈ ϵ)
+            u[e] = 0.0
+            append!(ϵ,e)
+        end
     end
+    sort!(ϵ)
+    nothing
   end
 
   function remove_species_and_rewire!(integrator)
     remove_species!(integrator)
     if parameters[:productivity] == :nutrients
-      working_biomass = integrator.u[1:end-2]
+      workingbm = deepcopy(integrator.u[1:end-2])
     else
-      working_biomass = integrator.u
+      workingbm = deepcopy(integrator.u)
     end
-    parameters = update_rewiring_parameters(parameters, working_biomass, integrator.t)
+    parameters = update_rewiring_parameters(parameters, workingbm, integrator.t)
   end
 
   cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  extinction_callback = DiscreteCallback(cb, affect_function; save_positions=(false,false))
+  extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
 
-  sol = solve(prob, alg, callback = CallbackSet(PositiveDomain(), extinction_callback), saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=true)
+  sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
 
   B = hcat(sol.u...)'
 
