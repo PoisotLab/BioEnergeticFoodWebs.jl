@@ -1,4 +1,4 @@
-module TestADBM_ratio
+module TestADBM_Nmethod
     using BioEnergeticFoodWebs
     using Test
 
@@ -36,7 +36,7 @@ module TestADBM_ratio
 
 end
 
-module TestADBM_power
+module TestADBM_Hmethod
     using BioEnergeticFoodWebs
     using Test
 
@@ -71,12 +71,6 @@ module TestADBM_power
     @test all(isapprox.(ADBMterms_bm[:λ],λ_bm,atol = 0.001))
     E_bm = [1.0, 31.6228, 316.228]
     @test all(isapprox.(ADBMterms_bm[:E],E_bm,atol = 0.001))
-
-end
-
-module TestADBM_power
-    using BioEnergeticFoodWebs
-    using Test
 
     #Testing ADBM
     S = 5
