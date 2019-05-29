@@ -30,7 +30,7 @@ module TestSimulateExtinctions
   #nutrients and passed extinction threshold
   passed_extinction_threshold = 100*eps()
   tolerated_values = passed_extinction_threshold * 0.1
-  s_nutrients = simulate2(p_nutrients, b, extinction_threshold = passed_extinction_threshold)
+  s_nutrients = simulate(p_nutrients, b, extinction_threshold = passed_extinction_threshold)
   @test sum((s_nutrients[:B][:,2] .< tolerated_values) .& (s_nutrients[:B][:,2] .> 0.0)) == 0
-  
+
 end
