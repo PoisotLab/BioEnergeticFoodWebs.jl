@@ -53,13 +53,13 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   ϵ = []
 
-  function species_under_extinction_threshold_nutrients(u, t, integrator)
-    workingbm = deepcopy(integrator.u[1:end-2])
-    sort!(ϵ)
-    deleteat!(workingbm, unique(ϵ))
-    cond = any(x -> x < extinction_threshold, workingbm) ? 0.0 : 1.0
-    return cond
-  end
+  # function species_under_extinction_threshold_nutrients(u, t, integrator)
+  #   workingbm = deepcopy(integrator.u[1:end-2])
+  #   sort!(ϵ)
+  #   deleteat!(workingbm, unique(ϵ))
+  #   cond = any(x -> x < extinction_threshold, workingbm) ? 0.0 : 1.0
+  #   return cond
+  # end
 
   function species_under_extinction_threshold(u, t, integrator)
     workingbm = deepcopy(u)
@@ -92,7 +92,8 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     parameters = update_rewiring_parameters(parameters, workingbm, integrator.t)
   end
 
-  cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
+  # cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
+  cb = species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
   extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
 
