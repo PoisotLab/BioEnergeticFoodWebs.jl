@@ -15,7 +15,9 @@ test_files = [
     "rewiring/StaniczenkoRewire.jl",
     "consumption.jl",
     "biological_rates.jl",
-    "temperature_size.jl"
+    "temperature_size.jl",
+    "productivity.jl",
+    "extinctions.jl"
 ]
 
 test_n = 1
