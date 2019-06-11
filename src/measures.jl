@@ -194,7 +194,7 @@ function producer_growth(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Sy
         gr = map(x -> get_growth(parameters,x), measure_on_mat)
         growth = hcat(map(x -> x[1], gr)...)'
     end
-    growth[:,.!parameters[:is_producer]] = 0.0
+    growth[:,.!parameters[:is_producer]] .= 0.0
     if out_type == :all #return all growth rates (each producer at each time step)
         return growth
     elseif out_type == :mean #return the producers mean growth rate over the last `last` time steps
