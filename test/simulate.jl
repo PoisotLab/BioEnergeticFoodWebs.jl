@@ -33,28 +33,28 @@ module TestSimulateSanityCheck
   # A producer with no predation reaches K
   free_producers = [0 1 0 0; 0 0 1 0; 0 0 0 0; 0 0 0 0]
   parameters = free_producers |> model_parameters
-  n = rand(4)
+  bm = rand(4)
 
-  s = simulate(parameters, n, start=0, stop=25)
+  s = simulate(parameters, bm, start=0, stop=25)
   @test s[:B][end,4] ≈ parameters[:K] atol=0.002
 
   # Using system-wide regulation, producers with no consumption reach K / n
   A = zeros(Int64, (4, 4))
   parameters = model_parameters(A, productivity=:system)
-  n = rand(4)
-  s = simulate(parameters, n, start=0, stop=15)
+  bm = rand(4)
+  s = simulate(parameters, bm, start=0, stop=15)
   @test s[:B][end,4] ≈ parameters[:K]/4 atol=0.001
 
   # A consumer with a resource with 0 biomass goes extinct
   A = [0 1; 0 0]
   parameters = A |> model_parameters
-  n = vec([1.0, 0.0])
+  bm = vec([1.0, 0.0])
 
   # s = simulate(p, n, start=0, stop=50, use=:stiff)
   # @test_approx_eq_eps s[:B][end,1] 0.0 0.001
   # @test_approx_eq_eps s[:B][end,2] 0.0 0.001
 
-  s = simulate(parameters, n, start=0, stop=50)
+  s = simulate(parameters, bm, start=0, stop=50)
   @test s[:B][end,1] ≈ .0 atol=0.001
   @test s[:B][end,2] ≈ 0.0 atol=0.001
 
