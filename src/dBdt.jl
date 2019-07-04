@@ -155,7 +155,6 @@ timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
 function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
-  println(biomass)
   S = size(parameters[:A], 1)
 
   # producer growth if NP model
