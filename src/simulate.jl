@@ -79,7 +79,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
         end
     end
     sort!(ϵ)
-    nothing
   end
 
   function remove_species_and_rewire!(integrator)

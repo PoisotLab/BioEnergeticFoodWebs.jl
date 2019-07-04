@@ -35,8 +35,8 @@ module TestSimulateSanityCheck
   parameters = free_producers |> model_parameters
   bm = rand(4)
 
-  # s = simulate(parameters, bm, start=0, stop=25)
-  # @test s[:B][end,4] ≈ parameters[:K] atol=0.002
+  s = simulate(parameters, bm, start=0, stop=25)
+  @test s[:B][end,4] ≈ parameters[:K] atol=0.002
 
   # Using system-wide regulation, producers with no consumption reach K / n
   A = zeros(Int64, (4, 4))
