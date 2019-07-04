@@ -95,7 +95,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
   extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
-  println("passed callback")
   sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
 
   B = hcat(sol.u...)'
