@@ -49,7 +49,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(dBdt2, biomass, tspan, parameters)
+  prob = ODEProblem(BioEnergeticFoodWebs.dBdt, biomass, tspan, parameters)
 
   ϵ = []
 
@@ -62,7 +62,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   function species_under_extinction_threshold(u, t, integrator)
-    workingbm = deepcopy(u[1:S])
+    workingbm = deepcopy(u)
     sort!(ϵ)
     deleteat!(workingbm, unique(ϵ))
     cond = any(x -> x < extinction_threshold, workingbm) ? -0.0 : 1.0
@@ -71,11 +71,10 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   function remove_species!(integrator)
     u = integrator.u
-    idϵ = findall(x -> x < extinction_threshold, u[1:end-2])
-    println((integrator.t, idϵ))
+    idϵ = findall(x -> x < extinction_threshold, u)
     for e in idϵ
-        u[e] = 0.0
         if !(e ∈ ϵ)
+            u[e] = 0.0
             append!(ϵ,e)
         end
     end

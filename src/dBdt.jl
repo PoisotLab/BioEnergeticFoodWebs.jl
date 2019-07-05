@@ -76,7 +76,8 @@ end
 
 function fill_bm_matrix!(bm_matrix::Matrix{Float64}, biomass::Vector{Float64}, w::Matrix{Float64}, A::Matrix{Int64}, h::Float64; rewire::Bool=false, costMat=nothing)
   for i in eachindex(biomass), j in eachindex(biomass)
-    @inbounds bm_matrix[i,j] = w[i,j] * (biomass[j] .^ h) * A[i,j]
+    workingbm = isapprox(biomass[j], 0, atol = 1e-5) ? 0.0 : deepcopy(biomass[j])
+    @inbounds bm_matrix[i,j] = w[i,j] * (workingbm .^ h) * A[i,j]
     if rewire
       bm_matrix[i,j] *= costMat[i,j]
     end
@@ -179,7 +180,7 @@ function dBdt2(derivative, biomass, parameters::Dict{Symbol,Any}, t)
 
   parameters[:productivity] == :nutrients && append!(dbdt, BioEnergeticFoodWebs.nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
-    derivative[i] = dbdt[i]
+    derivative[i] = dbdt[i] #this test is necessary even with the callback in place for the very steep changes
   end
   return dbdt
 end

@@ -55,6 +55,28 @@ module TestDefault
   @test p[:Γ] == hsc
   @test p[:Γ] == [0.8, 0.8, 0.0]
 
+  # NORMALISATION
+  p_norm = model_parameters(food_chain, vertebrates = metab_status,
+                       handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = (y_vertebrate = 3.0, y_invertebrate = 7.0)),
+                       attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8,)),
+                       metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = (a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
+                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0,)),
+                       scale_growth = true,
+                       scale_maxcons = true,
+                       scale_metabolism = true)
+  rspp = 2.0
+  @test p_norm[:r] == [2.0, 2.0, 2.0] ./ rspp
+  # metabolic rates
+  @test p_norm[:x] == [a_vertebrate, a_invertebrate, a_producer] ./ rspp
+  # maximum consumption rate
+  @test p_norm[:y] == [y_vertebrate, y_invertebrate, y_producer] ./ [a_vertebrate, a_invertebrate, a_producer]
+  # handling time
+  # attack rate
+  @test p_norm[:ar] == 1 ./ (0.8 * p[:ht])
+  # half saturation constant
+  @test p_norm[:Γ] == hsc
+  @test p_norm[:Γ] == [0.8, 0.8, 0.0]
+
   # Different temperatures, same rates
   temp2 = 293.15
   p2 = model_parameters(food_chain, T = temp2, vertebrates = metab_status,

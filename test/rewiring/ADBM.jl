@@ -74,7 +74,7 @@ module TestADBM_power
 
 end
 
-module TestADBM_power
+module TestADBM_power_ratio
     using BioEnergeticFoodWebs
     using Test
 
