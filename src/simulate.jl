@@ -49,7 +49,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(BioEnergeticFoodWebs.dBdt, biomass, tspan, parameters)
+  prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
   ϵ = []
 
