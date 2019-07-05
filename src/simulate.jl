@@ -42,7 +42,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   @assert use ∈ vec([:stiff :nonstiff])
   alg = use == :stiff ? Rodas4(autodiff=false) : Tsit5()
 
-  const S = size(parameters[:A], 1)
+  S = size(parameters[:A], 1)
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
