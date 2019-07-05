@@ -49,15 +49,15 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   t_keep = collect(start:0.25:stop)
 
   # Perform the actual integration
-  prob = ODEProblem(BioEnergeticFoodWebs.dBdt, biomass, tspan, parameters)
+  prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
   ϵ = []
 
   function species_under_extinction_threshold_nutrients(u, t, integrator)
-    workingbm = deepcopy(integrator.u[1:end-2])
+    workingbm = deepcopy(u[1:end-2])
     sort!(ϵ)
     deleteat!(workingbm, unique(ϵ))
-    cond = any(x -> x < extinction_threshold, workingbm) ? 0.0 : 1.0
+    cond = any(x -> x < extinction_threshold, workingbm) ? -0.0 : 1.0
     return cond
   end
 
@@ -92,9 +92,19 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     parameters = update_rewiring_parameters(parameters, workingbm, integrator.t)
   end
 
-  cb = parameters[:productivity] == :nutrients ? species_under_extinction_threshold_nutrients : species_under_extinction_threshold
+  cb = species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+  if parameters[:rewire_method] == :ADBM
+    if parameters[:adbm_trigger] == :interval
+      Δt = parameters[:adbm_interval]
+      extinction_callback = PeriodicCallback(affect_function, Δt)
+    else
+      extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+    end
+  else
+    extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+  end
+
   sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
 
   B = hcat(sol.u...)'
@@ -113,6 +123,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       :B => B)
   end
 
-  return output
+return output
 
 end
