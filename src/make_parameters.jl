@@ -108,6 +108,7 @@ function model_parameters(A;
         attackrate::Function = NoEffectTemperature(:attackrate),
         metabolicrate::Function = NoEffectTemperature(:metabolism),
         growthrate::Function = NoEffectTemperature(:growth),
+        scale_maxcons::Bool = false,
         dry_mass_293::Array{Float64, 1}=[0.0],
         TSR_type::Symbol = :no_response)
 
@@ -271,25 +272,30 @@ function model_parameters(A;
   # a[.!parameters[:vertebrates]] = parameters[:a_invertebrate]
   # a[is_producer] = parameters[:a_producer]
 
-  # Step 12 -- Metabolic rate
+  # Step 12 -- Growth rate
   m_producer = minimum(parameters[:bodymass][is_producer])
   parameters[:m_producer] = m_producer
-  body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
-  # body_size_scaled = body_size_relative.^-0.25
-  x = metabolicrate(body_size_relative, T, parameters)
+  #body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
+  r = growthrate(parameters[:bodymass], T, parameters)
+  rspp = r[sortperm(parameters[:bodymass])[1]]
+  r_scaled = r ./ rspp
+  parameters[:r] = r_scaled
 
-  # Step 13 -- Growth rate
-  r = growthrate(body_size_relative, T, parameters)
+  # Step 13 -- Metabolic rate
+  x = metabolicrate(parameters[:bodymass], T, parameters)
+  x_scaled = x ./ rspp
+  parameters[:x] = x_scaled
 
   # Step 14 -- Handling time
-  handling_t = handlingtime(body_size_relative, T, parameters)
+  handling_t = handlingtime(parameters[:bodymass], T, parameters)
   parameters[:ht] = handling_t
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 ./ handling_t
+  parameters[:y] = scale_maxcons == true ? y ./ x : y
 
   # Step 15 -- Attack rate
-  attack_r = attackrate(body_size_relative, T, parameters)
+  attack_r = attackrate(parameters[:bodymass], T, parameters)
 
   # Step 17 -- Half-saturation constant
   Γ = 1 ./ (attack_r .* handling_t)
@@ -302,13 +308,11 @@ function model_parameters(A;
   # Final Step -- store the parameters in the dict. p
   #parameters[:efficiency] = efficiency
   parameters[:y] = y
-  parameters[:x] = x
   #parameters[:a] = a
   #parameters[:is_herbivore] = is_herbivore
   parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
   parameters[:ar] = attack_r
-  parameters[:r] = r
 
 
   check_parameters(parameters)
