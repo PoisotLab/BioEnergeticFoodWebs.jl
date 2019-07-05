@@ -94,11 +94,15 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   cb = species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  if parameters[:adbm_trigger] == :extinction
-    extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+  if parameters[:rewire_method] == :ADBM
+    if parameters[:adbm_trigger] == :interval
+      Δt = parameters[:adbm_interval]
+      extinction_callback = PeriodicCallback(affect_function, Δt)
+    else
+      extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+    end
   else
-    Δt = parameters[:adbm_interval]
-    extinction_callback = PeriodicCallback(affect_function, Δt)
+    extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
   end
 
   sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
