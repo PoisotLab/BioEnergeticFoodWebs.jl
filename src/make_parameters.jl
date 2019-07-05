@@ -108,7 +108,7 @@ function model_parameters(A;
         attackrate::Function = NoEffectTemperature(:attackrate),
         metabolicrate::Function = NoEffectTemperature(:metabolism),
         growthrate::Function = NoEffectTemperature(:growth),
-        scale_maxcons::Bool = false,
+        scale_biological_rates::Bool = false,
         dry_mass_293::Array{Float64, 1}=[0.0],
         TSR_type::Symbol = :no_response)
 
@@ -279,12 +279,12 @@ function model_parameters(A;
   r = growthrate(parameters[:bodymass], T, parameters)
   rspp = r[sortperm(parameters[:bodymass])[1]]
   r_scaled = r ./ rspp
-  parameters[:r] = r_scaled
+  parameters[:r] = scale_biological_rates ? r_scaled : r
 
   # Step 13 -- Metabolic rate
   x = metabolicrate(parameters[:bodymass], T, parameters)
   x_scaled = x ./ rspp
-  parameters[:x] = x_scaled
+  parameters[:x] = scale_biological_rates ? x_scaled : x
 
   # Step 14 -- Handling time
   handling_t = handlingtime(parameters[:bodymass], T, parameters)
@@ -292,7 +292,7 @@ function model_parameters(A;
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 ./ handling_t
-  parameters[:y] = scale_maxcons == true ? y ./ x : y
+  parameters[:y] = scale_biological_rates == true ? y ./ x : y
 
   # Step 15 -- Attack rate
   attack_r = attackrate(parameters[:bodymass], T, parameters)
@@ -307,7 +307,6 @@ function model_parameters(A;
 
   # Final Step -- store the parameters in the dict. p
   #parameters[:efficiency] = efficiency
-  parameters[:y] = y
   #parameters[:a] = a
   #parameters[:is_herbivore] = is_herbivore
   parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
