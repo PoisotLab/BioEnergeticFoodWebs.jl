@@ -83,6 +83,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   function remove_species_and_rewire!(integrator)
+    println("I'm rewiring! at " * string(integrator.t))
     remove_species!(integrator)
     if parameters[:productivity] == :nutrients
       workingbm = deepcopy(integrator.u[1:end-2])
@@ -94,7 +95,12 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
 
   cb = species_under_extinction_threshold
   affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
-  extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+  if parameters[:adbm_trigger] == :extinction
+    extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+  else
+    Δt = parameters[:adbm_interval]
+    extinction_callback = PeriodicCallback(affect_function, Δt)
+  end
 
   sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
 
