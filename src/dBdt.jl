@@ -180,7 +180,7 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
 
   parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
-    derivative[i] = dbdt[i]
+    derivative[i] = dbdt[i] #this test is necessary even with the callback in place for the very steep changes
   end
   return dbdt
 end
