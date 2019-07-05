@@ -83,7 +83,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   function remove_species_and_rewire!(integrator)
-    println("I'm rewiring! at " * string(integrator.t))
     remove_species!(integrator)
     if parameters[:productivity] == :nutrients
       workingbm = deepcopy(integrator.u[1:end-2])
