@@ -63,6 +63,10 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
     getW_preference(parameters)
     get_efficiency(parameters)
 
+  else
+    #no rewiring
+    append!(parameters[:extinctions], i) ;
+    append!(parameters[:extinctionstime], [(t, i)])
   end
 
   return parameters

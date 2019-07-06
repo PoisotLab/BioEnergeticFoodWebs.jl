@@ -69,20 +69,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     return cond
   end
 
-  function remove_species!(integrator)
-    u = integrator.u
-    idϵ = findall(x -> x < extinction_threshold, u)
-    for e in idϵ
-        if !(e ∈ ϵ)
-            u[e] = 0.0
-            append!(ϵ,e)
-        end
-    end
-    sort!(ϵ)
-    nothing
-  end
-
-  function remove_species_and_rewire!(integrator)
+  function remove_species_and_update!(integrator)
     remove_species!(integrator)
     if parameters[:productivity] == :nutrients
       workingbm = deepcopy(integrator.u[1:end-2])
@@ -93,7 +80,7 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   end
 
   cb = species_under_extinction_threshold
-  affect_function = parameters[:rewire_method] == :none ? remove_species! : remove_species_and_rewire!
+  affect_function = remove_species_and_update!
   if parameters[:rewire_method] == :ADBM
     if parameters[:adbm_trigger] == :interval
       Δt = parameters[:adbm_interval]
