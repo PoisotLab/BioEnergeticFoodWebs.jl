@@ -148,7 +148,7 @@ function consumption(parameters, biomass)
 end
 
 function density_dependent_mortality(parameters, biomass)
-  mortality = parameters[:d] .* biomass
+  mortality = parameters[:d](biomass) .* Int.(.!parameters[:is_producer])
 end
 
 """

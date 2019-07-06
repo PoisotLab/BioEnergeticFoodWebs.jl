@@ -26,7 +26,7 @@ matrix A. See documentation for more information. Specifically, the default valu
 | scale_metabolism  | false         | whether to normalize metabolic rates by the growth rate of the smallest producer            |
 | scale_maxcons     | false         | whether to normalize max. consumption rates by metabolic rates                              |
 | productivity      | :species      | type of productivity regulation                                                             |
-| d                 | 0.0           | strength of density dependent mortality for consumers                                       |
+| d                 | x -> x .* 0.0 | density dependent mortality function for consumers                                          |
 | rewire_method     | :none         | method for rewiring the foodweb following extinction events                                 |
 | adbm_trigger      | :extinction   | (ADBM) trigger for ADBM rewiring (on extinctions or periodic with :interval)                |
 | adbm_interval     | 100           | (ADBM) Δt for periodic rewiring                                                             |
@@ -108,7 +108,7 @@ function model_parameters(A;
         bodymass::Array{Float64, 1}=[0.0],
         scale_bodymass::Bool=true,
         vertebrates::Array{Bool, 1}=[false],
-        d::Array{Float64, 1}=[0.0],
+        d::Function= (x -> x .* 0.0),
         rewire_method::Symbol = :none,
         adbm_trigger::Symbol = :extinction,
         adbm_interval::Int64 = 100,
@@ -328,15 +328,7 @@ function model_parameters(A;
   parameters[:ar] = attack_r
 
   # Step  19 -- Density dependent mortality
-  if length(d) > 1
-    if length(d) != size(A, 1)
-      error("when calling `model_parameters` with an array of values for `d`, there must be as many elements as rows/columns in the matrix")
-    else
-      parameters[:d] = d
-    end
-  else
-    parameters[:d] = d .* Int.(.!parameters[:is_producer])
-  end
+  parameters[:d] = d
 
   check_parameters(parameters)
 
