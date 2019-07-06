@@ -123,7 +123,7 @@ function consumption(parameters, biomass)
 
   # Total available biomass
   bm_matrix = zeros(eltype(biomass), (length(biomass), length(biomass)))
-  rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam)
+  rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam) | (parameters[:rewire_method] == :DS)
   costMat = rewire ? parameters[:costMat] : nothing
   fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A], parameters[:h]; rewire=rewire, costMat=costMat)
 

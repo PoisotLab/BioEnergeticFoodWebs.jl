@@ -8,8 +8,8 @@ There are four options for the `rewiring_method` argument:
 
 * `:none` - Default setting with no rewiring
 * `:ADBM` - The allometric diet breadth model (ADBM) as described in Petchey et al. (2008). Based on optimal foraging theory.
-* `:Gilljam` - The rewiring mechanism used by Gilljam et al. (2015) based on diet similarity.
-* `:stan` - The rewiring mechanism used by Staniczenko et al. (2010) based on diet overlap.
+* `:DS` - The rewiring mechanism used by Gilljam et al. (2015) based on diet similarity.
+* `:DO` - The rewiring mechanism used by Staniczenko et al. (2010) based on diet overlap.
 
 The `simulate` function will automatically perform the rewiring depending on
 which option is chosen. Further arguments can also be supplied to

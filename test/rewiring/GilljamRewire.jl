@@ -9,7 +9,7 @@ module TestGilljamRewire
          1 0 0 ;
          1 1 1 ]
     biomass = [1.0,1.0,1.0]
-    parameters = model_parameters(A, rewire_method = :Gilljam)
+    parameters = model_parameters(A, rewire_method = :DS)
 
 #testing Gilljam no extinctions
     GilljamTest = BioEnergeticFoodWebs.Gilljam(S,parameters,biomass)

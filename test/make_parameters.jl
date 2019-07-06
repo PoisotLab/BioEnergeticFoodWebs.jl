@@ -155,8 +155,8 @@ module TestMakeParameters
 
       # exception if the wrong preferenceMethod is passed
   wrong_pm = :gen
-  @test_throws ErrorException model_parameters(correct_network, rewire_method=:Gilljam, preferenceMethod=wrong_pm)
-  parameters = model_parameters(correct_network, rewire_method = :Gilljam, preferenceMethod = :specialist)
+  @test_throws ErrorException model_parameters(correct_network, rewire_method=:DS, preferenceMethod=wrong_pm)
+  parameters = model_parameters(correct_network, rewire_method = :DS, preferenceMethod = :specialist)
   @test parameters[:similarity] == n1_simIndex
   @test parameters[:specialistPrefMag] == .9
   @test parameters[:extinctions] == Int[]
@@ -167,7 +167,7 @@ module TestMakeParameters
 
   # Test that an empty vector parameters[:extinctions] is returned when using Staniczenko's rewiring method
   extinctions = Int[]
-  p = model_parameters(correct_network, rewire_method = :stan)
+  p = model_parameters(correct_network, rewire_method = :DO)
   @test extinctions == parameters[:extinctions]
 
 end
@@ -204,7 +204,7 @@ module TestUpdateParameters
   # Test with Gilljam rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5] #extinction of species 3
-  RWmethod = :Gilljam
+  RWmethod = :DS
   parameters = model_parameters(A, rewire_method = RWmethod)
   old_p = copy(parameters)
   BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b, 1)
@@ -230,7 +230,7 @@ module TestUpdateParameters
   # Test with Staniczenko rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5]
-  RWmethod = :stan
+  RWmethod = :DO
   parameters = model_parameters(A, rewire_method = RWmethod)
   old_p = copy(parameters)
   BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b, 1)

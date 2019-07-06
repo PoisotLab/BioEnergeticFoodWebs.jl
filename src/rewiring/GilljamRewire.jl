@@ -1,3 +1,28 @@
+"""
+**gilljam_parameters**
+"""
+function gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
+  #preference parameters
+  rewireP = preference_parameters(cost, specialistPrefMag, parameters[:A], preferenceMethod)
+  #check preferenceMethod
+  if preferenceMethod ∈ [:generalist, :specialist]
+    rewireP[:preferenceMethod] = preferenceMethod
+    rewireP[:specialistPref] = get_specialist_preferences(rewireP,parameters[:A])
+  else
+    error("Invalid value for preferenceMethod -- must be :generalist or :specialist")
+  end
+  parameters[:similarity] = rewireP[:similarity]
+  parameters[:specialistPrefMag] = rewireP[:specialistPrefMag]
+  #parameters[:extinctions] = rewireP[:extinctions]
+  parameters[:preferenceMethod] = rewireP[:preferenceMethod]
+  parameters[:cost] = rewireP[:cost]
+  parameters[:costMat] = rewireP[:costMat]
+  parameters[:specialistPref] = rewireP[:specialistPref]
+end
+
+"""
+Diet similarity rewiring model
+"""
 function Gilljam(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
   #create matrix to work on
   preferenceMat = deepcopy(parameters[:A])

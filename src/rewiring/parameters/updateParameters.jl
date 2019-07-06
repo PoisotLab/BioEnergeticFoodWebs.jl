@@ -20,7 +20,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
     getW_preference(parameters) #
     get_efficiency(parameters)
 
-  elseif parameters[:rewire_method] == :Gilljam
+  elseif parameters[:rewire_method] ∈ [:Gilljam, :DS]
     #add extinction
     extinct = findall(biomass .< 100*eps())
     for i in extinct
@@ -46,7 +46,7 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
     parameters[:w][(LinearIndices(parameters[:w]))[findall(x -> x .== Inf, parameters[:w])]] .= 1
     get_efficiency(parameters)
 
-  elseif parameters[:rewire_method] == :stan
+  elseif parameters[:rewire_method] ∈ [:stan, :DO]
     #add extinction
     extinct = findall(biomass .< 100*eps())
     for i in extinct
@@ -66,106 +66,6 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
   end
 
   return parameters
-end
-
-function get_herbivores(parameters::Dict{Symbol,Any})
-  #used internally by model_parameters and update_parameters
-  S = size(parameters[:A], 1)
-  is_herbivore = falses(S)
-  # Identify herbivores
-  # Herbivores consume producers
-  for consumer in 1:S
-    if !parameters[:is_producer][consumer]
-      for resource in 1:S
-        if parameters[:is_producer][resource]
-          if parameters[:A][consumer, resource] == 1
-            is_herbivore[consumer] = true
-          end
-        end
-      end
-    end
-  end
-  parameters[:is_herbivore] = is_herbivore
-  #return(p)
-end
-
-function get_efficiency(parameters::Dict{Symbol,Any})
-  #used internally by model_parameters and update_parameters
-  S = size(parameters[:A], 1)
-  # Efficiency matrix
-  efficiency = zeros(Float64,(S, S))
-  for consumer in 1:S
-    for resource in 1:S
-      if parameters[:A][consumer, resource] == 1
-        if parameters[:is_producer][resource]
-          efficiency[consumer, resource] = parameters[:e_herbivore]
-        else
-          efficiency[consumer, resource] = parameters[:e_carnivore]
-        end
-      end
-    end
-  end
-  parameters[:efficiency] = efficiency
-  #return(p)
-end
-
-function getW_preference(parameters::Dict{Symbol,Any})
-  #used internally by model_parameters and update_parameters
-  S = size(parameters[:A],1)
-  generality = float(vec(sum(parameters[:A], dims = 2)))
-
-  if (parameters[:rewire_method] ∈ [:none, :ADBM, :stan])
-
-    w = zeros(Float64,(S))
-    for i in eachindex(generality)
-      if generality[i] > 0.0
-        w[i] = 1.0 / generality[i]
-      end
-    end
-    w = w .*parameters[:A]
-
-  else
-
-    if parameters[:preferenceMethod] == :generalist
-      w = zeros(Float64,(S))
-      for i in eachindex(generality)
-        if generality[i] > 0.0
-          w[i] = 1.0 / generality[i]
-        end
-      end
-      w = w .*parameters[:A]
-
-    elseif parameters[:preferenceMethod] == :specialist
-      w = zeros(Float64,(S,S))
-      for i in eachindex(generality)
-        if generality[i] > 0.0
-          for j = 1:S
-            if parameters[:A][i,j] == 1
-              if parameters[:specialistPref][i] == j
-                if generality[i] > 1
-                  w[i,j] = parameters[:specialistPrefMag]
-                else
-                  w[i,j] = 1.0
-                end
-              else
-                if generality[i] > 1
-                  w[i,j] = (1 - parameters[:specialistPrefMag])/(generality[i]-1)
-                else
-                  w[i,j] = 1.0
-                end
-              end
-            end
-          end
-        end
-      end
-
-    end # ifelse parameters[:preferenceMethod]
-
-  end #ifelse parameters[:rewire_method]
-
-
-  parameters[:w] = w
-  #return(p)
 end
 
 function update_specialist_preference(parameters::Dict{Symbol,Any})
