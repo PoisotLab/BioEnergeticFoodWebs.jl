@@ -69,6 +69,19 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     return cond
   end
 
+  function remove_species!(integrator)
+    u = integrator.u
+    idϵ = findall(x -> x < extinction_threshold, u)
+    for e in idϵ
+        if !(e ∈ ϵ)
+            u[e] = 0.0
+            append!(ϵ,e)
+        end
+    end
+    sort!(ϵ)
+    nothing
+  end
+
   function remove_species_and_update!(integrator)
     remove_species!(integrator)
     if parameters[:productivity] == :nutrients
