@@ -108,7 +108,7 @@ function model_parameters(A;
         bodymass::Array{Float64, 1}=[0.0],
         scale_bodymass::Bool=true,
         vertebrates::Array{Bool, 1}=[false],
-        d::Int64=[0.0],
+        d::Array{Float64, 1}=[0.0],
         rewire_method::Symbol = :none,
         adbm_trigger::Symbol = :extinction,
         adbm_interval::Int64 = 100,
