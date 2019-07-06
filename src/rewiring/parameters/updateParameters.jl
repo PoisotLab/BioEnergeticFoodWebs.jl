@@ -64,9 +64,16 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
     get_efficiency(parameters)
 
   else
-    #no rewiring
-    append!(parameters[:extinctions], i) ;
-    append!(parameters[:extinctionstime], [(t, i)])
+    #add extinction
+    extinct = findall(biomass .< 100*eps())
+    for i in extinct
+      if i ∉ parameters[:extinctions]
+        append!(parameters[:extinctions], i) ;
+        append!(parameters[:extinctionstime], [(t, i)])
+        append!(parameters[:tmpA], [parameters[:A]])
+      end
+    end
+    sort!(parameters[:extinctions])
   end
 
   return parameters
