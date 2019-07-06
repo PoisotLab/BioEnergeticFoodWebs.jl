@@ -27,7 +27,7 @@ module TestSimulateExtinctions
   p_nutrients = model_parameters(A, productivity = :nutrients)
   default_extinction_threshold = 1e-6
   tolerated_values = default_extinction_threshold * 0.1
-  s_nutrients = simulate5(p_nutrients, b)
+  s_nutrients = simulate(p_nutrients, b)
   @test sum((s_nutrients[:B][:,2] .< tolerated_values) .& (s_nutrients[:B][:,2] .> 0.0)) == 0
 
   #nutrients and passed extinction threshold
