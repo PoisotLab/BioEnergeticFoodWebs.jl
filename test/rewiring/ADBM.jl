@@ -72,6 +72,12 @@ module TestADBM_Hmethod
     E_bm = [1.0, 31.6228, 316.228]
     @test all(isapprox.(ADBMterms_bm[:E],E_bm,atol = 0.001))
 
+end
+
+module TestADBM_power_ratio
+    using BioEnergeticFoodWebs
+    using Test
+
     #Testing ADBM
     S = 5
     A = [0 0 0 0 0; 0 1 0 0 0; 0 0 0 0 0; 0 1 1 0 0; 0 1 1 1 1]
@@ -92,4 +98,18 @@ module TestADBM_Hmethod
     ADBMTest = BioEnergeticFoodWebs.ADBM(S,p,biomass)
     @test ADBMTest == [0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 0 0 0 0 0; 1 1 1 0 0]
 
+end
+
+module TestADBM_interval
+    using BioEnergeticFoodWebs
+    using Test
+    A = [0 1 0 ; 0 0 1 ; 0 0 0]
+    b = [0.8, 0.0, 0.5]
+    p = model_parameters(A, rewire_method = :ADBM, adbm_trigger = :interval, adbm_interval = 100)
+
+    s = simulate(p, b)
+
+    @test p[:extinctions] == [1,2]
+    @test p[:extinctionstime] == [(0.0, 2), (100.0, 1)]
+    @test p[:tmpA] == [A, [0 0 0 ; 0 0 0 ; 0 0 0]]
 end

@@ -159,18 +159,18 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
 
   # producer growth if NP model
   if parameters[:productivity] == :nutrients
-    nutrients = biomass[S+1:end] #nutrients concentration
+    nutrients = deepcopy(biomass[S+1:end]) #nutrients concentration
     nutrients[nutrients .< 0] .= 0.0
-    biomass = biomass[1:S] #species biomasses
+    biomass = deepcopy(biomass[1:S]) #species biomasses
   else
     nutrients = [NaN, NaN]
   end
 
   # Consumption
-  gain, loss = consumption(parameters, biomass)
+  gain, loss = BioEnergeticFoodWebs.consumption(parameters, biomass)
 
   # Growth
-  growth, G = get_growth(parameters, biomass; c = nutrients)
+  growth, G = BioEnergeticFoodWebs.get_growth(parameters, biomass; c = nutrients)
 
   # Balance
   dbdt = zeros(eltype(biomass), length(biomass))
@@ -178,9 +178,9 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
     dbdt[i] = growth[i] + gain[i] - loss[i]
   end
 
-  parameters[:productivity] == :nutrients && append!(dbdt, nutrientuptake(parameters, biomass, nutrients, G))
+  parameters[:productivity] == :nutrients && append!(dbdt, BioEnergeticFoodWebs.nutrientuptake(parameters, biomass, nutrients, G))
   for i in eachindex(dbdt)
-    derivative[i] = dbdt[i]
+    derivative[i] = dbdt[i] #this test is necessary even with the callback in place for the very steep changes
   end
   return dbdt
 end

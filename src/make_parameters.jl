@@ -82,7 +82,9 @@ function model_parameters(A;
         productivity::Symbol=:species,
         bodymass::Array{Float64, 1}=[0.0],
         vertebrates::Array{Bool, 1}=[false],
-        rewire_method = :none,
+        rewire_method::Symbol = :none,
+        adbm_trigger::Symbol = :extinction,
+        adbm_interval::Int64 = 100,
         e::Float64 = 1.0,
         a_adbm::Float64 = 0.0189,
         ai::Float64 = -0.491,
@@ -108,6 +110,9 @@ function model_parameters(A;
         attackrate::Function = NoEffectTemperature(:attackrate),
         metabolicrate::Function = NoEffectTemperature(:metabolism),
         growthrate::Function = NoEffectTemperature(:growth),
+        scale_growth::Bool = false,
+        scale_metabolism::Bool = false,
+        scale_maxcons::Bool = false,
         dry_mass_293::Array{Float64, 1}=[0.0],
         TSR_type::Symbol = :no_response)
 
@@ -218,7 +223,7 @@ function model_parameters(A;
 
   # Step 8 -- rewire method
 
- if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam]
+ if rewire_method ∈ [:stan, :none, :ADBM, :Gilljam, :ADBM_interval]
     parameters[:rewire_method] = rewire_method
     parameters[:extinctions] = []
     parameters[:extinctionstime] = []
@@ -228,7 +233,13 @@ function model_parameters(A;
  end
 
  if rewire_method == :ADBM
-     adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+     if adbm_trigger ∈ [:extinction, :interval]
+       parameters[:adbm_trigger] = adbm_trigger
+       parameters[:adbm_trigger] == :interval ? parameters[:adbm_interval] = adbm_interval : nothing
+       adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+     else
+       error("Invalid trigger for ADBM trigger, must be either :interval or :extinction")
+     end
  elseif rewire_method == :Gilljam
      gilljam_parameters(parameters, cost, specialistPrefMag, preferenceMethod)
  #elseif rewire_method == :stan
@@ -271,25 +282,30 @@ function model_parameters(A;
   # a[.!parameters[:vertebrates]] = parameters[:a_invertebrate]
   # a[is_producer] = parameters[:a_producer]
 
-  # Step 12 -- Metabolic rate
+  # Step 12 -- Growth rate
   m_producer = minimum(parameters[:bodymass][is_producer])
   parameters[:m_producer] = m_producer
-  body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
-  # body_size_scaled = body_size_relative.^-0.25
-  x = metabolicrate(body_size_relative, T, parameters)
+  #body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
+  r = growthrate(parameters[:bodymass], T, parameters)
+  rspp = r[sortperm(parameters[:bodymass])[1]]
+  r_scaled = r ./ rspp
+  parameters[:r] = scale_growth ? r_scaled : r
 
-  # Step 13 -- Growth rate
-  r = growthrate(body_size_relative, T, parameters)
+  # Step 13 -- Metabolic rate
+  x = metabolicrate(parameters[:bodymass], T, parameters)
+  x_scaled = x ./ rspp
+  parameters[:x] = scale_metabolism ? x_scaled : x
 
   # Step 14 -- Handling time
-  handling_t = handlingtime(body_size_relative, T, parameters)
+  handling_t = handlingtime(parameters[:bodymass], T, parameters)
   parameters[:ht] = handling_t
 
   # Step 16 -- Maximum relative consumption rate
   y = 1 ./ handling_t
+  parameters[:y] = scale_maxcons == true ? y ./ x : y
 
   # Step 15 -- Attack rate
-  attack_r = attackrate(body_size_relative, T, parameters)
+  attack_r = attackrate(parameters[:bodymass], T, parameters)
 
   # Step 17 -- Half-saturation constant
   Γ = 1 ./ (attack_r .* handling_t)
@@ -301,14 +317,11 @@ function model_parameters(A;
 
   # Final Step -- store the parameters in the dict. p
   #parameters[:efficiency] = efficiency
-  parameters[:y] = y
-  parameters[:x] = x
   #parameters[:a] = a
   #parameters[:is_herbivore] = is_herbivore
   parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
   parameters[:ar] = attack_r
-  parameters[:r] = r
 
 
   check_parameters(parameters)
