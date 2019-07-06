@@ -147,6 +147,10 @@ function consumption(parameters, biomass)
 
 end
 
+function density_dependent_mortality(parameters, biomass)
+  mortality = parameters[:d] .* biomass
+end
+
 """
 **Derivatives**
 
@@ -172,10 +176,13 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   # Growth
   growth, G = BioEnergeticFoodWebs.get_growth(parameters, biomass; c = nutrients)
 
+  # Mortality
+  mortality = BioEnergeticFoodWebs.density_dependent_mortality(parameters, biomass)
+
   # Balance
   dbdt = zeros(eltype(biomass), length(biomass))
   for i in eachindex(dbdt)
-    dbdt[i] = growth[i] + gain[i] - loss[i]
+    dbdt[i] = growth[i] + gain[i] - loss[i] - mortality[i]
   end
 
   parameters[:productivity] == :nutrients && append!(dbdt, BioEnergeticFoodWebs.nutrientuptake(parameters, biomass, nutrients, G))
