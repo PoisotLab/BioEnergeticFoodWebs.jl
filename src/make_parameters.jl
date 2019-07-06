@@ -335,7 +335,7 @@ function model_parameters(A;
       parameters[:d] = d
     end
   else
-    parameters[:d] = d .* Int.(parameters[:is_producer])
+    parameters[:d] = d .* Int.(.!parameters[:is_producer])
   end
 
   check_parameters(parameters)
