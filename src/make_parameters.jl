@@ -110,7 +110,7 @@ function model_parameters(A;
         scale_bodymass::Bool=true,
         vertebrates::Array{Bool, 1}=[false],
         dc::Function= (x -> x .* 0.0),
-        dr::Function= (x -> x .* 0.0),
+        dp::Function= (x -> x .* 0.0),
         rewire_method::Symbol = :none,
         adbm_trigger::Symbol = :extinction,
         adbm_interval::Int64 = 100,
