@@ -23,7 +23,7 @@ module TestDDMortality
 
     @test all(dbdt .== balance)
 
-    ddm_prod = (x -> x^2 .* 0.1)
+    ddm_prod = (x -> x .^ 2 .* 0.1)
     p = model_parameters(A, dc = ddm, dp = ddm_prod)
     PI_death = BioEnergeticFoodWebs.density_dependent_mortality(p, b)
     mc = ddm(b).* Int.(.!p[:is_producer])
