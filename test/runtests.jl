@@ -17,7 +17,8 @@ test_files = [
     "biological_rates.jl",
     "temperature_size.jl",
     "productivity.jl",
-    "extinctions.jl"
+    "extinctions.jl",
+    "mortality.jl"
 ]
 
 test_n = 1

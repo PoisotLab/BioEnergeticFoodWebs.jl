@@ -26,6 +26,8 @@ matrix A. See documentation for more information. Specifically, the default valu
 | scale_metabolism  | false         | whether to normalize metabolic rates by the growth rate of the smallest producer            |
 | scale_maxcons     | false         | whether to normalize max. consumption rates by metabolic rates                              |
 | productivity      | :species      | type of productivity regulation                                                             |
+| dc                | x -> x .* 0.0 | density dependent mortality function for consumers                                          |
+| dp                | x -> x .* 0.0 | density dependent mortality function for producers                                          |
 | rewire_method     | :none         | method for rewiring the foodweb following extinction events                                 |
 | adbm_trigger      | :extinction   | (ADBM) trigger for ADBM rewiring (on extinctions or periodic with :interval)                |
 | adbm_interval     | 100           | (ADBM) Δt for periodic rewiring                                                             |
@@ -107,6 +109,8 @@ function model_parameters(A;
         bodymass::Array{Float64, 1}=[0.0],
         scale_bodymass::Bool=true,
         vertebrates::Array{Bool, 1}=[false],
+        dc::Function= (x -> x .* 0.0),
+        dp::Function= (x -> x .* 0.0),
         rewire_method::Symbol = :none,
         adbm_trigger::Symbol = :extinction,
         adbm_interval::Int64 = 100,
@@ -321,10 +325,13 @@ function model_parameters(A;
   # Step 18 -- Efficiency matrix
   get_efficiency(parameters)
 
-  # Final Step -- store the parameters in the dict. p
   parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
   parameters[:ar] = attack_r
+
+  # Step  19 -- Density dependent mortality
+  parameters[:dc] = dc
+  parameters[:dp] = dp
 
   check_parameters(parameters)
 
