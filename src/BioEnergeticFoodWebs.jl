@@ -7,6 +7,7 @@ using JLD
 using StatsBase
 using Statistics
 using LinearAlgebra
+using ForwardDiff
 
 export trophic_rank,
   model_parameters,

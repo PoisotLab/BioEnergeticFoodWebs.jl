@@ -304,3 +304,29 @@ function metabolism(out::Dict{Symbol,Any}; last::Int64 = 1000, out_type::Symbol 
         error("out_type should be one of :all, :mean or :std")
     end
 end
+
+"""
+**Stability measure : invariability**
+Compute mean invariability, from the covariance matrix. The higher the invariability, the more stable the system.
+TODO
+"""
+
+function invariability(out::Dict{Symbol,Any}; last::Int64 = 1000, alpha::Float64 = 1)
+
+    @assert last <= size(out[:B], 1)
+    equ_biomass = out[:B][size(out[:B], 1),:]
+    jac = ForwardDiff.jacobian(dbdt, equ_biomass) # jacobian matrix
+
+    mat_diag = Diagonal(equ_biomass .^ alpha) # diagonal matrix
+
+    mat_cov = Lyap.lyap(jac, mat_diag) # solve lyapunov equation
+
+    inv = out[:p][:S]/tr(mat_cov) # mean invariability
+
+    return(inv)
+end function
+
+"""
+**Stability measure : resilience**
+TODO
+"""
