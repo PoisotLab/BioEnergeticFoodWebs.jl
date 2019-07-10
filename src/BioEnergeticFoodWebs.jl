@@ -8,6 +8,7 @@ using StatsBase
 using Statistics
 using LinearAlgebra
 using ForwardDiff
+using Lyap
 
 export trophic_rank,
   model_parameters,
