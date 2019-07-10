@@ -4,20 +4,18 @@
 
 # Bio-energetic food web model
 
-[![RTD](https://img.shields.io/badge/doc-latest-blue.svg)](http://poisotlab.io/BioEnergeticFoodWebs.jl/latest/)
+[![RTD](https://img.shields.io/badge/doc-latest-blue.svg)](https://poisotlab.github.io/BioEnergeticFoodWebs.jl/latest/)
 [![GitHub tag](https://img.shields.io/github/tag/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/releases)
 [![DOI](https://zenodo.org/badge/70102258.svg)](https://zenodo.org/badge/latestdoi/70102258)
 [![Gitter](https://img.shields.io/gitter/room/PoisotLab/BioEnergeticFoodWebs.jl.svg)](https://gitter.im/PoisotLab/BioEnergeticFoodWebs.jl)
-
-[![BioEnergeticFoodWebs](http://pkg.julialang.org/badges/BioEnergeticFoodWebs_0.4.svg)](http://pkg.julialang.org/?pkg=BioEnergeticFoodWebs)
-[![BioEnergeticFoodWebs](http://pkg.julialang.org/badges/BioEnergeticFoodWebs_0.5.svg)](http://pkg.julialang.org/?pkg=BioEnergeticFoodWebs)
-[![BioEnergeticFoodWebs](http://pkg.julialang.org/badges/BioEnergeticFoodWebs_0.6.svg)](http://pkg.julialang.org/?pkg=BioEnergeticFoodWebs)
 
 Simulations of biomass flows in food webs is a difficult task, yet performing it
 correctly is required to understand the ties betweeen the structure and
 function of ecological communities. This package provides a robustly tested,
 well-documented, computationally efficient common interface for the simulation
 of bio-energetic systems in food webs.
+
+This package is no longer compatible with Julia 0.6 (or older).
 
 ## Stable
 

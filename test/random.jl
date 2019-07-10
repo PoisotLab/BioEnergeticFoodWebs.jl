@@ -1,5 +1,5 @@
 module TestRandom
-    using Base.Test
+    using Test
     using BioEnergeticFoodWebs
 
     @test_throws AssertionError nichemodel(10, 150)

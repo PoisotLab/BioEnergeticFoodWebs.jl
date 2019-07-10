@@ -5,25 +5,22 @@ keyword in `model_parameters`.
 This allows species to form new links following extinctions according to some
 set of rules.
 There are four options for the `rewiring_method` argument:
+
 * `:none` - Default setting with no rewiring
-* `:ADBM` - The allometric diet breadth model (ADBM) as described in Petchey
-et al. (2008). Based on optimal foraging theory.
-* `:Gilljam` - The rewiring mechanism used by Gilljam et al.(2015) based on diet
-similarity.
-* `:stan` - The rewiring mechanism used by Staniczenko et al.(2010) based
-on diet overlap.
+* `:ADBM` - The allometric diet breadth model (ADBM) as described in Petchey et al. (2008). Based on optimal foraging theory.
+* `:DS` - The rewiring mechanism used by Gilljam et al. (2015) based on diet similarity.
+* `:DO` - The rewiring mechanism used by Staniczenko et al. (2010) based on diet overlap.
 
 The `simulate` function will automatically perform the rewiring depending on
-which option is chosen. Further parameters can also be supplied to
-`model_parameters`.
+which option is chosen. Further arguments can also be supplied to
+`model_parameters` to change the parameters of the rewiring models.
 
-Simulations with rewiring are run in the same way as those without, for example
-using ADBM rewiring:
+Simulations with rewiring are run in the same way as those without, for example using ADBM rewiring:
 
 ```julia
-A = nichemodel(10, 0.3);
-p = model_parameters(A,rewire_method = :ADBM);
-b = rand(size(A, 1));
+A = nichemodel(10, 0.3)
+p = model_parameters(A,rewire_method = :ADBM)
+b = rand(size(A, 1))
 
 s = simulate(p, b, start=0, stop=50, steps=1000)
 ```
@@ -36,28 +33,59 @@ For more details on the parameters meaning and value, see the references
 
 ### Petchey's ADBM model
 
-|Name|Meaning|Default value|Alternative value|
-|---|---|---|---|
-|`Nmethod`|Method used to calculate the resource density|`:original`|`:biomass`|
-|`Hmethod`|Method used to calculate the handling time|`:ratio`|`:power`|
-|`n`|Scaling constant for the resource density|`1.0`|--|
-|`ni`|Species-specific scaling exponent for the resource density|`0.75`|--|
-|`b`|Scaling constant for handling time|`0.401`|--|
-|`h_adbm`|Scaling constant for handling time|`1.0`|--|
-|`hi`|Consumer specific scaling exponent for handling time|`1.0`|--|
-|`hj`|Resource specific scaling constant for handling time|`1.0`|--|
-|`e`|Scaling constant for the net energy gain|`1.0`|--|
-|`a_adbm`|Scaling constant for the attack rate|`0.0189`|--|
-|`ai`|Consumer specific scaling exponent for the attack rate|`-0.491`|--|
-|`aj`|Resource specific scaling exponent for the attack rate|`-0.465`|--|
+For this particular model, it is possible to chose how rewiring is triggered: on extinctions (default) or periodically (see example below the table).
+
+| Name      | Meaning                                                    | Default value | Alternative value |
+| --------- | ---------------------------------------------------------- | ------------- | ----------------- |
+| `Nmethod` | Method used to calculate the resource density              | `:original`   | `:biomass`        |
+| `Hmethod` | Method used to calculate the handling time                 | `:ratio`      | `:power`          |
+| `n`       | Scaling constant for the resource density                  | `1.0`         | --                |
+| `ni`      | Species-specific scaling exponent for the resource density | `0.75`        | --                |
+| `b`       | Scaling constant for handling time                         | `0.401`       | --                |
+| `h_adbm`  | Scaling constant for handling time                         | `1.0`         | --                |
+| `hi`      | Consumer specific scaling exponent for handling time       | `1.0`         | --                |
+| `hj`      | Resource specific scaling constant for handling time       | `1.0`         | --                |
+| `e`       | Scaling constant for the net energy gain                   | `1.0`         | --                |
+| `a_adbm`  | Scaling constant for the attack rate                       | `0.0189`      | --                |
+| `ai`      | Consumer specific scaling exponent for the attack rate     | `-0.491`      | --                |
+| `aj`      | Resource specific scaling exponent for the attack rate     | `-0.465`      | --                |
+
+Example:
+
+```julia
+# food web
+A = [0 0 0 0 0; 0 1 0 0 0; 0 0 0 0 0; 0 1 1 0 0; 0 1 1 1 1]
+# setting the model parameters for ADBM periodic rewiring using biomass to calculate resource densities
+p = model_parameters(
+                     A #food web
+                     , Z = 10.0 #consumer/resource body mass scaling
+                     , rewire_method = :ADBM #ADBM reiwring
+                     , adbm_trigger = :interval #rewiring triggered periodically ...
+                     , adbm_interval = 100 #... with Δt = 100
+                     , Nmethod = :biomass #densities = biomass
+                     )
+# set initial biomass as to have immediate extinction of species 4
+Bi = [1.0,1.0,1.0,0.0,1.0]
+# perform the simulations
+s = simulate(p, Bi)
+# you can check the identity of the extinct species :
+p[:extinctions]
+# extinction times for each species:
+p[:extinctionstime]
+# and the temporary matrix (A is recorded just before each extinction)
+p[:tmpA][1] # original matrix, just befor extinction of species 4
+p[:tmpA][2] # matrix after extinction of species 4, before extinction of species 2
+# the new interaction matrix, after the last extinction:
+p[:A]
+```
 
 ### Gilljam's diet similarity model
 
-|Name|Meaning|Default value|Alternative value|
-|---|---|---|---|
-|`cost`|Rewiring cost (a consumer decrease in efficiency when exploiting novel resource)|`0.0`|--|
-|`specialistPrefMag`|Strength of the consumer preference for one prey species if `preferenceMethod = :specialist` |`0.9`|--|
-|`preferenceMethod`|Scenarios with respect to prey preferences of consumers|`:generalist`|`:specialist`|
+| Name                | Meaning                                                                                      | Default value | Alternative value |
+| ------------------- | -------------------------------------------------------------------------------------------- | ------------- | ----------------- |
+| `cost`              | Rewiring cost (a consumer decrease in efficiency when exploiting novel resource)             | `0.0`         | --                |
+| `specialistPrefMag` | Strength of the consumer preference for one prey species if `preferenceMethod = :specialist` | `0.9`         | --                |
+| `preferenceMethod`  | Scenarios with respect to prey preferences of consumers                                      | `:generalist` | `:specialist`     |
 
 ### Staniczenko's diet overlap model
 
