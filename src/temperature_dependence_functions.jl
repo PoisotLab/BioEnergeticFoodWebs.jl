@@ -286,13 +286,13 @@ This function can be called with the keywords :growth, :growthrate or :r as an a
 Example : model_parameters(A, growthrate = ExponentialBA(:r))
 
 
-| Parameter         | Meaning                               | Default values  | Reference                             |
-|:------------------|:--------------------------------------|:----------------|:--------------------------------------|
-| norm_constant     | scaling coefficient                   | exp(-15.68)*4e6 | Ehnes et al. 2011, Binzer et al. 2012 |
-| activation_energy | activation energy                     | -0.84           | Ehnes et al. 2011, Binzer et al. 2012 |
-| T0                | normalization temperature (K)         | 293.15          | Binzer et al. 2012, Binzer et al. 2012|
-| β                 | allometric exponent                   | -0.25           | Ehnes et al. 2011                     |
-| k                 | Boltzmann norm_constant               | 8.617e-5        |                                       |
+| Parameter         | Meaning                               | Default values    | Reference                             |
+|:------------------|:--------------------------------------|:------------------|:--------------------------------------|
+| norm_constant     | scaling coefficient                   | exp(-15.68)*86400 | Ehnes et al. 2011, Binzer et al. 2012 |
+| activation_energy | activation energy                     | -0.84             | Ehnes et al. 2011, Binzer et al. 2012 |
+| T0                | normalization temperature (K)         | 298.15            | Binzer et al. 2012, Binzer et al. 2012|
+| β                 | allometric exponent                   | -0.25             | Ehnes et al. 2011                     |
+| k                 | Boltzmann norm_constant               | 8.617e-5          |                                       |
 
 Default values are given as an example.
 
