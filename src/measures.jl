@@ -315,13 +315,18 @@ function invariability(out::Dict{Symbol,Any}; last::Int64 = 1000, alpha::Float64
 
     @assert last <= size(out[:B], 1)
     equ_biomass = out[:B][size(out[:B], 1),:]
-    jac = ForwardDiff.jacobian(dbdt, equ_biomass) # jacobian matrix
 
-    mat_diag = Diagonal(equ_biomass .^ alpha) # diagonal matrix
+    function dBdt_jac(biom)
+        return dBdt(zeros(size(biom)), biom, parameters, t)
+    end
 
-    mat_cov = Lyap.lyap(jac, mat_diag) # solve lyapunov equation
+    jac = Calculus.jacobian(dBdt_jac, equ_biomass, :central) # jacobian matrix
 
-    inv = out[:p][:S]/tr(mat_cov) # mean invariability
+    mat_diag = LinearAlgebra.Diagonal(equ_biomass .^ alpha) # diagonal matrix
+    mat_diag = convert(Array{Float64, 2}, mat_diag) # convert to array
+    mat_cov = LinearAlgebra.lyap(jac, mat_diag) # solve lyapunov equation
+
+    inv = out[:p][:S]/tr(mat_cov) # mean invariability (trace of covariance matrix)
 
     return(inv)
 end function
