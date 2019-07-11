@@ -314,7 +314,7 @@ Compute mean invariability (system response to stochastic perturbation). The hig
 - α = 1 -> demographic noise
 - α = 2 -> environmental noise
 
-
+see Arnoldi et al 2019
 """
 
 function invariability(out::Dict{Symbol,Any}; last::Int64 = 1000, alpha::Float64 = 1)
