@@ -323,7 +323,10 @@ function invariability(out::Dict{Symbol,Any}; α_inv::Int64 = 1, last::Int64 = 1
     if α_inv ∉ [0 1 2]
         error("α should equal 0, 1 or 2")
     end
-    equ_biomass = out[:B][size(out[:B], 1),:]
+
+    equ_biomass = out[:B][size(out[:B], 1),:] # biomass at the end of the simulation (should be at equilibrium)
+    t = out[:t][size(out[:B], 1)] # corresponding time
+    parameters = out[:p]
 
     function dBdt_jac(biom)
          return dBdt(zeros(size(biom)), biom, parameters, t)
