@@ -317,8 +317,12 @@ Compute mean invariability (system response to stochastic perturbation). The hig
 see Arnoldi et al 2019
 """
 
-function invariability(out::Dict{Symbol,Any}; last::Int64 = 1000, alpha::Int64 = 1)
+function invariability(out::Dict{Symbol,Any}; α_inv::Int64 = 1, last::Int64 = 1000)
     @assert last <= size(out[:B], 1)
+
+    if α_inv ∉ [0 1 2]
+        error("α should equal 0, 1 or 2")
+    end
     equ_biomass = out[:B][size(out[:B], 1),:]
 
     function dBdt_jac(biom)
@@ -327,10 +331,10 @@ function invariability(out::Dict{Symbol,Any}; last::Int64 = 1000, alpha::Int64 =
 
     jac = Calculus.jacobian(dBdt_jac, equ_biomass, :central) # jacobian matrix
 
-    mat_diag = LinearAlgebra.Diagonal(equ_biomass .^ alpha) # diagonal matrix
+    mat_diag = LinearAlgebra.Diagonal(equ_biomass .^ α_inv) # diagonal matrix
     mat_diag = convert(Array{Float64, 2}, mat_diag) # convert to array
     mat_cov = LinearAlgebra.lyap(jac, mat_diag) # solve lyapunov equation
-     
+
     inv = out[:p][:S]/tr(mat_cov) # mean invariability (trace of covariance matrix)
 
     return(inv)
