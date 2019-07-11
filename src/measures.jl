@@ -307,8 +307,14 @@ end
 
 """
 **Stability measure : invariability**
-Compute mean invariability, from the covariance matrix. The higher the invariability, the more stable the system.
-TODO
+Compute mean invariability (system response to stochastic perturbation). The higher the invariability, the more stable the system.
+α allows us to choose between different type of noise :
+
+- α = 0 -> immigration noise
+- α = 1 -> demographic noise
+- α = 2 -> environmental noise
+
+
 """
 
 function invariability(out::Dict{Symbol,Any}; last::Int64 = 1000, alpha::Float64 = 1)
