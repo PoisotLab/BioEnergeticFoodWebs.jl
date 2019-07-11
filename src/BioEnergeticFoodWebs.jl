@@ -30,7 +30,8 @@ export trophic_rank,
   ExtendedEppley,
   ExponentialBA,
   ExtendedBA,
-  Gaussian
+  Gaussian,
+  invariability
 
 
 # Includes
