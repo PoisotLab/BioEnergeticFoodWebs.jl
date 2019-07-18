@@ -5,3 +5,5 @@ DiffEqCallbacks
 JSON
 JLD
 StatsBase
+LinearAlgebra
+Calculus
