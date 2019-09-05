@@ -20,7 +20,7 @@ function check_rewiring_parameters(rewireP,rewireMethod)
     :Hmethod,
     :rewire_method,
     :costMat]
-  elseif rewireMethod == :Gilljam
+  elseif rewireMethod ∈ [:Gilljam, :DS]
     required_keys = [
     :rewire_method,
     :similarity,
@@ -30,13 +30,13 @@ function check_rewiring_parameters(rewireP,rewireMethod)
     :cost,
     :costMat,
     :specialistPref]
-  elseif rewireMethod == :stan
+  elseif rewireMethod ∈ [:stan, :DO]
     required_keys = [
     :rewire_method,
     :extinctions]
   end
 
-  if rewireMethod ∈ [:Gilljam, :ADBM, :stan]
+  if rewireMethod ∈ [:Gilljam, :ADBM, :stan, :DO, :DS]
     for k in required_keys
       @assert get(rewireP, k, nothing) != nothing
     end

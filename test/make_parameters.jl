@@ -118,10 +118,6 @@ module TestMakeParameters
   @test pref_par[:preferenceMethod] == test_preferenceMethod
   @test pref_par[:specialistPrefMag] == test_specialistPrefMag
 
-      # empty extinction vector to store extinct species during simulations
-  right_extinctions = Int64[]
-  @test pref_par[:extinctions] == right_extinctions
-
       # jaccard similarity matrix
   network_1 = correct_network #all species have different resources
   pref_par_1 = BioEnergeticFoodWebs.preference_parameters(test_cost, test_specialistPrefMag, network_1, test_preferenceMethod)
@@ -159,8 +155,8 @@ module TestMakeParameters
 
       # exception if the wrong preferenceMethod is passed
   wrong_pm = :gen
-  @test_throws ErrorException model_parameters(correct_network, rewire_method=:Gilljam, preferenceMethod=wrong_pm)
-  parameters = model_parameters(correct_network, rewire_method = :Gilljam, preferenceMethod = :specialist)
+  @test_throws ErrorException model_parameters(correct_network, rewire_method=:DS, preferenceMethod=wrong_pm)
+  parameters = model_parameters(correct_network, rewire_method = :DS, preferenceMethod = :specialist)
   @test parameters[:similarity] == n1_simIndex
   @test parameters[:specialistPrefMag] == .9
   @test parameters[:extinctions] == Int[]
@@ -171,7 +167,7 @@ module TestMakeParameters
 
   # Test that an empty vector parameters[:extinctions] is returned when using Staniczenko's rewiring method
   extinctions = Int[]
-  p = model_parameters(correct_network, rewire_method = :stan)
+  p = model_parameters(correct_network, rewire_method = :DO)
   @test extinctions == parameters[:extinctions]
 
 end
@@ -187,7 +183,7 @@ module TestUpdateParameters
   RWmethod = :ADBM
   parameters = model_parameters(A, rewire_method = RWmethod)
   old_p = copy(parameters)
-  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
+  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b, 1)
 
   #check that all links from and to 3 are gone
   @test parameters[:A] == Int.(zero(A))
@@ -208,10 +204,10 @@ module TestUpdateParameters
   # Test with Gilljam rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5] #extinction of species 3
-  RWmethod = :Gilljam
+  RWmethod = :DS
   parameters = model_parameters(A, rewire_method = RWmethod)
   old_p = copy(parameters)
-  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
+  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b, 1)
 
   #check that all links from and to 3 are gone
   @test parameters[:A][:,3] ==  parameters[:A][3,:] == zeros(4)
@@ -234,10 +230,10 @@ module TestUpdateParameters
   # Test with Staniczenko rewiring method
   A = [0 0 1 0 ; 0 0 1 1 ; 0 0 0 0 ; 0 0 0 0]
   b = [0.2, 0.3, 0.0, 0.5]
-  RWmethod = :stan
+  RWmethod = :DO
   parameters = model_parameters(A, rewire_method = RWmethod)
   old_p = copy(parameters)
-  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b)
+  BioEnergeticFoodWebs.update_rewiring_parameters(parameters, b, 1)
   #no released prey => no new link
   @test parameters[:A][:,3] ==  parameters[:A][3,:] == zeros(4)
   # 1 is not an herbivore anymore (no resource)

@@ -1,4 +1,36 @@
 """
+**ADBM parameters**
+"""
+function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+    parameters[:e] = e
+    parameters[:a_adbm] = a_adbm
+    parameters[:ai] = ai
+    parameters[:aj] = aj
+    parameters[:b] = b
+    parameters[:h_adbm] = h_adbm
+    parameters[:hi] = hi
+    parameters[:hj] = hj
+    parameters[:n] = n
+    parameters[:ni] = ni
+    #check Hmethod
+    if Hmethod ∈ [:ratio, :power]
+      parameters[:Hmethod] = Hmethod
+    else
+      error("Invalid value for Hmethod -- must be :ratio or :power")
+    end
+    # check Nmethod
+    if Nmethod ∈ [:original, :biomass]
+      parameters[:Nmethod] = Nmethod
+    else
+      error("Invalid value for Nmethod -- must be :original or :biomass")
+    end
+    # add empty cost matrix
+    S = size(parameters[:A],2)
+    parameters[:costMat] = ones(Float64,(S,S))
+end
+
+
+"""
 **ADBM Terms**
 This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
@@ -48,7 +80,7 @@ function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
   profit = E ./ H[j,:]
   # Setting profit of species with zero biomass  to -1.0
   # This prevents them being included in the profitSort
-  profit[biomass .== 0.0] .= -1.0
+  profit[vec(biomass .== 0.0)] .= -1.0
 
   profs = sortperm(profit,rev = true)
 

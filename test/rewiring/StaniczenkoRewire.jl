@@ -4,7 +4,7 @@ module TestStaniczenkoRewire
 
     A = [0 0 1 1 ; 0 0 0 1 ; 0 0 0 0 ; 0 0 0 0]
     expected_rg = [0 0 0 0 ; 0 0 0 0 ; 0 0 0 0 ; 0 0 1 0]
-    parameters = model_parameters(A, rewire_method = :stan)
+    parameters = model_parameters(A, rewire_method = :DO)
     @test BioEnergeticFoodWebs.rewiring_graph(parameters) == expected_rg
     expected_pl = [0 0 0 0 ; 0 0 1 0 ; 0 0 0 0 ; 0 0 0 0]
     @test BioEnergeticFoodWebs.potential_newlinks(A, expected_rg, parameters) == expected_pl
@@ -30,7 +30,7 @@ module TestStaniczenkoRewire_TRissue
                    0 0 0 0 0 0 ;
                    0 0 0 0 0 0 ;
                    0 0 0 0 0 0 ]
-    parameters = model_parameters(A, rewire_method = :stan)
+    parameters = model_parameters(A, rewire_method = :DO)
     @test BioEnergeticFoodWebs.rewiring_graph(parameters) == expected_rg
     expected_pl = zero(A)
     @test BioEnergeticFoodWebs.potential_newlinks(A, expected_rg, parameters) == expected_pl
@@ -70,7 +70,7 @@ module TestStaniczenkoRewire_exemplepaper
              1 1 0 0 0 0 0 ;
              1 1 1 0 0 0 0 ;
              0 0 0 0 1 1 0 ]
-    p = model_parameters(A, rewire_method = :stan)
+    p = model_parameters(A, rewire_method = :DO)
     p[:extinctions] = [4]
     @test BioEnergeticFoodWebs.rewiring_graph(p) == expected_R
     @test BioEnergeticFoodWebs.Staniczenko_rewire(p) == new_A
