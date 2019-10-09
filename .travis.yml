@@ -11,6 +11,7 @@ julia:
   - nightly
 addons:
   apt:
+    update: true
     packages:
     - hdf5-tools
 before_script:
