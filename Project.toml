@@ -2,7 +2,7 @@ name = "BioEnergeticFoodWebs"
 uuid = "9b49b652-2545-5b88-a3af-87b516beb26f"
 keywords = ["food webs", "ecology", "ecological models", "populations dynamics", "biomass"]
 desc = "A unified interface for simulations of the Bio-Energetic model on food webs"
-version = "1.1.0"
+version = "1.1.1"
 
 [deps]
 DiffEqCallbacks = "459566f4-90b8-5000-8ac3-15dfb0a30def"
