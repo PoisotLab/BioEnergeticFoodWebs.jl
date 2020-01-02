@@ -14,11 +14,11 @@ addons:
     update: true
     packages:
     - hdf5-tools
-before_script:
-  - julia -e 'using Pkg;
-      Pkg.add(PackageSpec(name="MbedTLS", version="0.6.6"));
-      Pkg.pin(PackageSpec(name="MbedTLS", version="0.6.6"));
-      Pkg.add([PackageSpec(name="BinaryBuilder", rev="master"), PackageSpec(name="BinaryProvider")])'
+# before_script:
+#   - julia -e 'using Pkg;
+#       Pkg.add(PackageSpec(name="MbedTLS", version="0.6.6"));
+#       Pkg.pin(PackageSpec(name="MbedTLS", version="0.6.6"));
+#       Pkg.add([PackageSpec(name="BinaryBuilder", rev="master"), PackageSpec(name="BinaryProvider")])'
 after_success:
   - julia -e 'import Pkg; cd(Pkg.dir("BioEnergeticFoodWebs")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder()); Codecov.submit(Codecov.process_folder())'
   - julia -e 'import Pkg; Pkg.add("Documenter")'
