@@ -31,12 +31,12 @@ top-level keys:
 The array of biomasses has one row for each timestep, and one column for
 each species.
 """
-function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff, cb_interp_points::Int64=100, extinction_threshold::Float64=1e-6)
+function simulate(parameters, biomass; n_concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff, cb_interp_points::Int64=100, extinction_threshold::Float64=1e-6)
   @assert stop > start
   @assert length(biomass) == size(parameters[:A],1)
-  @assert length(concentration) == 2
+  @assert length(n_concentration) == 2
   if parameters[:productivity] == :nutrients
-      biomass = vcat(biomass, concentration)
+      biomass = vcat(biomass, n_concentration)
   end
 
   @assert use ∈ vec([:stiff :nonstiff])
@@ -52,14 +52,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
 
   ϵ = []
-
-  function species_under_extinction_threshold_nutrients(u, t, integrator)
-    workingbm = deepcopy(u[1:end-2])
-    sort!(ϵ)
-    deleteat!(workingbm, unique(ϵ))
-    cond = any(x -> x < extinction_threshold, workingbm) ? -0.0 : 1.0
-    return cond
-  end
 
   function species_under_extinction_threshold(u, t, integrator)
     workingbm = deepcopy(u)
@@ -92,17 +84,35 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
     parameters = update_rewiring_parameters(parameters, workingbm, integrator.t)
   end
 
+  function remove_target_and_update!(u, t, integrator)
+    remove_species!(integrator)
+    if parameters[:productivity] == :nutrients
+      workingbm = deepcopy(integrator.u[1:end-2])
+    else
+      workingbm = deepcopy(integrator.u)
+    end
+    parameters = BioEnergeticFoodWebs.update_rewiring_parameters(parameters, workingbm, integrator.t)
+  end
+
   cb = species_under_extinction_threshold
   affect_function = remove_species_and_update!
   if parameters[:rewire_method] == :ADBM
     if parameters[:adbm_trigger] == :interval
       Δt = parameters[:adbm_interval]
-      extinction_callback = PeriodicCallback(affect_function, Δt)
+      cb1 = PeriodicCallback(affect_function, Δt)
     else
-      extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+      cb1 = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
     end
   else
-    extinction_callback = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+    cb1 = ContinuousCallback(cb, affect_function, interp_points = cb_interp_points)
+  end
+
+  is_any_extinct = any(biomass .< extinction_threshold)
+  if is_any_extinct
+    cb2 = FunctionCallingCallback(remove_target_and_update!, funcat = [1.0])
+    extinction_callback = CallbackSet(cb1, cb2)
+  else
+    extinction_callback = cb1
   end
 
   sol = solve(prob, alg, callback = extinction_callback, saveat=t_keep, dense=false, save_timeseries=false, force_dtmin=false)
@@ -123,6 +133,6 @@ function simulate(parameters, biomass; concentration::Vector{Float64}=rand(Float
       :B => B)
   end
 
-return output
+  return output
 
 end

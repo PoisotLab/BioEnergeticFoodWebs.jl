@@ -62,13 +62,13 @@ module TestNutrientIntake
   # When nutrient supply or turnover is 0, then producers growth is 0 and nutrient growth is 1
 
   p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, supply = [0.0])
-  s = simulate(p, b0, concentration = c0, stop = 1000)
+  s = simulate(p, b0, n_concentration = c0, stop = 1000)
   @test s[:B][end,1] ≈ .0 atol=1e-6
   @test s[:B][end,2] ≈ .0 atol=1e-6
 
   p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2, D = 0.0)
-  s = simulate(p, b0, concentration = c0, stop = 1000)
+  s = simulate(p, b0, n_concentration = c0, stop = 1000)
   @test s[:B][end,1] ≈ .0 atol=1e-6
   @test s[:B][end,2] ≈ .0 atol=1e-6
-  
+
 end
