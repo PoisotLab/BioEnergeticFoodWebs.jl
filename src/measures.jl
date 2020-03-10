@@ -143,31 +143,33 @@ end
 # This function is *not* exported, so it must be called with `BioEnergeticFoodWebs.save`.
 #
 # """
-# function save(parameters::Dict{Symbol,Any}; as::Symbol=:json, filename=nothing, varname=nothing)
-#     if as == :JSON
-#         as = :json
-#     end
-#     if as == :JLD
-#         as = :jld
-#     end
-#     @assert as ∈ vec([:json :jld])
-#     if filename == nothing
-#         filename = "befwm_" * string(hash(parameters))
-#     end
-#     if varname == nothing
-#         varname = "befwm_simul"
-#     end
-#     if as == :json
-#         filename = filename * ".json"
-#         f = open(filename, "w")
-#         JSON.print(f, parameters)
-#         close(f)
-#     end
-#     if as == :jld
-#         filename = filename * ".jld"
-#         JLD.save(filename, varname, parameters)
-#     end
-# end
+function save(sim::Dict{Symbol,Any}; as::Symbol=:jld, filename=nothing, varname=nothing)
+    if as == :JSON
+        as = :json
+    end
+    if as == :JLD
+        as = :jld
+    end
+    @assert as ∈ vec([:json :jld])
+    if filename == nothing
+        filename = "befwm_" * string(hash(sim))
+    end
+    if varname == nothing
+        varname = "befwm_simul"
+    end
+    if as == :json
+        sim[:p][:dp] = string(@code_lowered sim[:p][:dp](1))
+        sim[:p][:dc] = string(@code_lowered sim[:p][:dc](1))
+        filename = filename * ".json"
+        f = open(filename, "w")
+        JSON.print(f, sim)
+        close(f)
+    end
+    if as == :jld
+        filename = filename * ".jld2"
+        @save filename sim
+    end
+end
 
 
 """
