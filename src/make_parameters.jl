@@ -250,6 +250,7 @@ function model_parameters(A;
     parameters[:extinctions] = []
     parameters[:extinctionstime] = []
     parameters[:tmpA] = []
+    adbm_trigger == :interval ? parameters[:rewiretime] = [] : Nothing
  else
     error("Invalid method for rewiring -- must be :DO (alternatively :stan), :ADBM, :DS (alternatively :Gilljam) or :none")
  end

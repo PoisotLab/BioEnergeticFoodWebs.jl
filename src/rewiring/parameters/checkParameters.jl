@@ -19,13 +19,23 @@ function check_rewiring_parameters(rewireP,rewireMethod)
     :Nmethod,
     :Hmethod,
     :rewire_method,
-    :costMat]
+    :adbm_trigger,
+    :costMat,
+    :extinctions,
+    :extinctionstime,
+    :tmpA]
+    if rewireP[:adbm_trigger] == :interval
+      append!(required_keys, :adbm_interval)
+      append!(required_keys, :rewiretime)
+    end
   elseif rewireMethod ∈ [:Gilljam, :DS]
     required_keys = [
     :rewire_method,
     :similarity,
     :specialistPrefMag,
     :extinctions,
+    :extinctionstime,
+    :tmpA,
     :preferenceMethod,
     :cost,
     :costMat,
@@ -33,7 +43,9 @@ function check_rewiring_parameters(rewireP,rewireMethod)
   elseif rewireMethod ∈ [:stan, :DO]
     required_keys = [
     :rewire_method,
-    :extinctions]
+    :extinctions,
+    :extinctionstime,
+    :tmpA]
   end
 
   if rewireMethod ∈ [:Gilljam, :ADBM, :stan, :DO, :DS]
