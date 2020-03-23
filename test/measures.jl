@@ -51,53 +51,53 @@ module TestMeasures
 
 end
 
-# module TestSave
-#     using Test
-#     using BioEnergeticFoodWebs
-#     using LinearAlgebra
-#     using JLD
-#     using JSON
-#
-#     A = [0 0 0 ; 0 0 0 ; 0 0 0]
-#     b = rand(3)
-#     p = model_parameters(A)
-#     #default variable name and extension
-#     def_vname = "befwm_simul"
-#     def_ext = :jld
-#     #test default arguments
-#     cd(tempdir())
-#     s = simulate(p,b)
-#     # default file name
-#     def_fname = "befwm_" * string(hash(s)) * ".jld"
-#     BioEnergeticFoodWebs.save(s, as = def_ext)
-#
-#     # Test if the file is saved (under the default name)
-#     @test isfile(def_fname)
-#     # Test if the content is the same
-#     sbis = load(def_fname, def_vname)
-#     @test sbis == s
-#
-#     rm(def_fname)
-#     # Test is it works with as = :JLD
-#     ext = :JLD
-#     BioEnergeticFoodWebs.save(s, as = ext)
-#     @test isfile(def_fname)
-#     sbis = load(def_fname, def_vname)
-#     @test sbis == s
-#     rm(def_fname)
-#
-#     # Test with .json
-#     ext = :json
-#     BioEnergeticFoodWebs.save(s, as = ext)
-#     fname = "befwm_" * string(hash(s)) * ".json"
-#     @test isfile(fname)
-#     rm(fname)
-#
-#     # Test with .JSON
-#     ext = :JSON
-#     BioEnergeticFoodWebs.save(s, as = ext)
-#     fname = "befwm_" * string(hash(s)) * ".json"
-#     @test isfile(fname)
-#     rm(fname)
-#
-# end
+module TestSave
+    using Test
+    using BioEnergeticFoodWebs
+    using LinearAlgebra
+    using JLD2
+    using JSON
+
+    A = [0 0 0 ; 0 0 0 ; 0 0 0]
+    b = rand(3)
+    p = model_parameters(A)
+    #default variable name and extension
+    def_vname = "befwm_simul"
+    def_ext = :jld
+    #test default arguments
+    cd(tempdir())
+    s = simulate(p,b)
+    # default file name
+    def_fname = "befwm_" * string(hash(s)) * ".jld2"
+    BioEnergeticFoodWebs.save(s, as = def_ext)
+
+    # Test if the file is saved (under the default name)
+    @test isfile(def_fname)
+    # Test if the content is the same
+    sbis = load(def_fname, def_vname)
+    @test sbis == s
+
+    rm(def_fname)
+    # Test is it works with as = :JLD
+    ext = :JLD
+    BioEnergeticFoodWebs.save(s, as = ext)
+    @test isfile(def_fname)
+    sbis = load(def_fname, def_vname)
+    @test sbis == s
+    rm(def_fname)
+
+    # Test with .json
+    ext = :json
+    BioEnergeticFoodWebs.save(s, as = ext)
+    fname = "befwm_" * string(hash(s)) * ".json"
+    @test isfile(fname)
+    rm(fname)
+
+    # Test with .JSON
+    ext = :JSON
+    BioEnergeticFoodWebs.save(s, as = ext)
+    fname = "befwm_" * string(hash(s)) * ".json"
+    @test isfile(fname)
+    rm(fname)
+
+end
