@@ -3,7 +3,7 @@ module BioEnergeticFoodWebs
 using Distributions
 using OrdinaryDiffEq, DiffEqCallbacks
 using JSON
-using JLD
+using JLD2
 using StatsBase
 using Statistics
 using LinearAlgebra
@@ -13,6 +13,7 @@ export trophic_rank,
   #rewire_parameters,
   simulate,
   nichemodel,
+  save, 
   population_stability,
   total_biomass,
   population_biomass,
