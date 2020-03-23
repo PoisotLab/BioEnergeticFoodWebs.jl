@@ -158,8 +158,8 @@ function save(sim::Dict{Symbol,Any}; as::Symbol=:jld, filename=nothing, varname=
         varname = "befwm_simul"
     end
     if as == :json
-        sim[:p][:dp] = string(@code_lowered sim[:p][:dp](1))
-        sim[:p][:dc] = string(@code_lowered sim[:p][:dc](1))
+        sim[:p][:dc] = string(sim[:p][:dc])
+        sim[:p][:dp] = string(sim[:p][:dp])
         filename = filename * ".json"
         f = open(filename, "w")
         JSON.print(f, sim)
