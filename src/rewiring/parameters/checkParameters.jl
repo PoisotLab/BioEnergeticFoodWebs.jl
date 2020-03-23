@@ -25,8 +25,7 @@ function check_rewiring_parameters(rewireP,rewireMethod)
     :extinctionstime,
     :tmpA]
     if rewireP[:adbm_trigger] == :interval
-      append!(required_keys, :adbm_interval)
-      append!(required_keys, :rewiretime)
+      append!(required_keys, [:adbm_interval, :rewiretime])
     end
   elseif rewireMethod ∈ [:Gilljam, :DS]
     required_keys = [
