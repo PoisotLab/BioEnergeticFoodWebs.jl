@@ -134,16 +134,14 @@ end
 # Takes a simulation output as a mandatory argument. The two keyword arguments
 # are `as` (can be `:json` or `:jld`), defining the file format, and `filename`
 # (without an extension, defaults to `NaN`). If `:jld` is used, the variable
-# is named `befwm_simul` unless a `varname` is given.
+# is named `befwm_simul`.
 #
 # Called with the defaults, this function will write `befwm_xxxxxxxx.json`
 # with the current simulation output, where `xxxxxxxx` is a hash of the `p`
 # output (ensuring that all output files are unique).
 #
-# This function is *not* exported, so it must be called with `BioEnergeticFoodWebs.save`.
-#
 # """
-function save(sim::Dict{Symbol,Any}; as::Symbol=:jld, filename=nothing, varname=nothing)
+function save(sim::Dict{Symbol,Any}; as::Symbol=:jld, filename=nothing)
     if as == :JSON
         as = :json
     end
@@ -154,15 +152,13 @@ function save(sim::Dict{Symbol,Any}; as::Symbol=:jld, filename=nothing, varname=
     if filename == nothing
         filename = "befwm_" * string(hash(sim))
     end
-    if varname == nothing
-        varname = "befwm_simul"
-    end
     if as == :json
-        sim[:p][:dc] = string(sim[:p][:dc])
-        sim[:p][:dp] = string(sim[:p][:dp])
+        befwm_simul = deepcopy(sim)
+        befwm_simul[:p][:dc] = string(befwm_simul[:p][:dc])
+        befwm_simul[:p][:dp] = string(befwm_simul[:p][:dp])
         filename = filename * ".json"
         f = open(filename, "w")
-        JSON.print(f, sim)
+        JSON.print(f, befwm_simul)
         close(f)
     end
     if as == :jld

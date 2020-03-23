@@ -76,8 +76,8 @@ module TestSave
     # Test if the content is the same
     @load def_fname sim
     @test sim == s
-
     rm(def_fname)
+
     # Test is it works with as = :JLD
     ext = :JLD
     save(s, as = ext)
@@ -88,15 +88,14 @@ module TestSave
 
     # Test with .json
     ext = :json
-    save(s, as = ext)
     fname = "befwm_" * string(hash(s)) * ".json"
+    save(s, as = ext)
     @test isfile(fname)
     rm(fname)
 
     # Test with .JSON
     ext = :JSON
     save(s, as = ext)
-    fname = "befwm_" * string(hash(s)) * ".json"
     @test isfile(fname)
     rm(fname)
 
