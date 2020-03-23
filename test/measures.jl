@@ -69,7 +69,7 @@ module TestSave
     s = simulate(p,b)
     # default file name
     def_fname = "befwm_" * string(hash(s)) * ".jld2"
-    BioEnergeticFoodWebs.save(s, as = def_ext)
+    save(s, as = def_ext)
 
     # Test if the file is saved (under the default name)
     @test isfile(def_fname)
@@ -80,7 +80,7 @@ module TestSave
     rm(def_fname)
     # Test is it works with as = :JLD
     ext = :JLD
-    BioEnergeticFoodWebs.save(s, as = ext)
+    save(s, as = ext)
     @test isfile(def_fname)
     @load def_fname sim
     @test sim == s
@@ -88,14 +88,14 @@ module TestSave
 
     # Test with .json
     ext = :json
-    BioEnergeticFoodWebs.save(s, as = ext)
+    save(s, as = ext)
     fname = "befwm_" * string(hash(s)) * ".json"
     @test isfile(fname)
     rm(fname)
 
     # Test with .JSON
     ext = :JSON
-    BioEnergeticFoodWebs.save(s, as = ext)
+    save(s, as = ext)
     fname = "befwm_" * string(hash(s)) * ".json"
     @test isfile(fname)
     rm(fname)
