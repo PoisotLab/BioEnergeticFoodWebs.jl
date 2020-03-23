@@ -74,16 +74,16 @@ module TestSave
     # Test if the file is saved (under the default name)
     @test isfile(def_fname)
     # Test if the content is the same
-    sbis = load(def_fname, def_vname)
-    @test sbis == s
+    @load def_fname sim
+    @test sim == s
 
     rm(def_fname)
     # Test is it works with as = :JLD
     ext = :JLD
     BioEnergeticFoodWebs.save(s, as = ext)
     @test isfile(def_fname)
-    sbis = load(def_fname, def_vname)
-    @test sbis == s
+    @load def_fname sim
+    @test sim == s
     rm(def_fname)
 
     # Test with .json
