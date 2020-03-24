@@ -7,7 +7,9 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
     Anew = ADBM(S,parameters,biomass) #potentially new interaction  matrix
     if A != Anew #different matrices => rewired
       append!(parameters[:tmpA], [parameters[:A]]) #store the old matrix
-      append!(parameters[:rewiretime], t) #store the time t whichrewiring happened
+      if parameters[:adbm_trigger] == :interval
+        append!(parameters[:rewiretime], t) #store the time t whichrewiring happened
+      end
     end
     #Is there any extinction?
     extinct = findall(biomass .< 100*eps())
