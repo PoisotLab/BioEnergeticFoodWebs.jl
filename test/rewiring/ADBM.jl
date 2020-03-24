@@ -111,5 +111,5 @@ module TestADBM_interval
 
     @test p[:extinctions] == [1,2]
     @test p[:extinctionstime] == [(0.0, 2), (100.0, 1)]
-    @test p[:tmpA] == [A, [0 0 0 ; 0 0 0 ; 0 0 0]]
+    @test map(x -> Int.(x), p[:tmpA]) == [A, [0 0 0 ; 0 0 0 ; 0 0 0]]
 end
