@@ -112,6 +112,7 @@ module TestADBM_interval
     @test p[:extinctions] == [1,2]
     @test p[:extinctionstime] == [(0.0, 2), (100.0, 1)]
     @test p[:tmpA] == [convert(Array{Any, 2}, A)]
+    @test length(p[:rewiretime]) != 0
 
     A = [0 1 0 0; 0 0 0 1 ; 0 0 0 1 ; 0 0 0 0]
     p = model_parameters(A, rewire_method = :ADBM, adbm_trigger = :interval, adbm_interval = 1, Z = 10.0)
