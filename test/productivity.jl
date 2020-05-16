@@ -11,9 +11,16 @@ module TestProductivity
   @test s[:B][end,4] ≈ parameters[:K]/4 atol=0.001
 
   # Using species-wide regulation, producers with no consumption reach K
-  parameters = model_parameters(A, productivity=:species)
-  s = simulate(parameters, n, start=0, stop=15)
+  parameters = BioEnergeticFoodWebs.model_parameters(A, productivity=:species)
+  s = BioEnergeticFoodWebs.simulate(parameters, n, start=0, stop=15)
   @test s[:B][end,4] ≈ parameters[:K] atol=0.001
+
+  parameters = BioEnergeticFoodWebs.model_parameters(A, K=[0.4, 2, 1, 0.9])
+  s = BioEnergeticFoodWebs.simulate(parameters, n, start=0, stop=15)
+  @test s[:B][end,1] ≈ parameters[:K][1] atol=0.001
+  @test s[:B][end,2] ≈ parameters[:K][2] atol=0.001
+  @test s[:B][end,3] ≈ parameters[:K][3] atol=0.001
+  @test s[:B][end,4] ≈ parameters[:K][4] atol=0.001
 
   # NOTE The following tests start with n = [1 1 1 1]
 

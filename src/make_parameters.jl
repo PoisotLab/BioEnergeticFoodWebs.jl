@@ -98,7 +98,7 @@ please check the documentation for more information.
 
 """
 function model_parameters(A;
-        K::Float64=1.0,
+        K::Array{Float64, 1}=[1.0],
         Z::Float64=1.0,
         c::Float64=0.0,
         h::Number=1.0,
@@ -149,7 +149,7 @@ function model_parameters(A;
 
   # Step 1 -- create a dictionnary to store the parameters
   parameters = Dict{Symbol,Any}(
-  :K              => K,
+  #:K              => K,
   :Z              => Z,
   :c              => c,
   :e_carnivore    => e_carnivore,
@@ -206,6 +206,15 @@ function model_parameters(A;
     parameters[:productivity] = productivity
   else
     error("Invalid value for productivity -- must be :system, :species, :competitive or :nutrients")
+  end
+
+  parameters[:K] = K
+  if length(parameters[:K]) > 1
+    if length(parameters[:K]) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `K`, there must be as many elements as rows/columns in the matrix (K for consumers will be ignored as r_consumers = 0)")
+    end
+  else
+    parameters[:K] = repeat(K, size(A,1))
   end
 
   # step 7 -- productivity parameters for the NP model
