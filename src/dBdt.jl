@@ -6,7 +6,7 @@ TODO
 function growthrate(parameters, biomass, i; c = [0.0, 0.0])
   # Default -- species-level regulation
   compete_with = biomass[i]
-  effective_K = parameters[:K]
+  effective_K = parameters[:K][i]
   # If regulation is system-wide (all species share K)
   if parameters[:productivity] == :system
     compete_with = biomass[i]
@@ -27,7 +27,7 @@ function growthrate(parameters, biomass, i; c = [0.0, 0.0])
     limiting_nutrient = hcat(limit_n1, limit_n2)
     G = minimum(limiting_nutrient, dims = 2)
   else
-    G = 1.0 - compete_with / effective_K
+    G = 1.0 .- compete_with ./ effective_K
   end
   return G
 end
