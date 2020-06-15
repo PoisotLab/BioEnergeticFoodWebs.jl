@@ -149,7 +149,6 @@ function model_parameters(A;
 
   # Step 1 -- create a dictionnary to store the parameters
   parameters = Dict{Symbol,Any}(
-  #:K              => K,
   :Z              => Z,
   :c              => c,
   :e_carnivore    => e_carnivore,

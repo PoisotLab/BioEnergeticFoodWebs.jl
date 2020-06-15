@@ -11,7 +11,7 @@ function growthrate(parameters, biomass, i; c = [0.0, 0.0])
   if parameters[:productivity] == :system
     compete_with = biomass[i]
     effective_K = parameters[:K] / parameters[:np]
-    G = 1.0 - compete_with / effective_K
+    G = 1.0 .- compete_with ./ effective_K
   elseif parameters[:productivity] == :competitive # If there is competition
     compete_with = biomass[i]
     for j in eachindex(biomass)
@@ -20,7 +20,7 @@ function growthrate(parameters, biomass, i; c = [0.0, 0.0])
       end
     end
     effective_K = parameters[:K]
-    G = 1.0 - compete_with / effective_K
+    G = 1.0 .- compete_with ./ effective_K
   elseif parameters[:productivity] == :nutrients
     limit_n1 = c[1] ./ (parameters[:K1][i] .+ c[1])
     limit_n2 = c[2] ./ (parameters[:K2][i] .+ c[2])
