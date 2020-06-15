@@ -8,15 +8,15 @@ module TestProductivity
   # Using system-wide regulation, producers with no consumption reach K / n
   parameters = model_parameters(A, productivity=:system)
   s = simulate(parameters, n, start=0, stop=15)
-  @test s[:B][end,4] ≈ parameters[:K]/4 atol=0.001
+  @test s[:B][end,4] ≈ parameters[:K][4]/4 atol=0.001
 
   # Using species-wide regulation, producers with no consumption reach K
-  parameters = BioEnergeticFoodWebs.model_parameters(A, productivity=:species)
-  s = BioEnergeticFoodWebs.simulate(parameters, n, start=0, stop=15)
-  @test s[:B][end,4] ≈ parameters[:K] atol=0.001
+  parameters = model_parameters(A, productivity=:species)
+  s = simulate(parameters, n, start=0, stop=15)
+  @test s[:B][end,4] ≈ parameters[:K][4] atol=0.001
 
-  parameters = BioEnergeticFoodWebs.model_parameters(A, K=[0.4, 2, 1, 0.9])
-  s = BioEnergeticFoodWebs.simulate(parameters, n, start=0, stop=15)
+  parameters = model_parameters(A, K=[0.4, 2, 1, 0.9])
+  s = simulate(parameters, n, start=0, stop=15)
   @test s[:B][end,1] ≈ parameters[:K][1] atol=0.001
   @test s[:B][end,2] ≈ parameters[:K][2] atol=0.001
   @test s[:B][end,3] ≈ parameters[:K][3] atol=0.001
@@ -27,22 +27,22 @@ module TestProductivity
   # Using competitive regulation with α = 1 is neutral
   parameters = model_parameters(A, productivity=:competitive, α=1.0)
   s = simulate(parameters, ones(4), start=0, stop=15)
-  @test s[:B][end,4] ≈ parameters[:K]/4 atol=0.001
+  @test s[:B][end,4] ≈ parameters[:K][4]/4 atol=0.001
 
   # Using competitive regulation with α > 1 is exclusive
   parameters = model_parameters(A, productivity=:competitive, α=1.05)
   s = simulate(parameters, ones(4), start=0, stop=15)
-  @test s[:B][end,4] < parameters[:K]/4
+  @test s[:B][end,4] < parameters[:K][4]/4
 
   # Using competitive regulation with α < 1 is overyielding
   parameters = model_parameters(A, productivity=:competitive, α=0.95)
   s = simulate(parameters, ones(4), start=0, stop=15)
-  @test s[:B][end,4] > parameters[:K]/4
+  @test s[:B][end,4] > parameters[:K][4]/4
 
   # Using competitive regulation with α = 0 is species-level regulation
   parameters = model_parameters(A, productivity=:competitive, α=0.0)
   s = simulate(parameters, ones(4), start=0, stop=15)
-  @test s[:B][end,4] ≈ parameters[:K] atol=0.001
+  @test s[:B][end,4] ≈ parameters[:K][4] atol=0.001
 
 end
 
