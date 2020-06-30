@@ -303,7 +303,7 @@ function model_parameters(A;
 
   # Step 12 -- Growth rate
   m_producer = minimum(parameters[:bodymass][is_producer])
-  id_smallest_prod = findfirst([(bodymass[i] == m_producer) & (is_producer[i]) for i = 1:length(is_producer)])
+  id_smallest_prod = findfirst([(parameters[:bodymass][i] == m_producer) & (is_producer[i]) for i = 1:length(is_producer)])
   parameters[:m_producer] = m_producer
   body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
   m = scale_bodymass ? body_size_relative : parameters[:bodymass]
