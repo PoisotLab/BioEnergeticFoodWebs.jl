@@ -1,9 +1,6 @@
-using Pkg
-using Documenter
-
 push!(LOAD_PATH, "../src/")
 
-Pkg.activate(".")
+using Documenter
 using BioEnergeticFoodWebs
 
 makedocs(
@@ -12,7 +9,8 @@ makedocs(
          )
 
 deploydocs(
-           deps = Deps.pip("pygments", "mkdocs==0.17.5", "mkdocs-material==2.9.4", "python-markdown-math"),
-           repo = "github.com/PoisotLab/BioEnergeticFoodWebs.jl.git",
-           devbranch = "next"
-          )
+        deps   = Deps.pip("pygments", "python-markdown-math"),
+        repo   = "github.com/PoisotLab/BioEnergeticFoodWebs.jl.git",
+        devbranch = "next",
+        push_preview = true
+        )
