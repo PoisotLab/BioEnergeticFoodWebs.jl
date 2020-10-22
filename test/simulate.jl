@@ -36,14 +36,17 @@ module TestSimulateSanityCheck
   bm = rand(4)
 
   s = simulate(parameters, bm, start=0, stop=25)
-  @test s[:B][end,4] ≈ parameters[:K] atol=0.002
+  @test parameters[:K] == Float64.(ones(4))
+  @test s[:B][end,4] ≈ parameters[:K][4] atol=0.002
 
   # Using system-wide regulation, producers with no consumption reach K / n
   A = zeros(Int64, (4, 4))
   parameters = model_parameters(A, productivity=:system)
   bm = rand(4)
   s = simulate(parameters, bm, start=0, stop=15)
-  @test s[:B][end,4] ≈ parameters[:K]/4 atol=0.001
+  K = parameters[:K][1]
+  @test length(parameters[:K]) == 1
+  @test s[:B][end,4] ≈ K/4 atol=0.001
 
   # A consumer with a resource with 0 biomass goes extinct
   A = [0 1; 0 0]

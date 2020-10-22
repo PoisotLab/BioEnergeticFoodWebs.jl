@@ -209,12 +209,18 @@ function model_parameters(A;
   end
 
   parameters[:K] = K
-  if length(parameters[:K]) > 1
-    if length(parameters[:K]) != size(A, 1)
-      error("when calling `model_parameters` with an array of values for `K`, there must be as many elements as rows/columns in the matrix (K for consumers will be ignored as r_consumers = 0)")
+  if productivity ∈ [:system, :competitive]
+    if length(parameters[:K]) != 1
+      error("When using productivity = :system or :competitve, you should only provide 1 value for K (system-wide carrying capacity")
     end
-  else
-    parameters[:K] = repeat(K, size(A,1))
+  elseif productivity == :species
+    if length(parameters[:K]) > 1
+      if length(parameters[:K]) != size(A, 1)
+        error("when calling `model_parameters` with an array of values for `K`, there must be as many elements as rows/columns in the matrix (K for consumers will be ignored as r_consumers = 0)")
+      end
+    else
+      parameters[:K] = repeat(K, size(A,1))
+    end
   end
 
   # step 7 -- productivity parameters for the NP model
