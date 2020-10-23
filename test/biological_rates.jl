@@ -33,7 +33,7 @@ module TestDefault
                        handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = (y_vertebrate = 3.0, y_invertebrate = 7.0)),
                        attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8,)),
                        metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = (a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
-                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0,)))
+                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (ar = 2.0,)))
   @test p[:r] == [2.0, 2.0, 2.0]
   # metabolic rates
   a_invertebrate = 0.3
@@ -60,7 +60,7 @@ module TestDefault
                        handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = (y_vertebrate = 3.0, y_invertebrate = 7.0)),
                        attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8,)),
                        metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = (a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
-                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0,)),
+                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (ar = 2.0,)),
                        scale_growth = true,
                        scale_maxcons = true,
                        scale_metabolism = true)
@@ -83,7 +83,7 @@ module TestDefault
                        handlingtime = NoEffectTemperature(:handlingtime, parameters_tuple = (y_vertebrate = 3.0, y_invertebrate = 7.0)),
                        attackrate = NoEffectTemperature(:attackrate, parameters_tuple = (Γ = 0.8,)),
                        metabolicrate = NoEffectTemperature(:metabolism, parameters_tuple = (a_vertebrate = 0.8, a_invertebrate = 0.3, a_producer = 0.1)),
-                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (r = 2.0,)))
+                       growthrate = NoEffectTemperature(:growth, parameters_tuple = (ar = 2.0,)))
   @test p[:r] == p2[:r]
   @test p[:x] == p2[:x]
   @test p[:ht] == p2[:ht]

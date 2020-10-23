@@ -1,5 +1,5 @@
 NAME=BioEnergeticFoodWebs
-V=0.5
+V=1.3
 FOLD=~/.julia/v$(V)/$(NAME)
 JEXEC=julia
 
