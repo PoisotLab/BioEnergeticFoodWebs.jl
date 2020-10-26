@@ -115,14 +115,14 @@ Internally the function takes 3 arguments (unused in this case):
 - the set of parameters p.
 
 """
-function no_effect_r(default_temp_parameters = (r = 1.0,); passed_temp_parameters...)
+function no_effect_r(default_temp_parameters = (ar = 1.0, br = -0.25); passed_temp_parameters...)
 	if length(passed_temp_parameters) != 0
 	  tmpargs = passed_temp_parameters[:passed_temp_parameters]
 	  temperature_param = merge(default_temp_parameters, tmpargs)
 	else
 	  temperature_param = default_temp_parameters
 	end
-    return (bodymass, T, p) -> repeat([temperature_param.r], size(p[:A], 1))
+    return (bodymass, T, p) -> temperature_param.ar * (bodymass .^ temperature_param.br)
 end
 
 """

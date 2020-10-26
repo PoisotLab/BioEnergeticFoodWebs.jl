@@ -2,18 +2,27 @@ function update_rewiring_parameters(parameters::Dict{Symbol,Any}, biomass, t)
   S = size(parameters[:A], 1)
 
   if parameters[:rewire_method] == :ADBM
+    # Is there any extinction and/or rewiring happening?
+    A = parameters[:A] #interaction matrix
+    Anew = ADBM(S,parameters,biomass) #potentially new interaction  matrix
+    if A != Anew #different matrices => rewired
+      append!(parameters[:tmpA], [parameters[:A]]) #store the old matrix
+      if parameters[:adbm_trigger] == :interval
+        append!(parameters[:rewiretime], t) #store the time t whichrewiring happened
+      end
+    end
+    #Is there any extinction?
     extinct = findall(biomass .< 100*eps())
     for i in extinct
       if i ∉ parameters[:extinctions]
         append!(parameters[:extinctions], i) ;
         append!(parameters[:extinctionstime], [(t, i)])
-        append!(parameters[:tmpA], [parameters[:A]])
       end
     end
     sort!(parameters[:extinctions])
 
     #assign new array
-    parameters[:A] = ADBM(S,parameters,biomass)
+    parameters[:A] = Anew
 
     #update the parameters
     get_herbivores(parameters) #

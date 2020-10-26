@@ -6,20 +6,23 @@ TODO
 function growthrate(parameters, biomass, i; c = [0.0, 0.0])
   # Default -- species-level regulation
   compete_with = biomass[i]
-  effective_K = parameters[:K]
   # If regulation is system-wide (all species share K)
   if parameters[:productivity] == :system
+    @assert length(parameters[:K]) == 1
+    K = parameters[:K][1]
     compete_with = biomass[i]
-    effective_K = parameters[:K] / parameters[:np]
+    effective_K = K / parameters[:np]
     G = 1.0 - compete_with / effective_K
   elseif parameters[:productivity] == :competitive # If there is competition
+    @assert length(parameters[:K]) == 1
+    K = parameters[:K][1]
     compete_with = biomass[i]
     for j in eachindex(biomass)
       if (i != j) & (parameters[:is_producer][j])
         compete_with += parameters[:α] * biomass[j]
       end
     end
-    effective_K = parameters[:K]
+    effective_K = K
     G = 1.0 - compete_with / effective_K
   elseif parameters[:productivity] == :nutrients
     limit_n1 = c[1] ./ (parameters[:K1][i] .+ c[1])
@@ -27,7 +30,8 @@ function growthrate(parameters, biomass, i; c = [0.0, 0.0])
     limiting_nutrient = hcat(limit_n1, limit_n2)
     G = minimum(limiting_nutrient, dims = 2)
   else
-    G = 1.0 - compete_with / effective_K
+    effective_K = parameters[:K][i]
+    G = 1.0 .- compete_with ./ effective_K
   end
   return G
 end
@@ -162,6 +166,9 @@ parameters `p`, it will return `dB/dt` for every species.
 """
 function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   S = size(parameters[:A], 1)
+  for i in 1:length(biomass)
+    biomass[i] = biomass[i] <= eps() ? 0.0 : biomass[i]
+  end
 
   # producer growth if NP model
   if parameters[:productivity] == :nutrients

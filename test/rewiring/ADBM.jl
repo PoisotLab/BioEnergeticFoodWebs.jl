@@ -104,12 +104,24 @@ module TestADBM_interval
     using BioEnergeticFoodWebs
     using Test
     A = [0 1 0 ; 0 0 1 ; 0 0 0]
-    b = [0.8, 0.0, 0.5]
+    b = [0.8, -10.0, 0.5]
     p = model_parameters(A, rewire_method = :ADBM, adbm_trigger = :interval, adbm_interval = 100)
 
     s = simulate(p, b)
 
     @test p[:extinctions] == [1,2]
-    @test p[:extinctionstime] == [(0.0, 2), (100.0, 1)]
-    @test p[:tmpA] == [A, [0 0 0 ; 0 0 0 ; 0 0 0]]
+    @test p[:extinctionstime][2] == (100.0, 1)
+    @test p[:tmpA] == [convert(Array{Any, 2}, A)]
+    @test length(p[:rewiretime]) != 0
+
+    A = [0 1 0 0; 0 0 0 1 ; 0 0 0 1 ; 0 0 0 0]
+    p = model_parameters(A, rewire_method = :ADBM, adbm_trigger = :interval, adbm_interval = 1, Z = 10.0)
+    b = [0.8, 2e-6, 0.8, 0.5]
+    s = simulate(p, b, stop = 10)
+
+    @test p[:extinctions] == [2]
+    @test length(p[:extinctionstime]) != 0
+    @test p[:tmpA] == map(x -> convert(Array{Any, 2}, x),[A, [0 1 1 1; 0 0 0 1; 0 0 0 1; 0 0 0 0]])
+    @test length(p[:rewiretime]) != 0
+
 end

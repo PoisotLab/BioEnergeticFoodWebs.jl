@@ -31,7 +31,7 @@ function check_initial_parameters(parameters)
     #:Γ,
     :c,
     #:r,
-    :K
+    #:K
   ]
   for k in required_keys
     @assert get(parameters, k, nothing) != nothing
