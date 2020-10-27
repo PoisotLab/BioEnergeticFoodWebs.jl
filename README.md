@@ -19,13 +19,17 @@ This package is no longer compatible with Julia 0.6 (or older).
 
 ## Stable
 
-[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)](https://travis-ci.org/PoisotLab/BioEnergeticFoodWebs.jl)
-[![Coveralls branch](https://img.shields.io/coveralls/PoisotLab/BioEnergeticFoodWebs.jl/master.svg)](https://coveralls.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=master)
+![CI](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/workflows/CI/badge.svg?branch=master)
+![CI](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/workflows/TagBot/badge.svg?branch=master)
+![CI](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/workflows/CompatHelper/badge.svg?branch=master)
+[![codecov.io](http://codecov.io/github/PoisotLab/BioEnergeticFoodWebs.jl/coverage.svg?branch=master)](http://codecov.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=master)
 
 ## In development
 
-[![Travis branch](https://img.shields.io/travis/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)](https://travis-ci.org/PoisotLab/BioEnergeticFoodWebs.jl)
-[![Coveralls branch](https://img.shields.io/coveralls/PoisotLab/BioEnergeticFoodWebs.jl/next.svg)](https://coveralls.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=next)
+![CI](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/workflows/CI/badge.svg?branch=next)
+![CI](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/workflows/TagBot/badge.svg?branch=next)
+![CI](https://github.com/PoisotLab/BioEnergeticFoodWebs.jl/workflows/CompatHelper/badge.svg?branch=next)
+[![codecov.io](http://codecov.io/github/PoisotLab/BioEnergeticFoodWebs.jl/coverage.svg?branch=next)](http://codecov.io/github/PoisotLab/BioEnergeticFoodWebs.jl?branch=next)
 
 This is a `julia` implementation of the bioenergetic model applied to
 food webs.
