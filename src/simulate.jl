@@ -11,11 +11,14 @@ This function takes two mandatory arguments:
 Internally, the function will check that the length of `biomass` matches
 with the size of the network.
 
-In addition, the function takes three optional arguments:
+In addition, the function takes seven optional arguments:
 
 - `start` (defaults to 0), the initial time
 - `stop` (defaults to 500), the final time
 - `use` (defaults to `:stiff`), a hint to select the solver
+- `cb_interp_points` (default to 100), number of interpolation points used to check for an event (extinction)
+- `extinction_threshold` (default to 1e-6), biomass below which a species is considered as extinct
+- `interval_tkeep` (default to 0.25), controls the density of the outputs, defaukt behavior is to save outputs at times = [start:interval_tkeep:stop]
 
 The integration method is, by default, `:stiff`, and can be changed to
 `:nonstiff`. This is because internally, this function used the
@@ -28,10 +31,12 @@ top-level keys:
 - `:t`, the timesteps
 - `:B`, an `Array{Float64, 2}` with the biomasses
 
-The array of biomasses has one row for each timestep, and one column for
+If a nutient intake model is used for productivity, a `C` Array is also returned, with the 2 nutrients concentrations through time
+
+The array of biomasses (and nutrients concentrations if applicable) has one row for each timestep, and one column for
 each species.
 """
-function simulate(parameters, biomass; n_concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff, cb_interp_points::Int64=100, extinction_threshold::Float64=1e-6)
+function simulate(parameters, biomass; n_concentration::Vector{Float64}=rand(Float64, 2).*10, start::Int64=0, stop::Int64=500, use::Symbol=:nonstiff, cb_interp_points::Int64=100, extinction_threshold::Float64=1e-6, interval_tkeep::Number=0.25)
   @assert stop > start
   @assert length(biomass) == size(parameters[:A],1)
   @assert length(n_concentration) == 2
@@ -46,7 +51,7 @@ function simulate(parameters, biomass; n_concentration::Vector{Float64}=rand(Flo
 
   # Pre-allocate the timeseries matrix
   tspan = (float(start), float(stop))
-  t_keep = collect(start:0.25:stop)
+  t_keep = collect(start:interval_tkeep:stop)
 
   # Perform the actual integration
   prob = ODEProblem(dBdt, biomass, tspan, parameters)
