@@ -19,19 +19,9 @@ function check_initial_parameters(parameters)
   required_keys = [
     :Z,
     :vertebrates,
-    #:a_vertebrate,
-    #:a_invertebrate,
-    #:a_producer,
-    #:m_producer,
-    #:y_vertebrate,
-    #:y_invertebrate,
     :e_herbivore,
     :e_carnivore,
-    :h,
-    #:Γ,
-    :c,
-    #:r,
-    #:K
+    :h
   ]
   for k in required_keys
     @assert get(parameters, k, nothing) != nothing
