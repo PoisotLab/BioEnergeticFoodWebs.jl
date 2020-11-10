@@ -107,10 +107,10 @@ module TestADBM_interval
     b = [0.8, 0.0, 0.5]
     p = model_parameters(A, rewire_method = :ADBM, adbm_trigger = :interval, adbm_interval = 100)
 
-    s = simulate(p, b)
+    s = simulate(p, b, stop = 1000)
 
     @test p[:extinctions] == [1,2]
-    @test p[:extinctionstime][2] == (100.0, 1)
+    @test p[:extinctionstime] == [(0.0, 2) , (100.0, 1)]
     @test p[:tmpA] == [convert(Array{Any, 2}, A)]
     @test length(p[:rewiretime]) != 0
 
@@ -122,7 +122,7 @@ module TestADBM_interval
 
     @test p[:extinctions] == [2]
     @test length(p[:extinctionstime]) != 0
-    @test p[:extinctionstime] == [(1.0, 2)]
+    @test p[:extinctionstime] == [(0.0, 2)]
     @test p[:tmpA] == map(x -> convert(Array{Any, 2}, x),[A])
     @test length(p[:rewiretime]) != 0
 
