@@ -100,12 +100,13 @@ please check the documentation for more information.
 function model_parameters(A;
         K::Array{Float64, 1}=[1.0],
         Z::Float64=1.0,
-        c::Float64=0.0,
+        c::Array{Float64, 1}=[0.0],
         h::Number=1.0,
         e_carnivore::Float64=0.85,
         e_herbivore::Float64=0.45,
         α::Float64=1.0,
         productivity::Symbol=:species,
+        functional_response::Symbol=:bioenergetic,
         bodymass::Array{Float64, 1}=[0.0],
         scale_bodymass::Bool=true,
         vertebrates::Array{Bool, 1}=[false],
@@ -149,18 +150,16 @@ function model_parameters(A;
 
   # Step 1 -- create a dictionnary to store the parameters
   parameters = Dict{Symbol,Any}(
-  #:K              => K,
-  :Z              => Z,
-  :c              => c,
-  :e_carnivore    => e_carnivore,
-  :e_herbivore    => e_herbivore,
-  :h              => h,
-  :vertebrates    => falses(size(A)[1]),
-  :A              => A,
-  :α              => α,
-  :TSR_type       => TSR_type,
-  :dry_mass_293   => dry_mass_293,
-  :T              => T
+  :Z                   => Z,
+  :e_carnivore         => e_carnivore,
+  :e_herbivore         => e_herbivore,
+  :h                   => h,
+  :vertebrates         => falses(size(A)[1]),
+  :A                   => A,
+  :α                   => α,
+  :TSR_type            => TSR_type,
+  :dry_mass_293        => dry_mass_293,
+  :T                   => T
   )
   check_initial_parameters(parameters)
 
@@ -258,7 +257,23 @@ function model_parameters(A;
 
   end
 
-  # Step 8 -- rewire method
+  # Step 8 -- Functional response
+  if functional_response ∈ [:classical, :bioenergetic]
+    parameters[:functional_response] = functional_response
+  else
+    error("Invalid value for functional_response -- must be :classical or :bioenergetic")
+  end
+
+  if length(c) > 1
+    if length(c) != size(A, 1)
+      error("when calling `model_parameters` with an array of values for `c` (predator interference), there must be as many elements as species")
+    end
+    parameters[:c] = c
+  else
+    parameters[:c] = repeat(c, size(A,1))
+  end
+  
+  # Step 9 -- rewire method
 
  if rewire_method ∈ [:DO, :DS, :stan, :none, :ADBM, :Gilljam, :ADBM_interval]
     parameters[:rewire_method] = rewire_method
@@ -298,16 +313,16 @@ function model_parameters(A;
   parameters[:trophic_rank] = TR
   is_herbivore = falses(S)
 
-  # Step 9 -- Identify herbivores (Herbivores consume producers)
+  # Step 10 -- Identify herbivores (Herbivores consume producers)
   get_herbivores(parameters)
 
-  # Step 10 -- Measure generality and extract the vector of 1/n
+  # Step 11 -- Measure generality and extract the vector of 1/n
   getW_preference(parameters)
 
-  # Step 11 -- Get the body mass
+  # Step 12 -- Get the body mass
   temperature_size_rule(parameters)
 
-  # Step 12 -- Growth rate
+  # Step 13 -- Growth rate
   m_producer = minimum(parameters[:bodymass][is_producer])
   id_smallest_prod = findfirst([(parameters[:bodymass][i] == m_producer) & (is_producer[i]) for i = 1:length(is_producer)])
   parameters[:m_producer] = m_producer
@@ -318,12 +333,12 @@ function model_parameters(A;
   r_scaled = r ./ rspp
   parameters[:r] = scale_growth ? r_scaled : r
 
-  # Step 13 -- Metabolic rate
+  # Step 14 -- Metabolic rate
   x = metabolicrate(m, T, parameters)
   x_scaled = x ./ rspp
   parameters[:x] = scale_metabolism ? x_scaled : x
 
-  # Step 14 -- Handling time
+  # Step 15 -- Handling time
   handling_t = handlingtime(m, T, parameters)
   parameters[:ht] = handling_t
 
@@ -331,22 +346,22 @@ function model_parameters(A;
   y = 1 ./ handling_t
   parameters[:y] = scale_maxcons == true ? y ./ x : y
 
-  # Step 15 -- Attack rate
+  # Step 17 -- Attack rate
   attack_r = attackrate(m, T, parameters)
 
-  # Step 17 -- Half-saturation constant
+  # Step 18 -- Half-saturation constant
   Γ = 1 ./ (attack_r .* handling_t)
   Γ[isnan.(Γ)] .= 0.0
   parameters[:Γ] = Γ
 
-  # Step 18 -- Efficiency matrix
+  # Step 19 -- Efficiency matrix
   get_efficiency(parameters)
 
   parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
   parameters[:ar] = attack_r
 
-  # Step  19 -- Density dependent mortality
+  # Step  20 -- Density dependent mortality
   parameters[:dc] = dc
   parameters[:dp] = dp
 
