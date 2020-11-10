@@ -200,15 +200,11 @@ timepoint `t`, an array of biomasses `biomass`, and a series of simulation
 parameters `p`, it will return `dB/dt` for every species.
 """
 function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
+
   S = size(parameters[:A], 1)
+
   for i in 1:length(biomass)
     biomass[i] = biomass[i] <= eps() ? 0.0 : biomass[i]
-  end
-  #force extinct species to stay dead
-  if length(parameters[:extinctions]) != 0
-    isextinct = falses(S)
-    isextinct[parameters[:extinctions]] .= true
-    biomass[isextinct] .= 0.0  
   end
 
   # producer growth if NP model
@@ -219,6 +215,14 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   else
     nutrients = [NaN, NaN]
   end
+
+  #force extinct species to stay dead
+  if length(parameters[:extinctions]) != 0
+    isextinct = falses(S)
+    isextinct[parameters[:extinctions]] .= true
+    biomass[isextinct] .= 0.0  
+  end
+  
 
   # Consumption
   gain, loss = BioEnergeticFoodWebs.consumption(parameters, biomass)
