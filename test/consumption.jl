@@ -88,6 +88,7 @@ module ClassicalFR
               f_calc = num./den
               f_calc[isnan.(f_calc)] .= 0.0
               f = zeros(eltype(init_biomass), (length(init_biomass), length(init_biomass)))
+              hsd = [0.5, 0.5, 0.0] .^ i
               BioEnergeticFoodWebs.fill_F_matrix!(f, num, init_biomass, hsd, j, ht, fr)
               @test f == f_calc
               eff = a == foodchain ? [0.0 0.85 0.0; 0.0 0.0 0.45; 0.0 0.0 0.0] : [0.0 0.85 0.45; 0.0 0.0 0.45; 0.0 0.0 0.0] #max. efficiency
