@@ -114,7 +114,7 @@ function simulate(parameters, biomass; n_concentration::Vector{Float64}=rand(Flo
 
   is_any_extinct = any(biomass .< extinction_threshold)
   if is_any_extinct
-    cb2 = FunctionCallingCallback(remove_target_and_update!, funcat = [1.0])
+    cb2 = FunctionCallingCallback(remove_target_and_update!, funcat = [0.0])
     extinction_callback = CallbackSet(cb1, cb2)
   else
     extinction_callback = cb1

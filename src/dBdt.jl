@@ -204,6 +204,10 @@ function dBdt(derivative, biomass, parameters::Dict{Symbol,Any}, t)
   for i in 1:length(biomass)
     biomass[i] = biomass[i] <= eps() ? 0.0 : biomass[i]
   end
+  #force extinct species to stay dead
+  isextinct = falses(S)
+  isextinct[parameters[:extinctions]] .= true
+  biomass[isextinct] .= 0.0
 
   # producer growth if NP model
   if parameters[:productivity] == :nutrients
