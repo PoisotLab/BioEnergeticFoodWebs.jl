@@ -18,6 +18,7 @@ The current version can be installed by typing the following line into Julia
 (which is usually started from the command line):
 
 ``` julia
+import Pkg
 Pkg.add("BioEnergeticFoodWebs")
 ```
 
