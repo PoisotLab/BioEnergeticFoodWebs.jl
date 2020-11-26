@@ -155,13 +155,12 @@ function save(sim::Dict{Symbol,Any}; as::Symbol=:jld, filename=nothing)
     if as == :json
         befwm_simul = deepcopy(sim)
         befwm_simul[:p][:dc] = string(befwm_simul[:p][:dc])
-        befwm_simul[:p][:dp] = string(befwm_simul[:p][:dp])
+        befwm_simul[:p][:dp] = string(befwm_simul[:p][:dp])    
         filename = filename * ".json"
         f = open(filename, "w")
         JSON.print(f, befwm_simul)
         close(f)
-    end
-    if as == :jld
+    elseif as == :jld
         filename = filename * ".jld2"
         @save filename sim
     end
