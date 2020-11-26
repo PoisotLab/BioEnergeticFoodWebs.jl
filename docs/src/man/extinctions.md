@@ -1,5 +1,51 @@
 # Extinctions
 
+Extinctions often happen during simulations. You can control the biomass
+threshold under which species will be considered as extinct using the 
+`extinction_threshold` (default is `1e-6`): 
+
+```julia 
+A = [0 0 0 0 0 0 0 0 0 0; 
+     0 1 0 0 0 0 0 0 0 0; 
+     0 0 1 0 0 0 0 0 0 0; 
+     0 1 1 1 1 1 1 0 0 0; 
+     0 1 1 0 0 0 0 0 0 0; 
+     1 1 1 1 1 1 1 1 0 0; 
+     1 1 1 1 0 0 0 0 0 0; 
+     0 0 1 1 1 1 1 0 0 0; 
+     0 0 0 1 1 1 1 1 1 1; 
+     0 0 0 0 0 0 0 1 0 0]
+p = model_parameters(A)
+b = rand(size(A, 1))
+
+s = simulate(p, b, start=0, stop=100, extinction_threshold = 1e-12)
+```
+
+The identity of the extinct species are stored in the output as follow: 
+
+```julia 
+s[:p][:extinctions] #ordered set of extinct species 
+s[:p][:extinctionstime] #each element contains a tuple describing an extinction event as follows:
+                        #(time step, species identity)
+s[:p][:tmpA] #after each extinction event, the interaction matrix is recalculated 
+             #(removing interaction from and to extinct species or rewiring the matrix if rewiring is turned on)
+s[:p][:A] #final state of the interaction matrix
+```
+
+It's important to note that for the model to run smoothly, the dimension of the
+matrix doe not change, so if you want to analyze the structure of the emergent 
+interaction matrix, you need to remove extinct species, as follows: 
+
+```julia 
+A_emergent = deepcopy(A)
+id_extinct = s[:p][:extinctions] #ordered set of extinct species 
+is_extinct = falses(size(A,1))
+is_extinct[id_extinct] .= true
+A_emergent = A_emergent[is_extinct, is_extinct]
+```
+
+## Rewiring (diet switch)
+
 Simulations can be run with rewiring by using the `rewiring_method`
 keyword in `model_parameters`.
 This allows species to form new links following extinctions according to some
@@ -35,20 +81,22 @@ For more details on the parameters meaning and value, see the references
 
 For this particular model, it is possible to chose how rewiring is triggered: on extinctions (default) or periodically (see example below the table).
 
-| Name      | Meaning                                                    | Default value | Alternative value |
-| --------- | ---------------------------------------------------------- | ------------- | ----------------- |
-| `Nmethod` | Method used to calculate the resource density              | `:original`   | `:biomass`        |
-| `Hmethod` | Method used to calculate the handling time                 | `:ratio`      | `:power`          |
-| `n`       | Scaling constant for the resource density                  | `1.0`         | --                |
-| `ni`      | Species-specific scaling exponent for the resource density | `0.75`        | --                |
-| `b`       | Scaling constant for handling time                         | `0.401`       | --                |
-| `h_adbm`  | Scaling constant for handling time                         | `1.0`         | --                |
-| `hi`      | Consumer specific scaling exponent for handling time       | `1.0`         | --                |
-| `hj`      | Resource specific scaling constant for handling time       | `1.0`         | --                |
-| `e`       | Scaling constant for the net energy gain                   | `1.0`         | --                |
-| `a_adbm`  | Scaling constant for the attack rate                       | `0.0189`      | --                |
-| `ai`      | Consumer specific scaling exponent for the attack rate     | `-0.491`      | --                |
-| `aj`      | Resource specific scaling exponent for the attack rate     | `-0.465`      | --                |
+| Name            | Meaning                                                    | Default value | Alternative value |
+| --------------- | ---------------------------------------------------------- | ------------- | ----------------- |
+| `adbm_trigger`  | Is rewiring triggered by extinctions or periodically?      | `:extinction` | `:interval`       |
+| `adbm_interval` | Specifies the interval for periodical rewiring             | `100`         | Any `Int64`       |
+| `Nmethod`       | Method used to calculate the resource density              | `:original`   | `:biomass`        |
+| `Hmethod`       | Method used to calculate the handling time                 | `:ratio`      | `:power`          |
+| `n`             | Scaling constant for the resource density                  | `1.0`         | Any `Float64`     |
+| `ni`            | Species-specific scaling exponent for the resource density | `0.75`        | Any `Float64`     |
+| `b`             | Scaling constant for handling time                         | `0.401`       | Any `Float64`     |
+| `h_adbm`        | Scaling constant for handling time                         | `1.0`         | Any `Float64`     |
+| `hi`            | Consumer specific scaling exponent for handling time       | `1.0`         | Any `Float64`     |
+| `hj`            | Resource specific scaling constant for handling time       | `1.0`         | Any `Float64`     |
+| `e`             | Scaling constant for the net energy gain                   | `1.0`         | Any `Float64`     |
+| `a_adbm`        | Scaling constant for the attack rate                       | `0.0189`      | Any `Float64`     |
+| `ai`            | Consumer specific scaling exponent for the attack rate     | `-0.491`      | Any `Float64`     |
+| `aj`            | Resource specific scaling exponent for the attack rate     | `-0.465`      | Any `Float64`     |
 
 Example:
 
@@ -72,8 +120,8 @@ s = simulate(p, Bi)
 p[:extinctions]
 # extinction times for each species:
 p[:extinctionstime]
-# and the temporary matrix (A is recorded just before each extinction)
-p[:tmpA][1] # original matrix, just befor extinction of species 4
+# and the temporary matrix (A is recorded just before each rewiring event)
+p[:tmpA][1] # original matrix, just before extinction of species 4
 p[:tmpA][2] # matrix after extinction of species 4, before extinction of species 2
 # the new interaction matrix, after the last extinction:
 p[:A]

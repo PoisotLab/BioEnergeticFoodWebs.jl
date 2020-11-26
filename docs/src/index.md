@@ -5,6 +5,8 @@ Pages = [
   "man/installation.md",
   "man/random.md",
   "man/first_simulation.md",
+  "man/productivity.md",
+  "man/consumption.md",
   "man/contributing.md",
   "man/extinctions.md",
   "man/temperature.md"
