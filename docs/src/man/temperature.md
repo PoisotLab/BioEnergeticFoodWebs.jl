@@ -1,5 +1,39 @@
 # Temperature dependence
 
+**Disclaimer**: This set of functions is tested but not guaranteed to work for
+some parameter sets. We recommend that you use your own functions for
+calculating biological rates if you are using temperature dependence and then
+pass the values to the parameter object as follow: 
+
+```julia 
+A = [0 1 0 ; 0 0 1 ; 0 0 0] #linear food chain
+# Boltzmann scaling for handling time 
+function ScaleHandling(m, T, A) #m = mass, T = temperature in Kelvins, A = interaction matrix
+    h0 = exp(9.66)
+    βres = -0.45
+    βcons = 0.47
+    Eh = 0.26
+    T0 = 293.15
+    k = 8.617332E-5
+    boltz = exp(Eh * ((T0-T)/(k*T*T0)))
+    hij = zeros(length(m), length(m))
+    for i in eachindex(m) #i = rows => consumers
+      for j in eachindex(m) #j = cols => resources
+        mcons = m[i] ^ βcons #mass scaled for cons
+        mres = m[j] ^ βres #mass scaled for res
+        hij[i,j] = h0 * mres * mcons * boltz
+      end
+    end
+    hij = hij .* A
+    return hij
+end
+#build the parameter object
+p = model_parameters(A, functional_response = :classical)
+#interaction specific handling times at 30C
+handling_time = ScaleHandling(p[:bodymass], 30+273.15, A)
+p[:ht] = handling_time 
+```
+
 Both organisms biological rates and body sizes can be set to be temperature dependent, using respectively different temperature dependence functions for biological rates and different temperature size rules for body sizes. This effect of temperature can be integrated in the bioenergetic model using one of the functions described below. However, note **that these functions should only be used when the user has a good understanding of the system modelled** as some functions, under certain conditions, can lead to an erratic behavior of the bioenergetic model (instability, negative rates, etc.).
 
 ## Temperature dependence for biological rates
