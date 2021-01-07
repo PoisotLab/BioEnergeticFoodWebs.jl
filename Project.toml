@@ -2,7 +2,7 @@ name = "BioEnergeticFoodWebs"
 uuid = "9b49b652-2545-5b88-a3af-87b516beb26f"
 keywords = ["food webs", "ecology", "ecological models", "populations dynamics", "biomass"]
 desc = "A unified interface for simulations of the Bio-Energetic model on food webs"
-version = "1.2.0"
+version = "1.2.1"
 
 [deps]
 DiffEqCallbacks = "459566f4-90b8-5000-8ac3-15dfb0a30def"
@@ -17,16 +17,9 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
+DiffEqCallbacks = "2.13"
 Distributions = "0.24"
-JLD2 = "0.2, 0.3"
+JLD2 = "0.3"
 JSON = "0.21"
 StatsBase = "0.33"
-julia = "1"
-
-[extras]
-LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test", "LinearAlgebra", "Statistics"]
+julia = "1.3"
