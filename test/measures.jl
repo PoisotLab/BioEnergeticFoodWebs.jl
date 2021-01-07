@@ -92,3 +92,47 @@ module TestSave
     rm(fname)
 
 end
+
+module TestPGrowth
+    using Test
+    using BioEnergeticFoodWebs
+    import Statistics.mean, Statistics.std
+
+    A = zeros(Int64, (3, 3))
+    n = ones(3)
+
+    # System productivity
+    p = model_parameters(A, productivity=:system)
+    s = simulate(p, n, start=0, stop=500)
+    pgall = producer_growth(s, last = 100, out_type = :all)
+    pgstd = producer_growth(s, last = 100, out_type = :std)
+    meanpg = mean(pgall, dims = 1)
+    stdpg = std(pgall, dims = 1)
+    pg = producer_growth(s, last = 100, out_type = :mean)
+    @test pg[1] == meanpg[1]
+    @test pg[2] == meanpg[2]
+    @test pg[3] == meanpg[3]
+    @test pgstd[1] == stdpg[1]
+    @test pgstd[2] == stdpg[2]
+    @test pgstd[3] == stdpg[3]
+    K = p[:K][1]
+    B = population_biomass(s, last = 100)
+    @test B[1] == B[2] == B[3] 
+    @test B[1] ≈ K/3 atol = 1e-4
+    pg_calc = 0
+    @test pg[1] == pg[2] == pg[3]
+    @test pg[1] ≈ pg_calc atol = 1e-4
+
+    # Nutrient intake
+    A = [0 0 ; 0 0]
+    b0 = [0.5, 0.5]
+    c0 = [2.0, 2.0]
+    k1 = [0.2, 0.1]
+    k2 = [0.1, 0.2]
+    p = model_parameters(A, productivity = :nutrients, K1 = k1, K2 = k2)
+    s = simulate(p, b0, start=0, stop=500)
+    pg = producer_growth(s, last = 100, out_type = :mean)
+    @test pg[1] ≈ 0 atol = 1e-4
+    @test pg[2] ≈ 0 atol = 1e-4
+    
+end
