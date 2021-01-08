@@ -1,7 +1,7 @@
 """
 **ADBM parameters**
 """
-function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod, consrate_adbm)
     parameters[:e] = e
     parameters[:a_adbm] = a_adbm
     parameters[:ai] = ai
@@ -12,6 +12,12 @@ function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni
     parameters[:hj] = hj
     parameters[:n] = n
     parameters[:ni] = ni
+    #check method for calculating consumption rates
+    if consrate_adbm ∈ [:befwm, :adbm]
+      parameters[:consrate_adbm] = consrate_adbm
+    else
+      error("Invalid value for consrate_adbm -- must be :befwm or :adbm")
+    end
     #check Hmethod
     if Hmethod ∈ [:ratio, :power]
       parameters[:Hmethod] = Hmethod
@@ -19,10 +25,10 @@ function adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni
       error("Invalid value for Hmethod -- must be :ratio or :power")
     end
     # check Nmethod
-    if Nmethod ∈ [:original, :biomass]
+    if Nmethod ∈ [:original, :allometric, :biomass, :density]
       parameters[:Nmethod] = Nmethod
     else
-      error("Invalid value for Nmethod -- must be :original or :biomass")
+      error("Invalid value for Nmethod -- must be :allometric, :biomass, or :density")
     end
     # add empty cost matrix
     S = size(parameters[:A],2)
@@ -36,30 +42,39 @@ This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
-  E = parameters[:e] .* parameters[:bodymass]
-  if parameters[:Nmethod] == :original
+  if parameters[:Nmethod] ∈ [:allometric, :original]
     N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
   elseif parameters[:Nmethod] == :biomass
     N = biomass
+  elseif parameters[:Nmethod] == :density
+    N = biomass ./ parameters[:bodymass]
   end
-  A_adbm = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
+  if parameters[:consrate_adbm] == :befwm
+    E = parameters[:efficiency] .* parameters[:bodymass]
+    A_adbm = parameters[:ar]
+    H = parameters[:ht]
+  else
+    E = parameters[:e] .* parameters[:bodymass]
+    E = repeat(E', S, 1)
+    A_adbm = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
+    if parameters[:Hmethod] == :ratio
+      H = zeros(Float64,(S,S))
+      ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
+      for i = 1:S , j = 1:S
+        if ratios[j,i] < parameters[:b]
+        H[j,i] =  parameters[:h_adbm] / (parameters[:b] - ratios[j,i])
+        else
+        H[j,i] = Inf
+        end
+      end
+    elseif parameters[:Hmethod] == :power
+      H = parameters[:h_adbm] * (parameters[:bodymass].^parameters[:hj]) * (parameters[:bodymass].^parameters[:hi])' # h * pred * prey
+    end  
+  end
   for i = 1:S #for each prey
     A_adbm[:,i] = A_adbm[:,i] .* N[i]
   end
   λ = A_adbm
-  if parameters[:Hmethod] == :ratio
-    H = zeros(Float64,(S,S))
-    ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
-    for i = 1:S , j = 1:S
-      if ratios[j,i] < parameters[:b]
-      H[j,i] =  parameters[:h_adbm] / (parameters[:b] - ratios[j,i])
-      else
-      H[j,i] = Inf
-      end
-    end
-  elseif parameters[:Hmethod] == :power
-    H = parameters[:h_adbm] * (parameters[:bodymass].^parameters[:hj]) * (parameters[:bodymass].^parameters[:hi])' # h * pred * prey
-  end
 
   adbmTerms = Dict{Symbol,Any}(
   :E => E,
@@ -74,10 +89,9 @@ end
 This function takes the terms calculated by getADBM_Terms() and uses them to determine the feeding
 links of species j. Used internally by ADBM().
 """
-function get_feeding_links(S::Int64,E::Vector{Float64}, λ::Array{Float64},
-   H::Array{Float64},biomass::Vector{Float64},j)
+function get_feeding_links(S::Int64,E::Array{Float64}, λ::Array{Float64}, H::Array{Float64}, biomass::Vector{Float64},j)
 
-  profit = E ./ H[j,:]
+  profit = E[j,:] ./ H[j,:]
   # Setting profit of species with zero biomass  to -1.0
   # This prevents them being included in the profitSort
   profit[vec(biomass .== 0.0)] .= -1.0
