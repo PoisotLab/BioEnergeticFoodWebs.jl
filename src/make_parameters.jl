@@ -104,6 +104,10 @@ function model_parameters(A;
         h::Number=1.0,
         e_carnivore::Float64=0.85,
         e_herbivore::Float64=0.45,
+        ar::Array{Float64, 2} = [0.0],
+        ht::Array{Float64, 2} = [0.0],
+        r::Array{Float64,1} = [0.0],
+        x::Array{Float64,1} = [0.0],
         α::Float64=1.0,
         productivity::Symbol=:species,
         functional_response::Symbol=:bioenergetic,
@@ -127,6 +131,7 @@ function model_parameters(A;
         ni::Float64= -0.75,
         Hmethod::Symbol = :ratio,
         Nmethod::Symbol = :original,
+        consrate_adbm::Symbol = :adbm,
         cost::Float64 = 0.0,
         specialistPrefMag::Float64 = 0.9,
         preferenceMethod::Symbol = :generalist,
@@ -289,7 +294,7 @@ function model_parameters(A;
      if adbm_trigger ∈ [:extinction, :interval]
        parameters[:adbm_trigger] = adbm_trigger
        parameters[:adbm_trigger] == :interval ? parameters[:adbm_interval] = adbm_interval : nothing
-       adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod)
+       adbm_parameters(parameters, e, a_adbm, ai, aj, b, h_adbm, hi, hj, n, ni, Hmethod, Nmethod, consrate_adbm)
      else
        error("Invalid trigger for ADBM trigger, must be either :interval or :extinction")
      end
@@ -304,10 +309,6 @@ function model_parameters(A;
   F = zeros(Float64, size(A))
   efficiency = zeros(Float64, size(A))
   M = zeros(Float64, S)
-  x = zeros(Float64, S) # metabolic rate
-  r = zeros(Float64, S) # producers growth rate
-  attack_r = zeros(Float64, S) # attack rates
-  handling_t = zeros(Float64, S) # handling times
   Γ = zeros(Float64, S) #B0, half saturation density
   TR = trophic_rank(A)
   parameters[:trophic_rank] = TR
@@ -323,43 +324,76 @@ function model_parameters(A;
   temperature_size_rule(parameters)
 
   # Step 13 -- Growth rate
+  if length(r) > 1
+    if length(r) != size(A,1)
+      error("when calling `model_parameters` with an array of values for `r` (growth rate), there must be as many elements as rows/columns in the matrix")
+    else 
+      R = r
+    end
+  else
+    R = growthrate(m, T, parameters)
+    parameters[:ar] = attack_r
+  end
   m_producer = minimum(parameters[:bodymass][is_producer])
   id_smallest_prod = findfirst([(parameters[:bodymass][i] == m_producer) & (is_producer[i]) for i = 1:length(is_producer)])
   parameters[:m_producer] = m_producer
   body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
   m = scale_bodymass ? body_size_relative : parameters[:bodymass]
-  r = growthrate(m, T, parameters)
-  rspp = r[id_smallest_prod]
-  r_scaled = r ./ rspp
-  parameters[:r] = scale_growth ? r_scaled : r
+  rspp = R[id_smallest_prod]
+  r_scaled = R ./ rspp
+  parameters[:r] = scale_growth ? r_scaled : R
 
   # Step 14 -- Metabolic rate
-  x = metabolicrate(m, T, parameters)
-  x_scaled = x ./ rspp
-  parameters[:x] = scale_metabolism ? x_scaled : x
+  if length(x) > 1
+    if length(x) != size(A,1)
+      error("when calling `model_parameters` with an array of values for `x` (metabolic rate), there must be as many elements as rows/columns in the matrix")
+    else 
+      X = x
+    end
+  else
+    X = metabolicrate(m, T, parameters)
+    parameters[:ar] = attack_r
+  end
+  x_scaled = X ./ rspp
+  parameters[:x] = scale_metabolism ? x_scaled : X
 
-  # Step 15 -- Handling time
-  handling_t = handlingtime(m, T, parameters)
-  parameters[:ht] = handling_t
+  # Step 15 -- Consumption rates
+  if length(ar) > 1
+    if size(ar) != size(A)
+      error("when calling `model_parameters` with an array of values for `ar` (attack rate), it must have the same dimension as the matrix")
+    else 
+      parameters[:ar] = ar
+    end
+  else
+    attack_r = attackrate(m, T, parameters)
+    parameters[:ar] = attack_r
+  end
 
-  # Step 16 -- Maximum relative consumption rate
-  y = 1 ./ handling_t
+  if length(ht) > 1
+    if size(ht) != size(A)
+      error("when calling `model_parameters` with an array of values for `ht` (handling time), it must have the same dimension as the matrix")
+    else 
+      parameters[:ht] = ht
+    end
+  else
+    handling_t = handlingtime(m, T, parameters)
+    parameters[:ht] = handling_t
+    end
+
+  # Maximum relative consumption rate
+  y = 1 ./ parameters[:ht]
   parameters[:y] = scale_maxcons == true ? y ./ x : y
 
-  # Step 17 -- Attack rate
-  attack_r = attackrate(m, T, parameters)
-
-  # Step 18 -- Half-saturation constant
-  Γ = 1 ./ (attack_r .* handling_t)
+  # Half-saturation constant
+  Γ = 1 ./ (parameters[:ar] .* parameters[:ht])
   Γ[isnan.(Γ)] .= 0.0
   parameters[:Γ] = Γ
 
-  # Step 19 -- Efficiency matrix
+  # Efficiency matrix
   get_efficiency(parameters)
 
   parameters[:Γh] = parameters[:Γ] .^ parameters[:h]
   parameters[:np] = sum(parameters[:is_producer])
-  parameters[:ar] = attack_r
 
   # Step  20 -- Density dependent mortality
   parameters[:dc] = dc
