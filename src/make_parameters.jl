@@ -104,8 +104,8 @@ function model_parameters(A;
         h::Number=1.0,
         e_carnivore::Float64=0.85,
         e_herbivore::Float64=0.45,
-        ar::Array{Float64, 2} = [0.0],
-        ht::Array{Float64, 2} = [0.0],
+        ar::Array{Float64, 2} = [NaN NaN],
+        ht::Array{Float64, 2} = [NaN NaN],
         r::Array{Float64,1} = [0.0],
         x::Array{Float64,1} = [0.0],
         α::Float64=1.0,
@@ -322,6 +322,11 @@ function model_parameters(A;
 
   # Step 12 -- Get the body mass
   temperature_size_rule(parameters)
+  m_producer = minimum(parameters[:bodymass][is_producer])
+  id_smallest_prod = findfirst([(parameters[:bodymass][i] == m_producer) & (is_producer[i]) for i = 1:length(is_producer)])
+  parameters[:m_producer] = m_producer
+  body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
+  m = scale_bodymass ? body_size_relative : parameters[:bodymass]
 
   # Step 13 -- Growth rate
   if length(r) > 1
@@ -332,13 +337,7 @@ function model_parameters(A;
     end
   else
     R = growthrate(m, T, parameters)
-    parameters[:ar] = attack_r
   end
-  m_producer = minimum(parameters[:bodymass][is_producer])
-  id_smallest_prod = findfirst([(parameters[:bodymass][i] == m_producer) & (is_producer[i]) for i = 1:length(is_producer)])
-  parameters[:m_producer] = m_producer
-  body_size_relative = parameters[:bodymass] ./ parameters[:m_producer]
-  m = scale_bodymass ? body_size_relative : parameters[:bodymass]
   rspp = R[id_smallest_prod]
   r_scaled = R ./ rspp
   parameters[:r] = scale_growth ? r_scaled : R
@@ -352,37 +351,39 @@ function model_parameters(A;
     end
   else
     X = metabolicrate(m, T, parameters)
-    parameters[:ar] = attack_r
   end
   x_scaled = X ./ rspp
   parameters[:x] = scale_metabolism ? x_scaled : X
 
   # Step 15 -- Consumption rates
-  if length(ar) > 1
-    if size(ar) != size(A)
-      error("when calling `model_parameters` with an array of values for `ar` (attack rate), it must have the same dimension as the matrix")
-    else 
-      parameters[:ar] = ar
+
+   #handling time
+   if size(ht) != size(A)
+    if all(isnan.(ht))
+      handling_t = handlingtime(m, T, parameters)
+      parameters[:ht] = handling_t
+    else
+      error("when calling `model_parameters` with an array of values for `ht` (handling time), it must have the same dimension as the matrix")
     end
   else
-    attack_r = attackrate(m, T, parameters)
-    parameters[:ar] = attack_r
+    parameters[:ht] = ht
   end
 
-  if length(ht) > 1
-    if size(ht) != size(A)
-      error("when calling `model_parameters` with an array of values for `ht` (handling time), it must have the same dimension as the matrix")
-    else 
-      parameters[:ht] = ht
+  #attack rate
+  if size(ar) != size(A)
+    if all(isnan.(ar))
+      attack_r = attackrate(m, T, parameters)
+      parameters[:ar] = attack_r
+    else
+      error("when calling `model_parameters` with an array of values for `ar` (attack rate), it must have the same dimension as the matrix")
     end
   else
-    handling_t = handlingtime(m, T, parameters)
-    parameters[:ht] = handling_t
-    end
+    parameters[:ar] = ar
+  end
 
   # Maximum relative consumption rate
   y = 1 ./ parameters[:ht]
-  parameters[:y] = scale_maxcons == true ? y ./ x : y
+  parameters[:y] = scale_maxcons == true ? y ./ X : y
 
   # Half-saturation constant
   Γ = 1 ./ (parameters[:ar] .* parameters[:ht])

@@ -79,7 +79,8 @@ module TestMakeParameters
   test_ni= -0.8
   test_Hmethod = :power
   test_Nmethod = :biomass
-  BioEnergeticFoodWebs.adbm_parameters(parameters, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod)
+  test_consrate = :adbm
+  BioEnergeticFoodWebs.adbm_parameters(parameters, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod, test_consrate)
   @test test_e == parameters[:e]
   @test test_a_adbm == parameters[:a_adbm]
   @test test_ai == parameters[:ai]
@@ -92,6 +93,7 @@ module TestMakeParameters
   @test test_ni == parameters[:ni]
   @test test_Hmethod == parameters[:Hmethod]
   @test test_Nmethod == parameters[:Nmethod]
+  @test test_consrate == parameters[:consrate_adbm]
 
   # Test that there is an exception if the wrong Nmethod is passed
   wrong_Nmethod = :logbiomass
@@ -101,6 +103,10 @@ module TestMakeParameters
   wrong_Hmethod = :sum
   @test_throws ErrorException model_parameters(correct_network, rewire_method=:ADBM, Hmethod=wrong_Hmethod)
 
+  # Test that there is an exception if the wrong Hmethod is passed
+  wrong_consrate = :dbm
+  @test_throws ErrorException model_parameters(correct_network, rewire_method=:ADBM, consrate_adbm=wrong_consrate)
+  
   # Test that a cost matrix (each cost = 1.0) of size (S, S) is added to p
   S = size(correct_network, 1)
   right_cm = ones(S,S)

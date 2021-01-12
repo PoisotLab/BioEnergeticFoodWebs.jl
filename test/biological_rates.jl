@@ -68,6 +68,8 @@ module TestDefault
   @test p_norm[:r] == [2.0, 2.0, 2.0] ./ rspp
   # metabolic rates
   @test p_norm[:x] == [a_vertebrate, a_invertebrate, a_producer] ./ rspp
+  #handling time
+  @test p_norm[:ht] == 1 ./ [y_vertebrate , y_invertebrate, y_producer]
   # maximum consumption rate
   @test p_norm[:y] == [y_vertebrate, y_invertebrate, y_producer] ./ [a_vertebrate, a_invertebrate, a_producer]
   # handling time
