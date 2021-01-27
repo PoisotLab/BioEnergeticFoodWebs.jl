@@ -42,20 +42,36 @@ This function takes the parameters for the ADBM model and returns
 the final terms used to determine feeding patterns. It is used internally by  ADBM().
 """
 function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
-  if parameters[:Nmethod] ∈ [:allometric, :original]
+
+  # energy content of resources
+  E = parameters[:e] .* parameters[:bodymass]
+
+  # how is density calculated?
+  if parameters[:Nmethod] ∈ [:allometric, :original] #as in the ADBm paper
     N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
-  elseif parameters[:Nmethod] == :biomass
+  elseif parameters[:Nmethod] == :biomass #density is biomass
     N = biomass
-  elseif parameters[:Nmethod] == :density
+  elseif parameters[:Nmethod] == :density #density is biomass/mass
     N = biomass ./ parameters[:bodymass]
   end
-  if parameters[:consrate_adbm] == :befwm
-    E = parameters[:efficiency] .* parameters[:bodymass]
-    A_adbm = parameters[:ar]
-    H = parameters[:ht]
-  else
-    E = parameters[:e] .* parameters[:bodymass]
-    E = repeat(E', S, 1)
+
+  #where do feeding rates come from?
+  if parameters[:consrate_adbm] == :befwm #from the bio-energetic model
+    A_adbm = parameters[:ar] #attack rate
+    H = parameters[:ht] #handling time 
+    if parameters[:Nmethod] ∈ [:allometric, :original, :density]
+      #if we are using densities - we want ind. specific feeding rates
+      M = parameters[:bodymass]
+      A_adbm = A_adbm .* M .* M'
+      H = H .* M .* M'
+    else
+      #if we are using biomass - we want mass-specific energy content
+      M = parameters[:bodymass]
+      E = E ./ M
+    end
+
+  else #from the ADBm framework
+
     A_adbm = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
     if parameters[:Hmethod] == :ratio
       H = zeros(Float64,(S,S))
@@ -71,6 +87,8 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
       H = parameters[:h_adbm] * (parameters[:bodymass].^parameters[:hj]) * (parameters[:bodymass].^parameters[:hi])' # h * pred * prey
     end  
   end
+
+  #Encounter rate is attack rates * density
   for i = 1:S #for each prey
     A_adbm[:,i] = A_adbm[:,i] .* N[i]
   end
@@ -91,7 +109,7 @@ links of species j. Used internally by ADBM().
 """
 function get_feeding_links(S::Int64,E::Array{Float64}, λ::Array{Float64}, H::Array{Float64}, biomass::Vector{Float64},j)
 
-  profit = E[j,:] ./ H[j,:]
+  profit = E ./ H[j,:]
   # Setting profit of species with zero biomass  to -1.0
   # This prevents them being included in the profitSort
   profit[vec(biomass .== 0.0)] .= -1.0
@@ -120,7 +138,6 @@ function get_feeding_links(S::Int64,E::Array{Float64}, λ::Array{Float64}, H::Ar
   #feeding = profs[(append!([true],cumulativeProfit[1:end-1] .< profitSort[2:end]))]
   return(feeding)
 end
-
 
 """
 **ADBM Web**
