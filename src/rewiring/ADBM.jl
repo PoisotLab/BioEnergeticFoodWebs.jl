@@ -43,36 +43,38 @@ the final terms used to determine feeding patterns. It is used internally by  AD
 """
 function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
 
+  M = parameters[:bodymass]
+
   # energy content of resources
   E = parameters[:e] .* parameters[:bodymass]
 
-  # how is density calculated?
-  if parameters[:Nmethod] ∈ [:allometric, :original] #as in the ADBm paper
-    N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
-  elseif parameters[:Nmethod] == :biomass #density is biomass
-    N = biomass
-  elseif parameters[:Nmethod] == :density #density is biomass/mass
-    N = biomass ./ parameters[:bodymass]
-  end
+  if parameters[:consrate_adbm] == :befwm 
 
-  #where do feeding rates come from?
-  if parameters[:consrate_adbm] == :befwm #from the bio-energetic model
+    # The feeding rates come from the BEFW model and are mass-specific. 
+    # If used with density they must be converted when using density
+
     A_adbm = parameters[:ar] #attack rate
     H = parameters[:ht] #handling time 
-    if parameters[:Nmethod] ∈ [:allometric, :original, :density]
-      #if we are using densities - we want ind. specific feeding rates
-      M = parameters[:bodymass]
-      A_adbm = A_adbm .* M .* M'
-      H = H .* M .* M'
-    else
-      #if we are using biomass - we want mass-specific energy content
-      M = parameters[:bodymass]
-      E = E ./ M
+
+    if parameters[:Nmethod] ∈ [:allometric, :original]
+      N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
+      A_adbm = A_adbm .* M'
+      
+    elseif parameters[:Nmethod] ∈ [:density]
+      N = biomass ./ parameters[:bodymass]
+      A_adbm = A_adbm .* M'
+
+    else 
+      N = biomass
+
     end
 
-  else #from the ADBm framework
+  elseif parameters[:consrate_adbm] == :adbm
 
+    # get attack rate 
     A_adbm = parameters[:a_adbm] * (parameters[:bodymass].^parameters[:aj]) * (parameters[:bodymass].^parameters[:ai])' # a * pred * prey
+
+    # get handling time
     if parameters[:Hmethod] == :ratio
       H = zeros(Float64,(S,S))
       ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
@@ -83,14 +85,33 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
         H[j,i] = Inf
         end
       end
+
     elseif parameters[:Hmethod] == :power
       H = parameters[:h_adbm] * (parameters[:bodymass].^parameters[:hj]) * (parameters[:bodymass].^parameters[:hi])' # h * pred * prey
-    end  
+
+    end 
+
+    # The feeding rates come from the ADB model and are individual-specific. 
+    # If used with biomass they must be converted
+
+    if parameters[:Nmethod] ∈ [:allometric, :original]
+      N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
+
+    elseif parameters[:Nmethod] ∈ [:density]
+      N = biomass ./ parameters[:bodymass]
+
+    else
+      N = biomass
+      #mass-specific attack rate (because we multiply with the biomass of the resource to calculate encounter rate)
+      A_adbm = A_adbm ./ (M') 
+
+    end
+
   end
 
   #Encounter rate is attack rates * density
   for i = 1:S #for each prey
-    A_adbm[:,i] = A_adbm[:,i] .* N[i]
+    A_adbm[:,i] = A_adbm[:,i] * N[i]
   end
   λ = A_adbm
 
