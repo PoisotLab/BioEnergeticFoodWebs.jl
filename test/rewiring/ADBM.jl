@@ -142,7 +142,8 @@ module TestADBM_equivalence
     Hb, Lb, Eb = tb[:H], tb[:λ], tb[:E]
     
     @test Hn == Ha == Hb
-    @test Ln == La == Lb
+    @test Ln ≈ La atol 1e-10
+    @test La ≈ Lb atol 1e-10
     @test En == Ea == Eb
     
     isP_test = pn[:is_producer]
