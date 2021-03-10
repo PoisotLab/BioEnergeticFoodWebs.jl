@@ -113,6 +113,7 @@ module TestMakeParameters
   @test right_cm == parameters[:costMat]
 
   # Passing r / x / ht / ar works as intended
+  A = [0 1 1 ; 0 0 0 ; 0 0 0]
   x = [0.5, 0.0, 0.0]
   r = [0.0, 1.0, 0.9]
   ht = zeros(3,3)
