@@ -112,6 +112,28 @@ module TestMakeParameters
   right_cm = ones(S,S)
   @test right_cm == parameters[:costMat]
 
+  # Passing r / x / ht / ar works as intended
+  x = [0.5, 0.0, 0.0]
+  r = [0.0, 1.0, 0.9]
+  ht = zeros(3,3)
+  ar = zeros(3,3)
+  ht[1,2] = 1e-6
+  ht[1,3] = 2e-7
+  ar[1,2] = 1e6
+  ar[1,3] = 2e7
+  parameters = model_parameters(A, x = x, r = r, ht = ht, ar = ar, functional_response = :classical)
+  @test parameters[:x] == x
+  @test parameters[:r] == r
+  @test parameters[:ht] == ht
+  @test parameters[:ar] == ar
+  @test_throws ErrorException model_parameters(A, x = [0.5, 0.0])
+  @test_throws ErrorException model_parameters(A, r = [0.5, 0.0])
+  @test_throws ErrorException model_parameters(A, ht = zeros(2,2))
+  @test_throws ErrorException model_parameters(A, ar = zeros(2,2))
+  parameters = model_parameters(A, x = [0.5], r = [0.7])
+  @test parameters[:r] == [1.0,1.0,1.0] #scale growth function takes over
+  @test parameters[:x] == [0.3141,0.138,0.138] #scale metabolism function takes over
+
   # Tests for the gilljam_parameters function:
     # Tests for the internal preference_parameters function:
 
