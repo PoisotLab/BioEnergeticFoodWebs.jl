@@ -79,7 +79,8 @@ module TestMakeParameters
   test_ni= -0.8
   test_Hmethod = :power
   test_Nmethod = :biomass
-  BioEnergeticFoodWebs.adbm_parameters(parameters, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod)
+  test_consrate = :adbm
+  BioEnergeticFoodWebs.adbm_parameters(parameters, test_e, test_a_adbm, test_ai, test_aj, test_b, test_h_adbm, test_hi, test_hj, test_n, test_ni, test_Hmethod, test_Nmethod, test_consrate)
   @test test_e == parameters[:e]
   @test test_a_adbm == parameters[:a_adbm]
   @test test_ai == parameters[:ai]
@@ -92,6 +93,7 @@ module TestMakeParameters
   @test test_ni == parameters[:ni]
   @test test_Hmethod == parameters[:Hmethod]
   @test test_Nmethod == parameters[:Nmethod]
+  @test test_consrate == parameters[:consrate_adbm]
 
   # Test that there is an exception if the wrong Nmethod is passed
   wrong_Nmethod = :logbiomass
@@ -101,10 +103,37 @@ module TestMakeParameters
   wrong_Hmethod = :sum
   @test_throws ErrorException model_parameters(correct_network, rewire_method=:ADBM, Hmethod=wrong_Hmethod)
 
+  # Test that there is an exception if the wrong Hmethod is passed
+  wrong_consrate = :dbm
+  @test_throws ErrorException model_parameters(correct_network, rewire_method=:ADBM, consrate_adbm=wrong_consrate)
+  
   # Test that a cost matrix (each cost = 1.0) of size (S, S) is added to p
   S = size(correct_network, 1)
   right_cm = ones(S,S)
   @test right_cm == parameters[:costMat]
+
+  # Passing r / x / ht / ar works as intended
+  A = [0 1 1 ; 0 0 0 ; 0 0 0]
+  x = [0.5, 0.0, 0.0]
+  r = [0.0, 1.0, 0.9]
+  ht = zeros(3,3)
+  ar = zeros(3,3)
+  ht[1,2] = 1e-6
+  ht[1,3] = 2e-7
+  ar[1,2] = 1e6
+  ar[1,3] = 2e7
+  parameters = model_parameters(A, x = x, r = r, ht = ht, ar = ar, functional_response = :classical)
+  @test parameters[:x] == x
+  @test parameters[:r] == r
+  @test parameters[:ht] == ht
+  @test parameters[:ar] == ar
+  @test_throws ErrorException model_parameters(A, x = [0.5, 0.0])
+  @test_throws ErrorException model_parameters(A, r = [0.5, 0.0])
+  @test_throws ErrorException model_parameters(A, ht = zeros(2,2))
+  @test_throws ErrorException model_parameters(A, ar = zeros(2,2))
+  parameters = model_parameters(A, x = [0.5], r = [0.7])
+  @test parameters[:r] == [1.0,1.0,1.0] #scale growth function takes over
+  @test parameters[:x] == [0.3141,0.138,0.138] #scale metabolism function takes over
 
   # Tests for the gilljam_parameters function:
     # Tests for the internal preference_parameters function:

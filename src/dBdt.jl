@@ -160,11 +160,11 @@ function consumption(parameters, biomass)
   bm_matrix = zeros(eltype(biomass), (length(biomass), length(biomass)))
   rewire = (parameters[:rewire_method] == :ADBM) | (parameters[:rewire_method] == :Gilljam) | (parameters[:rewire_method] == :DS)
   costMat = rewire ? parameters[:costMat] : nothing
-  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A], parameters[:h], parameters[:functional_response], parameters[:ar]; rewire=rewire, costMat=costMat)
+  fill_bm_matrix!(bm_matrix, biomass, parameters[:w], parameters[:A], parameters[:h], parameters[:functional_response], parameters[:ar] .* parameters[:A]; rewire=rewire, costMat=costMat)
 
   # Available food
   F = zeros(eltype(biomass), (length(biomass), length(biomass)))
-  fill_F_matrix!(F, bm_matrix, biomass, parameters[:Γh], parameters[:c], parameters[:ht], parameters[:functional_response])
+  fill_F_matrix!(F, bm_matrix, biomass, parameters[:Γh], parameters[:c], parameters[:ht] .* parameters[:A], parameters[:functional_response])
   
   # XYB matrix
   xyb = zeros(eltype(biomass), length(biomass))
