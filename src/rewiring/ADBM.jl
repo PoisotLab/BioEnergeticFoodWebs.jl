@@ -56,6 +56,17 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
     A_adbm = parameters[:ar] #attack rate
     H = parameters[:ht] #handling time 
 
+    if parameters[:Hmethod] == :ratio
+      ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
+      for i = 1:S , j = 1:S
+        if ratios[j,i] < parameters[:b]
+          H[j,i] =  H[j,i]
+        else
+          H[j,i] = Inf
+        end
+      end
+    end
+
     if parameters[:Nmethod] ∈ [:allometric, :original]
       N = parameters[:n] .* (parameters[:bodymass] .^ parameters[:ni])
       A_adbm = A_adbm .* M'
@@ -148,11 +159,11 @@ function get_feeding_links(S::Int64,E::Array{Float64}, λ::Array{Float64}, H::Ar
   Eλ[isnan.(Eλ)] .= Inf
 
   cumulativeProfit = Eλ ./ (1 .+ λH)
-
+  cumulativeProfit[isnan.(cumulativeProfit)] .= 0.0
   if all(0 .== cumulativeProfit)
-  feeding = []
+    feeding = []
   else
-  feeding = profs[1:maximum(findall(cumulativeProfit .== maximum(cumulativeProfit)))]
+    feeding = profs[1:maximum(findall(cumulativeProfit .== maximum(cumulativeProfit)))]
   end
 
   #cumulativeProfit[end] = NaN
