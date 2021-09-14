@@ -108,6 +108,8 @@ function fill_F_matrix!(F, bm_matrix, biomass, Γh, c, ht, fr)
     for i in eachindex(biomass), j in eachindex(biomass)
       food_available[i,j] = bm_matrix[i,j] * ht[i,j]
     end
+    food_available[isnan.(food_available)] .= 0.0
+    food_available[isinf.(food_available)] .= 0.0
     food_available = sum(food_available, dims = 2)
     for i in eachindex(biomass)
       f_den[i] = 1.0 + c[i] + food_available[i]
