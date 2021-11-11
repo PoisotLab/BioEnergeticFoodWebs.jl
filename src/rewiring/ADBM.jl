@@ -43,7 +43,7 @@ the final terms used to determine feeding patterns. It is used internally by  AD
 """
 function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{Float64})
 
-  M = parameters[:bodymass]
+  M = deepcopy(parameters[:bodymass])
 
   # energy content of resources
   E = parameters[:e] .* parameters[:bodymass]
@@ -53,8 +53,8 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
     # The feeding rates come from the BEFW model and are mass-specific. 
     # If used with density they must be converted when using density
 
-    A_adbm = parameters[:ar] #attack rate
-    H = parameters[:ht] #handling time 
+    A_adbm = deepcopy(parameters[:ar]) #attack rate
+    H = deepcopy(parameters[:ht]) #handling time 
 
     if parameters[:Hmethod] == :ratio
       ratios = (parameters[:bodymass] ./ parameters[:bodymass]')' #PREDS IN ROWS : PREY IN COLS
@@ -76,7 +76,7 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
       A_adbm = A_adbm .* M'
 
     else 
-      N = biomass
+      N = deepcopy(biomass)
 
     end
 
@@ -112,7 +112,7 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
       N = biomass ./ parameters[:bodymass]
 
     else
-      N = biomass
+      N = deepcopy(biomass)
       #mass-specific attack rate (because we multiply with the biomass of the resource to calculate encounter rate)
       A_adbm = A_adbm ./ (M') 
 
@@ -124,7 +124,7 @@ function get_adbm_terms(S::Int64, parameters::Dict{Symbol,Any}, biomass::Vector{
   for i = 1:S #for each prey
     A_adbm[:,i] = A_adbm[:,i] * N[i]
   end
-  λ = A_adbm
+  λ = deepcopy(A_adbm)
 
   adbmTerms = Dict{Symbol,Any}(
   :E => E,
