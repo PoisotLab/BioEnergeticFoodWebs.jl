@@ -19,6 +19,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 [compat]
 DiffEqCallbacks = "2.13"
 Distributions = "0.24"
+JLD2 = "0.4"
 JSON = "0.21"
 OrdinaryDiffEq = "5.42"
 StatsBase = "0.33"
