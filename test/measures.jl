@@ -55,7 +55,7 @@ module TestSave
     using Test
     using BioEnergeticFoodWebs
     using LinearAlgebra
-    using JLD2
+    using JLD2: @save 
     using JSON
 
     A = [0 0 0 ; 0 0 0 ; 0 0 0]
